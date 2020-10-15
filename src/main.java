@@ -28,9 +28,10 @@ public class main extends StarMod {
     @Override
     public void onGameStart() {
         super.onGameStart();
-        this.setModVersion("0.2");
-        this.setModName("Warpspace");
+        this.setModVersion("0.3");
+        this.setModName("WarpSpace");
         this.setModAuthor("IR0NSIGHT");
+   //     this.setServerSide(true); //needs client for packet receiving
         DebugFile.log("WarpSpace info set.",this);
     }
 
@@ -38,7 +39,8 @@ public class main extends StarMod {
     public void onEnable() {
         super.onEnable();
         DebugFile.log("enabled.",this);
-       // PacketUtil.registerPacket(PacketSCSetWaypoint.class);
+        PacketUtil.registerPacket(PacketSCSetWaypoint.class);
+
     }
 
     @Override

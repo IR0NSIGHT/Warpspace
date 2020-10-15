@@ -53,13 +53,16 @@ public class JumpListener {
                 DebugFile.log("jump detected at y:" + posNow.y);
                 Vector3i newPos;
                 String displayMessage;
+                boolean intoWarp;
                 if (posNow.y >= 150) {
                     //is in warpspace, get realspace pos
+                    intoWarp = false;
                     //ModPlayground.broadcastMessage("in warp");
                     displayMessage = " out of warp to position ";
                     DebugFile.log("warp");
                     newPos = GetRealSpacePos(posNow);
                 } else {
+                    intoWarp = true;
                     //is in realspace, get warppos
                     //ModPlayground.broadcastMessage("in realspace");
                     displayMessage = " into warp to position ";
@@ -81,12 +84,12 @@ public class JumpListener {
                 //TODO check for interdiction -> not possible bc vanilla method is private
                 //jump
 
-                SectorSwitch toWarp = GameServer.getServerState().getController().queueSectorSwitch(ship,newPos,SectorSwitch.TRANS_JUMP,false,true,true);
-                if (toWarp != null) {
-                    toWarp.delay = System.currentTimeMillis() + 4000;
-                    toWarp.jumpSpawnPos = new Vector3f(event.getController().getWorldTransform().origin);
-                    toWarp.executionGraphicsEffect = (byte) 2;
-                    toWarp.keepJumpBasisWithJumpPos = true;
+                SectorSwitch sectorSwitch = GameServer.getServerState().getController().queueSectorSwitch(ship,newPos,SectorSwitch.TRANS_JUMP,false,true,true);
+                if (sectorSwitch != null) {
+                    sectorSwitch.delay = System.currentTimeMillis() + 4000;
+                    sectorSwitch.jumpSpawnPos = new Vector3f(event.getController().getWorldTransform().origin);
+                    sectorSwitch.executionGraphicsEffect = (byte) 2;
+                    sectorSwitch.keepJumpBasisWithJumpPos = true;
                     ship.sendControllingPlayersServerMessage(Lng.astr("Jumping " + displayMessage + " " + newPos.toStringPure()), ServerMessage.MESSAGE_TYPE_INFO);
                     //empty jumpmodule after jump
                     warpdrive.removeCharge();
@@ -96,6 +99,8 @@ public class JumpListener {
                     ship.sendControllingPlayersServerMessage(Lng.astr("Jump failed, warpdrive needs to cooldown."), ServerMessage.MESSAGE_TYPE_INFO);
                     DebugFile.log("jumping into warp failed");
                 }
+                navigationHelper.handlePilots(ship,intoWarp);
+
             }
         });
     }
