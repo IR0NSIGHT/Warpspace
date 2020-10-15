@@ -1,5 +1,6 @@
 # Warpspace
-an alternative way to faster-than-light travel in starmade.
+# an alternative way to faster-than-light travel in starmade.
+# this mod is a proof of concept and not balanced or stable.
 This mod explores the idea to have a space in which you travel to get from point a to point b, but faster than normal flight.
 The mod creates a warpspace, similar to the minecraft nether in concept. Every meter travelled in the warp translates into 10 meters travelled in realspace. 
 So instead of teleporting from a to b (vanilla FTL), you change into the warp, fly the distance which is 10 times shorter, and drop back out of warp.
@@ -17,10 +18,10 @@ Some core effects are:
    + give warp custom visual effects to highlight the difference to realspace
    + make the thrust strength (= possible travel speed) in warp depend on the FTL drives level
    + explore means of making warp more interesting and different to realspace
-        # core principles here are that warp should not be just a smaller realspace 2.0 but behave differently
-        # one such difference could be that station building is impossible
-        # shields not working
-        # a limited time in warp, where a counter autodrops the ship back out
+        + core principles here are that warp should not be just a smaller realspace 2.0 but behave differently
+        + one such difference could be that station building is impossible
+        + shields not working
+        + a limited time in warp, where a counter autodrops the ship back out
 
 Gain insight to how the mod handles ingame with this showcase video:
 https://www.youtube.com/watch?v=0t-y4ZppfLg
