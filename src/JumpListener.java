@@ -8,8 +8,10 @@ import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.controller.elements.jumpdrive.JumpAddOn;
 import org.schema.game.common.data.ManagedSegmentController;
+import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.server.controller.SectorSwitch;
 import org.schema.schine.common.language.Lng;
+import org.schema.schine.network.objects.remote.RemoteVector3i;
 import org.schema.schine.network.server.ServerMessage;
 
 import javax.vecmath.Vector3f;
@@ -28,6 +30,8 @@ import javax.vecmath.Vector3f;
     //TODO add ways to pull ships out of warpspace
     //TODO make ships drop out of warp when FTL drive is damaged
     //TODO no shields in warp?
+    //TODO visual way to tell what realspace sector the palyer is in
+    //TODO translate selection marker to warp as well
 public class JumpListener {
     public static int scale = 10; //scale warpspace distance to realspace distance
     public static int offset = 150; //offset in sectors
@@ -95,7 +99,6 @@ public class JumpListener {
             }
         });
     }
-
     /**
      * Calculate the Warpspace position from a realworld position
      * @param RealSpacePos sector in realspace

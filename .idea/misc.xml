@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavadocGenerationManager">
-    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../Starmade_decompiled_release/docs" />
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/doc" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="false" project-jdk-name="14 (2)" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />

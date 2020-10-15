@@ -1,6 +1,7 @@
 import api.DebugFile;
 import api.listener.events.controller.ServerInitializeEvent;
 import api.mod.StarMod;
+import api.network.packets.PacketUtil;
 
 /**
  * STARMADE MOD
@@ -31,6 +32,13 @@ public class main extends StarMod {
         this.setModName("Warpspace");
         this.setModAuthor("IR0NSIGHT");
         DebugFile.log("WarpSpace info set.",this);
+    }
+
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        DebugFile.log("enabled.",this);
+       // PacketUtil.registerPacket(PacketSCSetWaypoint.class);
     }
 
     @Override
