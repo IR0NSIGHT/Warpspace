@@ -16,6 +16,10 @@ import javax.vecmath.Vector3f;
  * DATE: 14.10.2020
  * TIME: 19:13
  */
+
+/**
+ *  core class that handles jump events and teleports to and from the warp
+ */
 public class JumpListener {
     public static int scale = 10; //scale warpspace distance to realspace distance
     public static int offset = 150; //offset in sectors
@@ -42,6 +46,8 @@ public class JumpListener {
                     newPos = GetWarpSpacePos(posNow);
                 }
                 SectorSwitch toWarp = GameServer.getServerState().getController().queueSectorSwitch(event.getController(),newPos,SectorSwitch.TRANS_JUMP,false);
+                //TODO why are jumps sometimes not executed?
+                //TODO empty jumpmodule like a jump ususally would
             }
         });
     }
@@ -66,6 +72,11 @@ public class JumpListener {
         ModPlayground.broadcastMessage("warppos: " + warpPos);
         return warpPos;
     }
+    /**
+     * Calculate the realspace position from a warpspace position
+     * @param WarpSpacePos sector in warpspace
+     * @return correlating sector in realspace
+     */
     public static Vector3i GetRealSpacePos(Vector3i WarpSpacePos) {
         Vector3i warpPos;
         Vector3f realPosF = WarpSpacePos.toVector3f();
