@@ -26,6 +26,9 @@ Some core effects are:
 Gain insight to how the mod handles ingame with this showcase video:
 https://www.youtube.com/watch?v=0t-y4ZppfLg
 
+Find the documentation here:
+https://ir0nsight.github.io/Warpspace/
+
 You can try the mod out yourself, you will need starloader to run it. If you dont know how starloader is used, head over to its discord where we will help you set it up.
 https://discord.gg/hcpSphM
 
