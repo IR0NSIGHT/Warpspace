@@ -16,7 +16,7 @@ public class main extends StarMod {
     @Override
     public void onGameStart() {
         super.onGameStart();
-        this.setModVersion("0.1");
+        this.setModVersion("0.2");
         this.setModName("Warpspace");
         this.setModAuthor("IR0NSIGHT");
         DebugFile.log("Hello Space!");

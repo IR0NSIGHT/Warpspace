@@ -20,6 +20,10 @@ import javax.vecmath.Vector3f;
 /**
  *  core class that handles jump events and teleports to and from the warp
  */
+    //TODO make travel speed in warp depend on FTL chamber level
+    //TODO add ways to pull ships out of warpspace
+    //TODO make ships drop out of warp when FTL drive is damaged
+    //TODO no shields in warp?
 public class JumpListener {
     public static int scale = 10; //scale warpspace distance to realspace distance
     public static int offset = 150; //offset in sectors
