@@ -29,7 +29,7 @@ https://www.youtube.com/watch?v=0t-y4ZppfLg
 You can try the mod out yourself, you will need starloader to run it. If you dont know how starloader is used, head over to its discord where we will help you set it up.
 https://discord.gg/hcpSphM
 
-#Install guide
+# Install guide
 If you already have a working starloader:
 Download the latest WarpSpace.jar file from the builds repo (right hand table here) and place it into your /mods folder in starmade.
 Run the game, make sure the mod is active in the main menu -> "tools and mods". If its highlighted in green, its active.
