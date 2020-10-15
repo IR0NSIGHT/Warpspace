@@ -1,5 +1,4 @@
 import api.DebugFile;
-import api.ModPlayground;
 import api.common.GameServer;
 import api.listener.Listener;
 import api.listener.events.entity.ShipJumpEngageEvent;
@@ -9,7 +8,6 @@ import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.controller.elements.jumpdrive.JumpAddOn;
 import org.schema.game.common.data.ManagedSegmentController;
-import org.schema.game.common.data.world.Sector;
 import org.schema.game.server.controller.SectorSwitch;
 import org.schema.schine.common.language.Lng;
 import org.schema.schine.network.server.ServerMessage;
@@ -33,12 +31,18 @@ import javax.vecmath.Vector3f;
 public class JumpListener {
     public static int scale = 10; //scale warpspace distance to realspace distance
     public static int offset = 150; //offset in sectors
+
+    /**
+     * creates the event handler for ShipJumpEngageEvent.
+     * It will detect and cancel any jump a ship attempts.
+     * instead another jump is queue to or from warp, depending on the ships position.
+     */
     public static void createListener() {
         DebugFile.log("Creating jump listener");
         StarLoader.registerListener(ShipJumpEngageEvent.class, new Listener<ShipJumpEngageEvent>() {
             @Override
             public void onEvent(ShipJumpEngageEvent event) {
-                ModPlayground.broadcastMessage("ship jumping, abort");
+                //ModPlayground.broadcastMessage("ship jumping, abort");
 
                 event.setCanceled(true); //stop jump
                 Vector3i posNow = event.getOriginalSectorPos();
@@ -47,13 +51,13 @@ public class JumpListener {
                 String displayMessage;
                 if (posNow.y >= 150) {
                     //is in warpspace, get realspace pos
-                    ModPlayground.broadcastMessage("in warp");
+                    //ModPlayground.broadcastMessage("in warp");
                     displayMessage = " out of warp to position ";
                     DebugFile.log("warp");
                     newPos = GetRealSpacePos(posNow);
                 } else {
                     //is in realspace, get warppos
-                    ModPlayground.broadcastMessage("in realspace");
+                    //ModPlayground.broadcastMessage("in realspace");
                     displayMessage = " into warp to position ";
                     DebugFile.log("realspace");
                     newPos = GetWarpSpacePos(posNow);
@@ -67,7 +71,9 @@ public class JumpListener {
                     DebugFile.log("entity " + ship.getName() + "tried jumping but is no managed SC.");
                     return;
                 }
-
+                if (!warpdrive.canExecute()) {
+                    return;
+                }
                 //TODO check for interdiction -> not possible bc vanilla method is private
                 //jump
 
@@ -86,7 +92,6 @@ public class JumpListener {
                     ship.sendControllingPlayersServerMessage(Lng.astr("Jump failed, warpdrive needs to cooldown."), ServerMessage.MESSAGE_TYPE_INFO);
                     DebugFile.log("jumping into warp failed");
                 }
-                //TODO why are jumps sometimes not executed?
             }
         });
     }
@@ -99,7 +104,7 @@ public class JumpListener {
     public static Vector3i GetWarpSpacePos(Vector3i RealSpacePos) {
         Vector3i warpPos;
         Vector3f realPosF = RealSpacePos.toVector3f();
-        ModPlayground.broadcastMessage("real space pos: " + realPosF.toString());
+        //ModPlayground.broadcastMessage("real space pos: " + realPosF.toString());
         realPosF.x = Math.round(realPosF.x / scale);
         realPosF.y = Math.round(realPosF.y / scale);
         realPosF.z = Math.round(realPosF.z / scale);
@@ -108,7 +113,7 @@ public class JumpListener {
         realPosF.y += offset * 2; //offset sectors to up (y axis)
         warpPos = new Vector3i(realPosF.x,realPosF.y,realPosF.z);
         DebugFile.log("warppos: " + warpPos.toString());
-        ModPlayground.broadcastMessage("warppos: " + warpPos);
+       // ModPlayground.broadcastMessage("warppos: " + warpPos);
         return warpPos;
     }
     /**
@@ -119,7 +124,7 @@ public class JumpListener {
     public static Vector3i GetRealSpacePos(Vector3i WarpSpacePos) {
         Vector3i warpPos;
         Vector3f realPosF = WarpSpacePos.toVector3f();
-        ModPlayground.broadcastMessage("warp space pos: " + realPosF.toString());
+       // ModPlayground.broadcastMessage("warp space pos: " + realPosF.toString());
         realPosF.y -= offset * 2; //offset sectors to up (y axis)
         DebugFile.log("warppos minus offset: " + realPosF.toString());
         realPosF.x = Math.round(realPosF.x * scale);
@@ -130,7 +135,7 @@ public class JumpListener {
 
         warpPos = new Vector3i(realPosF.x,realPosF.y,realPosF.z);
 
-        ModPlayground.broadcastMessage("warppos: " + warpPos);
+       // ModPlayground.broadcastMessage("warppos: " + warpPos);
         return warpPos;
     }
 }
