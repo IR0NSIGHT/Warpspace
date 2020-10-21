@@ -17,6 +17,7 @@ import org.schema.game.client.data.ClientGameData;
 import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.data.player.PlayerState;
+import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.schine.network.objects.remote.RemoteVector3i;
 
 import java.util.Iterator;
@@ -44,9 +45,15 @@ public class navigationHelper {
         //set new waypoint
         return newWP;
     }
+    //TODO autodetect if "nowaypoint"
     public static void handlePilots(SegmentController ship, boolean toWarp) {
         try {
             DebugFile.log("trying to handle pilots");
+            if (ship.getType() != SimpleTransformableSendableObject.EntityType.SHIP) {
+                DebugFile.log("not handling pilots for type: " + ship.getType());
+                return;
+            }
+            //TODO crashes somewhere here
             //get all players in ship
             Iterator i = ((PlayerControllable)ship).getAttachedPlayers().iterator();
             //foreach pilot do
@@ -64,7 +71,7 @@ public class navigationHelper {
         }  catch (Exception e) {
             e.printStackTrace();
             DebugFile.log(e.toString());
-            ModPlayground.broadcastMessage("handlePilots failed");
+       //     ModPlayground.broadcastMessage("handlePilots failed");
         }
 
     }

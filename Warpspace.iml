@@ -38,5 +38,14 @@
         <jarDirectory url="file://$USER_HOME$/Desktop/Starmade/server testarea/dedicated starmade/StarMade/lib" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desktop/Starmade/mod/star-api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

@@ -1,14 +1,18 @@
 import api.DebugFile;
+import api.ModPlayground;
 import api.common.GameServer;
 import api.listener.Listener;
 import api.listener.events.entity.ShipJumpEngageEvent;
 import api.mod.StarLoader;
+import api.utils.StarRunnable;
+import org.lwjgl.util.vector.Vector;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.controller.elements.jumpdrive.JumpAddOn;
 import org.schema.game.common.data.ManagedSegmentController;
 import org.schema.game.common.data.player.PlayerState;
+import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.controller.SectorSwitch;
 import org.schema.schine.common.language.Lng;
 import org.schema.schine.network.objects.remote.RemoteVector3i;
@@ -95,6 +99,20 @@ public class JumpListener {
                     warpdrive.removeCharge();
                     warpdrive.setCharge(0);
                     warpdrive.sendChargeUpdate();
+                    if (intoWarp) { //ship has (will) successfully changed into warp
+                    //    ModPlayground.broadcastMessage("starting checkloop");
+                        final SegmentController s = ship;
+                        new StarRunnable() {
+                            @Override
+                            public void run() {
+                         //       warpLoop.startLoop(s); //start loop that will drop the ship back out if its to slow
+                            }
+                        }.runLater(25*5);
+                    //Does not work atm    WarpThrustManager.OverwriteThrust((Ship)ship,true);
+                    } else {
+                        //ship has successfully dropped out of warp
+                    //Does not work atm   WarpThrustManager.OverwriteThrust((Ship)ship,false);
+                    };
                 } else {
                     ship.sendControllingPlayersServerMessage(Lng.astr("Jump failed, warpdrive needs to cooldown."), ServerMessage.MESSAGE_TYPE_INFO);
                     DebugFile.log("jumping into warp failed");
@@ -145,5 +163,37 @@ public class JumpListener {
 
        // ModPlayground.broadcastMessage("warppos: " + warpPos);
         return warpPos;
+    }
+    public static void dropOutOfWarp(SegmentController ship) {
+        Vector3i posNow = ship.getSector(new Vector3i());
+        Vector3i newPos = GetRealSpacePos(posNow);
+        if (ship.getType() == SimpleTransformableSendableObject.EntityType.SPACE_STATION) {
+            newPos = getRandomSector();
+        }
+        SectorSwitch sectorSwitch = GameServer.getServerState().getController().queueSectorSwitch(ship,newPos,SectorSwitch.TRANS_JUMP,false,true,true);
+        if (sectorSwitch != null) {
+            sectorSwitch.delay = System.currentTimeMillis();
+            sectorSwitch.executionGraphicsEffect = (byte) 2;
+            ship.sendControllingPlayersServerMessage(Lng.astr("Dropping out of warp at " + newPos.toStringPure()), ServerMessage.MESSAGE_TYPE_INFO);
+            //empty jumpmodule after jump
+        } else {
+            ship.sendControllingPlayersServerMessage(Lng.astr("Jump failed, warpdrive needs to cooldown."), ServerMessage.MESSAGE_TYPE_INFO);
+            DebugFile.log("jumping into warp failed");
+        }
+        navigationHelper.handlePilots(ship,false);
+
+        //remove from tracking list
+        if (warpLoop.warpEntities.contains(ship)) {
+            warpLoop.warpEntities.remove(ship);
+        }
+    //    WarpThrustManager.OverwriteThrust((Ship)ship,false);
+    }
+    private static Vector3i getRandomSector() {
+        Vector3i sector = new Vector3i();
+        sector.x = (int) Math.round(Math.random() * 1000 - 500);
+        sector.y = (int) Math.round(Math.random() * 200 - 100);
+        sector.z = (int) Math.round(Math.random() * 1000 - 500);
+        DebugFile.log("chose random sector: " + sector.toString());
+        return sector;
     }
 }

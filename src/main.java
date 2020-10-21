@@ -40,7 +40,6 @@ public class main extends StarMod {
         super.onEnable();
         DebugFile.log("enabled.",this);
         PacketUtil.registerPacket(PacketSCSetWaypoint.class);
-
     }
 
     @Override
@@ -48,6 +47,6 @@ public class main extends StarMod {
         super.onServerCreated(event);
         DebugFile.log("WarpSpace creating listeners at server creation",this);
         JumpListener.createListener();
+        CheeseCatchLoop.createLoop();
     }
-
 }
