@@ -23,7 +23,16 @@ Some core effects are:
         + shields not working
         + a limited time in warp, where a counter autodrops the ship back out
 
-Gain insight to how the mod handles ingame with this showcase video:
+#How to use inGame
+- the mod will notice any FTL jump a ship performs. instead of arriving at your location, you will enter the warp instead.
+- Your navmarker will be changed to its warp position as well. Just follow the marker to get to the correct position in warp.
+- to drop out of warp you can either use your FTL drive again, or slow down to below 50m/s.
+- FTL usage will drop you out of warp instantly, slowing down will give you a 10 second countdown and show you a warning.
+- if you spawn a spacestation in warp, it will drop out to a random sector! thats wanted behaviour to prohibit warpcamping.
+- astronauts will not drop out of warp automatically.
+- if you want to avoid the warp completely, you can create Warpgates. they keep their vanilla behaviour and offer a way to travel instantly, precisely and safely.
+
+Gain insight to how the mod handles ingame with this showcase video (very early version):
 https://www.youtube.com/watch?v=0t-y4ZppfLg
 
 Find the documentation here:
