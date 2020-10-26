@@ -21,7 +21,7 @@ public class main extends StarMod {
     public static void main(String[] args) {
         System.out.println("hello space!");
     }
-
+    public static StarMod instance;
     /**
      *  sets mod information like author, name and version.
      */
@@ -38,6 +38,7 @@ public class main extends StarMod {
     @Override
     public void onEnable() {
         super.onEnable();
+        instance = this;
         DebugFile.log("enabled.",this);
         PacketUtil.registerPacket(PacketSCSetWaypoint.class);
     }

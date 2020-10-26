@@ -27,7 +27,7 @@ public class CheeseCatchLoop {
                 Map<String, SegmentController> scList = GameServer.getServerState().getSegmentControllersByName();
                 for (SegmentController sc: scList.values()) {
                 //    DebugFile.log("checking: " + sc.getName() + " at y = " + + sc.getSector(new Vector3i()).y);
-                    if (sc.getSector(new Vector3i()).y > 150 && !warpLoop.warpEntities.contains(sc)) { //entity is in warp but not registered by the system to be in warp
+                    if (sc.getSector(new Vector3i()).y >= 150 && !warpLoop.warpEntities.contains(sc)) { //entity is in warp but not registered by the system to be in warp
                         //register entity as in warp
                         DebugFile.log(" cheeser found: " + sc.getName());
                         DebugFile.log("------------ logging warpEn. list:");
@@ -41,6 +41,12 @@ public class CheeseCatchLoop {
                  //       ModPlayground.broadcastMessage("caught cheesy ship in warp");
                     } else {
                 //        DebugFile.log("not in warp or registered:");
+                    }
+                    if (sc.getSector(new Vector3i()).y < 150 && warpLoop.warpEntities.contains(sc)) {
+                        //is in warpentity list but not in warp
+                        //remove from list
+                        warpLoop.warpEntities.remove(sc);
+                        DebugFile.log("removed " + sc.getName() + "from list bc not anymore in warp: " + sc.getSector(new Vector3i()).toString());
                     }
                 }
                 //check y position

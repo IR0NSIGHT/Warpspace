@@ -47,7 +47,8 @@ public class JumpListener {
      */
     public static void createListener() {
         DebugFile.log("Creating jump listener");
-        StarLoader.registerListener(ShipJumpEngageEvent.class, new Listener<ShipJumpEngageEvent>() {
+        StarLoader.registerListener(ShipJumpEngageEvent.class,
+                new Listener<ShipJumpEngageEvent>() {
             @Override
             public void onEvent(ShipJumpEngageEvent event) {
                 //ModPlayground.broadcastMessage("ship jumping, abort");
@@ -120,7 +121,7 @@ public class JumpListener {
                 navigationHelper.handlePilots(ship,intoWarp);
 
             }
-        });
+        },main.instance);
     }
     /**
      * Calculate the Warpspace position from a realworld position

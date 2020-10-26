@@ -32,7 +32,7 @@ public class warpLoop {
             warpEntities.add(ship);
         }
         new StarRunnable() {
-            int countdown = 10;
+            int countdown = 15;
             long lastWarning = 11;
             @Override
             public void run() {
