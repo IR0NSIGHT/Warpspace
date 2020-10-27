@@ -33,12 +33,9 @@ public class main extends StarMod {
         this.setModName("WarpSpace");
         this.setModAuthor("IR0NSIGHT");
         this.setModDescription("an alternative FTL system");
-      //  this.addDependency("StarAPI");
-   //     this.setServerSide(true); //needs client for packet receiving
         DebugFile.log("WarpSpace info set.",this);
-   //     DebugFile.log(this.toString());
     }
-
+    //TODO rewrite whole system of warploop and events. its a friggin mess.
     @Override
     public void onEnable() {
         super.onEnable();

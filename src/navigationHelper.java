@@ -15,7 +15,6 @@ import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.schine.network.objects.remote.RemoteVector3i;
 
 import java.util.Iterator;
-//TODO change nav waypoint to autoupdate (?) or add gui button for that
 /**
  * adds elements that make it easier to tell what warp coord relates to what realspace coord.
  */

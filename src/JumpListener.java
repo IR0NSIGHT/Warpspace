@@ -34,8 +34,6 @@ import javax.vecmath.Vector3f;
     //TODO add ways to pull ships out of warpspace
     //TODO make ships drop out of warp when FTL drive is damaged
     //TODO no shields in warp?
-    //TODO visual way to tell what realspace sector the palyer is in
-    //TODO translate selection marker to warp as well
 public class JumpListener {
     public static int scale = 10; //scale warpspace distance to realspace distance
     public static int offset = 150; //offset in sectors

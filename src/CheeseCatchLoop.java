@@ -37,7 +37,7 @@ public class CheeseCatchLoop {
                         DebugFile.log("---------done");
 
                         warpLoop.startLoop(sc);
-                        navigationHelper.handlePilots(sc,true); //TODO make navHelper autodetect if into or from warp
+                        navigationHelper.handlePilots(sc,true);
                  //       ModPlayground.broadcastMessage("caught cheesy ship in warp");
                     } else {
                 //        DebugFile.log("not in warp or registered:");

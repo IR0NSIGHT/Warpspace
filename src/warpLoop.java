@@ -25,7 +25,6 @@ import java.util.List;
 public class warpLoop {
     public static List<SegmentController> warpEntities = new ArrayList<>();
     //TODO add a central method that handles an entity being put into warp so it can be called by event or cheeseloop
-
     public static void startLoop(final SegmentController ship) {
         if (warpEntities.contains(ship)) {
             DebugFile.log("ship already is registered with warploop");
