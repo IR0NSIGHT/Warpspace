@@ -31,6 +31,7 @@ public class WarpHUDPanel {
     public void setTextEl(String text) {
         textEl.text = text;
     }
+    //TODO only calculate other sector if sector changed. dont calculate once per tick.
     private void startLoop() {
         new StarRunnable() {
             @Override

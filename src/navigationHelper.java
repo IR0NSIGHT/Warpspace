@@ -26,6 +26,9 @@ public class navigationHelper {
      * @param toWarp switch navigation waypoint towarp, false for to realspace
      */
     public static Vector3i switchWaypoint(Vector3i waypoint, boolean toWarp) {
+        if (waypoint.equals(PlayerState.NO_WAYPOINT)) {
+            return PlayerState.NO_WAYPOINT;
+        }
         //check if fromWarp or toWarp
         Vector3i currentWP = waypoint;
         Vector3i newWP;
@@ -39,7 +42,6 @@ public class navigationHelper {
         //set new waypoint
         return newWP;
     }
-    //TODO autodetect if "nowaypoint"
     public static void handlePilots(SegmentController ship, boolean toWarp) {
         try {
             DebugFile.log("trying to handle pilots");
@@ -47,7 +49,6 @@ public class navigationHelper {
                 DebugFile.log("not handling pilots for type: " + ship.getType());
                 return;
             }
-            //TODO crashes somewhere here
             //get all players in ship
             Iterator i = ((PlayerControllable)ship).getAttachedPlayers().iterator();
             //foreach pilot do
@@ -56,6 +57,9 @@ public class navigationHelper {
                 DebugFile.log("changing waypoint for player " + player.getName());
                 RemoteVector3i vec = player.getNetworkObject().waypoint;
                 Vector3i newVec = switchWaypoint(vec.getVector(),toWarp);
+                if (newVec.equals(PlayerState.NO_WAYPOINT)) {
+                    continue;
+                }
                 DebugFile.log("old wp: " + vec.getVector().toString() + " new wp: " + newVec);
                 //make packet with new wp, send it to players client
                 PacketSCUpdateWarp packet = new PacketSCUpdateWarp(newVec);
