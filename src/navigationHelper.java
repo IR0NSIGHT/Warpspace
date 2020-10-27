@@ -6,14 +6,8 @@
  */
 
 import api.DebugFile;
-import api.ModPlayground;
-import api.common.GameServer;
-import api.listener.Listener;
-import api.listener.events.gui.HudCreateEvent;
-import api.mod.StarLoader;
 import api.network.packets.PacketUtil;
 import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.client.data.ClientGameData;
 import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.data.player.PlayerState;
@@ -64,7 +58,7 @@ public class navigationHelper {
                 Vector3i newVec = switchWaypoint(vec.getVector(),toWarp);
                 DebugFile.log("old wp: " + vec.getVector().toString() + " new wp: " + newVec);
                 //make packet with new wp, send it to players client
-                PacketSCSetWaypoint packet = new PacketSCSetWaypoint(newVec);
+                PacketSCUpdateWarp packet = new PacketSCUpdateWarp(newVec);
                 PacketUtil.sendPacket(player, packet);
             } while (i.hasNext());
             DebugFile.log("handled all pilots");

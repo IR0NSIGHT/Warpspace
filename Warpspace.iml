@@ -10,15 +10,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/Starmade/server testarea/dedicated starmade/StarMade/StarMade.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$USER_HOME$/Desktop/Starmade/server testarea/dedicated starmade/StarMade/patched_starmade.jar!/" />
         </CLASSES>
         <JAVADOC />

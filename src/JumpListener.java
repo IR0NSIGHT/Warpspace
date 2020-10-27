@@ -108,7 +108,7 @@ public class JumpListener {
                             public void run() {
                          //       warpLoop.startLoop(s); //start loop that will drop the ship back out if its to slow
                             }
-                        }.runLater(25*5);
+                        }.runLater(main.instance, 25*5);
                     //Does not work atm    WarpThrustManager.OverwriteThrust((Ship)ship,true);
                     } else {
                         //ship has successfully dropped out of warp

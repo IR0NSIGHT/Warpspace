@@ -2,9 +2,12 @@ import api.DebugFile;
 import api.ModPlayground;
 import api.common.GameServer;
 import api.utils.StarRunnable;
+import api.utils.sound.AudioUtils;
 import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
+import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.server.data.GameServerState;
 import org.schema.schine.common.language.Lng;
 import org.schema.schine.network.server.ServerMessage;
@@ -56,6 +59,15 @@ public class warpLoop {
                             DebugFile.log("warning player for countdown " + countdown + " and lastwarning " + lastWarning);
                             ship.sendControllingPlayersServerMessage(Lng.astr("you are to slow! dropping out of warp in " + countdown), ServerMessage.MESSAGE_TYPE_WARNING);
                         //    ModPlayground.broadcastMessage("you are to slow! dropping out of warp in " + countdown);
+                            //send warning sound to players in ship
+                            if (ship.isConrolledByActivePlayer()) {
+                                for (PlayerState player: ((PlayerControllable)ship).getAttachedPlayers()) {
+                                    AudioUtils.serverPlaySound("0022_gameplay - low fuel warning constant beeps (loop)", 1F,1F,player);
+                                }
+                            //    ModPlayground.broadcastMessage("ship is controlled by player, ding dong");
+                            }
+
+
                             lastWarning = countdown;
                         }
                         countdown --; //runs once a second
@@ -95,6 +107,6 @@ public class warpLoop {
 
                 super.cancel();
             }
-        }.runTimer(25);
+        }.runTimer(main.instance, 25);
     }
 }

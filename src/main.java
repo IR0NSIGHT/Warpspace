@@ -1,4 +1,5 @@
 import api.DebugFile;
+import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
 import api.mod.StarMod;
 import api.network.packets.PacketUtil;
@@ -31,8 +32,10 @@ public class main extends StarMod {
         this.setModVersion("0.4");
         this.setModName("WarpSpace");
         this.setModAuthor("IR0NSIGHT");
+      //  this.addDependency("StarAPI");
    //     this.setServerSide(true); //needs client for packet receiving
         DebugFile.log("WarpSpace info set.",this);
+   //     DebugFile.log(this.toString());
     }
 
     @Override
@@ -40,7 +43,7 @@ public class main extends StarMod {
         super.onEnable();
         instance = this;
         DebugFile.log("enabled.",this);
-        PacketUtil.registerPacket(PacketSCSetWaypoint.class);
+        PacketUtil.registerPacket(PacketSCUpdateWarp.class);
     }
 
     @Override
@@ -49,5 +52,12 @@ public class main extends StarMod {
         DebugFile.log("WarpSpace creating listeners at server creation",this);
         JumpListener.createListener();
         CheeseCatchLoop.createLoop();
+    }
+
+    @Override
+    public void onClientCreated(ClientInitializeEvent event) {
+        super.onClientCreated(event);
+        DebugFile.log("calling static method to register to GUI draw listener",main.instance);
+        GUIeventhandler.addHUDDrawListener();
     }
 }

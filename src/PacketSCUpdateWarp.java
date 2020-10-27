@@ -9,15 +9,21 @@ import java.io.IOException;
 
 /**
  * packet to send a vector3i to a client and set it as the clients navigation waypoint
+ * send all important information from server to client
+ * edited by Ir0nsight
  * made by jake
  */
-public class PacketSCSetWaypoint extends Packet {
+public class PacketSCUpdateWarp extends Packet {
     private Vector3i waypoint;
 
-    public PacketSCSetWaypoint(Vector3i waypoint) {
+    /**
+     * constructor
+     * @param waypoint
+     */
+    public PacketSCUpdateWarp(Vector3i waypoint) {
         this.waypoint = waypoint;
     }
-    public PacketSCSetWaypoint(){
+    public PacketSCUpdateWarp(){
 
     }
 

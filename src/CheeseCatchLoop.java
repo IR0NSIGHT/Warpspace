@@ -52,6 +52,6 @@ public class CheeseCatchLoop {
                 //check y position
                 //check for all warp sc if they have a warploop
             }
-        }.runTimer(25);
+        }.runTimer(main.instance,25);
     }
 }
