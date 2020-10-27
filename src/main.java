@@ -29,9 +29,10 @@ public class main extends StarMod {
     @Override
     public void onGameStart() {
         super.onGameStart();
-        this.setModVersion("0.4");
+        this.setModVersion("0.5");
         this.setModName("WarpSpace");
         this.setModAuthor("IR0NSIGHT");
+        this.setModDescription("an alternative FTL system");
       //  this.addDependency("StarAPI");
    //     this.setServerSide(true); //needs client for packet receiving
         DebugFile.log("WarpSpace info set.",this);

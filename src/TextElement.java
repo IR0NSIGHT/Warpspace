@@ -6,6 +6,7 @@ import api.entity.StarPlayer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.UnicodeFont;
 import org.schema.game.common.data.player.faction.FactionRelation;
+import org.schema.schine.graphicsengine.forms.gui.GUITextOverlay;
 import org.schema.schine.input.InputState;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  * TIME: 21:02
  * blatantly stolen from pilotelement of star api
  */
-public class TextElement extends CustomHudText {
+public class TextElement extends GUITextOverlay {
     public TextElement(UnicodeFont unicodeFont, InputState inputState) {
         super(100, 20, unicodeFont, Color.green, inputState);
     }
