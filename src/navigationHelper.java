@@ -26,9 +26,6 @@ public class navigationHelper {
      * @param toWarp switch navigation waypoint towarp, false for to realspace
      */
     public static Vector3i switchWaypoint(Vector3i waypoint, boolean toWarp) {
-        if (waypoint.equals(PlayerState.NO_WAYPOINT)) {
-            return PlayerState.NO_WAYPOINT;
-        }
         //check if fromWarp or toWarp
         Vector3i currentWP = waypoint;
         Vector3i newWP;
@@ -56,10 +53,11 @@ public class navigationHelper {
                 PlayerState player = (PlayerState)i.next();
                 DebugFile.log("changing waypoint for player " + player.getName());
                 RemoteVector3i vec = player.getNetworkObject().waypoint;
-                Vector3i newVec = switchWaypoint(vec.getVector(),toWarp);
-                if (newVec.equals(PlayerState.NO_WAYPOINT)) {
+                if (vec.equals(PlayerState.NO_WAYPOINT)) {
                     continue;
                 }
+                Vector3i newVec = switchWaypoint(vec.getVector(),toWarp);
+
                 DebugFile.log("old wp: " + vec.getVector().toString() + " new wp: " + newVec);
                 //make packet with new wp, send it to players client
                 PacketSCUpdateWarp packet = new PacketSCUpdateWarp(newVec);
@@ -71,12 +69,5 @@ public class navigationHelper {
             DebugFile.log(e.toString());
        //     ModPlayground.broadcastMessage("handlePilots failed");
         }
-
-    }
-    public static void tmp() {
-        PlayerState player = null;
-        RemoteVector3i vec = player.getNetworkObject().waypoint;
-        Vector3i newVec = switchWaypoint(vec.getVector(),true);
-        vec.set(newVec);
     }
 }
