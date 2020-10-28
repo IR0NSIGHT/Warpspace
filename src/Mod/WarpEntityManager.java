@@ -7,6 +7,8 @@ package Mod;
  * TIME: 16:42
  */
 
+import Mod.server.InWarpLoop;
+import api.DebugFile;
 import org.schema.game.common.controller.SegmentController;
 
 import java.util.List;
@@ -30,7 +32,15 @@ public class WarpEntityManager {
      */
     public static void DeclareWarpEntity(SegmentController ship) {
         //TODO write method
+        if (WarpEntityManager.isWarpEntity(ship)) {
+            DebugFile.log("ship already is registered with warploop");
+            return;
+        }
+        DebugFile.log("added ship to warpentities: " + ship.getName());
         shipsInWarp.add(ship);
+        InWarpLoop.startLoop(ship);
+
+
         //add to list
         //start ship loop
         //handle pilots

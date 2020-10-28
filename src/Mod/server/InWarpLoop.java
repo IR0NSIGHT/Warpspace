@@ -1,4 +1,9 @@
+package Mod.server;
+
+import Mod.WarpEntityManager;
+import Mod.WarpJumpManager;
 import Mod.WarpMain;
+import Mod.WarpManager;
 import api.DebugFile;
 import api.utils.StarRunnable;
 import api.utils.sound.AudioUtils;
@@ -19,17 +24,9 @@ import java.util.List;
  * DATE: 16.10.2020
  * TIME: 01:00
  */
-public class warpLoop {
-    public static List<SegmentController> warpEntities = new ArrayList<>();
+public class InWarpLoop {
     //TODO add a central method that handles an entity being put into warp so it can be called by event or cheeseloop
     public static void startLoop(final SegmentController ship) {
-        if (warpEntities.contains(ship)) {
-            DebugFile.log("ship already is registered with warploop");
-            return;
-        } else {
-            DebugFile.log("added ship to warpentities: " + ship.getName());
-            warpEntities.add(ship);
-        }
         new StarRunnable() {
             int countdown = 15;
             long lastWarning = 11;
@@ -39,31 +36,21 @@ public class warpLoop {
                     cancel();
                 }
                 try {
-                //    ModPlayground.broadcastMessage("loop running");
-                //    ModPlayground.broadcastMessage("ship speed: " + ship.getSpeedCurrent());
-                //    ModPlayground.broadcastMessage("countdown: " + countdown);
-                //     ModPlayground.broadcastMessage("lastWarning: " + lastWarning);
-                //    WarpThrustManager.DebugThrust((Ship)ship);
-                    if (ship.getSector(new Vector3i()).y < 150) {
+                    if (!WarpEntityManager.isWarpEntity(ship)) {
                         //left warp
-                    //    ModPlayground.broadcastMessage("ship left warp.");
                         cancel();
                     }
-                    if (ship.getSpeedCurrent() < 50) {
+                    if (ship.getSpeedCurrent() < WarpManager.minimumSpeed) {
                         //ship is to slow, dropping out of warp!
                         if (countdown < lastWarning) {
                             DebugFile.log("warning player for countdown " + countdown + " and lastwarning " + lastWarning);
                             ship.sendControllingPlayersServerMessage(Lng.astr("you are to slow! dropping out of warp in " + countdown), ServerMessage.MESSAGE_TYPE_WARNING);
-                        //    ModPlayground.broadcastMessage("you are to slow! dropping out of warp in " + countdown);
                             //send warning sound to players in ship
                             if (ship.isConrolledByActivePlayer()) {
                                 for (PlayerState player: ((PlayerControllable)ship).getAttachedPlayers()) {
                                     AudioUtils.serverPlaySound("0022_gameplay - low fuel warning constant beeps (loop)", 1F,1F,player);
                                 }
-                            //    ModPlayground.broadcastMessage("ship is controlled by player, ding dong");
                             }
-
-
                             lastWarning = countdown;
                         }
                         countdown --; //runs once a second
@@ -72,37 +59,22 @@ public class warpLoop {
                             countdown ++;
                             lastWarning = countdown;
                         }
-
                     }
-                //    WarpThrustManager.LimitShipSpeed((Ship) ship,50); //TODO make thrust manipulation work
                     if (countdown > 10) { //essentially caps the countdown to 10, while allowing a start buffer of extra seconds
                         countdown --;
-
                     }
                     if (countdown <= 0) {
                         //drop entity out of warp.
-                    //    ModPlayground.broadcastMessage("dropping, to slow for to long");
-                        //JumpListener.dropOutOfWarp(ship);
+                        WarpJumpManager.invokeDrop(25,ship,WarpManager.GetRealSpacePos(ship.getSector(new Vector3i())),true);
                         cancel();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     DebugFile.log(e.toString());
                 }
-
-            }
-
-            @Override
-            public void cancel() {
-                try {
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    DebugFile.log("could not remove entity from warpList: " + e.toString());
-                }
-
-                super.cancel();
             }
         }.runTimer(WarpMain.instance, 25);
+    }
+    private void handleCountdown() {
     }
 }

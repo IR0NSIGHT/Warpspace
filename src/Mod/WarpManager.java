@@ -28,6 +28,10 @@ public class WarpManager {
     public static int offset = 150; //offset in sectors
 
     /**
+     *  minimum speed required to stay in warp
+     */
+    public static int minimumSpeed = 50;
+    /**
      * check if an objects positon is in warpspace
      * @param object
      * @return
