@@ -1,3 +1,7 @@
+package Mod;
+
+import Mod.server.WarpCheckLoop;
+import Mod.server.WarpJumpListener;
 import api.DebugFile;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
@@ -14,7 +18,7 @@ import api.network.packets.PacketUtil;
 /**
  * the main class where the mod is run from by starloader.
  */
-public class main extends StarMod {
+public class WarpMain extends StarMod {
     /**
      * empty method required for jar to build correctly. prints "hello space" if run.
      * @param args
@@ -48,14 +52,16 @@ public class main extends StarMod {
     public void onServerCreated(ServerInitializeEvent event) {
         super.onServerCreated(event);
         DebugFile.log("WarpSpace creating listeners at server creation",this);
-        JumpListener.createListener();
-        CheeseCatchLoop.createLoop();
+    //    JumpListener.createListener();
+        WarpJumpListener.createListener();
+        WarpCheckLoop.loop(25); //TODO use a frequency from a config
+    //    CheeseCatchLoop.createLoop();
     }
 
     @Override
     public void onClientCreated(ClientInitializeEvent event) {
         super.onClientCreated(event);
-        DebugFile.log("calling static method to register to GUI draw listener",main.instance);
-        GUIeventhandler.addHUDDrawListener();
+        DebugFile.log("calling static method to register to GUI draw listener", WarpMain.instance);
+    //TODO    GUIeventhandler.addHUDDrawListener();
     }
 }

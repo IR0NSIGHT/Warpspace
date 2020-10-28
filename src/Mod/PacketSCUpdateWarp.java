@@ -1,3 +1,5 @@
+package Mod;
+
 import api.common.GameClient;
 import api.network.Packet;
 import api.network.PacketReadBuffer;

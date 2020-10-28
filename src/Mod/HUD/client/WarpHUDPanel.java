@@ -1,9 +1,10 @@
-import api.DebugFile;
+package Mod.HUD.client;
+
+import Mod.WarpMain;
+import Mod.WarpManager;
 import api.common.GameClient;
-import api.element.gui.custom.CustomHudText;
 import api.listener.events.gui.HudCreateEvent;
 import api.utils.StarRunnable;
-import org.newdawn.slick.Color;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.schine.graphicsengine.forms.font.FontLibrary;
 
@@ -38,17 +39,17 @@ public class WarpHUDPanel {
             public void run() {
                 String text = "empty";
                 //.log("playersector: " + getPlayerSector().toString());
-                if (getPlayerSector().y >= JumpListener.offset) {
+                if (getPlayerSector().y >= WarpManager.offset) {
 
-                    text = "WARP - realspace pos: " + JumpListener.GetRealSpacePos(getPlayerSector());
+                    text = "WARP - realspace pos: " + WarpManager.GetRealSpacePos(getPlayerSector());
                 } else {
-                    text = "REALSPACE - warp pos: " + JumpListener.GetWarpSpacePos(getPlayerSector());
+                    text = "REALSPACE - warp pos: " + WarpManager.GetWarpSpacePos(getPlayerSector());
                 }
                 //DebugFile.log("text: " +text,main.instance);
                 setTextEl(text);
 
             }
-        }.runTimer(main.instance,1);
+        }.runTimer(WarpMain.instance,1);
     }
     private static Vector3i getPlayerSector() {
         return GameClient.getClientPlayerState().getCurrentSector();

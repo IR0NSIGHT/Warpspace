@@ -1,3 +1,5 @@
+package Mod.HUD.client;
+
 import api.common.GameClient;
 import api.element.gui.custom.CustomHudText;
 import api.element.gui.custom.examples.PilotElement;

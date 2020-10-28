@@ -5,8 +5,9 @@
  * TIME: 20:13
  */
 
+import Mod.HUD.client.navigationHelper;
+import Mod.WarpMain;
 import api.DebugFile;
-import api.ModPlayground;
 import api.common.GameServer;
 import api.utils.StarRunnable;
 import org.schema.common.util.linAlg.Vector3i;
@@ -52,6 +53,6 @@ public class CheeseCatchLoop {
                 //check y position
                 //check for all warp sc if they have a warploop
             }
-        }.runTimer(main.instance,25);
+        }.runTimer(WarpMain.instance,25);
     }
 }

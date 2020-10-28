@@ -44,7 +44,7 @@ https://discord.gg/hcpSphM
 # Install guide
 If you already have a working starloader:
 Download the latest WarpSpace.jar file from the builds repo (right hand table here) and place it into your /mods folder in starmade.
-Run the game, make sure the mod is active in the main menu -> "tools and mods". If its highlighted in green, its active.
+Run the game, make sure the mod is active in the WarpMain menu -> "tools and mods". If its highlighted in green, its active.
 Start any gameworld and use a ships warpdrive.
 
 If you have the suspicion that something is not working or the mod is not running at all, contact me or the starloader discord.

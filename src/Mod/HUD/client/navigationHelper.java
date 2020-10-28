@@ -1,10 +1,12 @@
-/**
+package Mod.HUD.client; /**
  * STARMADE MOD
  * CREATOR: Max1M
  * DATE: 15.10.2020
  * TIME: 17:36
  */
 
+import Mod.PacketSCUpdateWarp;
+import Mod.WarpManager;
 import api.DebugFile;
 import api.network.packets.PacketUtil;
 import org.schema.common.util.linAlg.Vector3i;
@@ -30,10 +32,10 @@ public class navigationHelper {
         Vector3i newWP;
         if (toWarp) {
             //calculate warp position from realworld pos
-            newWP = JumpListener.GetWarpSpacePos(currentWP);
+            newWP = WarpManager.GetWarpSpacePos(currentWP);
         } else {
             //calculate realspace position from warp pos
-            newWP = JumpListener.GetRealSpacePos(currentWP);
+            newWP = WarpManager.GetRealSpacePos(currentWP);
         }
         //set new waypoint
         return newWP;

@@ -1,21 +1,19 @@
+import Mod.HUD.client.navigationHelper;
+import Mod.WarpMain;
 import api.DebugFile;
-import api.ModPlayground;
 import api.common.GameServer;
 import api.listener.Listener;
 import api.listener.events.entity.ShipJumpEngageEvent;
 import api.mod.StarLoader;
 import api.utils.StarRunnable;
-import org.lwjgl.util.vector.Vector;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.controller.elements.jumpdrive.JumpAddOn;
 import org.schema.game.common.data.ManagedSegmentController;
-import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.controller.SectorSwitch;
 import org.schema.schine.common.language.Lng;
-import org.schema.schine.network.objects.remote.RemoteVector3i;
 import org.schema.schine.network.server.ServerMessage;
 
 import javax.vecmath.Vector3f;
@@ -63,14 +61,14 @@ public class JumpListener {
                     //ModPlayground.broadcastMessage("in warp");
                     displayMessage = " out of warp to position ";
                     DebugFile.log("warp");
-                    newPos = GetRealSpacePos(posNow);
+                 //   newPos = GetRealSpacePos(posNow);
                 } else {
                     intoWarp = true;
                     //is in realspace, get warppos
                     //ModPlayground.broadcastMessage("in realspace");
                     displayMessage = " into warp to position ";
                     DebugFile.log("realspace");
-                    newPos = GetWarpSpacePos(posNow);
+                 //   newPos = GetWarpSpacePos(posNow);
                 }
                 SegmentController ship = event.getController();
                 //get jumpaddon
@@ -106,7 +104,7 @@ public class JumpListener {
                             public void run() {
                          //       warpLoop.startLoop(s); //start loop that will drop the ship back out if its to slow
                             }
-                        }.runLater(main.instance, 25*5);
+                        }.runLater(WarpMain.instance, 25*5);
                     //Does not work atm    WarpThrustManager.OverwriteThrust((Ship)ship,true);
                     } else {
                         //ship has successfully dropped out of warp
@@ -119,53 +117,14 @@ public class JumpListener {
                 navigationHelper.handlePilots(ship,intoWarp);
 
             }
-        },main.instance);
+        }, WarpMain.instance);
     }
-    /**
-     * Calculate the Warpspace position from a realworld position
-     * @param RealSpacePos sector in realspace
-     * @return correlating sector in warpspace
-     */
-    public static Vector3i GetWarpSpacePos(Vector3i RealSpacePos) {
-        Vector3i warpPos;
-        Vector3f realPosF = RealSpacePos.toVector3f();
-        //ModPlayground.broadcastMessage("real space pos: " + realPosF.toString());
-        realPosF.x = Math.round(realPosF.x / scale);
-        realPosF.y = Math.round(realPosF.y / scale);
-        realPosF.z = Math.round(realPosF.z / scale);
-   //     realPosF.scale((1/scale)); //scale to warpspace -> 10,10,10 becomes 1,1,1
-        DebugFile.log("realpos scaled down by " + scale + " : " + realPosF.toString());
-        realPosF.y += offset * 2; //offset sectors to up (y axis)
-        warpPos = new Vector3i(realPosF.x,realPosF.y,realPosF.z);
-        DebugFile.log("warppos: " + warpPos.toString());
-       // ModPlayground.broadcastMessage("warppos: " + warpPos);
-        return warpPos;
-    }
-    /**
-     * Calculate the realspace position from a warpspace position
-     * @param WarpSpacePos sector in warpspace
-     * @return correlating sector in realspace
-     */
-    public static Vector3i GetRealSpacePos(Vector3i WarpSpacePos) {
-        Vector3i warpPos;
-        Vector3f realPosF = WarpSpacePos.toVector3f();
-       // ModPlayground.broadcastMessage("warp space pos: " + realPosF.toString());
-        realPosF.y -= offset * 2; //offset sectors to up (y axis)
-        DebugFile.log("warppos minus offset: " + realPosF.toString());
-        realPosF.x = Math.round(realPosF.x * scale);
-        realPosF.y = Math.round(realPosF.y * scale);
-        realPosF.z = Math.round(realPosF.z * scale);
-        //     realPosF.scale((1/scale)); //scale to warpspace -> 10,10,10 becomes 1,1,1
-        DebugFile.log("realpos scaled down by " + scale + " : " + realPosF.toString());
 
-        warpPos = new Vector3i(realPosF.x,realPosF.y,realPosF.z);
 
-       // ModPlayground.broadcastMessage("warppos: " + warpPos);
-        return warpPos;
-    }
+
     public static void dropOutOfWarp(SegmentController ship) {
         Vector3i posNow = ship.getSector(new Vector3i());
-        Vector3i newPos = GetRealSpacePos(posNow);
+    //    Vector3i newPos = GetRealSpacePos(posNow);
         if (ship.getType() == SimpleTransformableSendableObject.EntityType.SPACE_STATION) {
             newPos = getRandomSector();
         }

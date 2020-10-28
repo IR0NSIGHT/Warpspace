@@ -1,15 +1,10 @@
+package Mod.HUD.client;
+
+import Mod.WarpMain;
 import api.DebugFile;
-import api.ModPlayground;
-import api.common.GameClient;
-import api.element.gui.custom.examples.BasicInfoGroup;
-import api.element.gui.custom.examples.BasicInfoPanel;
-import api.element.gui.custom.examples.CurrentEntityReactorBar;
 import api.listener.Listener;
 import api.listener.events.gui.HudCreateEvent;
 import api.mod.StarLoader;
-import org.newdawn.slick.Game;
-import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.client.data.GameClientState;
 
 /**
  * STARMADE MOD
@@ -28,7 +23,7 @@ public class GUIeventhandler {
                 whp.setPosition(200,200);
             }
 
-        },main.instance);
+        }, WarpMain.instance);
     }
 
 }

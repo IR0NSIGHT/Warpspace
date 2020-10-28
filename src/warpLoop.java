@@ -1,18 +1,15 @@
+import Mod.WarpMain;
 import api.DebugFile;
-import api.ModPlayground;
-import api.common.GameServer;
 import api.utils.StarRunnable;
 import api.utils.sound.AudioUtils;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
-import org.schema.game.common.controller.Ship;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.server.data.GameServerState;
 import org.schema.schine.common.language.Lng;
 import org.schema.schine.network.server.ServerMessage;
 
-import javax.naming.LimitExceededException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +103,6 @@ public class warpLoop {
 
                 super.cancel();
             }
-        }.runTimer(main.instance, 25);
+        }.runTimer(WarpMain.instance, 25);
     }
 }
