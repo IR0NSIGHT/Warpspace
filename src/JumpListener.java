@@ -124,7 +124,7 @@ public class JumpListener {
 
     public static void dropOutOfWarp(SegmentController ship) {
         Vector3i posNow = ship.getSector(new Vector3i());
-    //    Vector3i newPos = GetRealSpacePos(posNow);
+       Vector3i newPos = posNow;// = GetRealSpacePos(posNow);
         if (ship.getType() == SimpleTransformableSendableObject.EntityType.SPACE_STATION) {
             newPos = getRandomSector();
         }
