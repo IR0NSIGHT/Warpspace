@@ -82,7 +82,7 @@ public class warpLoop {
                     if (countdown <= 0) {
                         //drop entity out of warp.
                     //    ModPlayground.broadcastMessage("dropping, to slow for to long");
-                        JumpListener.dropOutOfWarp(ship);
+                        //JumpListener.dropOutOfWarp(ship);
                         cancel();
                     }
                 } catch (Exception e) {
