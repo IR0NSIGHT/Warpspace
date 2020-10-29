@@ -20,7 +20,7 @@ public class GUIeventhandler {
             @Override
             public void onEvent(HudCreateEvent hudCreateEvent) {
                 WarpHUDPanel whp = new WarpHUDPanel(hudCreateEvent);
-                whp.setPosition(200,200);
+
             }
 
         }, WarpMain.instance);

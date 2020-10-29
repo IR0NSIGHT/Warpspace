@@ -37,8 +37,13 @@ public class WarpManager {
      * @return
      */
     public static boolean IsInWarp(SegmentController object) {
-        DebugFile.log("checkInWarp is an empty method :(");
-        return true;
+        return IsInWarp(object.getSector(new Vector3i()));
+    }
+    public static boolean IsInWarp(Vector3i pos) {
+        if (pos.y >= offset) {
+            return true;
+        }
+        return false;
     }
 
     /**

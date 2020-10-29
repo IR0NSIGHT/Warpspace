@@ -1,6 +1,6 @@
 package Mod.server;
 
-/**
+/*
  * STARMADE MOD
  * CREATOR: Max1M
  * DATE: 28.10.2020
@@ -34,8 +34,8 @@ public class WarpJumpListener {
                         event.setCanceled(true); //stop jump
                         Vector3i posNow = event.getOriginalSectorPos();
                         //check if ship is in warp or not, check if ship is allowed to perform the jump
-                        if (WarpManager.IsInWarp(event.getController()) && WarpJumpManager.isAllowedDrop(event.getController())) { //is in warpspace, get realspace pos
-                            WarpJumpManager.invokeDrop(4,event.getController(),WarpManager.GetRealSpacePos(posNow),false);
+                        if (WarpManager.IsInWarp(event.getController()) && WarpJumpManager.isAllowedDropJump(event.getController())) { //is in warpspace, get realspace pos
+                            WarpJumpManager.invokeDrop(4,event.getController(),WarpManager.GetRealSpacePos(posNow),true, false);
                         } else if (!WarpManager.IsInWarp(event.getController()) && WarpJumpManager.isAllowedEntry(event.getController())) { //is in realspace, get warppos
                             WarpJumpManager.invokeEntry(4,event.getController(),WarpManager.GetWarpSpacePos(posNow),false);
                         }

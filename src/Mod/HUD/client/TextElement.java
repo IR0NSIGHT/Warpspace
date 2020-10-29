@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 public class TextElement extends GUITextOverlay {
     public TextElement(UnicodeFont unicodeFont, InputState inputState) {
-        super(100, 20, unicodeFont, Color.green, inputState);
+        super(50, 30, unicodeFont, Color.green, inputState);
     }
 
 

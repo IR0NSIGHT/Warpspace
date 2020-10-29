@@ -11,6 +11,7 @@ import Mod.server.InWarpLoop;
 import api.DebugFile;
 import org.schema.game.common.controller.SegmentController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class WarpEntityManager {
     /**
      * List that holds references to every single ship currently in warp. Is filled/cleaned regularly by the warpcheckloop.
      */
-    public static List<SegmentController> shipsInWarp;
+    public static List<SegmentController> shipsInWarp = new ArrayList<>();
 
     /**
      * declare ship a warpentity and start warp mechanics for ship.

@@ -1,5 +1,7 @@
 package Mod;
 
+import Mod.HUD.client.GUIeventhandler;
+import Mod.HUD.client.SkyboxEventHandler;
 import Mod.server.WarpCheckLoop;
 import Mod.server.WarpJumpListener;
 import api.DebugFile;
@@ -33,7 +35,7 @@ public class WarpMain extends StarMod {
     @Override
     public void onGameStart() {
         super.onGameStart();
-        this.setModVersion("0.5");
+        this.setModVersion("0.6");
         this.setModName("WarpSpace");
         this.setModAuthor("IR0NSIGHT");
         this.setModDescription("an alternative FTL system");
@@ -62,6 +64,7 @@ public class WarpMain extends StarMod {
     public void onClientCreated(ClientInitializeEvent event) {
         super.onClientCreated(event);
         DebugFile.log("calling static method to register to GUI draw listener", WarpMain.instance);
-    //TODO    GUIeventhandler.addHUDDrawListener();
+        GUIeventhandler.addHUDDrawListener();
+    //    SkyboxEventHandler.CreateListener();
     }
 }

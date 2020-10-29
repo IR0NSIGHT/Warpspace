@@ -36,8 +36,9 @@ public class InWarpLoop {
                     cancel();
                 }
                 try {
-                    if (!WarpEntityManager.isWarpEntity(ship)) {
+                    if (!WarpEntityManager.isWarpEntity(ship) || GameServerState.isShutdown()) {
                         //left warp
+                        DebugFile.log("InWarpLoop was terminated bc server is shutdown or ship no longer in warp.");
                         cancel();
                     }
                     if (ship.getSpeedCurrent() < WarpManager.minimumSpeed) {
@@ -65,7 +66,7 @@ public class InWarpLoop {
                     }
                     if (countdown <= 0) {
                         //drop entity out of warp.
-                        WarpJumpManager.invokeDrop(25,ship,WarpManager.GetRealSpacePos(ship.getSector(new Vector3i())),true);
+                        WarpJumpManager.invokeDrop(1,ship,WarpManager.GetRealSpacePos(ship.getSector(new Vector3i())),false, false);
                         cancel();
                     }
                 } catch (Exception e) {

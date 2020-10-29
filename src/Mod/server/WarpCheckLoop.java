@@ -10,6 +10,7 @@ package Mod.server;
 import Mod.WarpEntityManager;
 import Mod.WarpMain;
 import Mod.WarpManager;
+import api.DebugFile;
 import api.common.GameServer;
 import api.utils.StarRunnable;
 import org.schema.game.common.controller.SegmentController;
@@ -31,7 +32,8 @@ public class WarpCheckLoop {
             @Override
             public void run() {
                 //kill loop if server is shut down.
-                if (GameServerState.isShutdown()) {
+                if (GameServerState.isShutdown() || GameServerState.isFlagShutdown()) {
+                    DebugFile.log("WarpCheckLoop was terminated on server shutdown",WarpMain.instance);
                     cancel();
                 }
 

@@ -6,6 +6,7 @@ import api.common.GameClient;
 import api.listener.events.gui.HudCreateEvent;
 import api.utils.StarRunnable;
 import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.server.data.GameServerState;
 import org.schema.schine.graphicsengine.forms.font.FontLibrary;
 
 /**
@@ -34,18 +35,19 @@ public class WarpHUDPanel {
     }
     //TODO only calculate other sector if sector changed. dont calculate once per tick.
     private void startLoop() {
+        setPosition(1700,300);
         new StarRunnable() {
             @Override
             public void run() {
-                String text = "empty";
-                //.log("playersector: " + getPlayerSector().toString());
-                if (getPlayerSector().y >= WarpManager.offset) {
-
-                    text = "WARP - realspace pos: " + WarpManager.GetRealSpacePos(getPlayerSector());
-                } else {
-                    text = "REALSPACE - warp pos: " + WarpManager.GetWarpSpacePos(getPlayerSector());
+                if (GameServerState.isFlagShutdown()) {
+                    cancel();
                 }
-                //DebugFile.log("text: " +text,main.instance);
+                String text = "empty";
+                if (WarpManager.IsInWarp(getPlayerSector())) {
+                    text = "RSP " + WarpManager.GetRealSpacePos(getPlayerSector());
+                } else {
+                    text = "WARP " + WarpManager.GetWarpSpacePos(getPlayerSector());
+                }
                 setTextEl(text);
 
             }
@@ -53,6 +55,5 @@ public class WarpHUDPanel {
     }
     private static Vector3i getPlayerSector() {
         return GameClient.getClientPlayerState().getCurrentSector();
-        // return GameClient.getClientController().lastSector;
     }
 }
