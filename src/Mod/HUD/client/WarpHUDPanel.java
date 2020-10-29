@@ -2,6 +2,7 @@ package Mod.HUD.client;
 
 import Mod.WarpMain;
 import Mod.WarpManager;
+import api.ModPlayground;
 import api.common.GameClient;
 import api.listener.events.gui.HudCreateEvent;
 import api.utils.StarRunnable;
@@ -35,23 +36,33 @@ public class WarpHUDPanel {
     }
     //TODO only calculate other sector if sector changed. dont calculate once per tick.
     private void startLoop() {
-        setPosition(1740,270);
+        //setPosition(1740,270);
+        setPosition(1300,270);
         new StarRunnable() {
+            Vector3i oldPos = getPlayerSector();
+            String text = "empty";
+            Integer i = 0;
             @Override
             public void run() {
                 if (GameServerState.isFlagShutdown()) {
                     cancel();
                 }
-                String text = "empty";
-                if (WarpManager.IsInWarp(getPlayerSector())) {
-                    text = "RSP " + WarpManager.GetRealSpacePos(getPlayerSector());
-                } else {
-                    text = "WARP " + WarpManager.GetWarpSpacePos(getPlayerSector());
+                i++;
+                text = "sector unchanged: " + oldPos.toString();
+                if (!oldPos.equals(getPlayerSector())) {
+                    ModPlayground.broadcastMessage("HENLO");
+                    if (WarpManager.IsInWarp(getPlayerSector())) {
+                        text = "RSP " + WarpManager.GetRealSpacePos(getPlayerSector());
+                    } else {
+                        text = "WARP " + WarpManager.GetWarpSpacePos(getPlayerSector());
+                    }
+                    //TODO figure out how the fuck it can overwrite the position but not the text
+                    text = "I CHANGED!";
+                    oldPos = getPlayerSector();
                 }
-                setTextEl(text);
-
+                setTextEl(text+ i);
             }
-        }.runTimer(WarpMain.instance,1);
+        }.runTimer(WarpMain.instance,2 * 25);
     }
     private static Vector3i getPlayerSector() {
         return GameClient.getClientPlayerState().getCurrentSector();
