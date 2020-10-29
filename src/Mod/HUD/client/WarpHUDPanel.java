@@ -35,7 +35,7 @@ public class WarpHUDPanel {
     }
     //TODO only calculate other sector if sector changed. dont calculate once per tick.
     private void startLoop() {
-        setPosition(1700,300);
+        setPosition(1740,270);
         new StarRunnable() {
             @Override
             public void run() {
