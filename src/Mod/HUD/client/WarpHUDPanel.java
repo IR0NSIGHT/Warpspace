@@ -36,10 +36,9 @@ public class WarpHUDPanel {
     }
     //TODO only calculate other sector if sector changed. dont calculate once per tick.
     private void startLoop() {
-        //setPosition(1740,270);
-        setPosition(1300,270);
+        setPosition(1740,270);
         new StarRunnable() {
-            Vector3i oldPos = getPlayerSector();
+            Vector3i oldPos = new Vector3i(getPlayerSector());
             String text = "empty";
             Integer i = 0;
             @Override
@@ -47,22 +46,19 @@ public class WarpHUDPanel {
                 if (GameServerState.isFlagShutdown()) {
                     cancel();
                 }
-                i++;
-                text = "sector unchanged: " + oldPos.toString();
-                if (!oldPos.equals(getPlayerSector())) {
-                    ModPlayground.broadcastMessage("HENLO");
+                if (i == 0 || !(oldPos.equals(getPlayerSector()))) {
+                    oldPos = new Vector3i(getPlayerSector());
                     if (WarpManager.IsInWarp(getPlayerSector())) {
                         text = "RSP " + WarpManager.GetRealSpacePos(getPlayerSector());
                     } else {
                         text = "WARP " + WarpManager.GetWarpSpacePos(getPlayerSector());
                     }
-                    //TODO figure out how the fuck it can overwrite the position but not the text
-                    text = "I CHANGED!";
-                    oldPos = getPlayerSector();
+                    i++;
                 }
-                setTextEl(text+ i);
+
+                setTextEl(text);
             }
-        }.runTimer(WarpMain.instance,2 * 25);
+        }.runTimer(WarpMain.instance,5);
     }
     private static Vector3i getPlayerSector() {
         return GameClient.getClientPlayerState().getCurrentSector();
