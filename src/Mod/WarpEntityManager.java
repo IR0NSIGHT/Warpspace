@@ -29,7 +29,7 @@ public class WarpEntityManager {
     /**
      * declare ship a warpentity and start warp mechanics for ship.
      * !does not check if ship is already registered!
-     * @param ship
+     * @param ship Segmentcontroller to be registered
      */
     public static void DeclareWarpEntity(SegmentController ship) {
         //TODO write method
@@ -54,8 +54,8 @@ public class WarpEntityManager {
 
     /**
      * check if an entity is registered as a warp entity in the WarpEntityManager.shipsInWarp list.
-     * @param ship
-     * @return
+     * @param ship segmentcontroller for ship
+     * @return boolean, true if a warp entity, false if not.
      */
     public static boolean isWarpEntity(SegmentController ship) {
         if (shipsInWarp.contains(ship)) {

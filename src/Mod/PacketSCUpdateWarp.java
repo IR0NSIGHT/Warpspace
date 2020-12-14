@@ -20,7 +20,7 @@ public class PacketSCUpdateWarp extends Packet {
 
     /**
      * constructor
-     * @param waypoint
+     * @param waypoint vector3i with new navigation marker waypoint for target machine.
      */
     public PacketSCUpdateWarp(Vector3i waypoint) {
         this.waypoint = waypoint;

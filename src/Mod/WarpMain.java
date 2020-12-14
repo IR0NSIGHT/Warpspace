@@ -23,7 +23,6 @@ import api.network.packets.PacketUtil;
 public class WarpMain extends StarMod {
     /**
      * empty method required for jar to build correctly. prints "hello space" if run.
-     * @param args
      */
     public static void main(String[] args) {
         System.out.println("hello space!");

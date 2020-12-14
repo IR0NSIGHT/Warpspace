@@ -81,8 +81,9 @@ public class WarpJumpManager {
     /**
      * will make the given ship entry warp after x seconds to specified sector.
      * @param countdown in seconds
-     * @param ship
-     * @param sector
+     * @param ship segmentcontroller
+     * @param sector target sector to enter
+     * @param force true if ignore all checks and force jump anyways
      */
     public static void invokeEntry(long countdown, final SegmentController ship, final Vector3i sector, boolean force) {
         countdown *= 25; //turn seconds into ticks
@@ -151,13 +152,14 @@ public class WarpJumpManager {
     }
     /**
      * Check if a ship is allowed to enter the warp
-     * @param ship
+     * @param ship segmentcontroller to check
+     * @return boolean, true if allowed entry, false if interdicted or can fire warpdrive
      */
     public static boolean isAllowedEntry(SegmentController ship) {
         if (isInterdicted(ship) || !canExecuteWarpdrive(ship)) {
             return false;
         }
-        DebugFile.log("isAllowedEntry is an empty check");
+    //    DebugFile.log("isAllowedEntry is an empty check");
         return true;
     }
 
@@ -165,19 +167,20 @@ public class WarpJumpManager {
      * Check if a ship is allowed to drop out of warp
      * checks interdiction
      * checks warpdrive.canExecute
-     * @param ship
+     * @param ship segmentcontroller ship
+     * return boolean, true if not interdicted and can fire warpdrive
      */
     public static boolean isAllowedDropJump(SegmentController ship) {
         if (isInterdicted(ship) || !canExecuteWarpdrive(ship)) {
             return false;
         }
-        DebugFile.log("isAllowedDrop is an empty check");
+    //    DebugFile.log("isAllowedDrop is an empty check");
         return true;
     }
 
     /**
      * will remove one jump charge from the FTL drive of the specified ship.
-     * @param ship
+     * @param ship ship segmentcontroller
      */
     public static void emptyWarpdrive(SegmentController ship) {
         //get jumpaddon

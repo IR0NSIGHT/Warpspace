@@ -23,7 +23,7 @@ public class WarpManager {
     public static int scale = 10; //scale warpspace distance to realspace distance
 
     /**
-     * the offset of warpspace to the realspace sector on the y axis. Use a number outside of the galaxy -> empty space
+     * the offset of warpspace to the realspace sector on the y axis. Use a number outside of the galaxy: empty space
      */
     public static int offset = 150; //offset in sectors
 
@@ -31,14 +31,21 @@ public class WarpManager {
      *  minimum speed required to stay in warp
      */
     public static int minimumSpeed = 50;
+
     /**
      * check if an objects positon is in warpspace
-     * @param object
-     * @return
+     * @param object segmentcontroller to check
+     * @return boolean, true if segmentcontrollers position is in warp
      */
     public static boolean IsInWarp(SegmentController object) {
         return IsInWarp(object.getSector(new Vector3i()));
     }
+
+    /**
+     * check if an objects positon is in warpspace
+     * @param pos  position to check
+     * @return boolean, true if position is in warp
+     */
     public static boolean IsInWarp(Vector3i pos) {
         if (pos.y >= offset) {
             return true;
