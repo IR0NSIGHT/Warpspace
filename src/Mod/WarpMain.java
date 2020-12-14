@@ -40,7 +40,6 @@ public class WarpMain extends StarMod {
         this.setModDescription("an alternative FTL system");
         DebugFile.log("WarpSpace info set.",this);
     }
-    //TODO rewrite whole system of warploop and events. its a friggin mess.
     @Override
     public void onEnable() {
         super.onEnable();

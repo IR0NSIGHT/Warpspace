@@ -72,7 +72,7 @@ public class WarpJumpManager {
                 //queue sector switch
                 doSectorSwitch(ship, sector,true);
                 ship.sendControllingPlayersServerMessage(Lng.astr("Dropping out of warp"), ServerMessage.MESSAGE_TYPE_INFO);
-                //TODO add visual effects and navwaypoint change
+                //TODO add visual effects
                 //navigationHelper.handlePilots(ship,intoWarp);
             }
         }.runLater(WarpMain.instance,countdown);
@@ -87,13 +87,14 @@ public class WarpJumpManager {
      */
     public static void invokeEntry(long countdown, final SegmentController ship, final Vector3i sector, boolean force) {
         countdown *= 25; //turn seconds into ticks
-    //TODO write entry method
+
         //check if already dropping
         if (!force && entryQueue.contains(ship)) { //ship already has a jump queued, and doesnt force another one.
             ship.sendControllingPlayersServerMessage(Lng.astr("Ship is already jumping!"), ServerMessage.MESSAGE_TYPE_INFO);
             return;
         }
         entryQueue.add(ship);
+
         ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
 
         new StarRunnable() {
