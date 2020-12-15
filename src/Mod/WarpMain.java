@@ -39,6 +39,7 @@ public class WarpMain extends StarMod {
         this.setModAuthor("IR0NSIGHT");
         this.setModDescription("an alternative FTL system");
         DebugFile.log("WarpSpace info set.",this);
+        this.setSMDResourceId(8166);
     }
     @Override
     public void onEnable() {
