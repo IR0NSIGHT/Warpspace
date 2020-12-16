@@ -1,6 +1,7 @@
 package Mod;
 
 import Mod.HUD.client.GUIeventhandler;
+import Mod.HUD.client.HUD_core;
 import Mod.HUD.client.SpriteList;
 import Mod.server.ThrustEventhandler;
 import Mod.server.WarpJumpEventHandler;
@@ -9,8 +10,10 @@ import Mod.server.WarpJumpListener;
 import api.DebugFile;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
+import api.mod.StarLoader;
 import api.mod.StarMod;
 import api.network.packets.PacketUtil;
+import api.utils.StarRunnable;
 
 /**
  * STARMADE MOD
@@ -48,7 +51,7 @@ public class WarpMain extends StarMod {
         DebugFile.log("enabled.",this);
         PacketUtil.registerPacket(PacketSCUpdateWarp.class);
         DebugFile.log("init for spritelist #####################################");
-        SpriteList.init();
+
     }
 
     @Override
@@ -66,7 +69,17 @@ public class WarpMain extends StarMod {
     public void onClientCreated(ClientInitializeEvent event) {
         super.onClientCreated(event);
         DebugFile.log("calling static method to register to GUI draw listener", WarpMain.instance);
-        GUIeventhandler.addHUDDrawListener();
+        SpriteList.init();
+
+                //if (SpriteList.CONSOLE.getSprite() != null) {
+                    DebugFile.log("init HUD CORE LIST");
+                    HUD_core.initList();
+                    GUIeventhandler.addHUDDrawListener();
+
+               // }
+
+        //
+        //GUIeventhandler.addHUDDrawListener();
     //    SkyboxEventHandler.CreateListener();
     }
 }

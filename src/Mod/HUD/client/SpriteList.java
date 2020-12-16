@@ -7,9 +7,15 @@ import api.utils.textures.StarLoaderTexture;
 import org.schema.schine.graphicsengine.forms.Sprite;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-    public enum SpriteList {
-        FLOWER;
+import java.io.InputStream;
+
+public enum SpriteList {
+        RSP_ICON,
+        CONSOLE
+    ;
+
 
         private Sprite sprite;
         private String name;
@@ -19,17 +25,23 @@ import java.io.IOException;
             StarLoaderTexture.runOnGraphicsThread(() -> {
                 synchronized (SpriteList.class) {
                     for (SpriteList value : SpriteList.values()) {
-                        DebugFile.log("################################### handling sprite: " + value.getName());
-                     //   String name = value.name().toLowerCase();
-                    //    value.name = name;
 
-                     /*   try {
-                            value.sprite = StarLoaderTexture.newSprite(ImageIO.read(WarpMain.class.getResourceAsStream("res/" + name + ".png")), WarpMain.instance, "warpmain_" + name);
+                        String name = value.name().toLowerCase();
+                        value.name = name;
+                        DebugFile.log("################################### handling sprite: " + value.getName());
+                        try {
+                            String path = "res/" + name + ".png";
+                            DebugFile.log("####################### trying to get resourcestream -> buffered image from path: " + path);
+                            InputStream is = WarpMain.class.getResourceAsStream(path);
+                            DebugFile.log("inputstream: "+ is.toString());
+                            BufferedImage bi = ImageIO.read(is);
+                            value.sprite = StarLoaderTexture.newSprite(bi, WarpMain.instance, "warpmain_" + name);
                         } catch (IOException e) {
                             e.printStackTrace();
                             DebugFile.log("############################ sprite failed" +e.toString());
-                        }*/
-                    }
+                        }
+                    };
+                    DebugFile.log("########################### finished loading sprites");
                 }
             });
         }

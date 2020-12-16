@@ -29,14 +29,14 @@ public class WarpHUDPanel {
         startLoop();
     }
     public void setPosition(int x, int y){
-        textEl.getPos().set(new float[]{x-20, y+6,1});
+        textEl.getPos().set(new float[]{x - 0.5f*textEl.getWidth(), y - 0.5f* textEl.getHeight(),0});
     }
     public void setTextEl(String text) {
         textEl.text = text;
     }
     //TODO only calculate other sector if sector changed. dont calculate once per tick.
     private void startLoop() {
-        setPosition(1740,270);
+
         new StarRunnable() {
             Vector3i oldPos = new Vector3i(getPlayerSector());
             String text = "empty";
@@ -49,13 +49,13 @@ public class WarpHUDPanel {
                 if (i == 0 || !(oldPos.equals(getPlayerSector()))) {
                     oldPos = new Vector3i(getPlayerSector());
                     if (WarpManager.IsInWarp(getPlayerSector())) {
-                        text = "RSP " + WarpManager.GetRealSpacePos(getPlayerSector());
+                        text = "" + WarpManager.GetRealSpacePos(getPlayerSector());
                     } else {
-                        text = "WARP " + WarpManager.GetWarpSpacePos(getPlayerSector());
+                        text = "" + WarpManager.GetWarpSpacePos(getPlayerSector());
                     }
                     i++;
                 }
-
+                setPosition(1624,1056); //needs to run in loop to autoadjust for changed textsize
                 setTextEl(text);
             }
         }.runTimer(WarpMain.instance,5);
