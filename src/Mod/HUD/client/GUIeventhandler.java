@@ -5,6 +5,7 @@ import api.DebugFile;
 import api.listener.Listener;
 import api.listener.events.gui.HudCreateEvent;
 import api.mod.StarLoader;
+import org.schema.game.client.data.GameClientState;
 
 /**
  * STARMADE MOD
@@ -20,7 +21,8 @@ public class GUIeventhandler {
             @Override
             public void onEvent(HudCreateEvent hudCreateEvent) {
                 WarpHUDPanel whp = new WarpHUDPanel(hudCreateEvent);
-
+             //   DebugFile.log("trying to add sprite element to HUD"); //FIXME debug
+            //    hudCreateEvent.addElement(new CustomHudImage(hudCreateEvent.getInputState()));
             }
 
         }, WarpMain.instance);

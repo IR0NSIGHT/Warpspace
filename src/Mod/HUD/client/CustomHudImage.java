@@ -1,14 +1,13 @@
 package Mod.HUD.client;
 
-import api.element.gui.elements.GUIElement;
 import org.schema.schine.graphicsengine.forms.Sprite;
 import org.schema.schine.graphicsengine.shader.ShaderLibrary;
 import org.schema.schine.input.InputState;
 
-class CustomHudImage extends GUIElement {
+class CustomHudImage extends WarpGUIElement {
     Sprite sprite;
     public CustomHudImage(InputState inputState) {
-        super(inputState);
+        super(inputState, 100, 100);
     }
 
 

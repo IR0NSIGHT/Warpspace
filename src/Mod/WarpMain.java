@@ -1,6 +1,7 @@
 package Mod;
 
 import Mod.HUD.client.GUIeventhandler;
+import Mod.HUD.client.SpriteList;
 import Mod.server.ThrustEventhandler;
 import Mod.server.WarpJumpEventHandler;
 import Mod.server.WarpCheckLoop;
@@ -46,6 +47,8 @@ public class WarpMain extends StarMod {
         instance = this;
         DebugFile.log("enabled.",this);
         PacketUtil.registerPacket(PacketSCUpdateWarp.class);
+        DebugFile.log("init for spritelist #####################################");
+        SpriteList.init();
     }
 
     @Override
@@ -53,8 +56,8 @@ public class WarpMain extends StarMod {
         super.onServerCreated(event);
         DebugFile.log("WarpSpace creating listeners at server creation",this);
         WarpJumpListener.createListener();
-        DebugFile.log("####################################################### trying to add thrust listener",this);
-        ThrustEventhandler.createListener();
+    //    DebugFile.log("####################################################### trying to add thrust listener",this);
+    //TODO thrust    ThrustEventhandler.createListener();
         WarpCheckLoop.loop(25); //TODO use a frequency from a config
         WarpJumpEventHandler.createServerListener();
     }
