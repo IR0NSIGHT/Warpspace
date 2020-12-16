@@ -1,7 +1,9 @@
 package Mod;
 
 import api.DebugFile;
+import api.ModPlayground;
 import api.common.GameServer;
+import api.mod.StarLoader;
 import api.utils.StarRunnable;
 import net.rudp.impl.Segment;
 import org.schema.common.util.linAlg.Vector3i;
@@ -9,6 +11,7 @@ import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.controller.elements.jumpdrive.JumpAddOn;
 import org.schema.game.common.data.ManagedSegmentController;
+import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.controller.SectorSwitch;
 import org.schema.game.server.data.GameServerState;
 import org.schema.schine.common.language.Lng;
@@ -42,7 +45,7 @@ public class WarpJumpManager {
      * @param isJump is a jump or an autodrop, will empty warpdrive if true
      * @param force overwrite all checks, admin
      */
-    public static void invokeDrop(long countdown, final SegmentController ship, final Vector3i sector, final boolean isJump, boolean force) {
+    public static void invokeDrop(long countdown, final SegmentController ship, Vector3i sector, final boolean isJump, boolean force) {
         countdown *= 25; //turn seconds into ticks
         //check if already dropping
         if (!force && dropQueue.contains(ship)) { //ship already has a drop queued, and doesnt force another one.
@@ -50,9 +53,21 @@ public class WarpJumpManager {
             //TODO abort already queued jump -> click to jump, click again to abort
             return;
         }
+        if (ship.getType().equals(SimpleTransformableSendableObject.EntityType.SPACE_STATION) )
+        {
+            //its a spacestation. drop to a random sector.
+            // reason: could drop second station into realspace sector by spawning in warp otherwise.
+            // also: could drop battlestation from warp into sector, maybe even homebase
+            sector = WarpJumpManager.getRandomSector();
+        }
+        //--------------before action is taken
+        //--------------after action is taken
         if (isJump) {
             ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
         }
+
+
+        final Vector3i sectorF = sector;
         dropQueue.add(ship);
         new StarRunnable() {
             @Override
@@ -65,14 +80,31 @@ public class WarpJumpManager {
                     dropQueue.remove(ship);
                 }
 
+                //create, fire event, get back params
+                WarpJumpEvent.WarpJumpType type;
+                if (isJump) {
+                    type = WarpJumpEvent.WarpJumpType.EXIT;
+                } else {
+                    type = WarpJumpEvent.WarpJumpType.DROP;
+                }
+
+                WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),sectorF);
+                StarLoader.fireEvent(e, true);
+                if (e.canceled) {
+                    cancel();
+                    return;
+                }
+                //-- event
+
                 if (isJump) {
                     //empty warpdrive
                     emptyWarpdrive(ship);
                 }
                 //queue sector switch
-                doSectorSwitch(ship, sector,true);
+                doSectorSwitch(ship, sectorF,true);
                 ship.sendControllingPlayersServerMessage(Lng.astr("Dropping out of warp"), ServerMessage.MESSAGE_TYPE_INFO);
                 //TODO add visual effects
+                //TODO drop station to random pos
                 //navigationHelper.handlePilots(ship,intoWarp);
             }
         }.runLater(WarpMain.instance,countdown);
@@ -107,13 +139,24 @@ public class WarpJumpManager {
                 if (entryQueue.contains(ship)) { //remove from queue
                     entryQueue.remove(ship);
                 }
+
+                //create, fire event, get back params
+                WarpJumpEvent.WarpJumpType  type = WarpJumpEvent.WarpJumpType.ENTRY;
+
+                WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),sector);
+                StarLoader.fireEvent(e, true);
+                if (e.canceled) {
+                    cancel();
+                    return;
+                }
+                //-- event
+
                 //empty warpdrive
                 emptyWarpdrive(ship);
                 //queue sector switch
                 doSectorSwitch(ship, sector,true);
                 ship.sendControllingPlayersServerMessage(Lng.astr("Entering warp"), ServerMessage.MESSAGE_TYPE_INFO);
                 //TODO add visual effects and navwaypoint change
-                //navigationHelper.handlePilots(ship,intoWarp);
             }
         }.runLater(WarpMain.instance,countdown);
     }
@@ -131,7 +174,7 @@ public class WarpJumpManager {
         return sector;
     }
     private static void handleStation(SegmentController station) {
-
+        //currently unused.
     }
 
     public static void doSectorSwitch(SegmentController ship, Vector3i newPos, boolean instant) {
@@ -169,7 +212,7 @@ public class WarpJumpManager {
      * checks interdiction
      * checks warpdrive.canExecute
      * @param ship segmentcontroller ship
-     * return boolean, true if not interdicted and can fire warpdrive
+     * @return boolean, true if not interdicted and can fire warpdrive
      */
     public static boolean isAllowedDropJump(SegmentController ship) {
         if (isInterdicted(ship) || !canExecuteWarpdrive(ship)) {

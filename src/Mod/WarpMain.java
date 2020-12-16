@@ -1,8 +1,12 @@
 package Mod;
 
 import Mod.HUD.client.GUIeventhandler;
+<<<<<<< HEAD
 import Mod.HUD.client.SkyboxEventHandler;
 import Mod.server.ThrustEventhandler;
+=======
+import Mod.server.WarpJumpEventHandler;
+>>>>>>> master
 import Mod.server.WarpCheckLoop;
 import Mod.server.WarpJumpListener;
 import api.DebugFile;
@@ -22,9 +26,7 @@ import api.network.packets.PacketUtil;
  * the main class where the mod is run from by starloader.
  */
 public class WarpMain extends StarMod {
-    /*q*
-     * empty method required for jar to build correctly. prints "hello space" if run.
-     */
+
     public static void main(String[] args) {
         System.out.println("hello space!");
     }
@@ -35,7 +37,7 @@ public class WarpMain extends StarMod {
     @Override
     public void onGameStart() {
         super.onGameStart();
-        this.setModVersion("0.6");
+        this.setModVersion("0.6.1");
         this.setModName("WarpSpace");
         this.setModAuthor("IR0NSIGHT");
         this.setModDescription("an alternative FTL system");
@@ -54,12 +56,11 @@ public class WarpMain extends StarMod {
     public void onServerCreated(ServerInitializeEvent event) {
         super.onServerCreated(event);
         DebugFile.log("WarpSpace creating listeners at server creation",this);
-    //    JumpListener.createListener();
         WarpJumpListener.createListener();
         DebugFile.log("####################################################### trying to add thrust listener",this);
         ThrustEventhandler.createListener();
         WarpCheckLoop.loop(25); //TODO use a frequency from a config
-    //    CheeseCatchLoop.createLoop();
+        WarpJumpEventHandler.createServerListener();
     }
 
     @Override
