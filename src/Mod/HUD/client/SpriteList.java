@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public enum SpriteList {
-        RSP_ICON,
-        CONSOLE
+        CONSOLE,
+    RSP_ICON
     ;
 
 
@@ -33,7 +33,7 @@ public enum SpriteList {
                             String path = "res/" + name + ".png";
                             DebugFile.log("####################### trying to get resourcestream -> buffered image from path: " + path);
                             InputStream is = WarpMain.class.getResourceAsStream(path);
-                            DebugFile.log("inputstream: "+ is.toString());
+                            DebugFile.log("inputstream null: "+ (null == is));
                             BufferedImage bi = ImageIO.read(is);
                             value.sprite = StarLoaderTexture.newSprite(bi, WarpMain.instance, "warpmain_" + name);
                         } catch (IOException e) {

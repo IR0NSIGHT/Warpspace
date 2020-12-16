@@ -27,7 +27,7 @@ public class GUIeventhandler {
                 DebugFile.log("hud_core element list has: " + HUD_core.elementList.size() + "entries.");
                 for (HUD_element el: HUD_core.elementList) {
                     //DebugFile.log("element" + el.sprite.getName());
-                    hudCreateEvent.addElement(new CustomHudImage(hudCreateEvent.getInputState(),el.pos,el.scale,el.sprite));
+                    hudCreateEvent.addElement(new CustomHudImage(hudCreateEvent.getInputState(),el.pos,el.scale,el));
                 }
 
             }

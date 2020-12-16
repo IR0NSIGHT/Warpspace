@@ -1,7 +1,9 @@
 package Mod.HUD.client;
 
+import Mod.WarpMain;
 import api.DebugFile;
 import api.element.gui.elements.GUIElement;
+import api.utils.StarRunnable;
 import org.schema.schine.graphicsengine.forms.Sprite;
 import org.schema.schine.graphicsengine.shader.ShaderLibrary;
 import org.schema.schine.input.InputState;
@@ -18,11 +20,16 @@ class CustomHudImage extends GUIElement {
 
     public Vector3f scale;
 
-    public CustomHudImage(InputState inputState, Vector3f position, Vector3f scale, Sprite sprite) {
+    public CustomHudImage(InputState inputState, Vector3f position, Vector3f scale, final HUD_element el) {
         super(inputState, 100, 100);
         this.position = position;
         this.scale = scale;
-        this.sprite = sprite;
+        if (el.sprite != null) {
+            this.sprite = sprite;
+        } else {
+            //run a loop until a valid sprite was found
+        }
+
         DebugFile.log("########### img a custom HUD panel and was constructed");
         DebugFile.log("sprite is null: " + (Objects.isNull(this.sprite)));
     }
@@ -35,25 +42,18 @@ class CustomHudImage extends GUIElement {
 
     @Override
     public void draw() {
-        if (sprite == null) {
-            return;
-        }
-        //DebugFile.log("i was drawn yee haw");
         ShaderLibrary.scanlineShader.load();
+        if (sprite != null) {
+            sprite.draw();
             DebugFile.log("positioning and scaling");
             sprite.setPositionCenter(true);
+            sprite.setPos(0,0,0);
+            sprite.setScale(1,1,1);
+        } else {
 
-            GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-            int width = gd.getDisplayMode().getWidth();
-            int height = gd.getDisplayMode().getHeight();
-
-            float xX = position.x * width;
-            float yY = position.y * height;
-            //DebugFile.log("search here w:" + width + "h: " + height + "x:" + xX + "y" + yY);
-            sprite.setPos(xX,yY, position.z);
-            sprite.setScale(scale.x,scale.y,scale.z);
-        //}
+        }
         ShaderLibrary.scanlineShader.unload();
+
     }
 
     @Override
