@@ -1,4 +1,4 @@
-package Mod.HUD.client; /**
+package Mod.server; /**
  * STARMADE MOD
  * CREATOR: Max1M
  * DATE: 15.10.2020
@@ -20,7 +20,7 @@ import java.util.Iterator;
 /**
  * adds elements that make it easier to tell what warp coord relates to what realspace coord.
  */
-public class navigationHelper {
+public class NavHelper {
     /**
      * get the players waypoint to its equivalent in warpspace / realspace, so that navigating in warp is easier.
      * @param waypoint name of the player whos navigation waypoint should be changed
@@ -49,33 +49,29 @@ public class navigationHelper {
      */
     public static void handlePilots(SegmentController ship, boolean toWarp) {
         try {
-            //DebugFile.log("trying to handle pilots");
-            if (ship.getType() != SimpleTransformableSendableObject.EntityType.SHIP) {
-                //DebugFile.log("not handling pilots for type: " + ship.getType());
-                return;
+            if (!(ship instanceof PlayerControllable)) {
+                return; //asteroids dont have attached players f.e.
             }
             //get all players in ship
             Iterator i = ((PlayerControllable)ship).getAttachedPlayers().iterator();
             //foreach pilot do
             do {
                 PlayerState player = (PlayerState)i.next();
-                //DebugFile.log("changing waypoint for player " + player.getName());
                 RemoteVector3i vec = player.getNetworkObject().waypoint;
-                if (vec.equals(PlayerState.NO_WAYPOINT)) {
+                if (vec.getVector().equals(PlayerState.NO_WAYPOINT)) {
                     continue;
-                }
-                Vector3i newVec = switchWaypoint(vec.getVector(),toWarp);
+                } else {
+                    Vector3i newVec = switchWaypoint(vec.getVector(),toWarp);
 
-                //DebugFile.log("old wp: " + vec.getVector().toString() + " new wp: " + newVec);
-                //make packet with new wp, send it to players client
-                PacketSCUpdateWarp packet = new PacketSCUpdateWarp(newVec);
-                PacketUtil.sendPacket(player, packet);
+                    //make packet with new wp, send it to players client
+                    PacketSCUpdateWarp packet = new PacketSCUpdateWarp(newVec);
+                    PacketUtil.sendPacket(player, packet);
+                }
             } while (i.hasNext());
-            //DebugFile.log("handled all pilots");
+
         }  catch (Exception e) {
             e.printStackTrace();
             DebugFile.log(e.toString());
-       //     ModPlayground.broadcastMessage("handlePilots failed");
         }
     }
 }

@@ -1,7 +1,7 @@
 package Mod;
 
 import Mod.HUD.client.GUIeventhandler;
-import Mod.HUD.client.SkyboxEventHandler;
+import Mod.server.WarpJumpEventHandler;
 import Mod.server.WarpCheckLoop;
 import Mod.server.WarpJumpListener;
 import api.DebugFile;
@@ -53,10 +53,9 @@ public class WarpMain extends StarMod {
     public void onServerCreated(ServerInitializeEvent event) {
         super.onServerCreated(event);
         DebugFile.log("WarpSpace creating listeners at server creation",this);
-    //    JumpListener.createListener();
         WarpJumpListener.createListener();
         WarpCheckLoop.loop(25); //TODO use a frequency from a config
-    //    CheeseCatchLoop.createLoop();
+        WarpJumpEventHandler.createServerListener();
     }
 
     @Override
