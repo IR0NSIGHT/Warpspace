@@ -1,6 +1,7 @@
 package Mod;
 
 import api.DebugFile;
+import api.ModPlayground;
 import api.common.GameServer;
 import api.utils.StarRunnable;
 import net.rudp.impl.Segment;
@@ -9,6 +10,7 @@ import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.controller.elements.jumpdrive.JumpAddOn;
 import org.schema.game.common.data.ManagedSegmentController;
+import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.controller.SectorSwitch;
 import org.schema.game.server.data.GameServerState;
 import org.schema.schine.common.language.Lng;
@@ -42,7 +44,7 @@ public class WarpJumpManager {
      * @param isJump is a jump or an autodrop, will empty warpdrive if true
      * @param force overwrite all checks, admin
      */
-    public static void invokeDrop(long countdown, final SegmentController ship, final Vector3i sector, final boolean isJump, boolean force) {
+    public static void invokeDrop(long countdown, final SegmentController ship, Vector3i sector, final boolean isJump, boolean force) {
         countdown *= 25; //turn seconds into ticks
         //check if already dropping
         if (!force && dropQueue.contains(ship)) { //ship already has a drop queued, and doesnt force another one.
@@ -53,6 +55,15 @@ public class WarpJumpManager {
         if (isJump) {
             ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
         }
+
+        if (ship.getType().equals(SimpleTransformableSendableObject.EntityType.SPACE_STATION) )
+        {
+            //its a spacestation. drop to a random sector.
+            // reason: could drop second station into realspace sector by spawning in warp otherwise.
+            // also: could drop battlestation from warp into sector, maybe even homebase
+            sector = WarpJumpManager.getRandomSector();
+        }
+        final Vector3i sectorF = sector;
         dropQueue.add(ship);
         new StarRunnable() {
             @Override
@@ -70,9 +81,10 @@ public class WarpJumpManager {
                     emptyWarpdrive(ship);
                 }
                 //queue sector switch
-                doSectorSwitch(ship, sector,true);
+                doSectorSwitch(ship, sectorF,true);
                 ship.sendControllingPlayersServerMessage(Lng.astr("Dropping out of warp"), ServerMessage.MESSAGE_TYPE_INFO);
                 //TODO add visual effects
+                //TODO drop station to random pos
                 //navigationHelper.handlePilots(ship,intoWarp);
             }
         }.runLater(WarpMain.instance,countdown);
@@ -131,7 +143,7 @@ public class WarpJumpManager {
         return sector;
     }
     private static void handleStation(SegmentController station) {
-
+        //currently unused.
     }
 
     public static void doSectorSwitch(SegmentController ship, Vector3i newPos, boolean instant) {
