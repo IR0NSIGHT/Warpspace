@@ -21,7 +21,7 @@ import api.network.packets.PacketUtil;
  * the main class where the mod is run from by starloader.
  */
 public class WarpMain extends StarMod {
-    /**
+    /*
      * empty method required for jar to build correctly. prints "hello space" if run.
      */
     public static void main(String[] args) {

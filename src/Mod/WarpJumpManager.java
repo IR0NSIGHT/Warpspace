@@ -212,7 +212,7 @@ public class WarpJumpManager {
      * checks interdiction
      * checks warpdrive.canExecute
      * @param ship segmentcontroller ship
-     * return boolean, true if not interdicted and can fire warpdrive
+     * @return boolean, true if not interdicted and can fire warpdrive
      */
     public static boolean isAllowedDropJump(SegmentController ship) {
         if (isInterdicted(ship) || !canExecuteWarpdrive(ship)) {
