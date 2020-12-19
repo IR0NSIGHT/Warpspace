@@ -1,23 +1,17 @@
 package Mod.HUD.client;
 
-import Mod.WarpJumpEvent;
 import Mod.WarpMain;
 import Mod.WarpManager;
 import api.DebugFile;
 import api.utils.StarRunnable;
-import com.google.gson.Gson;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.server.data.GameServerState;
-import org.schema.schine.graphicsengine.forms.Sprite;
-import org.schema.schine.network.client.ClientState;
 
-import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3f;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * STARMADE MOD
@@ -30,42 +24,18 @@ public class HUD_core {
     public static List<HUD_element> elementList = new ArrayList();
     public static HashMap<SpriteList, Integer> drawList = new HashMap<>();
 
-    public enum WarpSituation {
-        WARPSECTORBLOCKED(0),
-        RSPSECTORBLOCK(1),
-        JUMPDROP(2),
-        JUMPEXIT(3),
-        JUMPENTRY(4),
-        JUMPPULL(5),
-        TRAVEL(6);
-
-        private final int value;
-        private static Map map = new HashMap<>();
-        private WarpSituation(int value) {
-            this.value = value;
-        }
-
-        static { //map enum value to int keys for reconstruction int -> enumvalue
-            for (WarpSituation s: WarpSituation.values()) {
-                map.put(s.getValue(),s);
-            }
-        }
-
-        public static WarpSituation valueOf(int k) {
-            return (WarpSituation) map.get(k);
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-    };
-
+    /**
+     * some general HUD element placements to use a position references
+     */
     public static HUD_element console = new HUD_element(new Vector3f(0.8572f,0.8611f,0),new Vector3f((float)1/1080,(float)1/1080,(float)1/1080),SpriteList.CONSOLE);
     public static HUD_element spaceIndicator = new HUD_element(new Vector3f((float)1622/1920,(float)928/1080,0),new Vector3f((float)(0.42/1080),(float)(0.42/1080),(float)1/1080),SpriteList.RSP_ICON); //1625,929 - 512x512
 
     //TODO maybe split up in placement + available sprites?
     //TODO move to json
+    //TODO get rid of elementlist, directly put into drawlist.
+    /**
+     * initialize the list of hud elements, add all entries into the drawList.
+     */
     public static void initList() {
         //elementList.add(console);
         elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.WARP_ICON));
@@ -88,18 +58,20 @@ public class HUD_core {
     }
 
     /**
-     * what sprite to draw, accessed by CustomHUDImage on each draw() method.
+     * is called by PacketHUDUpdate, used to transfer information from the server to the client about what a player is currently doing related to warp.
+     * Sets the received info to WarpProcessController to the ProcessMap
      */
-    public static void HUD_processPacket(WarpSituation s) {
+    public static void HUD_processPacket(WarpProcessController.WarpProcess s, Integer key) {
         //TODO add behaviour for each enum value
         //TODO add method to get more precise data like time till warpdrop/jump etc.
         //priority: jump>drop>travel
         //travel kann nur
         playerWarpState = s;
-        DebugFile.log("set player warpsituation to " + s.toString());
+        WarpProcessController.WarpProcessMap.put(s, key);
+        DebugFile.log("set player warpsituation to " + s.toString() + "value: " + key.toString());
     }
 
-    public static WarpSituation playerWarpState = WarpSituation.TRAVEL;
+    public static WarpProcessController.WarpProcess playerWarpState = WarpProcessController.WarpProcess.TRAVEL;
     public static void HUDLoop() {
         new StarRunnable() {
             PlayerState player = GameClientState.instance.getPlayer();
@@ -108,16 +80,18 @@ public class HUD_core {
 
             @Override
             public void run() {
-                if (player == null || player.getCurrentSector() == null) {
+                UpdateSituation();
+                if (player == null || player.getCurrentSector() == null) { //nullpointer check to avoid drawing before player spawns.
                     DebugFile.log("playerstate is null or playersector is null");
                     player = GameClientState.instance.getPlayer();
                 } else {
                     if (GameServerState.isShutdown()) {
                         cancel();
                     }
-                    if (i == 0) {
-                        player = GameClientState.instance.getPlayer();
-                    }
+
+                    //draw decision making method
+
+                    //not server situation dependent, 100% passive
                     if (WarpManager.IsInWarp(player.getCurrentSector())) {
                         //player is in warp
                         drawList.put(SpriteList.RSP_ICON,0);
@@ -127,7 +101,8 @@ public class HUD_core {
                         drawList.put(SpriteList.WARP_ICON,0);
                     }
 
-                    if (playerWarpState.equals(WarpSituation.JUMPDROP) || playerWarpState.equals(WarpSituation.JUMPEXIT)) {
+                    //TODO make prettier check for processes
+                    if (isDropping || isExit) {
                         //do blinking drop icon
                         if (i % 5 == 0) { //once a second
                             if ((i/5) % 2 == 0) //gerade zahlen
@@ -144,7 +119,7 @@ public class HUD_core {
                         drawList.put(SpriteList.ICON_OUTLINE_TO_RSP,0);
                     }
 
-                    if (playerWarpState.equals(WarpSituation.JUMPENTRY) ) {
+                    if (isEntry) {
                         //do blinking jump icon
                         if (i % 5 == 0) { //once a second
                             if (i/5 % 2 == 0) //gerade zahlen
@@ -161,7 +136,7 @@ public class HUD_core {
                         drawList.put(SpriteList.ICON_OUTLINE_TO_WARP,0);
                     }
 
-                    if (playerWarpState.equals(WarpSituation.TRAVEL)) {
+                    if (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.TRAVEL) == 1) {
                         if (WarpManager.IsInWarp(player.getCurrentSector())) {
                             drawList.put(SpriteList.ICON_OUTLINE_WARP_TRAVEL,1);
                             drawList.put(SpriteList.ICON_OUTLINE_RSP_INACTIVE,1);
@@ -192,6 +167,27 @@ public class HUD_core {
                 }
             }
         }.runTimer(WarpMain.instance,1);
+    }
+
+    private static boolean isDropping = false;
+    private static boolean isEntry;
+    private static boolean isExit;
+    private static boolean isSectorLocked;
+
+    /**
+     * update player situation fields from WarpProcessMap
+     */
+    private static void UpdateSituation() {
+        DebugFile.log("updating warp situation from WarpProcessMap: ");
+
+        isDropping = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPDROP) == 1);
+        DebugFile.log("is Dropping: " + isDropping);
+        isExit = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPEXIT) == 1);
+
+        DebugFile.log("is exiting" + isExit);
+        isEntry = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPENTRY) == 1);
+
+        DebugFile.log("is entering" + isEntry);
     }
 }
 class HUD_element {

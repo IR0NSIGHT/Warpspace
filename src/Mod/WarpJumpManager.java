@@ -1,13 +1,11 @@
 package Mod;
 
-import Mod.HUD.client.HUD_core;
+import Mod.HUD.client.WarpProcessController;
 import api.DebugFile;
-import api.ModPlayground;
 import api.common.GameServer;
 import api.mod.StarLoader;
 import api.network.packets.PacketUtil;
 import api.utils.StarRunnable;
-import net.rudp.impl.Segment;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
@@ -68,7 +66,10 @@ public class WarpJumpManager {
         //--------------after action is taken
         if (isJump) {
             ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
-            SendPlayerWarpSituation(ship,HUD_core.WarpSituation.JUMPEXIT);
+            SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPEXIT, 1); //set exiting process to true
+        } else {
+            //must be a speeddrop situation is already handeled by loop.
+            //SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,1);
         }
 
 
@@ -96,7 +97,13 @@ public class WarpJumpManager {
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),sectorF);
                 StarLoader.fireEvent(e, true);
 
-                SendPlayerWarpSituation(ship,HUD_core.WarpSituation.TRAVEL);
+                if (isJump) {
+                    SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPEXIT, 0);
+                } else {
+                    //is a speeddrop (drop bc to slow)
+                    SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,0);
+                }
+
 
                 if (e.canceled) {
                     cancel();
@@ -135,7 +142,8 @@ public class WarpJumpManager {
         }
         entryQueue.add(ship);
 
-        SendPlayerWarpSituation(ship,HUD_core.WarpSituation.JUMPENTRY);
+        //set entry process to true/happening
+        SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,1);
         ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
 
         new StarRunnable() {
@@ -156,7 +164,7 @@ public class WarpJumpManager {
                 StarLoader.fireEvent(e, true);
 
                 //for all attached players send travel update, bc drop is over
-                SendPlayerWarpSituation(ship,HUD_core.WarpSituation.TRAVEL);
+                SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,0);
 
                 if (e.canceled) {
                     cancel();
@@ -271,19 +279,31 @@ public class WarpJumpManager {
         return false;
     }
 
-    private static void SendPlayerWarpSituation(PlayerState p, HUD_core.WarpSituation s) {
+    /**
+     * send hud update to specific player client computer
+     * @param p playerstate player
+     * @param s process
+     * @param v value
+     */
+    private static void SendPlayerWarpSituation(PlayerState p, WarpProcessController.WarpProcess s, Integer v) {
         //make packet with new wp, send it to players client
         DebugFile.log("sending HUD update to player " + p.getName() + " with " + s.toString());
-        PacketHUDUpdate packet = new PacketHUDUpdate(s);
+        PacketHUDUpdate packet = new PacketHUDUpdate(s, v);
         PacketUtil.sendPacket(p, packet);
     }
 
-    public static void SendPlayerWarpSituation(SegmentController sc, HUD_core.WarpSituation s) {
+    /**
+     * send HUD update to all clients of attached players of this segmentcontroller
+     * @param sc ship
+     * @param process warpprocess
+     * @param processValue value of warpprocess
+     */
+    public static void SendPlayerWarpSituation(SegmentController sc, WarpProcessController.WarpProcess process, Integer processValue) {
         DebugFile.log("sending HUD update for segmentcontroller: " + sc.getName());
         if ((sc instanceof PlayerControllable && !((PlayerControllable)sc).getAttachedPlayers().isEmpty()))
         {
             for (PlayerState p: ((PlayerControllable)sc).getAttachedPlayers()) {
-                SendPlayerWarpSituation(p,s);
+                SendPlayerWarpSituation(p,process,processValue);
             }
         }
     }

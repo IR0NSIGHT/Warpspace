@@ -3,6 +3,7 @@ package Mod;
 import Mod.HUD.client.GUIeventhandler;
 import Mod.HUD.client.HUD_core;
 import Mod.HUD.client.SpriteList;
+import Mod.HUD.client.WarpProcessController;
 import Mod.server.ThrustEventhandler;
 import Mod.server.WarpJumpEventHandler;
 import Mod.server.WarpCheckLoop;
@@ -70,6 +71,7 @@ public class WarpMain extends StarMod {
     public void onClientCreated(ClientInitializeEvent event) {
         super.onClientCreated(event);
         DebugFile.log("calling static method to register to GUI draw listener", WarpMain.instance);
+        WarpProcessController.initMap(); //build situation map for warp processes
         SpriteList.init();
 
                 //if (SpriteList.CONSOLE.getSprite() != null) {

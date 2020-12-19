@@ -1,11 +1,10 @@
 package Mod;
 
 import Mod.HUD.client.HUD_core;
-import api.common.GameClient;
+import Mod.HUD.client.WarpProcessController;
 import api.network.Packet;
 import api.network.PacketReadBuffer;
 import api.network.PacketWriteBuffer;
-import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.player.PlayerState;
 
 import java.io.IOException;
@@ -17,33 +16,48 @@ import java.io.IOException;
  * made by jake
  */
 public class PacketHUDUpdate extends Packet {
-    private HUD_core.WarpSituation situation;
+    /**
+     * what process
+     */
+    private WarpProcessController.WarpProcess warpProcess;
+
+    /**
+     * value given process has: 1 happening, 0 not happening
+     */
+    private Integer processValue;
 
     //TODO allow multiple HUD updates in one packet
     /**
      * constructor
-     * @param situation enum describing what warpjump state the player is in.
+     * @param warpProcess enum describing what warpjump state the player is in.
      */
-    public PacketHUDUpdate(HUD_core.WarpSituation situation) {
-        this.situation = situation;
+    public PacketHUDUpdate(WarpProcessController.WarpProcess warpProcess, Integer processValue) {
+        this.warpProcess = warpProcess;
+        this.processValue = processValue;
     }
-    public PacketHUDUpdate(){
+
+    /**
+     * default constructor required by starlaoder DO NOT DELETE!
+     */
+    public PacketHUDUpdate() {
 
     }
 
     @Override
     public void readPacketData(PacketReadBuffer buf) throws IOException {
-        situation = HUD_core.WarpSituation.valueOf(buf.readInt());
+        warpProcess = WarpProcessController.WarpProcess.valueOf(buf.readInt());
+        processValue = buf.readInt();
     }
 
     @Override
     public void writePacketData(PacketWriteBuffer buf) throws IOException {
-        buf.writeInt(situation.ordinal());
+        buf.writeInt(warpProcess.ordinal());
+        buf.writeInt(processValue);
     }
 
     @Override
     public void processPacketOnClient() {
-        HUD_core.HUD_processPacket(situation);
+        HUD_core.HUD_processPacket(warpProcess,processValue);
     }
 
     @Override
