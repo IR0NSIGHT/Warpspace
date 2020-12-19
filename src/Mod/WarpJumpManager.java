@@ -1,16 +1,20 @@
 package Mod;
 
+import Mod.HUD.client.HUD_core;
 import api.DebugFile;
 import api.ModPlayground;
 import api.common.GameServer;
 import api.mod.StarLoader;
+import api.network.packets.PacketUtil;
 import api.utils.StarRunnable;
 import net.rudp.impl.Segment;
 import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.controller.elements.jumpdrive.JumpAddOn;
 import org.schema.game.common.data.ManagedSegmentController;
+import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.controller.SectorSwitch;
 import org.schema.game.server.data.GameServerState;
@@ -64,6 +68,7 @@ public class WarpJumpManager {
         //--------------after action is taken
         if (isJump) {
             ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
+            SendPlayerWarpSituation(ship,HUD_core.WarpSituation.JUMPEXIT);
         }
 
 
@@ -90,6 +95,9 @@ public class WarpJumpManager {
 
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),sectorF);
                 StarLoader.fireEvent(e, true);
+
+                SendPlayerWarpSituation(ship,HUD_core.WarpSituation.TRAVEL);
+
                 if (e.canceled) {
                     cancel();
                     return;
@@ -127,6 +135,7 @@ public class WarpJumpManager {
         }
         entryQueue.add(ship);
 
+        SendPlayerWarpSituation(ship,HUD_core.WarpSituation.JUMPENTRY);
         ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
 
         new StarRunnable() {
@@ -145,6 +154,10 @@ public class WarpJumpManager {
 
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),sector);
                 StarLoader.fireEvent(e, true);
+
+                //for all attached players send travel update, bc drop is over
+                SendPlayerWarpSituation(ship,HUD_core.WarpSituation.TRAVEL);
+
                 if (e.canceled) {
                     cancel();
                     return;
@@ -257,4 +270,22 @@ public class WarpJumpManager {
         //TODO add interdiction check
         return false;
     }
+
+    private static void SendPlayerWarpSituation(PlayerState p, HUD_core.WarpSituation s) {
+        //make packet with new wp, send it to players client
+        DebugFile.log("sending HUD update to player " + p.getName() + " with " + s.toString());
+        PacketHUDUpdate packet = new PacketHUDUpdate(s);
+        PacketUtil.sendPacket(p, packet);
+    }
+
+    public static void SendPlayerWarpSituation(SegmentController sc, HUD_core.WarpSituation s) {
+        DebugFile.log("sending HUD update for segmentcontroller: " + sc.getName());
+        if ((sc instanceof PlayerControllable && !((PlayerControllable)sc).getAttachedPlayers().isEmpty()))
+        {
+            for (PlayerState p: ((PlayerControllable)sc).getAttachedPlayers()) {
+                SendPlayerWarpSituation(p,s);
+            }
+        }
+    }
+
 }

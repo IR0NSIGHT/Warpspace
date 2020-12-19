@@ -1,5 +1,6 @@
 package Mod;
 
+import Mod.HUD.client.HUD_core;
 import api.common.GameClient;
 import api.network.Packet;
 import api.network.PacketReadBuffer;
@@ -15,33 +16,34 @@ import java.io.IOException;
  * edited by Ir0nsight
  * made by jake
  */
-public class PacketSCUpdateWarp extends Packet {
-    private Vector3i waypoint;
+public class PacketHUDUpdate extends Packet {
+    private HUD_core.WarpSituation situation;
 
+    //TODO allow multiple HUD updates in one packet
     /**
      * constructor
-     * @param waypoint vector3i with new navigation marker waypoint for target machine.
+     * @param situation enum describing what warpjump state the player is in.
      */
-    public PacketSCUpdateWarp(Vector3i waypoint) {
-        this.waypoint = waypoint;
+    public PacketHUDUpdate(HUD_core.WarpSituation situation) {
+        this.situation = situation;
     }
-    public PacketSCUpdateWarp(){
+    public PacketHUDUpdate(){
 
     }
 
     @Override
     public void readPacketData(PacketReadBuffer buf) throws IOException {
-        waypoint = buf.readVector();
+        situation = HUD_core.WarpSituation.valueOf(buf.readInt());
     }
 
     @Override
     public void writePacketData(PacketWriteBuffer buf) throws IOException {
-        buf.writeVector(waypoint);
+        buf.writeInt(situation.ordinal());
     }
 
     @Override
     public void processPacketOnClient() {
-        GameClient.getClientController().getClientGameData().setWaypoint(waypoint);
+        HUD_core.HUD_processPacket(situation);
     }
 
     @Override

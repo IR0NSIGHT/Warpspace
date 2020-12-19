@@ -20,12 +20,15 @@ class CustomHudImage extends GUIElement {
 
     public Vector3f scale;
 
-    public CustomHudImage(InputState inputState, Vector3f position, Vector3f scale, final HUD_element el) {
+    private HUD_element el;
+
+    public CustomHudImage(InputState inputState, Vector3f position, Vector3f scale, HUD_element el) {
         super(inputState, 100, 100);
         this.position = position;
         this.scale = scale;
-        if (el.sprite != null) {
-            this.sprite = sprite;
+        this.el = el;
+        if (el.enumValue.getSprite() != null) {
+            this.sprite = el.enumValue.getSprite();
         } else {
             //run a loop until a valid sprite was found
         }
@@ -40,17 +43,50 @@ class CustomHudImage extends GUIElement {
 
     }
 
+    private GraphicsDevice gd;
+    private Vector3f screenRes = new Vector3f();
+    private Vector3f screenPos = new Vector3f(1,1,1);
+    private Vector3f screenScale = new Vector3f(1,1,1);
+    private int screenResUpdate = 0;
     @Override
     public void draw() {
         ShaderLibrary.scanlineShader.load();
         if (sprite != null) {
-            sprite.draw();
-            DebugFile.log("positioning and scaling");
-            sprite.setPositionCenter(true);
-            sprite.setPos(0,0,0);
-            sprite.setScale(1,1,1);
-        } else {
+            if (HUD_core.drawList.get(el.enumValue) == 1) { //draw
+                //DebugFile.log("positioning and scaling");
+                sprite.setPositionCenter(true);
 
+
+                if (screenResUpdate % 30 == 0) {
+                //    DebugFile.log("###########updating screen resolution");
+                    screenResUpdate = 0;
+                    gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+                    screenRes.x = gd.getDisplayMode().getWidth();
+                    screenRes.y = gd.getDisplayMode().getHeight();
+
+                    screenPos.x = position.x * screenRes.x;
+                    screenPos.y = position.y * screenRes.y;
+                    screenPos.z = position.z * screenRes.z;
+
+                    screenScale.x = scale.x * screenRes.y;
+                    screenScale.y = scale.y * screenRes.y;
+                    screenScale.z = scale.z * screenRes.y;
+                //    DebugFile.log("original scale is: " + scale.toString());
+
+                }
+                screenResUpdate += 1;
+            //    DebugFile.log("screen res is: " + screenRes.toString() + " position is: " + screenPos.toString() + " scale is: " + screenScale.toString());
+                sprite.setPos(screenPos.x,screenPos.y,screenPos.z);
+                sprite.setScale(screenScale.x,screenScale.y,screenScale.z); //!scale uses the smaller dimension (screenheight) as a multiplier so different formats dont stretch the image
+
+                sprite.draw();
+            }
+        } else {
+            DebugFile.log("sprite is null");
+            if (el.enumValue.getSprite() != null) {
+                DebugFile.log("elements sprite was detected");
+                this.sprite = el.enumValue.getSprite(); //this should automatically add the sprite once it was added through the graphics thread : autoupdated reference. element -> spriteenum
+            }
         }
         ShaderLibrary.scanlineShader.unload();
 

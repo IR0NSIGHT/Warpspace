@@ -50,6 +50,7 @@ public class WarpMain extends StarMod {
         instance = this;
         DebugFile.log("enabled.",this);
         PacketUtil.registerPacket(PacketSCUpdateWarp.class);
+        PacketUtil.registerPacket(PacketHUDUpdate.class);
         DebugFile.log("init for spritelist #####################################");
 
     }
@@ -75,7 +76,7 @@ public class WarpMain extends StarMod {
                     DebugFile.log("init HUD CORE LIST");
                     HUD_core.initList();
                     GUIeventhandler.addHUDDrawListener();
-
+                    HUD_core.HUDLoop();
                // }
 
         //

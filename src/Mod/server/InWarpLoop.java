@@ -1,5 +1,6 @@
 package Mod.server;
 
+import Mod.HUD.client.HUD_core;
 import Mod.WarpEntityManager;
 import Mod.WarpJumpManager;
 import Mod.WarpMain;
@@ -42,6 +43,8 @@ public class InWarpLoop {
                         cancel();
                     }
                     if (ship.getSpeedCurrent() < WarpManager.minimumSpeed) {
+                        //TODO get better way of turning on and off drop warning
+                        //WarpJumpManager.SendPlayerWarpSituation(ship, HUD_core.WarpSituation.JUMPDROP);
                         //ship is to slow, dropping out of warp!
                         if (countdown < lastWarning) {
                             DebugFile.log("warning player for countdown " + countdown + " and lastwarning " + lastWarning);
@@ -56,6 +59,8 @@ public class InWarpLoop {
                         }
                         countdown --; //runs once a second
                     } else {
+                        //WarpJumpManager.SendPlayerWarpSituation(ship, HUD_core.WarpSituation.TRAVEL);
+
                         if (countdown < 10) {
                             countdown ++;
                             lastWarning = countdown;

@@ -12,8 +12,21 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public enum SpriteList {
-        CONSOLE,
-    RSP_ICON
+    CONSOLE, //TODO add console
+    RSP_ICON,
+    WARP_ICON,
+    ICON_OUTLINE_RSP_TRAVEL,    //green lower bottom
+    ICON_OUTLINE_WARP_TRAVEL, //green up
+
+    ICON_OUTLINE_RSP_INACTIVE, //greyed out lower bottom
+    ICON_OUTLINE_WARP_INACTIVE, //grey top
+
+    ICON_OUTLINE_RSP_BLOCKED,   //red lower
+    ICON_OUTLINE_WARP_BLOCKED,   //red up
+    ICON_OUTLINE_SECTOR_LOCKED,  //red up and down
+
+    ICON_OUTLINE_TO_RSP,    //yellow drop sign
+    ICON_OUTLINE_TO_WARP    //yellow up sign
     ;
 
 
@@ -24,8 +37,8 @@ public enum SpriteList {
             DebugFile.log("######################################### spritelist init called, enum has x entries: " + SpriteList.values().length);
             StarLoaderTexture.runOnGraphicsThread(() -> {
                 synchronized (SpriteList.class) {
+                    long duration = System.currentTimeMillis();
                     for (SpriteList value : SpriteList.values()) {
-
                         String name = value.name().toLowerCase();
                         value.name = name;
                         DebugFile.log("################################### handling sprite: " + value.getName());
@@ -41,7 +54,8 @@ public enum SpriteList {
                             DebugFile.log("############################ sprite failed" +e.toString());
                         }
                     };
-                    DebugFile.log("########################### finished loading sprites");
+                    duration = (System.currentTimeMillis() - duration);
+                    DebugFile.log("########################### finished loading sprites after " + duration + "millis");
                 }
             });
         }
