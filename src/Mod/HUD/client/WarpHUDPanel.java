@@ -10,6 +10,9 @@ import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.server.data.GameServerState;
 import org.schema.schine.graphicsengine.forms.font.FontLibrary;
 
+import javax.vecmath.Vector3f;
+import java.util.Vector;
+
 /**
  * STARMADE MOD
  * CREATOR: Max1M
@@ -25,11 +28,13 @@ public class WarpHUDPanel {
     public WarpHUDPanel(HudCreateEvent ev) {
         textEl = new TextElement(FontLibrary.getBlenderProMedium16(), ev.getInputState());
         textEl.text = "hello space!";
+        DebugChatEvent.textElement = textEl;
         ev.addElement(textEl);
+        setPosition(1565,1038); //needs to run in loop to autoadjust for changed textsize
         startLoop();
     }
     public void setPosition(int x, int y){
-        textEl.getPos().set(new float[]{x - 0.5f*textEl.getWidth(), y - 0.5f* textEl.getHeight(),0});
+        textEl.getPos().set(new float[]{x,y,0});
     }
     public void setTextEl(String text) {
         textEl.text = text;
@@ -39,6 +44,7 @@ public class WarpHUDPanel {
 
         new StarRunnable() {
             Vector3i oldPos = new Vector3i(getPlayerSector());
+            Vector3i newPos;
             String text = "empty";
             Integer i = 0;
             @Override
@@ -48,14 +54,40 @@ public class WarpHUDPanel {
                 }
                 if (i == 0 || !(oldPos.equals(getPlayerSector()))) {
                     oldPos = new Vector3i(getPlayerSector());
+
                     if (WarpManager.IsInWarp(getPlayerSector())) {
-                        text = "" + WarpManager.GetRealSpacePos(getPlayerSector());
+                        newPos = WarpManager.GetRealSpacePos(getPlayerSector());
                     } else {
-                        text = "" + WarpManager.GetWarpSpacePos(getPlayerSector());
+                        newPos = WarpManager.GetWarpSpacePos(getPlayerSector());
+                    }
+                    Vector<Integer> vec = new Vector<Integer>();
+                    vec.add(newPos.x);
+                    vec.add(newPos.y);
+                    vec.add(newPos.z);
+                    int xi = 0;
+                    text = "";
+
+                    for (Integer i: vec) {
+                        //get length of int
+                        int length = (int) (Math.log10(Math.abs(i)) + 1);
+                        //turn to string
+                        if (i < 0) {
+                            length ++;
+                        }
+                        String s = "";
+                        for (int i1 = 0; i1 < (5 - length); i1 ++) {
+                            s += "x"; //add spaces for continous size
+                        }
+                        s += i.toString();
+                        if (xi < 2) {
+                            s += "|";
+                        }
+                        xi ++;
+                        text += s;
                     }
                     i++;
                 }
-                setPosition(1624,1056); //needs to run in loop to autoadjust for changed textsize
+                //
                 setTextEl(text);
             }
         }.runTimer(WarpMain.instance,5);

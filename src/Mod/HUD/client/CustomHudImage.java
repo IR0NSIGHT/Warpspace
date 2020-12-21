@@ -1,5 +1,6 @@
 package Mod.HUD.client;
 
+import Mod.WarpMain;
 import api.DebugFile;
 import api.element.gui.elements.GUIElement;
 import org.schema.schine.graphicsengine.forms.Sprite;
@@ -27,12 +28,8 @@ class CustomHudImage extends GUIElement {
         this.el = el;
         if (el.enumValue.getSprite() != null) {
             this.sprite = el.enumValue.getSprite();
-        } else {
-            //run a loop until a valid sprite was found
         }
 
-        DebugFile.log("########### img a custom HUD panel and was constructed");
-        DebugFile.log("sprite is null: " + (Objects.isNull(this.sprite)));
     }
 
 
@@ -72,13 +69,10 @@ class CustomHudImage extends GUIElement {
 
                     playShutter = el.playShutter;
                     if (el.enumValue.equals(SpriteList.CONSOLE_HUD1024)) {
-                        DebugFile.log("console is pos " + screenPos + " scale " + scale);
-                    }
-                //    DebugFile.log("original scale is: " + scale.toString());
 
+                    }
                 }
                 screenResUpdate += 1;
-            //    DebugFile.log("screen res is: " + screenRes.toString() + " position is: " + screenPos.toString() + " scale is: " + screenScale.toString());
                 if (playShutter) {
                     ShaderLibrary.scanlineShader.load();
                 }
@@ -91,10 +85,10 @@ class CustomHudImage extends GUIElement {
                 }
             }
         } else {
-            DebugFile.log("sprite is null");
             if (el.enumValue.getSprite() != null) {
-                DebugFile.log("elements sprite was detected");
                 this.sprite = el.enumValue.getSprite(); //this should automatically add the sprite once it was added through the graphics thread : autoupdated reference. element -> spriteenum
+            } else {
+                DebugFile.err("Sprite has no valid path to image");
             }
         }
     }

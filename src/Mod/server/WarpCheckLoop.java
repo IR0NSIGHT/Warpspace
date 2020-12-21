@@ -33,7 +33,6 @@ public class WarpCheckLoop {
             public void run() {
                 //kill loop if server is shut down.
                 if (GameServerState.isShutdown() || GameServerState.isFlagShutdown()) {
-                    DebugFile.log("WarpCheckLoop was terminated on server shutdown",WarpMain.instance);
                     cancel();
                 }
 

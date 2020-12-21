@@ -1,9 +1,6 @@
 package Mod;
 
-import Mod.HUD.client.GUIeventhandler;
-import Mod.HUD.client.HUD_core;
-import Mod.HUD.client.SpriteList;
-import Mod.HUD.client.WarpProcessController;
+import Mod.HUD.client.*;
 import Mod.server.ThrustEventhandler;
 import Mod.server.WarpJumpEventHandler;
 import Mod.server.WarpCheckLoop;
@@ -42,26 +39,21 @@ public class WarpMain extends StarMod {
         this.setModName("WarpSpace");
         this.setModAuthor("IR0NSIGHT");
         this.setModDescription("an alternative FTL system");
-        DebugFile.log("WarpSpace info set.",this);
         this.setSMDResourceId(8166);
     }
     @Override
     public void onEnable() {
         super.onEnable();
         instance = this;
-        DebugFile.log("enabled.",this);
         PacketUtil.registerPacket(PacketSCUpdateWarp.class);
         PacketUtil.registerPacket(PacketHUDUpdate.class);
-        DebugFile.log("init for spritelist #####################################");
 
     }
 
     @Override
     public void onServerCreated(ServerInitializeEvent event) {
         super.onServerCreated(event);
-        DebugFile.log("WarpSpace creating listeners at server creation",this);
         WarpJumpListener.createListener();
-    //    DebugFile.log("####################################################### trying to add thrust listener",this);
     //TODO thrust    ThrustEventhandler.createListener();
         WarpCheckLoop.loop(25); //TODO use a frequency from a config
         WarpJumpEventHandler.createServerListener();
@@ -70,19 +62,12 @@ public class WarpMain extends StarMod {
     @Override
     public void onClientCreated(ClientInitializeEvent event) {
         super.onClientCreated(event);
-        DebugFile.log("calling static method to register to GUI draw listener", WarpMain.instance);
+        //DebugChatEvent.addDebugChatListener();
         WarpProcessController.initMap(); //build situation map for warp processes
         SpriteList.init();
+        HUD_core.initList();
+        GUIeventhandler.addHUDDrawListener();
+        HUD_core.HUDLoop();
 
-                //if (SpriteList.CONSOLE.getSprite() != null) {
-                    DebugFile.log("init HUD CORE LIST");
-                    HUD_core.initList();
-                    GUIeventhandler.addHUDDrawListener();
-                    HUD_core.HUDLoop();
-               // }
-
-        //
-        //GUIeventhandler.addHUDDrawListener();
-    //    SkyboxEventHandler.CreateListener();
     }
 }

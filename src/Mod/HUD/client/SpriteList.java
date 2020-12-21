@@ -37,28 +37,24 @@ public enum SpriteList {
         private String name;
 
         public static void init() {
-            DebugFile.log("######################################### spritelist init called, enum has x entries: " + SpriteList.values().length);
             StarLoaderTexture.runOnGraphicsThread(() -> {
                 synchronized (SpriteList.class) {
                     long duration = System.currentTimeMillis();
                     for (SpriteList value : SpriteList.values()) {
                         String name = value.name().toLowerCase();
                         value.name = name;
-                        DebugFile.log("################################### handling sprite: " + value.getName());
                         try {
                             String path = "res/" + name + ".png";
-                            DebugFile.log("####################### trying to get resourcestream -> buffered image from path: " + path);
                             InputStream is = WarpMain.class.getResourceAsStream(path);
-                            DebugFile.log("inputstream null: "+ (null == is));
+                            if (is == null) {
+                                DebugFile.err("spritelist initialization could not get a valid path for image " + name);
+                            }
                             BufferedImage bi = ImageIO.read(is);
                             value.sprite = StarLoaderTexture.newSprite(bi, WarpMain.instance, "warpmain_" + name);
                         } catch (IOException e) {
                             e.printStackTrace();
-                            DebugFile.log("############################ sprite failed" +e.toString());
                         }
                     };
-                    duration = (System.currentTimeMillis() - duration);
-                    DebugFile.log("########################### finished loading sprites after " + duration + "millis");
                 }
             });
         }

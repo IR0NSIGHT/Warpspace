@@ -29,6 +29,7 @@ import java.util.List;
 public class InWarpLoop {
     //TODO add a central method that handles an entity being put into warp so it can be called by event or cheeseloop
     public static void startLoop(final SegmentController ship) {
+        DebugFile.log("################# starting in warp loop for " + ship.getName());
         new StarRunnable() {
             int countdown = 15;
             long lastWarning = 11;
@@ -40,7 +41,7 @@ public class InWarpLoop {
                 try {
                     if (!WarpEntityManager.isWarpEntity(ship) || GameServerState.isShutdown()) {
                         //left warp
-                        DebugFile.log("InWarpLoop was terminated bc server is shutdown or ship no longer in warp.");
+                    //    DebugFile.log("InWarpLoop was terminated bc server is shutdown or ship no longer in warp.");
                         cancel();
                     }
                     if (ship.getSpeedCurrent() < WarpManager.minimumSpeed) {
@@ -49,11 +50,12 @@ public class InWarpLoop {
                         //WarpJumpManager.SendPlayerWarpSituation(ship, HUD_core.WarpSituation.JUMPDROP);
                         //ship is to slow, dropping out of warp!
                         if (countdown < lastWarning) {
-                            DebugFile.log("warning player for countdown " + countdown + " and lastwarning " + lastWarning);
+                        //    DebugFile.log("warning player for countdown " + countdown + " and lastwarning " + lastWarning);
                             ship.sendControllingPlayersServerMessage(Lng.astr("you are to slow! dropping out of warp in " + countdown), ServerMessage.MESSAGE_TYPE_WARNING);
                             //send warning sound to players in ship
                             if (ship.isConrolledByActivePlayer()) {
                                 for (PlayerState player: ((PlayerControllable)ship).getAttachedPlayers()) {
+                                //    DebugFile.log("##################### playing warning sound for " + player);
                                     AudioUtils.serverPlaySound("0022_gameplay - low fuel warning constant beeps (loop)", 1F,1F,player);
                                 }
                             }
@@ -61,7 +63,6 @@ public class InWarpLoop {
                         }
                         countdown --; //runs once a second
                     } else {
-                        //WarpJumpManager.SendPlayerWarpSituation(ship, HUD_core.WarpSituation.TRAVEL);
                         WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,0);
                         if (countdown < 10) {
                             countdown ++;
@@ -82,7 +83,5 @@ public class InWarpLoop {
                 }
             }
         }.runTimer(WarpMain.instance, 25);
-    }
-    private void handleCountdown() {
     }
 }

@@ -6,6 +6,7 @@ import api.DebugFile;
 import api.utils.StarRunnable;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.data.player.PlayerState;
+import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
 
 import javax.vecmath.Vector3f;
@@ -55,7 +56,6 @@ public class HUD_core {
         elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_TO_RSP, HUD_element.ElementType.LOWER_BAR)); //1625,929)
         elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_TO_WARP, HUD_element.ElementType.UPPER_Bar)); //1625,929)
 
-        DebugFile.log("init list ran.");
         for (HUD_element e : elementList) {
             drawList.put(e.enumValue,0);
         }
@@ -72,7 +72,6 @@ public class HUD_core {
         //travel kann nur
         playerWarpState = s;
         WarpProcessController.WarpProcessMap.put(s, key);
-        DebugFile.log("set player warpsituation to " + s.toString() + "value: " + key.toString());
     }
 
     public static WarpProcessController.WarpProcess playerWarpState = WarpProcessController.WarpProcess.TRAVEL;
@@ -86,12 +85,24 @@ public class HUD_core {
             public void run() {
                 UpdateSituation();
                 if (player == null || player.getCurrentSector() == null) { //nullpointer check to avoid drawing before player spawns.
-                    DebugFile.log("playerstate is null or playersector is null");
+                   // DebugFile.log("playerstate is null or playersector is null");
                     player = GameClientState.instance.getPlayer();
                 } else {
                     if (GameServerState.isShutdown()) {
                         cancel();
                     }
+                   // DebugFile.log("trying to get player controllable");
+                    SimpleTransformableSendableObject playerShip = player.getFirstControlledTransformableWOExc();
+                    if (null == playerShip || !playerShip.isSegmentController() || GameClientState.instance.isInAnyBuildMode()) {
+                        //DebugFile.log("player is not in ship or in buildmode, skipping");
+                        //turn of HUD if player is not controlling a ship
+                        for (HUD_element.ElementType type: HUD_element.ElementType.values()) {
+                            HUDElementController.drawType(type,0);
+                        }
+                        return;
+                    }
+                  //  DebugFile.log("player is in ship or similar");
+
 
                     //draw decision making method
 
@@ -111,21 +122,19 @@ public class HUD_core {
                     //TODO make prettier check for processes
                     if (isDropping || isExit) {
                         //do blinking drop icon
-                        if ((i % 24) <= 12) { //once a second
+                        if ((i % 12) <= 6) { //once a second
                             HUDElementController.drawElement(SpriteList.ICON_OUTLINE_TO_RSP,true);
                         }
                     }
 
                     if (isEntry) {
                         //do blinking jump icon
-                        if ((i % 24) <= 12) { //once a second
+                        if ((i % 12) <= 6) { //once a second
                             HUDElementController.drawElement(SpriteList.ICON_OUTLINE_TO_WARP,true);
                         }
                     }
                 }
                 if (i % 25 == 0) {
-
-                    DebugFile.log("starrunnable with frequency = 1 took " + (System.currentTimeMillis() - lastTime) + " millis for 25 iteration");
                     lastTime = System.currentTimeMillis();
                 }
                 i ++;

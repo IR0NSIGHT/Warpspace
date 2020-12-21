@@ -26,7 +26,6 @@ public class WarpJumpListener {
      * instead another jump is queue to or from warp, depending on the ships position.
      */
     public static void createListener() {
-        DebugFile.log("Creating jump listener");
         StarLoader.registerListener(ShipJumpEngageEvent.class,
                 new Listener<ShipJumpEngageEvent>() {
                     @Override

@@ -21,12 +21,10 @@ import org.schema.game.common.data.player.PlayerState;
  */
 public class WarpJumpEventHandler {
     public static void createServerListener() {
-        DebugFile.log("Creating WarpJump listener on client");
         StarLoader.registerListener(WarpJumpEvent.class,new Listener<WarpJumpEvent>() {
             @Override
             public void onEvent(WarpJumpEvent event) {
                 //FIXME remove debug message
-                DebugFile.log("handling warp event for: " + event.getShip().getName());
 
                 //change players nav tool
                 boolean toWarp = (event.getType().equals(WarpJumpEvent.WarpJumpType.ENTRY));

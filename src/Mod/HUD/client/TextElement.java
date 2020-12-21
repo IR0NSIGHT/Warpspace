@@ -11,6 +11,8 @@ import org.schema.game.common.data.player.faction.FactionRelation;
 import org.schema.schine.graphicsengine.forms.gui.GUITextOverlay;
 import org.schema.schine.input.InputState;
 
+import javax.vecmath.Vector2d;
+import javax.vecmath.Vector3f;
 import java.util.ArrayList;
 
 /**

@@ -34,17 +34,10 @@ public class WarpEntityManager {
     public static void DeclareWarpEntity(SegmentController ship) {
         //TODO write method
         if (WarpEntityManager.isWarpEntity(ship)) {
-            DebugFile.log("ship already is registered with warploop");
             return;
         }
-        DebugFile.log("added ship to warpentities: " + ship.getName());
         shipsInWarp.add(ship);
         InWarpLoop.startLoop(ship);
-
-
-        //add to list
-        //start ship loop
-        //handle pilots
     }
     public static void RemoveWarpEntity(SegmentController ship) {
         if (shipsInWarp.contains(ship)) {

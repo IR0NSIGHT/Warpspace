@@ -79,7 +79,6 @@ public class WarpJumpManager {
             @Override
             public void run() {
                 if (GameServerState.isShutdown() || GameServerState.isFlagShutdown()) {
-                    DebugFile.log("WarpCheckLoop was terminated on server shutdown",WarpMain.instance);
                     cancel();
                 }
                 if (dropQueue.contains(ship)) { //remove from queue
@@ -150,7 +149,6 @@ public class WarpJumpManager {
             @Override
             public void run() {
                 if (GameServerState.isShutdown() || GameServerState.isFlagShutdown()) {
-                    DebugFile.log("WarpCheckLoop was terminated on server shutdown",WarpMain.instance);
                     cancel();
                 }
                 if (entryQueue.contains(ship)) { //remove from queue
@@ -191,7 +189,6 @@ public class WarpJumpManager {
         sector.x = (int) Math.round(Math.random() * 1000 - 500);
         sector.y = (int) Math.round(Math.random() * 200 - 100);
         sector.z = (int) Math.round(Math.random() * 1000 - 500);
-        DebugFile.log("chose random sector: " + sector.toString());
         return sector;
     }
     private static void handleStation(SegmentController station) {
@@ -212,7 +209,6 @@ public class WarpJumpManager {
 
         } else {
             ship.sendControllingPlayersServerMessage(Lng.astr("Jump failed, warpdrive needs to cooldown."), ServerMessage.MESSAGE_TYPE_INFO);
-            DebugFile.log("jumping into warp failed");
         }
     }
     /**
@@ -253,7 +249,6 @@ public class WarpJumpManager {
         if(ship instanceof ManagedSegmentController<?>) {
             warpdrive =((Ship)ship).getManagerContainer().getJumpAddOn();
         } else {
-            DebugFile.log("entity " + ship.getName() + "tried jumping but is no managed SC.");
             return;
         }
         warpdrive.removeCharge();
@@ -266,7 +261,6 @@ public class WarpJumpManager {
         if(ship instanceof ManagedSegmentController<?>) {
             warpdrive =((Ship)ship).getManagerContainer().getJumpAddOn();
         } else {
-            DebugFile.log("entity " + ship.getName() + "tried jumping but is no managed SC.");
             return false;
         }
         if (!warpdrive.canExecute()) {
@@ -287,7 +281,6 @@ public class WarpJumpManager {
      */
     private static void SendPlayerWarpSituation(PlayerState p, WarpProcessController.WarpProcess s, Integer v) {
         //make packet with new wp, send it to players client
-        DebugFile.log("sending HUD update to player " + p.getName() + " with " + s.toString());
         PacketHUDUpdate packet = new PacketHUDUpdate(s, v);
         PacketUtil.sendPacket(p, packet);
     }
@@ -299,7 +292,6 @@ public class WarpJumpManager {
      * @param processValue value of warpprocess
      */
     public static void SendPlayerWarpSituation(SegmentController sc, WarpProcessController.WarpProcess process, Integer processValue) {
-        DebugFile.log("sending HUD update for segmentcontroller: " + sc.getName());
         if ((sc instanceof PlayerControllable && !((PlayerControllable)sc).getAttachedPlayers().isEmpty()))
         {
             for (PlayerState p: ((PlayerControllable)sc).getAttachedPlayers()) {

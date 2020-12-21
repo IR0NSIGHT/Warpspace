@@ -46,7 +46,6 @@ public class WarpJumpEvent extends Event {
         this.start = start;
         this.end = end;
         this.type = type;
-        DebugFile.log(toString(), WarpMain.instance);
     }
 
     /**
