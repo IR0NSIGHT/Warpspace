@@ -1,9 +1,7 @@
 package Mod.HUD.client;
 
-import Mod.WarpMain;
 import api.DebugFile;
 import api.element.gui.elements.GUIElement;
-import api.utils.StarRunnable;
 import org.schema.schine.graphicsengine.forms.Sprite;
 import org.schema.schine.graphicsengine.shader.ShaderLibrary;
 import org.schema.schine.input.InputState;
@@ -47,10 +45,10 @@ class CustomHudImage extends GUIElement {
     private Vector3f screenRes = new Vector3f();
     private Vector3f screenPos = new Vector3f(1,1,1);
     private Vector3f screenScale = new Vector3f(1,1,1);
+    private boolean playShutter = false;
     private int screenResUpdate = 0;
     @Override
     public void draw() {
-        ShaderLibrary.scanlineShader.load();
         if (sprite != null) {
             if (HUD_core.drawList.get(el.enumValue) == 1) { //draw
                 //DebugFile.log("positioning and scaling");
@@ -71,15 +69,26 @@ class CustomHudImage extends GUIElement {
                     screenScale.x = scale.x * screenRes.y;
                     screenScale.y = scale.y * screenRes.y;
                     screenScale.z = scale.z * screenRes.y;
+
+                    playShutter = el.playShutter;
+                    if (el.enumValue.equals(SpriteList.CONSOLE_HUD1024)) {
+                        DebugFile.log("console is pos " + screenPos + " scale " + scale);
+                    }
                 //    DebugFile.log("original scale is: " + scale.toString());
 
                 }
                 screenResUpdate += 1;
             //    DebugFile.log("screen res is: " + screenRes.toString() + " position is: " + screenPos.toString() + " scale is: " + screenScale.toString());
+                if (playShutter) {
+                    ShaderLibrary.scanlineShader.load();
+                }
                 sprite.setPos(screenPos.x,screenPos.y,screenPos.z);
                 sprite.setScale(screenScale.x,screenScale.y,screenScale.z); //!scale uses the smaller dimension (screenheight) as a multiplier so different formats dont stretch the image
 
                 sprite.draw();
+                if (playShutter) {
+                    ShaderLibrary.scanlineShader.unload();
+                }
             }
         } else {
             DebugFile.log("sprite is null");
@@ -88,8 +97,6 @@ class CustomHudImage extends GUIElement {
                 this.sprite = el.enumValue.getSprite(); //this should automatically add the sprite once it was added through the graphics thread : autoupdated reference. element -> spriteenum
             }
         }
-        ShaderLibrary.scanlineShader.unload();
-
     }
 
     @Override

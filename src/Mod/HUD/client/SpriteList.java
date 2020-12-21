@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public enum SpriteList {
-    CONSOLE, //TODO add console
+    CONSOLE_HUD1024,
+    CONSOLE_HUD1024_SCREEN,
+    CONSOLE_HUD1024_BOTTOM,
     RSP_ICON,
     WARP_ICON,
     ICON_OUTLINE_RSP_TRAVEL,    //green lower bottom
@@ -23,7 +25,8 @@ public enum SpriteList {
 
     ICON_OUTLINE_RSP_BLOCKED,   //red lower
     ICON_OUTLINE_WARP_BLOCKED,   //red up
-    ICON_OUTLINE_SECTOR_LOCKED,  //red up and down
+    ICON_OUTLINE_SECTOR_LOCKED_UP,  //red up and down
+    ICON_OUTLINE_SECTOR_LOCKED_DOWN,
 
     ICON_OUTLINE_TO_RSP,    //yellow drop sign
     ICON_OUTLINE_TO_WARP    //yellow up sign

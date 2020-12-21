@@ -27,8 +27,8 @@ public class HUD_core {
     /**
      * some general HUD element placements to use a position references
      */
-    public static HUD_element console = new HUD_element(new Vector3f(0.8572f,0.8611f,0),new Vector3f((float)1/1080,(float)1/1080,(float)1/1080),SpriteList.CONSOLE);
-    public static HUD_element spaceIndicator = new HUD_element(new Vector3f((float)1622/1920,(float)928/1080,0),new Vector3f((float)(0.42/1080),(float)(0.42/1080),(float)1/1080),SpriteList.RSP_ICON); //1625,929 - 512x512
+    public static HUD_element console = new HUD_element(new Vector3f((float)1622/1920,(float)928/1080,0.01f),new Vector3f((float)0.314/1080,(float)0.314/1080,(float)1/1080),SpriteList.CONSOLE_HUD1024, HUD_element.ElementType.BACKGROUND);
+    public static HUD_element spaceIndicator = new HUD_element(new Vector3f((float)1622/1920,(float)928/1080,0.01f),new Vector3f((float)(0.32/1080),(float)(0.32/1080),(float)1/1080),SpriteList.RSP_ICON, HUD_element.ElementType.INDICATOR); //1625,929 - 512x512
 
     //TODO maybe split up in placement + available sprites?
     //TODO move to json
@@ -37,19 +37,23 @@ public class HUD_core {
      * initialize the list of hud elements, add all entries into the drawList.
      */
     public static void initList() {
-        //elementList.add(console);
-        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.WARP_ICON));
-        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.RSP_ICON));
-        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_RSP_TRAVEL)); //1625,929)
-        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_WARP_TRAVEL)); //1625,929)
-        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_RSP_INACTIVE)); //1625,929)
-        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_WARP_INACTIVE)); //1625,929)
-        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_RSP_BLOCKED)); //1625,929)
-        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_WARP_BLOCKED)); //1625,929)
-        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_SECTOR_LOCKED)); //1625,929)
+        elementList.add(new HUD_element(console.pos, console.scale,SpriteList.CONSOLE_HUD1024, HUD_element.ElementType.BACKGROUND));
+        elementList.add(new HUD_element(console.pos,console.scale,SpriteList.CONSOLE_HUD1024_SCREEN, HUD_element.ElementType.BACKGROUND));
+        elementList.add(new HUD_element(console.pos, console.scale,SpriteList.CONSOLE_HUD1024_BOTTOM, HUD_element.ElementType.BACKGROUND));
 
-        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_TO_RSP)); //1625,929)
-        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_TO_WARP)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.WARP_ICON, HUD_element.ElementType.INDICATOR));
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.RSP_ICON, HUD_element.ElementType.INDICATOR));
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_RSP_TRAVEL,HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_WARP_TRAVEL,HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_RSP_INACTIVE,HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_WARP_INACTIVE,HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_RSP_BLOCKED, HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_WARP_BLOCKED, HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_SECTOR_LOCKED_DOWN, HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_SECTOR_LOCKED_UP, HUD_element.ElementType.UPPER_Bar)); //1625,929)
+
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_TO_RSP, HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_TO_WARP, HUD_element.ElementType.UPPER_Bar)); //1625,929)
 
         DebugFile.log("init list ran.");
         for (HUD_element e : elementList) {
@@ -77,7 +81,7 @@ public class HUD_core {
             PlayerState player = GameClientState.instance.getPlayer();
 
             int i = 0;
-
+            long lastTime = System.currentTimeMillis();
             @Override
             public void run() {
                 UpdateSituation();
@@ -92,75 +96,38 @@ public class HUD_core {
                     //draw decision making method
 
                     //not server situation dependent, 100% passive
+                    HUDElementController.drawType(HUD_element.ElementType.BACKGROUND,1);
+
                     if (WarpManager.IsInWarp(player.getCurrentSector())) {
-                        //player is in warp
-                        drawList.put(SpriteList.RSP_ICON,0);
-                        drawList.put(SpriteList.WARP_ICON,1);
+                        HUDElementController.drawElement(SpriteList.WARP_ICON,true);
+                        HUDElementController.drawElement(SpriteList.ICON_OUTLINE_WARP_TRAVEL,true);
+                        HUDElementController.drawElement(SpriteList.ICON_OUTLINE_RSP_INACTIVE,true);
                     } else {
-                        drawList.put(SpriteList.RSP_ICON,1);
-                        drawList.put(SpriteList.WARP_ICON,0);
+                        HUDElementController.drawElement(SpriteList.RSP_ICON,true);
+                        HUDElementController.drawElement(SpriteList.ICON_OUTLINE_RSP_TRAVEL,true);
+                        HUDElementController.drawElement(SpriteList.ICON_OUTLINE_WARP_INACTIVE,true);
                     }
 
                     //TODO make prettier check for processes
                     if (isDropping || isExit) {
                         //do blinking drop icon
-                        if (i % 5 == 0) { //once a second
-                            if ((i/5) % 2 == 0) //gerade zahlen
-                            {
-                                drawList.put(SpriteList.ICON_OUTLINE_TO_RSP,1);
-                                drawList.put(SpriteList.ICON_OUTLINE_RSP_INACTIVE,0);
-                            } else {    //ungerade
-                                drawList.put(SpriteList.ICON_OUTLINE_TO_RSP,0);
-                                drawList.put(SpriteList.ICON_OUTLINE_RSP_INACTIVE,1);
-                            }
-                            drawList.put(SpriteList.ICON_OUTLINE_WARP_TRAVEL,1);
+                        if ((i % 24) <= 12) { //once a second
+                            HUDElementController.drawElement(SpriteList.ICON_OUTLINE_TO_RSP,true);
                         }
-                    } else {
-                        drawList.put(SpriteList.ICON_OUTLINE_TO_RSP,0);
                     }
 
                     if (isEntry) {
                         //do blinking jump icon
-                        if (i % 5 == 0) { //once a second
-                            if (i/5 % 2 == 0) //gerade zahlen
-                            {
-                                drawList.put(SpriteList.ICON_OUTLINE_TO_WARP,1);
-                                drawList.put(SpriteList.ICON_OUTLINE_WARP_INACTIVE,0);
-                            } else {    //ungerade
-                                drawList.put(SpriteList.ICON_OUTLINE_TO_WARP,0);
-                                drawList.put(SpriteList.ICON_OUTLINE_WARP_INACTIVE,1);
-                            }
+                        if ((i % 24) <= 12) { //once a second
+                            HUDElementController.drawElement(SpriteList.ICON_OUTLINE_TO_WARP,true);
                         }
-                        drawList.put(SpriteList.ICON_OUTLINE_RSP_TRAVEL,1);
-                    } else {
-                        drawList.put(SpriteList.ICON_OUTLINE_TO_WARP,0);
                     }
-
-                    if (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.TRAVEL) == 1) {
-                        if (WarpManager.IsInWarp(player.getCurrentSector())) {
-                            drawList.put(SpriteList.ICON_OUTLINE_WARP_TRAVEL,1);
-                            drawList.put(SpriteList.ICON_OUTLINE_RSP_INACTIVE,1);
-
-                            drawList.put(SpriteList.ICON_OUTLINE_RSP_TRAVEL,0);
-                            drawList.put(SpriteList.ICON_OUTLINE_WARP_INACTIVE,0);
-                        } else {
-                            drawList.put(SpriteList.ICON_OUTLINE_WARP_TRAVEL,0);
-                            drawList.put(SpriteList.ICON_OUTLINE_RSP_INACTIVE,0);
-
-                            drawList.put(SpriteList.ICON_OUTLINE_RSP_TRAVEL,1);
-                            drawList.put(SpriteList.ICON_OUTLINE_WARP_INACTIVE,1);
-                        }
-                    } else {
-                    /*    drawList.put(SpriteList.ICON_OUTLINE_WARP_TRAVEL,0);
-                        drawList.put(SpriteList.ICON_OUTLINE_RSP_INACTIVE,0);
-
-                        drawList.put(SpriteList.ICON_OUTLINE_RSP_TRAVEL,0);
-                        drawList.put(SpriteList.ICON_OUTLINE_WARP_INACTIVE,0); */
-                    }
-
-
                 }
+                if (i % 25 == 0) {
 
+                    DebugFile.log("starrunnable with frequency = 1 took " + (System.currentTimeMillis() - lastTime) + " millis for 25 iteration");
+                    lastTime = System.currentTimeMillis();
+                }
                 i ++;
                 if (i > 1000) {
                     i = 0;
@@ -178,26 +145,42 @@ public class HUD_core {
      * update player situation fields from WarpProcessMap
      */
     private static void UpdateSituation() {
-        DebugFile.log("updating warp situation from WarpProcessMap: ");
+        //DebugFile.log("updating warp situation from WarpProcessMap: ");
 
         isDropping = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPDROP) == 1);
-        DebugFile.log("is Dropping: " + isDropping);
+        //DebugFile.log("is Dropping: " + isDropping);
         isExit = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPEXIT) == 1);
 
-        DebugFile.log("is exiting" + isExit);
+        //DebugFile.log("is exiting" + isExit);
         isEntry = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPENTRY) == 1);
 
-        DebugFile.log("is entering" + isEntry);
+        //DebugFile.log("is entering" + isEntry);
     }
 }
 class HUD_element {
     public Vector3f pos;
     public Vector3f scale;
     public SpriteList enumValue;
-    public HUD_element(Vector3f pos, Vector3f scale, SpriteList enumValue) {
+    public boolean playShutter = false;
+    public ElementType type;
+    public enum ElementType {
+        LOWER_BAR,
+        UPPER_Bar,
+        INDICATOR,
+        BACKGROUND
+    }
+    public HUD_element(Vector3f pos, Vector3f scale, SpriteList enumValue, ElementType type) {
+        this.enumValue = enumValue;
+        this.type = type;
+        this.pos = pos;
+        this.scale = scale;
+    }
+    public HUD_element(Vector3f pos, Vector3f scale, SpriteList enumValue, ElementType type, boolean playShutter) {
+
         this.enumValue = enumValue;
         this.pos = pos;
         this.scale = scale;
+        this.playShutter = playShutter;
     }
     //TODO debug tostring
 }
