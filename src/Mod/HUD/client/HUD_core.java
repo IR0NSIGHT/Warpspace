@@ -114,6 +114,7 @@ public class HUD_core {
                         HUDElementController.drawElement(SpriteList.ICON_OUTLINE_WARP_TRAVEL,true);
                         HUDElementController.drawElement(SpriteList.ICON_OUTLINE_RSP_INACTIVE,true);
                     } else {
+                        isDropping = false;
                         HUDElementController.drawElement(SpriteList.RSP_ICON,true);
                         HUDElementController.drawElement(SpriteList.ICON_OUTLINE_RSP_TRAVEL,true);
                         HUDElementController.drawElement(SpriteList.ICON_OUTLINE_WARP_INACTIVE,true);
@@ -156,7 +157,7 @@ public class HUD_core {
     private static void UpdateSituation() {
         //DebugFile.log("updating warp situation from WarpProcessMap: ");
 
-        isDropping = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPDROP) == 1);
+        isDropping = ( WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPDROP) == 1);
         //DebugFile.log("is Dropping: " + isDropping);
         isExit = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPEXIT) == 1);
 
