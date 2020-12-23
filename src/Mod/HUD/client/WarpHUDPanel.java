@@ -76,7 +76,6 @@ public class WarpHUDPanel { //TODO refactor messy class, make instatiable like C
                             length = (int) (Math.log10(Math.abs(i)) + 1);
                         }
 
-                        DebugFile.log("length of " + i.toString() + "is " + length);
                         //turn to string
                         if (i < 0) {
                             length ++;

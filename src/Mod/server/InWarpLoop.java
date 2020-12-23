@@ -29,7 +29,6 @@ import java.util.List;
 public class InWarpLoop {
     //TODO add a central method that handles an entity being put into warp so it can be called by event or cheeseloop
     public static void startLoop(final SegmentController ship) {
-        DebugFile.log("################# starting in warp loop for " + ship.getName());
         new StarRunnable() {
             int countdown = 15;
             long lastWarning = 11;

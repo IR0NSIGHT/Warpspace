@@ -58,7 +58,9 @@ public class NavHelper {
             do {
                 PlayerState player = (PlayerState)i.next();
                 RemoteVector3i vec = player.getNetworkObject().waypoint;
-                if (vec.getVector().equals(PlayerState.NO_WAYPOINT)) {
+                boolean playerIsWarp = WarpManager.IsInWarp(ship);
+                boolean navpointIsWarp = WarpManager.IsInWarp(vec.getVector());
+                if (vec.getVector().equals(PlayerState.NO_WAYPOINT) || (playerIsWarp != navpointIsWarp)) {
                     continue;
                 } else {
                     Vector3i newVec = switchWaypoint(vec.getVector(),toWarp);
