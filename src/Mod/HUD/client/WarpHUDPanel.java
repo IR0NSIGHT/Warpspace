@@ -2,6 +2,7 @@ package Mod.HUD.client;
 
 import Mod.WarpMain;
 import Mod.WarpManager;
+import api.DebugFile;
 import api.ModPlayground;
 import api.common.GameClient;
 import api.listener.events.gui.HudCreateEvent;
@@ -23,7 +24,7 @@ import java.util.Vector;
 /**
  * creates a text field HUD element and draws it (?)
  */
-public class WarpHUDPanel {
+public class WarpHUDPanel { //TODO refactor messy class, make instatiable like CustomHUDImage
     TextElement textEl;
     public WarpHUDPanel(HudCreateEvent ev) {
         textEl = new TextElement(FontLibrary.getBlenderProMedium16(), ev.getInputState());
@@ -66,17 +67,23 @@ public class WarpHUDPanel {
                     vec.add(newPos.z);
                     int xi = 0;
                     text = "";
-
+                    int length;
                     for (Integer i: vec) {
                         //get length of int
-                        int length = (int) (Math.log10(Math.abs(i)) + 1);
+                        if (i == 0) {
+                            length = 1;    //log10(0) => error
+                        } else {
+                            length = (int) (Math.log10(Math.abs(i)) + 1);
+                        }
+
+                        DebugFile.log("length of " + i.toString() + "is " + length);
                         //turn to string
                         if (i < 0) {
                             length ++;
                         }
                         String s = "";
                         for (int i1 = 0; i1 < (5 - length); i1 ++) {
-                            s += "x"; //add spaces for continous size
+                            s += "_"; //add spaces for continous size
                         }
                         s += i.toString();
                         if (xi < 2) {

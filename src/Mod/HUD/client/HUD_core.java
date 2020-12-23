@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class HUD_core {
 
-    public static List<HUD_element> elementList = new ArrayList();
+    public static List<HUD_element> elementList = new ArrayList(); //TODO get rid of compiler warning for raw usage
     public static HashMap<SpriteList, Integer> drawList = new HashMap<>();
 
     /**

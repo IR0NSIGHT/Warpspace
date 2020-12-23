@@ -35,11 +35,14 @@ public class WarpMain extends StarMod {
     @Override
     public void onGameStart() {
         super.onGameStart();
-        this.setModVersion("0.7.0");
+        this.setModVersion("0.7.2 - compiler hotfix");
         this.setModName("WarpSpace");
         this.setModAuthor("IR0NSIGHT");
+        this.setModSMVersion("dev - v0.202.108");
         this.setModDescription("an alternative FTL system");
         this.setSMDResourceId(8166);
+       // this.addDependency("StarAPI");
+
     }
     @Override
     public void onEnable() {

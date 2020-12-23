@@ -1,8 +1,12 @@
 package Mod.HUD.client;
+/**
+ * provided by Jake
+ * thanks jake!
+ * modified by ironsight
+ */
 
 import Mod.WarpMain;
 import api.DebugFile;
-import api.element.gui.elements.GUIElement;
 import api.utils.textures.StarLoaderTexture;
 import org.schema.schine.graphicsengine.forms.Sprite;
 
@@ -33,37 +37,43 @@ public enum SpriteList {
     ;
 
 
-        private Sprite sprite;
-        private String name;
+        public Sprite sprite;
+        public String name;
 
-        public static void init() {
-            StarLoaderTexture.runOnGraphicsThread(() -> {
-                synchronized (SpriteList.class) {
-                    long duration = System.currentTimeMillis();
-                    for (SpriteList value : SpriteList.values()) {
-                        String name = value.name().toLowerCase();
-                        value.name = name;
-                        try {
-                            String path = "res/" + name + ".png";
-                            InputStream is = WarpMain.class.getResourceAsStream(path);
-                            if (is == null) {
-                                DebugFile.err("spritelist initialization could not get a valid path for image " + name);
-                            }
-                            BufferedImage bi = ImageIO.read(is);
-                            value.sprite = StarLoaderTexture.newSprite(bi, WarpMain.instance, "warpmain_" + name);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    };
-                }
-            });
+        public static void init() { //TODO add java 7 method instead of lambda (j8)
+            StarLoaderTexture.runOnGraphicsThread(new SpriteLoader());
         }
+        private static void lambdaReplace() {
 
+        }
         public Sprite getSprite() {
             return sprite;
         }
 
         public String getName() {
             return "warpmain_" + name;
+        }
+    }
+
+    class SpriteLoader implements Runnable {
+        @Override
+        public void run() {
+            synchronized (SpriteList.class) {
+                for (SpriteList value : SpriteList.values()) {
+                    String name = value.name().toLowerCase();
+                    value.name = name;
+                    try {
+                        String path = "res/" + name + ".png";
+                        InputStream is = WarpMain.class.getResourceAsStream(path);
+                        if (is == null) {
+                            DebugFile.err("spritelist initialization could not get a valid path for image " + name);
+                        }
+                        BufferedImage bi = ImageIO.read(is);
+                        value.sprite = StarLoaderTexture.newSprite(bi, WarpMain.instance, "warpmain_" + name);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                };
+            }
         }
     }

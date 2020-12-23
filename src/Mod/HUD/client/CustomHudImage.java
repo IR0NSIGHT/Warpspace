@@ -1,17 +1,17 @@
 package Mod.HUD.client;
+/**
+ * partly stolen from StarAPI (i think)
+ */
 
-import Mod.WarpMain;
 import api.DebugFile;
-import api.element.gui.elements.GUIElement;
 import org.schema.schine.graphicsengine.forms.Sprite;
 import org.schema.schine.graphicsengine.shader.ShaderLibrary;
 import org.schema.schine.input.InputState;
 
 import javax.vecmath.Vector3f;
 import java.awt.*;
-import java.util.Objects;
 
-class CustomHudImage extends GUIElement {
+class CustomHudImage extends org.schema.schine.graphicsengine.forms.gui.GUIElement {
     public Sprite sprite;
 
 
@@ -22,7 +22,7 @@ class CustomHudImage extends GUIElement {
     private HUD_element el;
 
     public CustomHudImage(InputState inputState, Vector3f position, Vector3f scale, HUD_element el) {
-        super(inputState, 100, 100);
+        super(inputState);
         this.position = position;
         this.scale = scale;
         this.el = el;
