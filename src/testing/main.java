@@ -1,6 +1,7 @@
 package testing;
 
 import Mod.server.interdiction.SectorManager;
+import org.schema.common.util.linAlg.Vector3i;
 
 import java.util.*;
 
@@ -14,50 +15,10 @@ public class main {
     private static List<WarpSector> sectorList = new ArrayList<>();
     private static HashMap<Integer,Integer> sectorMap = new HashMap<>();
     public static void main(String[] args) {
-
-        SectorManager.SetSectorStatus(1000, SectorManager.InterdictionState.noEntry,1);
-        SectorManager.SetSectorStatus(1000, SectorManager.InterdictionState.pull,2);
-        SectorManager.SetSectorStatus(1000, SectorManager.InterdictionState.noExit,3);
-  //      SectorManager.SetSectorStatus(1008, SectorManager.InterdictionState.noExit,1);
-   //     SectorManager.SetSectorStatus(1, SectorManager.InterdictionState.noExit,1);
-
-
-        SectorManager.toMap(SectorManager.toArray());
-
-
-        String string = "empty";
-        for (Map.Entry<Integer,Integer[]> s: SectorManager.map.entrySet()) {
-            Integer sectorID = s.getKey();
-            System.out.println("sector " + sectorID);
-
-            for (int i = 0; i < s.getValue().length; i++) {
-                Integer stateValue = s.getValue()[i];
-                SectorManager.InterdictionState state1 = SectorManager.InterdictionState.valueOf(i);
-                assert  state1 != null : "state1 is null";
-
-                string = state1.toString() + " : " + SectorManager.GetSectorStatus(sectorID,state1);
-                System.out.println(string);
-            }
-        }
-    //    System.out.println(string);
-
-   /*     GenerateSectors(10000);
-        System.out.println("searching " + sectorList.size() + " entries");
-
-        long start = System.currentTimeMillis();
-        //    System.out.println(sectorList.toString());
-        WarpSector s = FindSectorInMap(sectorList.size());
-        //System.out.println(s.toString());
-        long duration = System.currentTimeMillis() - start;
-
-        System.out.println("map: " + duration + " millis");
-
-        start = System.currentTimeMillis();
-        s = FindSectorInList(sectorList.size());
-        duration = System.currentTimeMillis() - start;
-        System.out.println("list: " + duration + " millis");
-
-    */
+        Vector3i sector = new Vector3i(2,2,2);
+        Long id = SectorManager.SectorToID(sector);
+        Vector3i sector1 = SectorManager.IDToSector(id);
+        System.out.println("sector: " + sector.toString() + "id:" + id + " out " + sector1.toString());
     }
 
     //test how fast 1000 sectors can be searched for their effects

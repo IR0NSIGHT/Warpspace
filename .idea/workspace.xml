@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="WarpSpace" />
+      <artifact name="WarpSpace_vcs" />
+    </artifacts-to-build>
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -20,12 +26,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3dd50877-3956-4571-8569-27d481b45e63" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Mod/server/interdiction/EnvironmentManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/HUD/client/DebugChatEvent$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/HUD/client/DebugChatEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/HUD/client/WarpHUDPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/HUD/client/WarpHUDPanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/HUD/client/WarpHUDPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/HUD/client/WarpHUDPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpJumpManager$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpJumpManager$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpJumpManager$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpJumpManager$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpJumpManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpJumpManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpMain.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/server/interdiction/SectorManager$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/server/interdiction/SectorManager$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/server/interdiction/SectorManager$InterdictionState.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/server/interdiction/SectorManager$InterdictionState.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/server/interdiction/SectorManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/server/interdiction/SectorManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/WarpSector$inhibitEffect.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/testing/WarpSector$inhibitEffect.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/WarpSector.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/testing/WarpSector.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/testing/main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mod/HUD/client/DebugChatEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/testing/DebugChatEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mod/HUD/client/WarpHUDPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/HUD/client/WarpHUDPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mod/WarpJumpManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/WarpJumpManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/WarpMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mod/WarpManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/WarpManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mod/server/interdiction/SectorManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/server/interdiction/SectorManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/testing/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/testing/main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -44,10 +82,36 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/lib" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/mods" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="testing" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="testing.main" />
+      <module name="Warpspace" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="testing.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.main" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -65,7 +129,21 @@
       <option name="project" value="LOCAL" />
       <updated>1609332790427</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="rebuild dependencies from clean workspace setting">
+      <created>1609332941144</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1609332941144</updated>
+    </task>
+    <task id="LOCAL-00003" summary="added out folder to vcs">
+      <created>1609333127277</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1609333127277</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -78,19 +156,50 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="adding workspace settings&#10;just pray it doesnt fuck up again" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding workspace settings&#10;just pray it doesnt fuck up again" />
+    <MESSAGE value="rebuild dependencies from clean workspace setting" />
+    <MESSAGE value="added out folder to vcs" />
+    <option name="LAST_COMMIT_MESSAGE" value="added out folder to vcs" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1609332918102">
+    <state x="690" y="299" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1609359386467">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040/1920.32.1536.824@0.0.1920.1040" timestamp="1609332918102" />
-    <state x="440" y="94" key="SettingsEditor" timestamp="1609332919865">
+    <state x="690" y="299" key="#com.intellij.ide.util.PackageChooserDialog/0.0.1920.1040/1920.32.1536.824@0.0.1920.1040" timestamp="1609359386467" />
+    <state x="743" y="414" width="433" height="217" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1609359387993">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="440" y="94" key="SettingsEditor/0.0.1920.1040/1920.32.1536.824@0.0.1920.1040" timestamp="1609332919865" />
+    <state x="743" y="414" width="433" height="217" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1920.1040/1920.32.1536.824@0.0.1920.1040" timestamp="1609359387993" />
+    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1609333079561">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040/1920.32.1536.824@0.0.1920.1040" timestamp="1609333079561" />
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1609362576028">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.32.1536.824@0.0.1920.1040" timestamp="1609362576028" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1609362576028">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040/1920.32.1536.824@0.0.1920.1040" timestamp="1609362576028" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1609362576028">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040/1920.32.1536.824@0.0.1920.1040" timestamp="1609362576028" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1609362576028">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040/1920.32.1536.824@0.0.1920.1040" timestamp="1609362576028" />
+    <state x="440" y="94" key="SettingsEditor" timestamp="1609333096659">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="440" y="94" key="SettingsEditor/0.0.1920.1040/1920.32.1536.824@0.0.1920.1040" timestamp="1609333096659" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1609332955401">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.32.1536.824@0.0.1920.1040" timestamp="1609332955401" />
   </component>
 </project>

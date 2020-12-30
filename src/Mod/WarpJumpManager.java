@@ -1,6 +1,8 @@
 package Mod;
 
 import Mod.HUD.client.WarpProcessController;
+import Mod.server.interdiction.EnvironmentManager;
+import Mod.server.interdiction.SectorManager;
 import api.DebugFile;
 import api.common.GameServer;
 import api.mod.StarLoader;
@@ -255,6 +257,7 @@ public class WarpJumpManager {
         warpdrive.setCharge(0.0F);
         warpdrive.sendChargeUpdate();
     }
+
     public static boolean canExecuteWarpdrive(SegmentController ship) {
         //get jumpaddon
         JumpAddOn warpdrive;
@@ -268,8 +271,18 @@ public class WarpJumpManager {
         }
         return true;
     }
+
     public static boolean isInterdicted(SegmentController ship) {
         //TODO add interdiction check
+        long originID = SectorManager.SectorToID(ship.getSector(new Vector3i()));
+        long targetID = SectorManager.SectorToID(WarpManager.GetPartnerPos(ship.getSector(new Vector3i())));
+
+        boolean noExitOrigin = SectorManager.GetSectorStatus(originID ,SectorManager.InterdictionState.noExit); //is origin exit blocked
+        boolean noEntryTarget = SectorManager.GetSectorStatus(targetID, SectorManager.InterdictionState.noEntry); //is target entry blocked
+        if (noExitOrigin || noEntryTarget) {
+            ship.sendControllingPlayersServerMessage(new String[]{"jump is inhibited!!"},1);
+            return true;
+        }
         return false;
     }
 

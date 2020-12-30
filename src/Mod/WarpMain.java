@@ -1,17 +1,18 @@
 package Mod;
 
 import Mod.HUD.client.*;
-import Mod.server.ThrustEventhandler;
+
 import Mod.server.WarpJumpEventHandler;
 import Mod.server.WarpCheckLoop;
 import Mod.server.WarpJumpListener;
-import api.DebugFile;
+
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
-import api.mod.StarLoader;
+
 import api.mod.StarMod;
 import api.network.packets.PacketUtil;
-import api.utils.StarRunnable;
+
+import testing.DebugChatEvent;
 
 /**
  * STARMADE MOD
@@ -35,7 +36,7 @@ public class WarpMain extends StarMod {
     @Override
     public void onGameStart() {
         super.onGameStart();
-        this.setModVersion("0.7.1 - compiler hotfix");
+        this.setModVersion("0.8.0 - inhibiton test 1");
         this.setModName("WarpSpace");
         this.setModAuthor("IR0NSIGHT");
         this.setModSMVersion("dev - v0.202.108");
@@ -60,17 +61,21 @@ public class WarpMain extends StarMod {
     //TODO thrust    ThrustEventhandler.createListener();
         WarpCheckLoop.loop(25); //TODO use a frequency from a config
         WarpJumpEventHandler.createServerListener();
+
+        //DebugFile.log("environment inhibition");
+        //EnvironmentManager.initNaturalInhibition(15);
     }
 
     @Override
     public void onClientCreated(ClientInitializeEvent event) {
         super.onClientCreated(event);
-        //DebugChatEvent.addDebugChatListener();
+        DebugChatEvent.addDebugChatListener();
         WarpProcessController.initMap(); //build situation map for warp processes
         SpriteList.init();
         HUD_core.initList();
         GUIeventhandler.addHUDDrawListener();
         HUD_core.HUDLoop();
+
 
     }
 }

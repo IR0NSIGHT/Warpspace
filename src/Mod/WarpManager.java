@@ -86,4 +86,17 @@ public class WarpManager {
 
         return warpPos;
     }
+
+    /**
+     * return sector matching this other dimension sector. goes both ways
+     * @param sector sector
+     * @return sector in other dimension
+     */
+    public static Vector3i GetPartnerPos(Vector3i sector) {
+        if (IsInWarp(sector)) {
+            return GetRealSpacePos(sector);
+        } else {
+            return GetWarpSpacePos(sector);
+        }
+    }
 }
