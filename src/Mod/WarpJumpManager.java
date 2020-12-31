@@ -277,6 +277,10 @@ public class WarpJumpManager {
         long originID = SectorManager.SectorToID(ship.getSector(new Vector3i()));
         long targetID = SectorManager.SectorToID(WarpManager.GetPartnerPos(ship.getSector(new Vector3i())));
 
+        //update inhibition
+        SectorManager.UpdateSectorInhibition(originID); //TODO check if update here makes sense
+        SectorManager.UpdateSectorInhibition(targetID); //TODO
+
         boolean noExitOrigin = SectorManager.GetSectorStatus(originID ,SectorManager.InterdictionState.noExit); //is origin exit blocked
         boolean noEntryTarget = SectorManager.GetSectorStatus(targetID, SectorManager.InterdictionState.noEntry); //is target entry blocked
         if (noExitOrigin || noEntryTarget) {

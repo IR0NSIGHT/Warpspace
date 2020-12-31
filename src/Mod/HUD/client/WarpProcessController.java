@@ -32,7 +32,12 @@ public class WarpProcessController {
         JUMPEXIT(3),
         JUMPENTRY(4),
         JUMPPULL(5),
-        TRAVEL(6);
+        TRAVEL(6),
+
+        SECTOR_NOEXIT(7),
+        SECTOR_NOENTRY(8),
+        PARTNER_NOEXIT(9),
+        PARTNER_NOENTRY(10);
 
         private final int value;
         private static Map map = new HashMap<>();

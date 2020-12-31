@@ -26,32 +26,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3dd50877-3956-4571-8569-27d481b45e63" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Mod/server/interdiction/EnvironmentManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Mod/server/interdiction/SynchManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/HUD/client/DebugChatEvent$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/HUD/client/DebugChatEvent.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/HUD/client/WarpHUDPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/HUD/client/WarpHUDPanel$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/HUD/client/WarpHUDPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/HUD/client/WarpHUDPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpJumpManager$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpJumpManager$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpJumpManager$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpJumpManager$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpJumpManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpJumpManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpMain.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/WarpManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/server/interdiction/SectorManager$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/server/interdiction/SectorManager$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/server/interdiction/SectorManager$InterdictionState.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/server/interdiction/SectorManager$InterdictionState.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/Mod/server/interdiction/SectorManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/Mod/server/interdiction/SectorManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/WarpSector$inhibitEffect.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/testing/WarpSector$inhibitEffect.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/WarpSector.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/testing/WarpSector.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/testing/main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Mod/HUD/client/DebugChatEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/testing/DebugChatEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Mod/HUD/client/WarpHUDPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/HUD/client/WarpHUDPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/brainstorming.md" beforeDir="false" afterPath="$PROJECT_DIR$/brainstorming.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mod/HUD/client/HUD_core.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/HUD/client/HUD_core.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mod/HUD/client/WarpProcessController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/HUD/client/WarpProcessController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mod/PacketHUDUpdate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/PacketHUDUpdate.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Mod/WarpJumpManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/WarpJumpManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/WarpMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Mod/WarpManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/WarpManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mod/server/WarpJumpEventHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/server/WarpJumpEventHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Mod/server/interdiction/SectorManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/server/interdiction/SectorManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/testing/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/testing/main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,7 +127,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609333127277</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="void RSP sectors are now inhibited.">
+      <created>1609368647985</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1609368647985</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -162,9 +153,14 @@
     <MESSAGE value="adding workspace settings&#10;just pray it doesnt fuck up again" />
     <MESSAGE value="rebuild dependencies from clean workspace setting" />
     <MESSAGE value="added out folder to vcs" />
-    <option name="LAST_COMMIT_MESSAGE" value="added out folder to vcs" />
+    <MESSAGE value="void RSP sectors are now inhibited." />
+    <option name="LAST_COMMIT_MESSAGE" value="void RSP sectors are now inhibited." />
   </component>
   <component name="WindowStateProjectService">
+    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1609431311299">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/1920.32.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1609431311299" />
     <state x="690" y="299" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1609359386467">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -197,9 +193,14 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="440" y="94" key="SettingsEditor/0.0.1920.1040/1920.32.1536.824@0.0.1920.1040" timestamp="1609333096659" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1609332955401">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1609368651195">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.32.1536.824@0.0.1920.1040" timestamp="1609332955401" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/1920.32.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1609368651195" />
+    <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1609433828577">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.32.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1609433828577" />
   </component>
 </project>

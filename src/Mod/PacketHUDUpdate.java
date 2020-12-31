@@ -30,6 +30,7 @@ public class PacketHUDUpdate extends Packet {
     /**
      * constructor
      * @param warpProcess enum describing what warpjump state the player is in.
+     * @param processValue what value process has (1: active, 0: inactive)
      */
     public PacketHUDUpdate(WarpProcessController.WarpProcess warpProcess, Integer processValue) {
         this.warpProcess = warpProcess;

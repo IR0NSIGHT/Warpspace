@@ -19,7 +19,7 @@ import org.schema.game.common.data.player.PlayerState;
  * this class contains the eventhandler for handling of mod-warpjumps.
  * this includes the switching of the navigation marker.
  */
-public class WarpJumpEventHandler {
+public class WarpJumpEventHandler { //TODO is this obsolete?
     public static void createServerListener() {
         StarLoader.registerListener(WarpJumpEvent.class,new Listener<WarpJumpEvent>() {
             @Override

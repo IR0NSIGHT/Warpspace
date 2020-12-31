@@ -112,7 +112,6 @@ public class SectorManager {
      * @return true (active) or false (inactive)
      */
     public static boolean GetSectorStatus(long sectorID, InterdictionState state) {
-        UpdateSectorInhibition(IDToSector(sectorID)); //TODO maybe move? updates every call
 
         Integer[] valueArr = map.get(sectorID);
         if (valueArr == null) { //not written to map -> no interdiction
@@ -167,9 +166,14 @@ public class SectorManager {
         //write to map for this sector
         //natural causes
         if (EnvironmentManager.IsVoidInhibition(sector) && !WarpManager.IsInWarp(sector)) {
+            DebugFile.log("sector was updated, is void: no entry, no exit");
             SetSectorStatus(sectorID,InterdictionState.noEntry,true);
             SetSectorStatus(sectorID,InterdictionState.noExit,true);
         }
         //TODO add more inhibition checks
+    }
+
+    public static void UpdateSectorInhibition(Long sectorID) {
+        UpdateSectorInhibition(IDToSector(sectorID));
     }
 }

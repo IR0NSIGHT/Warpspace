@@ -21,10 +21,8 @@ import java.util.List;
  * TIME: 19:23
  */
 public class HUD_core {
-
     public static List<HUD_element> elementList = new ArrayList(); //TODO get rid of compiler warning for raw usage
     public static HashMap<SpriteList, Integer> drawList = new HashMap<>();
-
     /**
      * some general HUD element placements to use a position references
      */
@@ -66,15 +64,10 @@ public class HUD_core {
      * Sets the received info to WarpProcessController to the ProcessMap
      */
     public static void HUD_processPacket(WarpProcessController.WarpProcess s, Integer key) {
-        //TODO add behaviour for each enum value
         //TODO add method to get more precise data like time till warpdrop/jump etc.
-        //priority: jump>drop>travel
-        //travel kann nur
-        playerWarpState = s;
         WarpProcessController.WarpProcessMap.put(s, key);
     }
 
-    public static WarpProcessController.WarpProcess playerWarpState = WarpProcessController.WarpProcess.TRAVEL;
     public static void HUDLoop() {
         new StarRunnable() {
             PlayerState player = GameClientState.instance.getPlayer();
@@ -108,16 +101,31 @@ public class HUD_core {
 
                     //not server situation dependent, 100% passive
                     HUDElementController.drawType(HUD_element.ElementType.BACKGROUND,1);
-
-                    if (WarpManager.IsInWarp(player.getCurrentSector())) {
+                    boolean InWarp = WarpManager.IsInWarp(player.getCurrentSector());
+                    if (InWarp) {
                         HUDElementController.drawElement(SpriteList.WARP_ICON,true);
                         HUDElementController.drawElement(SpriteList.ICON_OUTLINE_WARP_TRAVEL,true);
                         HUDElementController.drawElement(SpriteList.ICON_OUTLINE_RSP_INACTIVE,true);
+
+
                     } else {
                         isDropping = false;
                         HUDElementController.drawElement(SpriteList.RSP_ICON,true);
                         HUDElementController.drawElement(SpriteList.ICON_OUTLINE_RSP_TRAVEL,true);
                         HUDElementController.drawElement(SpriteList.ICON_OUTLINE_WARP_INACTIVE,true);
+                    }
+
+                    //inhibition HUD
+                    if (sectorNoExit) {
+                        HUDElementController.drawElement(SpriteList.ICON_OUTLINE_SECTOR_LOCKED_DOWN,true);
+                        HUDElementController.drawElement(SpriteList.ICON_OUTLINE_SECTOR_LOCKED_UP,true);
+                    }
+                    if (partnerNoEntry) {
+                        if (InWarp) {
+                            HUDElementController.drawElement(SpriteList.ICON_OUTLINE_RSP_BLOCKED,true);
+                        } else {
+                            HUDElementController.drawElement(SpriteList.ICON_OUTLINE_WARP_BLOCKED,true);
+                        }
                     }
 
                     //TODO make prettier check for processes
@@ -149,7 +157,12 @@ public class HUD_core {
     private static boolean isDropping = false;
     private static boolean isEntry;
     private static boolean isExit;
-    private static boolean isSectorLocked;
+    private static boolean isRSPBlocked; //dont use
+    private static boolean isWarpBlocked;
+    private static boolean sectorNoExit;
+    private static boolean sectorNoEntry;
+    private static boolean partnerNoExit;
+    private static boolean partnerNoEntry;
 
     /**
      * update player situation fields from WarpProcessMap
@@ -160,10 +173,14 @@ public class HUD_core {
         isDropping = ( WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPDROP) == 1);
         //DebugFile.log("is Dropping: " + isDropping);
         isExit = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPEXIT) == 1);
-
         //DebugFile.log("is exiting" + isExit);
         isEntry = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPENTRY) == 1);
 
+        sectorNoExit = (WarpProcessController.WarpProcessMap.get((WarpProcessController.WarpProcess.SECTOR_NOEXIT))== 1);
+        sectorNoEntry = (WarpProcessController.WarpProcessMap.get((WarpProcessController.WarpProcess.SECTOR_NOENTRY))== 1);
+
+        partnerNoEntry =  (WarpProcessController.WarpProcessMap.get((WarpProcessController.WarpProcess.PARTNER_NOENTRY))== 1);
+        partnerNoExit =  (WarpProcessController.WarpProcessMap.get((WarpProcessController.WarpProcess.PARTNER_NOEXIT))== 1);
         //DebugFile.log("is entering" + isEntry);
     }
 }

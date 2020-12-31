@@ -6,6 +6,7 @@ import Mod.server.WarpJumpEventHandler;
 import Mod.server.WarpCheckLoop;
 import Mod.server.WarpJumpListener;
 
+import Mod.server.interdiction.SynchManager;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
 
@@ -59,9 +60,11 @@ public class WarpMain extends StarMod {
         super.onServerCreated(event);
         WarpJumpListener.createListener();
     //TODO thrust    ThrustEventhandler.createListener();
-        WarpCheckLoop.loop(25); //TODO use a frequency from a config
+        WarpCheckLoop.loop(25);
         WarpJumpEventHandler.createServerListener();
 
+        //inhibition update
+        SynchManager.SynchLoop(); //sends clients info about sector inhibition every second
         //DebugFile.log("environment inhibition");
         //EnvironmentManager.initNaturalInhibition(15);
     }
