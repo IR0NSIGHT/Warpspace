@@ -35,7 +35,7 @@ public class WarpMain extends StarMod {
     @Override
     public void onGameStart() {
         super.onGameStart();
-        this.setModVersion("0.7.1 - compiler hotfix");
+        this.setModVersion("0.8.00 - interdiction experimental");
         this.setModName("WarpSpace");
         this.setModAuthor("IR0NSIGHT");
         this.setModSMVersion("dev - v0.202.108");
