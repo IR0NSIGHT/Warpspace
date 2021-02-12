@@ -1,10 +1,7 @@
 package Mod;
 
 import Mod.HUD.client.*;
-import Mod.server.ThrustEventhandler;
-import Mod.server.WarpJumpEventHandler;
-import Mod.server.WarpCheckLoop;
-import Mod.server.WarpJumpListener;
+import Mod.server.*;
 import api.DebugFile;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
@@ -35,7 +32,7 @@ public class WarpMain extends StarMod {
     @Override
     public void onGameStart() {
         super.onGameStart();
-        this.setModVersion("0.8.00 - interdiction experimental");
+        this.setModVersion("0.8.0 - interdiction experimental");
         this.setModName("WarpSpace");
         this.setModAuthor("IR0NSIGHT");
         this.setModSMVersion("dev - v0.202.108");
@@ -73,4 +70,5 @@ public class WarpMain extends StarMod {
         HUD_core.HUDLoop();
 
     }
+
 }
