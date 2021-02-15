@@ -12,7 +12,10 @@ import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.controller.elements.jumpdrive.JumpAddOn;
 import org.schema.game.common.data.ManagedSegmentController;
+import org.schema.game.common.data.blockeffects.config.EffectAccumulator;
+import org.schema.game.common.data.blockeffects.config.StatusEffectType;
 import org.schema.game.common.data.player.PlayerState;
+import org.schema.game.common.data.world.Sector;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.controller.SectorSwitch;
 import org.schema.game.server.data.GameServerState;
@@ -269,8 +272,72 @@ public class WarpJumpManager {
         return true;
     }
     public static boolean isInterdicted(SegmentController ship) {
-        //TODO add interdiction check
-        return false;
+        //TODO add interdiction check for target sector
+        JumpAddOn warpdrive;
+        if(ship instanceof ManagedSegmentController<?>) {
+            warpdrive =((Ship)ship).getManagerContainer().getJumpAddOn();
+        } else {
+            return false;
+        }
+
+        //use vanilla check method - check one sector in each direction for jumpaddons that interdict this one.
+        assert warpdrive.isOnServer();
+        GameServerState gameServerState;
+        Sector sector;
+        boolean retVal = false;
+        Vector3i neighbourSectorPos = new Vector3i();
+
+        //debug jumpdrive level
+        if(ship.hasActiveReactors()){
+            DebugFile.log ("warpdrive of "+ ship.getName() + " has level: " + ((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface().getActiveReactor().getLevel());
+        }
+        // -/
+
+        //error handling
+        if ((sector = (gameServerState = (GameServerState)warpdrive.getState()).getUniverse().getSector(warpdrive.getSegmentController().getSectorId())) == null) {
+            System.err.println("[SERVER][JUMP] " + warpdrive.getSegmentController() + " IS NOT IN A SECTOR " + warpdrive.getSegmentController().getSectorId());
+            return false;
+        }
+
+
+        int checkRange = 3; //range to check for inhibitors [sectors]
+        int shipReactorLvl = ((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface().getActiveReactor().getLevel();
+        int inhibitorStrength = 0;
+        int catchesLvl = 0;
+        double inhRange = 0;
+        Vector3i currentSec = ship.getSector(new Vector3i()); //TODO refactor me and make me pretty
+        for (int x = -checkRange; x <= checkRange; ++x) {
+            for (int y = -checkRange; y <= checkRange; ++y) {
+                for (int z = -checkRange; z <= checkRange; ++z) {
+                    neighbourSectorPos.set(sector.pos.x + z, sector.pos.y + y, sector.pos.z + x);
+                    Sector neighbourSector;
+                    if ((neighbourSector = gameServerState.getUniverse().getSectorWithoutLoading(neighbourSectorPos)) == null) {
+                        continue; //sector is not loaded
+                    }
+                    //get inhibitor level //returns [0..9]
+                    inhibitorStrength = neighbourSector.getRemoteSector().getConfigManager().apply(StatusEffectType.WARP_INTERDICTION_STRENGTH, 1); //TODO change apply value to 300K?
+                    catchesLvl = inhibitorStrength * 60; //will catch anything up to
+                    //max inhRange of inhibitor
+                    inhRange = Math.max(0, neighbourSector.getRemoteSector().getConfigManager().apply(StatusEffectType.WARP_INTERDICTION_DISTANCE,  1));
+                    int dx = Math.abs(currentSec.x - neighbourSectorPos.x);
+                    int dy = Math.abs(currentSec.y - neighbourSectorPos.y);
+                    int dz = Math.abs(currentSec.z - neighbourSectorPos.z);
+                    double distance = Math.pow(dx * dx + dy * dy + dz * dz,0.5);
+                    //TODO change config entry of inhibition power consumption
+                    if (inhibitorStrength <= 1 || (distance > inhRange)) {
+                        continue;
+                    }
+                    //DebugFile.log("inhibitor has strength: " + inhibitorStrength + " catches rkt level: " + catchesLvl + " power cons: " + inhibitorStrength * 60000 + " range: " + inhRange + " vs: " + distance);
+                    if (catchesLvl >= shipReactorLvl) {
+                        warpdrive.getSegmentController().sendControllingPlayersServerMessage(new Object[]{" inhibitor detected in " + neighbourSectorPos.toString()}, 3);
+                        retVal = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return retVal;
     }
 
     /**
