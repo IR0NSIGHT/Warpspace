@@ -5,12 +5,12 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.7" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../server testarea/install 01/StarMade.jar!/" />
+          <root url="jar://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/StarMade.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -19,7 +19,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../server testarea/install 01/starloader.jar!/" />
+          <root url="jar://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/starloader.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -28,15 +28,16 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../server testarea/install 01/lib" />
+          <root url="file://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/lib" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$MODULE_DIR$/../server testarea/install 01/lib" />
+          <root url="file://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/lib" />
         </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/../server testarea/install 01/lib" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/../server testarea/install 01/lib" recursive="false" type="SOURCES" />
+        <jarDirectory url="file://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/lib" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/lib" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="WarpSpace" level="project" />
   </component>
 </module>
