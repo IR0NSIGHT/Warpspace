@@ -1,0 +1,16 @@
+{
+  "name": "WarpSpace",
+  "author": "IR0NSIGHT",
+  "description": "an alternative FTL system",
+  "version": "0.8.0 - upgrade to StL 0.2.010",
+  "starmade_version": "dev - v0.202.108",
+  "client_mod": false,
+  "server_mod": false,
+  "main_class": "me.iron.WarpSpace.Mod.WarpMain",
+  "smd_resource_id": 8166,
+  "dependencies": [
+    -1
+  ],
+  "core_mod": false,
+  "requires_class_resize": false
+}

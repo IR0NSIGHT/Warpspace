@@ -1,0 +1,87 @@
+package me.iron.WarpSpace.Mod.HUD.client;
+/**
+ * provided by Jake
+ * thanks jake!
+ * modified by ironsight
+ */
+
+import me.iron.WarpSpace.Mod.WarpMain;
+import api.DebugFile;
+import api.utils.textures.StarLoaderTexture;
+import org.schema.schine.graphicsengine.forms.Sprite;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+public enum SpriteList {
+    CONSOLE_HUD1024,
+    CONSOLE_HUD1024_SCREEN,
+    CONSOLE_HUD1024_BOTTOM,
+    RSP_ICON,
+    WARP_ICON,
+    ICON_OUTLINE_RSP_TRAVEL,    //green lower bottom
+    ICON_OUTLINE_WARP_TRAVEL, //green up
+
+    ICON_OUTLINE_RSP_INACTIVE, //greyed out lower bottom
+    ICON_OUTLINE_WARP_INACTIVE, //grey top
+
+    ICON_OUTLINE_RSP_BLOCKED,   //red lower
+    ICON_OUTLINE_WARP_BLOCKED,   //red up
+    ICON_OUTLINE_SECTOR_LOCKED_UP,  //red up and down
+    ICON_OUTLINE_SECTOR_LOCKED_DOWN,
+
+    ICON_OUTLINE_TO_RSP,    //yellow drop sign
+    ICON_OUTLINE_TO_WARP    //yellow up sign
+    ;
+
+
+        public Sprite sprite;
+        public String name;
+
+        public static void init() { //TODO add java 7 method instead of lambda (j8)
+            StarLoaderTexture.runOnGraphicsThread(new SpriteLoader());
+        }
+        private static void lambdaReplace() {
+
+        }
+        public Sprite getSprite() {
+            return sprite;
+        }
+
+        public String getName() {
+            return "warpmain_" + name;
+        }
+    }
+
+    class SpriteLoader implements Runnable {
+        @Override
+        public void run() {
+            synchronized (SpriteList.class) {
+                for (SpriteList value : SpriteList.values()) {
+                    String name = value.name().toLowerCase();
+                    value.name = name;
+                    try {
+                        String path = "me/iron/WarpSpace/Mod/res/" + name + ".png"; //console.png
+                        InputStream is = WarpMain.instance.getJarResource(path);
+                        if (is == null) {
+                            DebugFile.err("spritelist initialization could not get a valid path for image " + name + " at path: " + path);
+                            //File nf = new File("");
+                            //DebugFile.log("new file has abs path: " + nf.getAbsolutePath());
+
+                            String s = WarpMain.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+                            DebugFile.log("warpmain at path:" + s);
+                            continue;
+                        }
+                        BufferedImage bi = ImageIO.read(is);
+
+                        value.sprite = StarLoaderTexture.newSprite(bi, WarpMain.instance, "warpmain_" + name);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                };
+            }
+        }
+    }
