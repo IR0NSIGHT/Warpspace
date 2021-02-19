@@ -2,7 +2,7 @@
   "name": "WarpSpace",
   "author": "IR0NSIGHT",
   "description": "an alternative FTL system",
-  "version": "0.8.0 - upgrade to StL 0.2",
+  "version": "0.8.1 - HOTFIX upgrade to StL 0.2",
   "starmade_version": "dev - v0.202.108",
   "client_mod": false,
   "server_mod": false,
