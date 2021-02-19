@@ -21,21 +21,19 @@
         <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
+
     </expand>
-    <select />
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:dev" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3dd50877-3956-4571-8569-27d481b45e63" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Mod/server/interdiction/SynchManager.java" afterDir="false" />
+    <list default="true" id="1a1c8471-5498-4be4-84d0-019e814a8d70" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/brainstorming.md" beforeDir="false" afterPath="$PROJECT_DIR$/brainstorming.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Mod/HUD/client/HUD_core.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/HUD/client/HUD_core.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Mod/HUD/client/WarpProcessController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/HUD/client/WarpProcessController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Mod/PacketHUDUpdate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/PacketHUDUpdate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Mod/WarpJumpManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/WarpJumpManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/WarpMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Mod/server/WarpJumpEventHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/server/WarpJumpEventHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Mod/server/interdiction/SectorManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mod/server/interdiction/SectorManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +98,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="3dd50877-3956-4571-8569-27d481b45e63" name="Default Changelist" comment="" />
+      <changelist id="1a1c8471-5498-4be4-84d0-019e814a8d70" name="Default Changelist" comment="" />
       <created>1609332745691</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -142,7 +140,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="dev" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
