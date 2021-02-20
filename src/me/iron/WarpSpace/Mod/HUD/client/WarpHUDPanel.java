@@ -26,7 +26,7 @@ public class WarpHUDPanel { //TODO refactor messy class, make instatiable like C
     public WarpHUDPanel(HudCreateEvent ev) {
         textEl = new TextElement(FontLibrary.getBlenderProMedium16(), ev.getInputState());
         textEl.text = "hello space!";
-        DebugChatEvent.textElement = textEl;
+        //DebugChatEvent.textElement = textEl;
         ev.addElement(textEl);
         setPosition(1565,1038); //needs to run in loop to autoadjust for changed textsize
         startLoop();

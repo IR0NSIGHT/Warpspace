@@ -1,6 +1,6 @@
 package me.iron.WarpSpace.Mod.testing;
 
-import me.iron.WarpSpace.Mod.server.interdiction.SectorManager;
+import me.iron.WarpSpace.Mod.Interdiction.SectorManager;
 
 import java.util.*;
 
