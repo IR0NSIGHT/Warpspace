@@ -26,7 +26,6 @@ public class DebugChatEvent {
 
         DebugFile.log("player chat event debug eventhandler added");
         StarLoader.registerListener(PlayerChatEvent.class, new Listener<PlayerChatEvent>() {
-            boolean up = true;
             @Override
             public void onEvent(PlayerChatEvent e) {
                DebugFile.log("playerchat event"); //FIXME debug
@@ -46,23 +45,19 @@ public class DebugChatEvent {
                   DebugFile.log("x and y are:" + new Vector2d(x,y).toString());
                   moveHUDElement(x,y);
                }
-               if (e.getText().contains("domove")) {
+               if (e.getText().contains("domove")) { //move to absolute pixelpos
                    ModPlayground.broadcastMessage("doing move for all HUD stuff");
-                   for (HUD_element element : HUD_core.elementList) {
-                       //move every element 100 pixels up or down
-                       CustomHudImage img = element.image;
-                       Vector3f newPos = new Vector3f(img.getPos());
-                       if (img.getPos() == null) {
-                           newPos = element.pos; //hypothetical, hardcoded pos
-                       }
-                       if (up) {
-                           newPos.add(new Vector3f(0,100,0));
-                       } else {
-                           newPos.add(new Vector3f(0,-100,0));
-                       };
-                       img.setScreenPos(newPos, 2000);
+                   Integer[] integers = parseText(e.getText(),"domove",",");
+                   if (integers.length < 3) {
+                       return;
                    }
-                   up = !up;
+                   Vector3f newPos = ScreenHelper.pixelPosToRelPos(new Vector3f(integers[0],integers[1],integers[2]),false);
+                   DebugFile.log("newPos: " + newPos.toString());
+                   HUD_element[] arr = new HUD_element[] {HUD_core.spaceIndicator,HUD_core.console}; //position groups
+                   for (HUD_element element : arr) {
+                       element.setPos(newPos);
+                       element.toString();
+                   }
                }
 
             }
@@ -70,6 +65,27 @@ public class DebugChatEvent {
         }, WarpMain.instance);
     }
     public static TextElement textElement;
+
+    public static Integer[] parseText(String text, String keyword, String separator) {
+        if (!text.contains(keyword)) {
+            DebugFile.log("text does not contain keyword.");
+            return null;
+        }
+
+        String s = text;
+        s = s.replace(keyword,""); //remove keyword
+        s = s.replace(" ",""); //remove space
+        DebugFile.log("pasreText: after removing keyword " + keyword + ", string is: " + s);
+        String[] parts = s.split(",");
+        Integer[] arr = new Integer[parts.length];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = Integer.parseInt(parts[i]);
+        }
+        DebugFile.log("integer[] is: " + arr.toString());
+        return arr;
+    }
+
+
     private static void moveHUDElement(int x, int y) {
         textElement.setPos(textElement.getPos().x + x,textElement.getPos().y + y,0);
     //    ModPlayground.broadcastMessage("text el is now at: " + textElement.getPos().toString());
