@@ -1,4 +1,4 @@
-package me.iron.WarpSpace.Mod.server.interdiction;
+package me.iron.WarpSpace.Mod.Interdiction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.Map;
  * DATE: 27.12.2020
  * TIME: 20:04
  */
-public class SectorManager {
+public class SectorManager { //TODO STOP MAKING MORE HALF FINISHED INHIBITION CLASSES
     public enum InterdictionState {
         noEntry(0),
         noExit(1),
