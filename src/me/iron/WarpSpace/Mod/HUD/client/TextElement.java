@@ -19,6 +19,7 @@ public class TextElement extends GUITextOverlay {
 
 
     public String text = "";
+    public HUD_element parent;
     @Override
     public void onInit() {
         super.onInit();
@@ -32,7 +33,10 @@ public class TextElement extends GUITextOverlay {
 
     @Override
     public void draw() {
-     //   text = "system time " + System.currentTimeMillis();
+        if (parent == null) {
+            return;
+        }
+        setPos(parent.getTextElementPxPos());
         super.draw();
     }
 }

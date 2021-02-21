@@ -5,6 +5,7 @@ import me.iron.WarpSpace.Mod.WarpMain;
 import api.listener.Listener;
 import api.listener.events.gui.HudCreateEvent;
 import api.mod.StarLoader;
+import org.schema.schine.graphicsengine.forms.font.FontLibrary;
 
 import javax.vecmath.Vector3f;
 
@@ -19,15 +20,17 @@ public class GUIeventhandler {
                 StarLoader.registerListener(HudCreateEvent.class, new Listener<HudCreateEvent>() {
             @Override
             public void onEvent(HudCreateEvent hudCreateEvent) {
-                WarpHUDPanel whp = new WarpHUDPanel(hudCreateEvent);
-
 
                 //register all HUD elements
                 Vector3f moveStep = new Vector3f(1,1,0); //placehold. is synched between all elements of same type
                 for (HUD_element el: HUD_core.elementList) {
                     DebugFile.log("GUI eventhandler creating CustomHUDImages for element: " + el.toString());
                     hudCreateEvent.addElement(new CustomHudImage(hudCreateEvent.getInputState(),el));
+                    el.setTextElement(new TextElement(FontLibrary.getBlenderProMedium16(), hudCreateEvent.getInputState()));
+                    hudCreateEvent.addElement(el.getTextElement());
+                    el.getTextElement().text = "";
                 }
+                HUD_core.interdictionBox.getTextElement().text = "I AM INTERDICTION!";
 
             }
 
