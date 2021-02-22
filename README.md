@@ -20,11 +20,11 @@ Some core effects are:
    + make the thrust strength (= possible travel speed) in warp depend on the FTL drives level
    + explore means of making warp more interesting and different to realspace
         + core principles here are that warp should not be just a smaller realspace 2.0 but behave differently
-        + one such difference could be that station building is impossible
+        + one such difference could be that station building is impossible (done)
         + shields not working
-        + a limited time in warp, where a counter autodrops the ship back out
+        + a limited time in warp, where a counter autodrops the ship back out (using speed limit, done)
 
-#How to use inGame
+# Ingame behaviour
 - the mod will notice any FTL jump a ship performs. instead of arriving at your location, you will enter the warp.
 - Your navmarker will be changed to its warp position as well. Just follow the marker to get to the correct position in warp.
 - to drop out of warp you can either use your FTL drive again, or slow down to below 50m/s.
