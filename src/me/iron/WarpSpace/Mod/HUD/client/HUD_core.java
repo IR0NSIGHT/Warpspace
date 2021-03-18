@@ -40,7 +40,6 @@ public class HUD_core {
             new Vector3f(1,1,1),
             SpriteList.RSP_ICON,
             HUD_element.ElementType.INDICATOR); //1625,929 - 512x512
-    public static HUD_element interdictionBox = new HUD_element(new Vector3f ((float) 1700/1920,(float) 928/1080,0), new Vector3f((float)0.314/1080,(float)0.314/1080,(float)1/1080), new Vector3f(1,1,1),SpriteList.CONSOLE_HUD1024,HUD_element.ElementType.INFO_RIGHT);
 
     //TODO maybe split up in placement + available sprites?
     //TODO move to json
@@ -53,20 +52,19 @@ public class HUD_core {
         elementList.add(new HUD_element(console,SpriteList.CONSOLE_HUD1024_SCREEN, HUD_element.ElementType.BACKGROUND));
         elementList.add(new HUD_element(console,SpriteList.CONSOLE_HUD1024_BOTTOM, HUD_element.ElementType.BACKGROUND));
 
-        elementList.add(new HUD_element(console, SpriteList.WARP_ICON, HUD_element.ElementType.INDICATOR));
-        elementList.add(new HUD_element(console, SpriteList.RSP_ICON, HUD_element.ElementType.INDICATOR));
-        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_RSP_TRAVEL,HUD_element.ElementType.LOWER_BAR)); //1625,929)
-        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_WARP_TRAVEL,HUD_element.ElementType.UPPER_Bar)); //1625,929)
-        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_RSP_INACTIVE,HUD_element.ElementType.LOWER_BAR)); //1625,929)
-        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_WARP_INACTIVE,HUD_element.ElementType.UPPER_Bar)); //1625,929)
-        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_RSP_BLOCKED, HUD_element.ElementType.LOWER_BAR)); //1625,929)
-        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_WARP_BLOCKED, HUD_element.ElementType.UPPER_Bar)); //1625,929)
-        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_SECTOR_LOCKED_DOWN, HUD_element.ElementType.LOWER_BAR)); //1625,929)
-        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_SECTOR_LOCKED_UP, HUD_element.ElementType.UPPER_Bar)); //1625,929)
-        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_TO_RSP, HUD_element.ElementType.LOWER_BAR)); //1625,929)
-        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_TO_WARP, HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator, SpriteList.WARP_ICON, HUD_element.ElementType.INDICATOR));
+        elementList.add(new HUD_element(spaceIndicator, SpriteList.RSP_ICON, HUD_element.ElementType.INDICATOR));
+        elementList.add(new HUD_element(spaceIndicator, SpriteList.ICON_OUTLINE_RSP_TRAVEL,HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator, SpriteList.ICON_OUTLINE_WARP_TRAVEL,HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator, SpriteList.ICON_OUTLINE_RSP_INACTIVE,HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator, SpriteList.ICON_OUTLINE_WARP_INACTIVE,HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator, SpriteList.ICON_OUTLINE_RSP_BLOCKED, HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator, SpriteList.ICON_OUTLINE_WARP_BLOCKED, HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator, SpriteList.ICON_OUTLINE_SECTOR_LOCKED_DOWN, HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator, SpriteList.ICON_OUTLINE_SECTOR_LOCKED_UP, HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator, SpriteList.ICON_OUTLINE_TO_RSP, HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator, SpriteList.ICON_OUTLINE_TO_WARP, HUD_element.ElementType.UPPER_Bar)); //1625,929)
 
-        elementList.add(interdictionBox);
         for (HUD_element e : elementList) {
             drawList.put(e.enumValue,0);
         }
@@ -96,7 +94,7 @@ public class HUD_core {
                 /**
                  * this method checks for static variables like "is in warp" and decides what elements to draw on the HUD and which to disable.
                  */
-                UpdateSituation(); //TODO make 100% event based? -> new package from server triggers GUI update
+                UpdateSituation();
                 if (player == null || player.getCurrentSector() == null) { //nullpointer check to avoid drawing before player spawns.
                    // DebugFile.log("playerstate is null or playersector is null");
                     player = GameClientState.instance.getPlayer();
@@ -109,6 +107,7 @@ public class HUD_core {
                     //turn of HUD if player is not controlling a ship
                     if (null == playerShip || !playerShip.isSegmentController() || GameClientState.instance.isInAnyBuildMode()) {
                         for (HUD_element.ElementType type: HUD_element.ElementType.values()) {
+                            DebugFile.log("disabling drawtype " + type.name());
                             HUDElementController.drawType(type,0);
                         }
                         return;
@@ -164,13 +163,8 @@ public class HUD_core {
                         }
                     }
 
-                    //move HUD elements.
-                    if (isRSPSectorBlocked || isWarpSectorBlocked) {
-                        console.setPos(onInhibition);
-                        interdictionBox.getTextElement().text= "interdicted by: EvilEnemyShipThatsVeryEvIL /r next line?";
-                    } else {
-                        console.setPos(noInhibition);
-                        interdictionBox.getTextElement().text = "";
+                    if (i % 25 == 0) {
+
                     }
                 }
                 if (i % 25 == 0) {
@@ -189,8 +183,7 @@ public class HUD_core {
     private static boolean isExit;
     private static boolean isRSPSectorBlocked;
     private static boolean isWarpSectorBlocked;
-    private static Vector3f noInhibition = new Vector3f((float)1622/1920,(float)928/1080,0.01f);
-    private static Vector3f onInhibition = new Vector3f((float) 1460/1920,(float) 928/1080,0f);
+
     /**
      * update player situation fields from WarpProcessMap
      */

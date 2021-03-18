@@ -18,12 +18,15 @@ class HUD_element {
     private Vector3f pxPos; //position in px
     private Vector3f pxScale; //scale on current screen.
     private Vector3f moveStep; //used for moving the image, synched vector
-    private HUD_element mother = null; //parent object which this element is attached to: uses its position and scale.
-    private TextElement textElement = null; //TODO make 100% sure textelements work here.
-    private Vector3f textElementOffset = new Vector3f(0,0,0); //in percent of screen
+    private HUD_element mother; //parent object which this element is attached to: uses its position and scale.
 
-    private Vector3f textElementPxPos; //absolute position of textelement
-    private boolean drawCondition = true;
+    public List<HUD_element> getChildren() {
+        return children;
+    }
+
+    public void addChildren(HUD_element child) {
+        this.children.add(child);
+    }
 
     private List<HUD_element> children = new ArrayList<HUD_element>();
     public SpriteList enumValue;
@@ -72,7 +75,7 @@ class HUD_element {
         this.scale = reference.getScale();
         this.moveStep = reference.getMoveStep();
         this.mother = reference;
-        this.mother.addChild(this);
+        this.mother.addChildren(this);
         setScale(scale);
         setPos(pos);
         DebugFile.log("created " + this.toString());
@@ -124,10 +127,6 @@ class HUD_element {
         for (HUD_element child : children) {
             child.setPos(pos);
         }
-        //change Text element pos
-        Vector3f offset = getPxPos();
-        offset.add(ScreenHelper.relPosToPixelPos(textElementOffset));
-        textElementPxPos = offset;
     }
 
     /**
@@ -195,81 +194,5 @@ class HUD_element {
      */
     public void setPxScale(Vector3f pxScale) {
         this.pxScale = new Vector3f(pxScale);
-    }
-
-    /**
-     * get children objects that are attached to this HUDelement.
-     * @return
-     */
-    public List<HUD_element> getChildren() {
-        return children;
-    }
-
-    /**
-     * add a child element which is moved and scaled with this HUD element
-     * @param child
-     */
-    public void addChild(HUD_element child) {
-        this.children.add(child);
-    }
-
-    /**
-     * return the attached textelement, null if doesnt exist
-     * @return
-     */
-    public TextElement getTextElement() {
-        return textElement;
-    }
-
-    /**
-     * set textelement to be attached to this HUD element.
-     * @param textElement
-     */
-    public void setTextElement(TextElement textElement) {
-        this.textElement = textElement;
-        textElement.parent = this;
-    }
-
-    /**
-     * offset textelement from
-     * @param offset
-     */
-    public void setTextElementOffset(Vector3f offset, boolean absolute) {
-        if (absolute) {
-            textElementOffset = ScreenHelper.pixelPosToRelPos(offset,false);
-        } else {
-            textElementOffset = new Vector3f(offset);
-        }
-        setPos(pos); //update other positions
-    }
-
-    public Vector3f getTextElementOffset() {
-        if (textElementOffset == null) {
-            return new Vector3f(0,0,0);
-        };
-        return textElementOffset;
-    }
-    /**
-     * check if draw condition is met
-     * @return true or false
-     */
-    public boolean isDrawCondition() {
-        return drawCondition;
-    }
-
-    /**
-     * set draw condition for this hud element
-     * @param drawCondition
-     */
-    public void setDrawCondition(boolean drawCondition) {
-        this.drawCondition = drawCondition;
-    }
-
-    public Vector3f getTextElementPxPos() {
-        return new Vector3f(textElementPxPos);
-    }
-
-    public void setTextElementPxPos(Vector3f textElementPxPos) {
-        this.textElementPxPos.set(textElementPxPos);
     }
 }

@@ -36,21 +36,16 @@ public class DebugChatEvent {
                if (e.getText().contains("domove")) { //move to absolute pixelpos
                    ModPlayground.broadcastMessage("doing move for all HUD stuff");
                    Integer[] integers = parseText(e.getText(),"domove",",");
-                   if (integers.length < 4) {
+                   if (integers.length < 3) {
                        return;
                    }
                    Vector3f newPos = ScreenHelper.pixelPosToRelPos(new Vector3f(integers[0],integers[1],integers[2]),false);
                    DebugFile.log("newPos: " + newPos.toString());
-                   if (integers[3] == 0) { //move box
-                       HUD_element[] arr = new HUD_element[] {HUD_core.interdictionBox}; //position groups
-                       for (HUD_element element : arr) {
-                           element.setPos(newPos);
-                           element.toString();
-                       }
-                   } else { //move text
-                       HUD_core.interdictionBox.setTextElementOffset(newPos,false);
+                   HUD_element[] arr = new HUD_element[] {HUD_core.spaceIndicator,HUD_core.console}; //position groups
+                   for (HUD_element element : arr) {
+                       element.setPos(newPos);
+                       element.toString();
                    }
-
                }
 
             }

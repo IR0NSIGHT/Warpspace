@@ -311,17 +311,7 @@ public class WarpJumpManager {
         }
 
         int checkRange = 3; //range to check for inhibitors [sectors]
-        int shipReactorLvl = 0;
-        try {
-            shipReactorLvl = ((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface().getActiveReactor().getLevel();
-        } catch (Exception e) {
-            e.printStackTrace();
-            DebugFile.log("managercontainer null: " + (((ManagedSegmentController<?>)ship).getManagerContainer() == null));
-            DebugFile.log("powerinterface null: " + (((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface() == null));
-            DebugFile.log("activereactor null: " + (((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface().getActiveReactor() == null));
-            return true;
-        }
-
+        int shipReactorLvl = ((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface().getActiveReactor().getLevel();
         int inhibitorStrength = 0;
         int catchesLvl = 0;
         double inhRange = 0;
