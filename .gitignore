@@ -1,2 +1,5 @@
 # Project exclude paths/
-
+/out/
+/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_02_2021_21_26_[Default_Changelist]/shelved.patch
+/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_02_2021_21_26__Default_Changelist_.xml
+/.idea/
