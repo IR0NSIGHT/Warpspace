@@ -1,7 +1,9 @@
 package me.iron.WarpSpace.Mod.testing;
 
-import me.iron.WarpSpace.Mod.server.interdiction.SectorManager;
+import me.iron.WarpSpace.Mod.Interdiction.SectorManager;
+import org.lwjgl.Sys;
 
+import javax.vecmath.Vector3f;
 import java.util.*;
 
 /**
@@ -15,36 +17,10 @@ public class main {
     private static List<WarpSector> sectorList = new ArrayList<>();
     private static HashMap<Integer,Integer> sectorMap = new HashMap<>();
     public static void main(String[] args) {
-        SectorManager.SetSectorStatus(1000, SectorManager.InterdictionState.pull,2);
-        System.out.println(SectorManager.map.toString());
-        String string = "empty";
-        for (Map.Entry<Integer,Integer[]> s: SectorManager.map.entrySet()) {
-            string = "k: " + s.getKey() + "v: ";
-
-            for (int i = 0; i < s.getValue().length; i++) {
-                string += SectorManager.InterdictionState.valueOf(i).toString() + "_" + s.getValue()[i];
-            }
-        }
-        System.out.println(string);
-
-        System.out.println(SectorManager.GetSectorStatus(1000, SectorManager.InterdictionState.pull));
-   /*     GenerateSectors(10000);
-        System.out.println("searching " + sectorList.size() + " entries");
-
-        long start = System.currentTimeMillis();
-        //    System.out.println(sectorList.toString());
-        me.iron.WarpSpace.Mod.testing.WarpSector s = FindSectorInMap(sectorList.size());
-        //System.out.println(s.toString());
-        long duration = System.currentTimeMillis() - start;
-
-        System.out.println("map: " + duration + " millis");
-
-        start = System.currentTimeMillis();
-        s = FindSectorInList(sectorList.size());
-        duration = System.currentTimeMillis() - start;
-        System.out.println("list: " + duration + " millis");
-
-    */
+        Vector3f a = new Vector3f(2,2,2);
+        Vector3f b = new Vector3f(0.5f,2,1);
+        a.scale(1,b);
+        System.out.println(a.toString());
     }
 
     //test how fast 1000 sectors can be searched for their effects

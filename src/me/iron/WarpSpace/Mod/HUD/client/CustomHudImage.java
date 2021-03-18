@@ -11,25 +11,36 @@ import org.schema.schine.input.InputState;
 import javax.vecmath.Vector3f;
 import java.awt.*;
 
+/**
+ * this class draws an image onto screen. it is a worker class for HUD_element. dont use it without HUD_element.
+ */
 class CustomHudImage extends org.schema.schine.graphicsengine.forms.gui.GUIElement {
     public Sprite sprite;
 
 
+    /**
+     * position on screen in pixels
+     */
     public Vector3f position;
-
     public Vector3f scale;
 
+    /**
+     * the HUD element (basically image wrapper) for which this HUDImage was created
+     */
     private HUD_element el;
 
-    public CustomHudImage(InputState inputState, Vector3f position, Vector3f scale, HUD_element el) {
+    public CustomHudImage(InputState inputState, HUD_element el) {
         super(inputState);
-        this.position = position;
-        this.scale = scale;
+        this.position = el.getPxPos(); //all HUD images of same type share the same position, scale and movestep.
+        this.scale = el.getPxScale();
         this.el = el;
+
         if (el.enumValue.getSprite() != null) {
             this.sprite = el.enumValue.getSprite();
         }
-
+        el.image = this; //write itself to its creator
+        //AdjustToScreenSize();
+        DebugFile.log("HUDImage " + el.enumValue.name + " has pos " + position.toString()  + " HUDelement pos: " + el.getPos());
     }
 
 
@@ -38,59 +49,34 @@ class CustomHudImage extends org.schema.schine.graphicsengine.forms.gui.GUIEleme
 
     }
 
-    private GraphicsDevice gd;
-    private Vector3f screenRes = new Vector3f();
-    private Vector3f screenPos = new Vector3f(1,1,1);
-    private Vector3f screenScale = new Vector3f(1,1,1);
-    private boolean playShutter = false;
-    private int screenResUpdate = 0;
     @Override
     public void draw() {
-        if (sprite != null) {
-            if (HUD_core.drawList.get(el.enumValue) == 1) { //draw
-                //DebugFile.log("positioning and scaling");
-                sprite.setPositionCenter(true);
-
-
-                if (screenResUpdate % 30 == 0) {
-                //    DebugFile.log("###########updating screen resolution");
-                    screenResUpdate = 0;
-                    gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-                    screenRes.x = gd.getDisplayMode().getWidth();
-                    screenRes.y = gd.getDisplayMode().getHeight();
-
-                    screenPos.x = position.x * screenRes.x;
-                    screenPos.y = position.y * screenRes.y;
-                    screenPos.z = position.z * screenRes.z;
-
-                    screenScale.x = scale.x * screenRes.y;
-                    screenScale.y = scale.y * screenRes.y;
-                    screenScale.z = scale.z * screenRes.y;
-
-                    playShutter = el.playShutter;
-                    if (el.enumValue.equals(SpriteList.CONSOLE_HUD1024)) {
-
-                    }
-                }
-                screenResUpdate += 1;
-                if (playShutter) {
-                    ShaderLibrary.scanlineShader.load();
-                }
-                sprite.setPos(screenPos.x,screenPos.y,screenPos.z);
-                sprite.setScale(screenScale.x,screenScale.y,screenScale.z); //!scale uses the smaller dimension (screenheight) as a multiplier so different formats dont stretch the image
-
-                sprite.draw();
-                if (playShutter) {
-                    ShaderLibrary.scanlineShader.unload();
-                }
-            }
-        } else {
+        if (sprite == null) {
             if (el.enumValue.getSprite() != null) {
                 this.sprite = el.enumValue.getSprite(); //this should automatically add the sprite once it was added through the graphics thread : autoupdated reference. element -> spriteenum
             } else {
-                DebugFile.err("Sprite has no valid path to image");
+                DebugFile.err("Sprite" + el.enumValue.name + " has no valid path to image");
+            }
+            return;
+        }
+
+        if (HUD_core.drawList.get(el.enumValue) == 1) { //draw
+            //DebugFile.log("positioning and scaling");
+            sprite.setPositionCenter(true);
+            if (el.playShutter) {
+                ShaderLibrary.scanlineShader.load();
+            }
+            this.setScale(el.getPxScale());
+            this.setPos(el.getPxPos());
+            sprite.setScale(el.getPxScale());
+            sprite.setPos(el.getPxPos());
+            sprite.draw();
+            if (el.playShutter) {
+                ShaderLibrary.scanlineShader.unload();
             }
         }
+
+
     }
 
     @Override
@@ -108,6 +94,15 @@ class CustomHudImage extends org.schema.schine.graphicsengine.forms.gui.GUIEleme
     @Override
     public float getWidth() {
         return 359;
+    }
+
+    /**
+     * position in pixels on current screen.
+     * @return Vector (x,y,z)
+     */
+    @Override
+    public Vector3f getPos() {
+        return position;
     }
 
     @Override
