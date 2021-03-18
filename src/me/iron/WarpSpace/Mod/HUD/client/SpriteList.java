@@ -70,11 +70,6 @@ public enum SpriteList {
                         InputStream is = WarpMain.instance.getJarResource(path);
                         if (is == null) {
                             DebugFile.err("spritelist initialization could not get a valid path for image " + name + " at path: " + path);
-                            //File nf = new File("");
-                            //DebugFile.log("new file has abs path: " + nf.getAbsolutePath());
-
-                            String s = WarpMain.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-                            DebugFile.log("warpmain at path:" + s);
                             continue;
                         }
                         BufferedImage bi = ImageIO.read(is);

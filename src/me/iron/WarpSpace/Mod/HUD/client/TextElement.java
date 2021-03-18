@@ -37,7 +37,6 @@ public class TextElement extends GUITextOverlay {
             return;
         }
         setPos(parent.getTextElementPxPos());
-        text = parent.getText();
         super.draw();
     }
 }

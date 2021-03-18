@@ -5,10 +5,8 @@ import api.listener.events.controller.ServerInitializeEvent;
 import api.listener.events.world.sector.SegmentControllerUnloadEvent;
 import api.mod.StarMod;
 import api.network.packets.PacketUtil;
-import me.iron.WarpSpace.Mod.HUD.client.GUIeventhandler;
-import me.iron.WarpSpace.Mod.HUD.client.HUD_core;
-import me.iron.WarpSpace.Mod.HUD.client.SpriteList;
-import me.iron.WarpSpace.Mod.HUD.client.WarpProcessController;
+import me.iron.WarpSpace.Mod.HUD.client.*;
+import me.iron.WarpSpace.Mod.Interdiction.InterdictionHUDUpdateLoop;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpEventHandler;
@@ -48,12 +46,13 @@ public class WarpMain extends StarMod {
     //TODO thrust    ThrustEventhandler.createListener();
         WarpCheckLoop.loop(25); //TODO use a frequency from a config
         WarpJumpEventHandler.createServerListener();
+        InterdictionHUDUpdateLoop.CreateServerLoop();
     }
 
     @Override
     public void onClientCreated(ClientInitializeEvent event) {
         super.onClientCreated(event);
-        //DebugChatEvent.addDebugChatListener();
+        DebugChatEvent.addDebugChatListener();
         WarpProcessController.initMap(); //build situation map for warp processes
         SpriteList.init();
         HUD_core.initList();

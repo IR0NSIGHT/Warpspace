@@ -8,15 +8,11 @@ import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
-import org.schema.game.common.data.ManagedSegmentController;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
 import org.schema.game.server.data.PlayerNotFountException;
 import org.schema.schine.network.RegisteredClientOnServer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * STARMADE MOD
@@ -57,8 +53,6 @@ public class InterdictionHUDUpdateLoop {
                     //get relevant positions to check
                     Vector3i rspPos = null;
                     Vector3i warpPos = null;
-                    List<String> inhInfo = new ArrayList<>();
-
                     if (WarpManager.IsInWarp(sc)) {
                         warpPos = sc.getSector(new Vector3i());
                         rspPos = WarpManager.GetRealSpacePos(warpPos);
@@ -70,37 +64,16 @@ public class InterdictionHUDUpdateLoop {
                      //   DebugFile.log("rsp or warppos is null");
                         continue;
                     }
-                    Vector3i interdictingRSP = WarpJumpManager.getInterdictingSector(sc,rspPos);
-                    Vector3i interdictingWARP = WarpJumpManager.getInterdictingSector(sc,warpPos);
-                    Vector3i interdictingSector = null;
-                    ManagedSegmentController badBoy = null;
-                    if (null != interdictingRSP) { //rsp is interdicted
+                    if (WarpJumpManager.isInterdicted(sc,rspPos)) {
                         rspinterdicted = 1;
-                        interdictingSector = interdictingRSP;
                     }
 
-                    if (null != interdictingWARP) { //warp is interdicted
+                    if (WarpJumpManager.isInterdicted(sc, warpPos)) {
                         warpinterdicted = 1;
-                        interdictingSector = interdictingWARP;
                     }
-
-                    if (warpinterdicted == 1 || rspinterdicted == 1) {
-                        badBoy = WarpJumpManager.getStrongestActiveInterdictorIn(interdictingSector);
-                        if (badBoy == null) {
-                            DebugFile.log("ship is interdicted but could not find interdictor in: " + interdictingSector.toString());
-                            return;
-                        }
-                        inhInfo.add(badBoy.getSegmentController().getName());
-                        if (badBoy.getSegmentController().getFaction() != null) {
-                            inhInfo.add(badBoy.getSegmentController().getFaction().getName());
-                        } else {
-                            inhInfo.add("no faction");
-                        }
-                        inhInfo.add(interdictingSector.toString());
-                    }
-
-                    WarpJumpManager.SendPlayerWarpSituation(player, WarpProcessController.WarpProcess.WARPSECTORBLOCKED,warpinterdicted,inhInfo);
-                    WarpJumpManager.SendPlayerWarpSituation(player, WarpProcessController.WarpProcess.RSPSECTORBLOCKED,rspinterdicted,inhInfo);
+                   // DebugFile.log("updating player on inhibition: " + player.getName() + warpPos.toString() + "warp " + warpinterdicted +rspPos.toString() + " rsp: " + rspinterdicted);
+                    WarpJumpManager.SendPlayerWarpSituation(player, WarpProcessController.WarpProcess.WARPSECTORBLOCKED,warpinterdicted);
+                    WarpJumpManager.SendPlayerWarpSituation(player, WarpProcessController.WarpProcess.RSPSECTORBLOCKED,rspinterdicted);
                 }
             }
         }.runTimer(WarpMain.instance,12);

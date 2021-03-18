@@ -1,5 +1,7 @@
 package me.iron.WarpSpace.Mod.HUD.client;
 
+import api.DebugFile;
+
 /**
  * STARMADE MOD
  * CREATOR: Max1M

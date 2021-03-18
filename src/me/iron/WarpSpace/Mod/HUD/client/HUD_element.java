@@ -13,16 +13,16 @@ import java.util.List;
  * TIME: 15:14
  */
 class HUD_element {
-    private Vector3f pos = new Vector3f(0,0,0); //positon in % of screen
-    private Vector3f scale = new Vector3f(0,0,0); //scale in % of screen
-    private Vector3f pxPos = new Vector3f(0,0,0); //position in px
-    private Vector3f pxScale = new Vector3f(0,0,0); //scale on current screen.
-    private Vector3f moveStep = new Vector3f(0,0,0); //used for moving the image, synched vector
+    private Vector3f pos; //positon in % of screen
+    private Vector3f scale; //scale in % of screen
+    private Vector3f pxPos; //position in px
+    private Vector3f pxScale; //scale on current screen.
+    private Vector3f moveStep; //used for moving the image, synched vector
     private HUD_element mother = null; //parent object which this element is attached to: uses its position and scale.
     private TextElement textElement = null; //TODO make 100% sure textelements work here.
     private Vector3f textElementOffset = new Vector3f(0,0,0); //in percent of screen
-    private String text = "";
-    private Vector3f textElementPxPos = new Vector3f(0,0,0); //absolute position of textelement
+
+    private Vector3f textElementPxPos; //absolute position of textelement
     private boolean drawCondition = true;
 
     private List<HUD_element> children = new ArrayList<HUD_element>();
@@ -57,7 +57,7 @@ class HUD_element {
         this.moveStep = moveStep;
         setScale(scale);
         setPos(pos);
-        //DebugFile.log("created" + this.toString());
+        DebugFile.log("created" + this.toString());
     }
 
     /**
@@ -75,17 +75,7 @@ class HUD_element {
         this.mother.addChild(this);
         setScale(scale);
         setPos(pos);
-        //DebugFile.log("created " + this.toString());
-    }
-
-    public HUD_element(HUD_element reference, Vector3f textElementOffset, String text) {
-        this.mother = reference;
-        this.mother.addChild(this);
-        setScale(scale);
-        this.textElementOffset = ScreenHelper.pixelPosToRelPos(textElementOffset,false);
-        this.text = text;
-        setPos(mother.getPos());
-        //DebugFile.log("HUD-Text_element: " + this.toString());
+        DebugFile.log("created " + this.toString());
     }
 
     @Override
@@ -101,8 +91,6 @@ class HUD_element {
                 ", image=" + image +
                 ", playShutter=" + playShutter +
                 ", type=" + type +
-                ", text=" + text +
-                ", textElPxPos" + textElementPxPos +
                 '}';
     }
 
@@ -283,21 +271,5 @@ class HUD_element {
 
     public void setTextElementPxPos(Vector3f textElementPxPos) {
         this.textElementPxPos.set(textElementPxPos);
-    }
-
-    /**
-     * get text of attached textelement
-     * @return
-     */
-    public String getText() {
-        return text;
-    }
-
-    /**
-     * set text of attached textelement
-     * @param text
-     */
-    public void setText(String text) {
-        this.text = text;
     }
 }
