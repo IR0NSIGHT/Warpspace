@@ -27,7 +27,7 @@ public class WarpProcessController {
      */
     public enum WarpProcess {
         WARPSECTORBLOCKED(0),
-        RSPSECTORBLOCKED(1),
+        RSPSECTORBLOCK(1),
         JUMPDROP(2),
         JUMPEXIT(3),
         JUMPENTRY(4),

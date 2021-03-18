@@ -37,24 +37,23 @@ public class HUD_core {
      * initialize the list of hud elements, add all entries into the drawList.
      */
     public static void initList() {
-        console.pos = new Vector3f(0.5f,0.5f,0);
-        spaceIndicator.pos = new Vector3f(0.5f,0.5f,0);
-        elementList.add(new HUD_element(new Vector3f(console.pos), new Vector3f(console.scale),SpriteList.CONSOLE_HUD1024, HUD_element.ElementType.BACKGROUND));
-        elementList.add(new HUD_element(new Vector3f(console.pos), new Vector3f(console.scale),SpriteList.CONSOLE_HUD1024_SCREEN, HUD_element.ElementType.BACKGROUND));
-        elementList.add(new HUD_element(new Vector3f(console.pos), new Vector3f(console.scale),SpriteList.CONSOLE_HUD1024_BOTTOM, HUD_element.ElementType.BACKGROUND));
+        elementList.add(new HUD_element(console.pos, console.scale,SpriteList.CONSOLE_HUD1024, HUD_element.ElementType.BACKGROUND));
+        elementList.add(new HUD_element(console.pos,console.scale,SpriteList.CONSOLE_HUD1024_SCREEN, HUD_element.ElementType.BACKGROUND));
+        elementList.add(new HUD_element(console.pos, console.scale,SpriteList.CONSOLE_HUD1024_BOTTOM, HUD_element.ElementType.BACKGROUND));
 
-        elementList.add(new HUD_element(new Vector3f(spaceIndicator.pos),new Vector3f(spaceIndicator.scale),SpriteList.WARP_ICON, HUD_element.ElementType.INDICATOR));
-        elementList.add(new HUD_element(new Vector3f(spaceIndicator.pos),new Vector3f(spaceIndicator.scale),SpriteList.RSP_ICON, HUD_element.ElementType.INDICATOR));
-        elementList.add(new HUD_element(new Vector3f(spaceIndicator.pos),new Vector3f(spaceIndicator.scale),SpriteList.ICON_OUTLINE_RSP_TRAVEL,HUD_element.ElementType.LOWER_BAR)); //1625,929)
-        elementList.add(new HUD_element(new Vector3f(spaceIndicator.pos),new Vector3f(spaceIndicator.scale),SpriteList.ICON_OUTLINE_WARP_TRAVEL,HUD_element.ElementType.UPPER_Bar)); //1625,929)
-        elementList.add(new HUD_element(new Vector3f(spaceIndicator.pos),new Vector3f(spaceIndicator.scale),SpriteList.ICON_OUTLINE_RSP_INACTIVE,HUD_element.ElementType.LOWER_BAR)); //1625,929)
-        elementList.add(new HUD_element(new Vector3f(spaceIndicator.pos),new Vector3f(spaceIndicator.scale),SpriteList.ICON_OUTLINE_WARP_INACTIVE,HUD_element.ElementType.UPPER_Bar)); //1625,929)
-        elementList.add(new HUD_element(new Vector3f(spaceIndicator.pos),new Vector3f(spaceIndicator.scale),SpriteList.ICON_OUTLINE_RSP_BLOCKED, HUD_element.ElementType.LOWER_BAR)); //1625,929)
-        elementList.add(new HUD_element(new Vector3f(spaceIndicator.pos),new Vector3f(spaceIndicator.scale),SpriteList.ICON_OUTLINE_WARP_BLOCKED, HUD_element.ElementType.UPPER_Bar)); //1625,929)
-        elementList.add(new HUD_element(new Vector3f(spaceIndicator.pos),new Vector3f(spaceIndicator.scale),SpriteList.ICON_OUTLINE_SECTOR_LOCKED_DOWN, HUD_element.ElementType.LOWER_BAR)); //1625,929)
-        elementList.add(new HUD_element(new Vector3f(spaceIndicator.pos),new Vector3f(spaceIndicator.scale),SpriteList.ICON_OUTLINE_SECTOR_LOCKED_UP, HUD_element.ElementType.UPPER_Bar)); //1625,929)
-        elementList.add(new HUD_element(new Vector3f(spaceIndicator.pos),new Vector3f(spaceIndicator.scale),SpriteList.ICON_OUTLINE_TO_RSP, HUD_element.ElementType.LOWER_BAR)); //1625,929)
-        elementList.add(new HUD_element(new Vector3f(spaceIndicator.pos),new Vector3f(spaceIndicator.scale),SpriteList.ICON_OUTLINE_TO_WARP, HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.WARP_ICON, HUD_element.ElementType.INDICATOR));
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.RSP_ICON, HUD_element.ElementType.INDICATOR));
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_RSP_TRAVEL,HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_WARP_TRAVEL,HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_RSP_INACTIVE,HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_WARP_INACTIVE,HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_RSP_BLOCKED, HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_WARP_BLOCKED, HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_SECTOR_LOCKED_DOWN, HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_SECTOR_LOCKED_UP, HUD_element.ElementType.UPPER_Bar)); //1625,929)
+
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_TO_RSP, HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(spaceIndicator.pos,spaceIndicator.scale,SpriteList.ICON_OUTLINE_TO_WARP, HUD_element.ElementType.UPPER_Bar)); //1625,929)
 
         for (HUD_element e : elementList) {
             drawList.put(e.enumValue,0);
@@ -66,6 +65,7 @@ public class HUD_core {
      * Sets the received info to WarpProcessController to the ProcessMap
      */
     public static void HUD_processPacket(WarpProcessController.WarpProcess s, Integer key) {
+        //TODO add behaviour for each enum value
         //TODO add method to get more precise data like time till warpdrop/jump etc.
         //priority: jump>drop>travel
         //travel kann nur
@@ -82,9 +82,6 @@ public class HUD_core {
             long lastTime = System.currentTimeMillis();
             @Override
             public void run() {
-                /**
-                 * this method checks for static variables like "is in warp" and decides what elements to draw on the HUD and which to disable.
-                 */
                 UpdateSituation();
                 if (player == null || player.getCurrentSector() == null) { //nullpointer check to avoid drawing before player spawns.
                    // DebugFile.log("playerstate is null or playersector is null");
@@ -93,23 +90,25 @@ public class HUD_core {
                     if (GameServerState.isShutdown()) {
                         cancel();
                     }
+                   // DebugFile.log("trying to get player controllable");
                     SimpleTransformableSendableObject playerShip = player.getFirstControlledTransformableWOExc();
-
-                    //turn of HUD if player is not controlling a ship
                     if (null == playerShip || !playerShip.isSegmentController() || GameClientState.instance.isInAnyBuildMode()) {
+                        //DebugFile.log("player is not in ship or in buildmode, skipping");
+                        //turn of HUD if player is not controlling a ship
                         for (HUD_element.ElementType type: HUD_element.ElementType.values()) {
                             HUDElementController.drawType(type,0);
                         }
                         return;
                     }
+                  //  DebugFile.log("player is in ship or similar");
 
 
                     //draw decision making method
 
                     //not server situation dependent, 100% passive
                     HUDElementController.drawType(HUD_element.ElementType.BACKGROUND,1);
-                    boolean isInWarp = WarpManager.IsInWarp(player.getCurrentSector());
-                    if (isInWarp) {
+
+                    if (WarpManager.IsInWarp(player.getCurrentSector())) {
                         HUDElementController.drawElement(SpriteList.WARP_ICON,true);
                         HUDElementController.drawElement(SpriteList.ICON_OUTLINE_WARP_TRAVEL,true);
                         HUDElementController.drawElement(SpriteList.ICON_OUTLINE_RSP_INACTIVE,true);
@@ -134,28 +133,6 @@ public class HUD_core {
                             HUDElementController.drawElement(SpriteList.ICON_OUTLINE_TO_WARP,true);
                         }
                     }
-
-                    if (isWarpSectorBlocked) {
-                        if (isInWarp) { //sector locked down
-                            HUDElementController.drawElement(SpriteList.ICON_OUTLINE_SECTOR_LOCKED_DOWN,true);
-                            HUDElementController.drawElement(SpriteList.ICON_OUTLINE_SECTOR_LOCKED_UP,true);
-                        } else { //no jump upwards
-                            HUDElementController.drawElement(SpriteList.ICON_OUTLINE_WARP_BLOCKED,true);
-                        }
-                    }
-
-                    if (isRSPSectorBlocked) {
-                        if (isInWarp) {
-                            HUDElementController.drawElement(SpriteList.ICON_OUTLINE_RSP_BLOCKED,true);
-                        } else {
-                            HUDElementController.drawElement(SpriteList.ICON_OUTLINE_SECTOR_LOCKED_DOWN,true);
-                            HUDElementController.drawElement(SpriteList.ICON_OUTLINE_SECTOR_LOCKED_UP,true);
-                        }
-                    }
-
-                    if (i % 25 == 0) {
-
-                    }
                 }
                 if (i % 25 == 0) {
                     lastTime = System.currentTimeMillis();
@@ -171,8 +148,7 @@ public class HUD_core {
     private static boolean isDropping = false;
     private static boolean isEntry;
     private static boolean isExit;
-    private static boolean isRSPSectorBlocked;
-    private static boolean isWarpSectorBlocked;
+    private static boolean isSectorLocked;
 
     /**
      * update player situation fields from WarpProcessMap
@@ -181,21 +157,19 @@ public class HUD_core {
         //DebugFile.log("updating warp situation from WarpProcessMap: ");
 
         isDropping = ( WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPDROP) == 1);
-
+        //DebugFile.log("is Dropping: " + isDropping);
         isExit = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPEXIT) == 1);
 
+        //DebugFile.log("is exiting" + isExit);
         isEntry = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPENTRY) == 1);
 
-        isRSPSectorBlocked = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.RSPSECTORBLOCKED) == 1);
-
-        isWarpSectorBlocked = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.WARPSECTORBLOCKED) == 1);
+        //DebugFile.log("is entering" + isEntry);
     }
 }
 class HUD_element {
     public Vector3f pos;
     public Vector3f scale;
     public SpriteList enumValue;
-    public CustomHudImage image;
     public boolean playShutter = false;
     public ElementType type;
     public enum ElementType {

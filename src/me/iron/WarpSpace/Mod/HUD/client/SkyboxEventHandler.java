@@ -17,13 +17,13 @@ import javax.vecmath.Vector4f;
  * DATE: 29.10.2020
  * TIME: 15:46
  */
-public class SkyboxEventHandler { //TODO figure out how to draw a skybox
+public class SkyboxEventHandler {
     public static void CreateListener() {
-        //DebugFile.log("skybox eventhandler",WarpMain.instance);
+        DebugFile.log("skybox eventhandler",WarpMain.instance);
         StarLoader.registerListener(ProceduralSkyboxColorEvent.class, new Listener<ProceduralSkyboxColorEvent>() {
             @Override
             public void onEvent(ProceduralSkyboxColorEvent e) {
-        //        DebugFile.log("skybox created",WarpMain.instance);
+                DebugFile.log("skybox created",WarpMain.instance);
                 ModPlayground.broadcastMessage("skybox created with color: " + e.getColor1() + e.getColor2());
                 if (WarpManager.IsInWarp(GameClient.getClientPlayerState().getCurrentSector())) {
                     //change skybox to cool color to make warp more obvious

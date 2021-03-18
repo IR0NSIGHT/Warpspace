@@ -23,7 +23,6 @@ import org.schema.schine.common.language.Lng;
 import org.schema.schine.network.server.ServerMessage;
 
 import javax.vecmath.Vector3f;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -221,7 +220,7 @@ public class WarpJumpManager {
      * @return boolean, true if allowed entry, false if interdicted or can fire warpdrive
      */
     public static boolean isAllowedEntry(SegmentController ship) {
-        if (isInterdicted(ship,WarpManager.GetWarpSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
+        if (isInterdicted(ship) || !canExecuteWarpdrive(ship)) {
             return false;
         }
     //    DebugFile.log("isAllowedEntry is an empty check");
@@ -236,7 +235,7 @@ public class WarpJumpManager {
      * @return boolean, true if not interdicted and can fire warpdrive
      */
     public static boolean isAllowedDropJump(SegmentController ship) {
-        if (isInterdicted(ship,WarpManager.GetRealSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
+        if (isInterdicted(ship) || !canExecuteWarpdrive(ship)) {
             return false;
         }
     //    DebugFile.log("isAllowedDrop is an empty check");
@@ -272,14 +271,7 @@ public class WarpJumpManager {
         }
         return true;
     }
-
-    /**
-     * check if this ship is/would be interdicted at specified position.
-     * @param ship ship
-     * @param position positon to check from
-     * @return
-     */
-    public static boolean isInterdicted(SegmentController ship, Vector3i position) {
+    public static boolean isInterdicted(SegmentController ship) {
         //TODO add interdiction check for target sector
         JumpAddOn warpdrive;
         if(ship instanceof ManagedSegmentController<?>) {
@@ -297,18 +289,16 @@ public class WarpJumpManager {
 
         //debug jumpdrive level
         if(ship.hasActiveReactors()){
-        //    DebugFile.log ("warpdrive of "+ ship.getName() + " has level: " + ((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface().getActiveReactor().getLevel());
+            DebugFile.log ("warpdrive of "+ ship.getName() + " has level: " + ((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface().getActiveReactor().getLevel());
+        }
+        // -/
+
+        //error handling
+        if ((sector = (gameServerState = (GameServerState)warpdrive.getState()).getUniverse().getSector(warpdrive.getSegmentController().getSectorId())) == null) {
+            System.err.println("[SERVER][JUMP] " + warpdrive.getSegmentController() + " IS NOT IN A SECTOR " + warpdrive.getSegmentController().getSectorId());
+            return false;
         }
 
-        try {
-            sector = GameServer.getUniverse().getSector(position);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        if (sector == null) {
-            return false;
-        }
 
         int checkRange = 3; //range to check for inhibitors [sectors]
         int shipReactorLvl = ((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface().getActiveReactor().getLevel();
@@ -321,7 +311,7 @@ public class WarpJumpManager {
                 for (int z = -checkRange; z <= checkRange; ++z) {
                     neighbourSectorPos.set(sector.pos.x + z, sector.pos.y + y, sector.pos.z + x);
                     Sector neighbourSector;
-                    if ((neighbourSector = GameServerState.instance.getUniverse().getSectorWithoutLoading(neighbourSectorPos)) == null) {
+                    if ((neighbourSector = gameServerState.getUniverse().getSectorWithoutLoading(neighbourSectorPos)) == null) {
                         continue; //sector is not loaded
                     }
                     //get inhibitor level //returns [0..9]
@@ -351,21 +341,12 @@ public class WarpJumpManager {
     }
 
     /**
-     * check if ship is interdicted at its current position
-     * @param ship
-     * @return
-     */
-    public static boolean isInterdicted(SegmentController ship) {
-        return isInterdicted(ship,ship.getSector(new Vector3i()));
-    }
-
-    /**
      * send hud update to specific player client computer
      * @param p playerstate player
-     * @param s process thats happening
-     * @param v value of process
+     * @param s process
+     * @param v value
      */
-    public static void SendPlayerWarpSituation(PlayerState p, WarpProcessController.WarpProcess s, Integer v) {
+    private static void SendPlayerWarpSituation(PlayerState p, WarpProcessController.WarpProcess s, Integer v) {
         //make packet with new wp, send it to players client
         PacketHUDUpdate packet = new PacketHUDUpdate(s, v);
         PacketUtil.sendPacket(p, packet);
@@ -375,15 +356,15 @@ public class WarpJumpManager {
      * send HUD update to all clients of attached players of this segmentcontroller
      * @param sc ship
      * @param process warpprocess
-     * @param processValue value of warpprocess (0 = off, 1 = on)
+     * @param processValue value of warpprocess
      */
     public static void SendPlayerWarpSituation(SegmentController sc, WarpProcessController.WarpProcess process, Integer processValue) {
-            if ((sc instanceof PlayerControllable && !((PlayerControllable)sc).getAttachedPlayers().isEmpty()))
-            {
-                for (PlayerState p: ((PlayerControllable)sc).getAttachedPlayers()) {
-                    SendPlayerWarpSituation(p,process,processValue);
-                }
+        if ((sc instanceof PlayerControllable && !((PlayerControllable)sc).getAttachedPlayers().isEmpty()))
+        {
+            for (PlayerState p: ((PlayerControllable)sc).getAttachedPlayers()) {
+                SendPlayerWarpSituation(p,process,processValue);
             }
+        }
     }
 
 }
