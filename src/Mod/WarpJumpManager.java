@@ -1,20 +1,21 @@
-package Mod;
+package me.iron.WarpSpace.Mod;
 
-import Mod.HUD.client.WarpProcessController;
-import Mod.server.interdiction.EnvironmentManager;
-import Mod.server.interdiction.SectorManager;
+import me.iron.WarpSpace.Mod.HUD.client.WarpProcessController;
 import api.DebugFile;
 import api.common.GameServer;
 import api.mod.StarLoader;
 import api.network.packets.PacketUtil;
 import api.utils.StarRunnable;
+import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.controller.elements.jumpdrive.JumpAddOn;
 import org.schema.game.common.data.ManagedSegmentController;
+import org.schema.game.common.data.blockeffects.config.StatusEffectType;
 import org.schema.game.common.data.player.PlayerState;
+import org.schema.game.common.data.world.Sector;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.controller.SectorSwitch;
 import org.schema.game.server.data.GameServerState;
@@ -22,8 +23,8 @@ import org.schema.schine.common.language.Lng;
 import org.schema.schine.network.server.ServerMessage;
 
 import javax.vecmath.Vector3f;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * STARMADE MOD
@@ -67,8 +68,7 @@ public class WarpJumpManager {
         //--------------before action is taken
         //--------------after action is taken
         if (isJump) {
-            ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
-            SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPEXIT, 1); //set exiting process to true
+            SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPEXIT, 1,null); //set exiting process to true
         } else {
             //must be a speeddrop situation is already handeled by loop.
             //SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,1);
@@ -99,10 +99,10 @@ public class WarpJumpManager {
                 StarLoader.fireEvent(e, true);
 
                 if (isJump) {
-                    SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPEXIT, 0);
+                    SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPEXIT, 0,null);
                 } else {
                     //is a speeddrop (drop bc to slow)
-                    SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,0);
+                    SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,0,null);
                 }
 
 
@@ -118,7 +118,6 @@ public class WarpJumpManager {
                 }
                 //queue sector switch
                 doSectorSwitch(ship, sectorF,true);
-                ship.sendControllingPlayersServerMessage(Lng.astr("Dropping out of warp"), ServerMessage.MESSAGE_TYPE_INFO);
                 //TODO add visual effects
                 //TODO drop station to random pos
                 //navigationHelper.handlePilots(ship,intoWarp);
@@ -144,8 +143,7 @@ public class WarpJumpManager {
         entryQueue.add(ship);
 
         //set entry process to true/happening
-        SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,1);
-        ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
+        SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,1, null);
 
         new StarRunnable() {
             @Override
@@ -164,7 +162,7 @@ public class WarpJumpManager {
                 StarLoader.fireEvent(e, true);
 
                 //for all attached players send travel update, bc drop is over
-                SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,0);
+                SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,0, null);
 
                 if (e.canceled) {
                     cancel();
@@ -176,8 +174,7 @@ public class WarpJumpManager {
                 emptyWarpdrive(ship);
                 //queue sector switch
                 doSectorSwitch(ship, sector,true);
-                ship.sendControllingPlayersServerMessage(Lng.astr("Entering warp"), ServerMessage.MESSAGE_TYPE_INFO);
-                //TODO add visual effects and navwaypoint change
+                //TODO add visual effects
             }
         }.runLater(WarpMain.instance,countdown);
     }
@@ -219,7 +216,7 @@ public class WarpJumpManager {
      * @return boolean, true if allowed entry, false if interdicted or can fire warpdrive
      */
     public static boolean isAllowedEntry(SegmentController ship) {
-        if (isInterdicted(ship) || !canExecuteWarpdrive(ship)) {
+        if (null != getInterdictingSector(ship,WarpManager.GetWarpSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
             return false;
         }
     //    DebugFile.log("isAllowedEntry is an empty check");
@@ -234,7 +231,7 @@ public class WarpJumpManager {
      * @return boolean, true if not interdicted and can fire warpdrive
      */
     public static boolean isAllowedDropJump(SegmentController ship) {
-        if (isInterdicted(ship) || !canExecuteWarpdrive(ship)) {
+        if (null != getInterdictingSector(ship,WarpManager.GetRealSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
             return false;
         }
     //    DebugFile.log("isAllowedDrop is an empty check");
@@ -272,33 +269,135 @@ public class WarpJumpManager {
         return true;
     }
 
-    public static boolean isInterdicted(SegmentController ship) {
-        //TODO add interdiction check
-        long originID = SectorManager.SectorToID(ship.getSector(new Vector3i()));
-        long targetID = SectorManager.SectorToID(WarpManager.GetPartnerPos(ship.getSector(new Vector3i())));
-
-        //update inhibition
-        SectorManager.UpdateSectorInhibition(originID); //TODO check if update here makes sense
-        SectorManager.UpdateSectorInhibition(targetID); //TODO
-
-        boolean noExitOrigin = SectorManager.GetSectorStatus(originID ,SectorManager.InterdictionState.noExit); //is origin exit blocked
-        boolean noEntryTarget = SectorManager.GetSectorStatus(targetID, SectorManager.InterdictionState.noEntry); //is target entry blocked
-        if (noExitOrigin || noEntryTarget) {
-            ship.sendControllingPlayersServerMessage(new String[]{"jump is inhibited!!"},1);
-            return true;
+    /**
+     * check if this ship is/would be interdicted at specified position.
+     * @param ship ship
+     * @param position positon to check from
+     * @return
+     */
+    public static Vector3i getInterdictingSector(SegmentController ship, Vector3i position) {
+        //TODO add interdiction check for target sector
+        JumpAddOn warpdrive;
+        if(ship instanceof ManagedSegmentController<?>) {
+            warpdrive =((Ship)ship).getManagerContainer().getJumpAddOn();
+        } else {
+            return null;
         }
-        return false;
+
+        //use vanilla check method - check one sector in each direction for jumpaddons that interdict this one.
+        assert warpdrive.isOnServer();
+        GameServerState gameServerState;
+        Sector sector;
+        Vector3i neighbourSectorPos = new Vector3i();
+
+        //debug jumpdrive level
+        if(ship.hasActiveReactors()){
+        //    DebugFile.log ("warpdrive of "+ ship.getName() + " has level: " + ((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface().getActiveReactor().getLevel());
+        }
+
+        try {
+            sector = GameServer.getUniverse().getSector(position);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (sector == null) {
+            return null;
+        }
+
+        int checkRange = 3; //range to check for inhibitors [sectors]
+        int shipReactorLvl = 0;
+        try {
+            shipReactorLvl = ((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface().getActiveReactor().getLevel();
+        } catch (Exception e) {
+            e.printStackTrace();
+            DebugFile.log("managercontainer null: " + (((ManagedSegmentController<?>)ship).getManagerContainer() == null));
+            DebugFile.log("powerinterface null: " + (((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface() == null));
+            DebugFile.log("activereactor null: " + (((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface().getActiveReactor() == null));
+            return null;
+        }
+
+        int inhibitorStrength = 0;
+        int catchesLvl = 0;
+        double inhRange = 0;
+        Vector3i currentSec = ship.getSector(new Vector3i()); //TODO refactor me and make me pretty
+        for (int x = -checkRange; x <= checkRange; ++x) {
+            for (int y = -checkRange; y <= checkRange; ++y) {
+                for (int z = -checkRange; z <= checkRange; ++z) {
+                    neighbourSectorPos.set(sector.pos.x + z, sector.pos.y + y, sector.pos.z + x);
+                    Sector neighbourSector;
+                    if ((neighbourSector = GameServerState.instance.getUniverse().getSectorWithoutLoading(neighbourSectorPos)) == null) {
+                        continue; //sector is not loaded
+                    }
+                    //get inhibitor level //returns [0..9]
+                    inhibitorStrength = neighbourSector.getRemoteSector().getConfigManager().apply(StatusEffectType.WARP_INTERDICTION_STRENGTH, 1); //TODO change apply value to 300K?
+                    catchesLvl = inhibitorStrength * 60; //will catch anything up to
+                    //max inhRange of inhibitor
+                    inhRange = Math.max(0, neighbourSector.getRemoteSector().getConfigManager().apply(StatusEffectType.WARP_INTERDICTION_DISTANCE,  1));
+                    int dx = Math.abs(currentSec.x - neighbourSectorPos.x);
+                    int dy = Math.abs(currentSec.y - neighbourSectorPos.y);
+                    int dz = Math.abs(currentSec.z - neighbourSectorPos.z);
+                    double distance = Math.pow(dx * dx + dy * dy + dz * dz,0.5);
+                    //TODO change config entry of inhibition power consumption
+                    if (inhibitorStrength <= 1 || (distance > inhRange)) {
+                        continue;
+                    }
+                    //DebugFile.log("inhibitor has strength: " + inhibitorStrength + " catches rkt level: " + catchesLvl + " power cons: " + inhibitorStrength * 60000 + " range: " + inhRange + " vs: " + distance);
+                    if (catchesLvl >= shipReactorLvl) {
+                        //warpdrive.getSegmentController().sendControllingPlayersServerMessage(Lng.astr(" inhibitor detected in " + neighbourSectorPos.toString()), 3);
+                        return neighbourSectorPos;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static ManagedSegmentController getStrongestActiveInterdictorIn(Vector3i sector) {
+        ManagedSegmentController interdictor = null;
+        try {
+           Set<SimpleTransformableSendableObject<?>> objects =  GameServerState.instance.getUniverse().getSector(sector).getEntities();
+            for (SimpleTransformableSendableObject object: objects) {
+                if (!(object instanceof ManagedSegmentController)) {
+                    continue;
+                }
+                ManagedSegmentController ship = (ManagedSegmentController) object;
+                if (!(ship.getManagerContainer().getInterdictionAddOn().isActive())) {
+                    continue;
+                }
+                if (interdictor == null) {
+                    interdictor = ship;
+                    continue;
+                }
+                if (interdictor.getManagerContainer().getInterdictionAddOn().getPowerConsumedPerSecondCharging() < ship.getManagerContainer().getInterdictionAddOn().getPowerConsumedPerSecondCharging()) {
+                    interdictor = ship;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return interdictor;
     }
 
     /**
      * send hud update to specific player client computer
      * @param p playerstate player
-     * @param s process
-     * @param v value
+     * @param s process thats happening
+     * @param v value of process
      */
-    private static void SendPlayerWarpSituation(PlayerState p, WarpProcessController.WarpProcess s, Integer v) {
+    public static void SendPlayerWarpSituation(PlayerState p, WarpProcessController.WarpProcess s, Integer v) {
         //make packet with new wp, send it to players client
-        PacketHUDUpdate packet = new PacketHUDUpdate(s, v);
+        PacketHUDUpdate packet = new PacketHUDUpdate(s, v,null);
+        PacketUtil.sendPacket(p, packet);
+    }
+
+    public static void SendPlayerWarpSituation(PlayerState p, WarpProcessController.WarpProcess s, Integer v, List<String> processArray) {
+        //make packet with new wp, send it to players client
+        if (processArray == null) {
+            processArray = Collections.emptyList();
+        }
+        PacketHUDUpdate packet = new PacketHUDUpdate(s, v, processArray);
         PacketUtil.sendPacket(p, packet);
     }
 
@@ -306,15 +405,15 @@ public class WarpJumpManager {
      * send HUD update to all clients of attached players of this segmentcontroller
      * @param sc ship
      * @param process warpprocess
-     * @param processValue value of warpprocess
+     * @param processValue value of warpprocess (0 = off, 1 = on)
      */
-    public static void SendPlayerWarpSituation(SegmentController sc, WarpProcessController.WarpProcess process, Integer processValue) {
-        if ((sc instanceof PlayerControllable && !((PlayerControllable)sc).getAttachedPlayers().isEmpty()))
-        {
-            for (PlayerState p: ((PlayerControllable)sc).getAttachedPlayers()) {
-                SendPlayerWarpSituation(p,process,processValue);
+    public static void SendPlayerWarpSituation(SegmentController sc, WarpProcessController.WarpProcess process, Integer processValue, List<String> processArray) {
+            if ((sc instanceof PlayerControllable && !((PlayerControllable)sc).getAttachedPlayers().isEmpty()))
+            {
+                for (PlayerState p: ((PlayerControllable)sc).getAttachedPlayers()) {
+                    SendPlayerWarpSituation(p,process,processValue,processArray);
+                }
             }
-        }
     }
 
 }

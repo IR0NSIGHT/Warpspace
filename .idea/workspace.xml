@@ -21,7 +21,6 @@
         <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
-
     </expand>
     <select>
       <path>
@@ -75,7 +74,7 @@
       <recent name="testing" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.main">
     <configuration name="main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="testing.main" />
       <module name="Warpspace" />
@@ -89,6 +88,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.main" />
+      <item itemvalue="JAR Application.SM with warpspace" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.main" />

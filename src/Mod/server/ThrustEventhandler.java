@@ -32,8 +32,8 @@ public class ThrustEventhandler {
                 float vanillaT = e.getCalculatedThrust();
                 SegmentController ship = e.getThrusterElementManager().getContainer().getSegmentController();
                 boolean inWarp = WarpEntityManager.isWarpEntity(ship);
-                ModPlayground.broadcastMessage("calcualted thrust: " + vanillaT);
-                ModPlayground.broadcastMessage("is warp entity: " + inWarp);
+                //ModPlayground.broadcastMessage("calcualted thrust: " + vanillaT);
+                //ModPlayground.broadcastMessage("is warp entity: " + inWarp);
                 e.getThrusterElementManager().getContainer();
                 e.setThrust(5);
 
@@ -43,13 +43,9 @@ public class ThrustEventhandler {
                 if(ship instanceof ManagedSegmentController<?>) {
                     warpdrive =((Ship)ship).getManagerContainer().getJumpAddOn();
                     warpdrive.getDistance();
-
                 } else {
                     DebugFile.log("entity " + ship.getName() + "tried jumping but is no managed SC.");
                 }
-
-
-
             }
         }, WarpMain.instance);
     }

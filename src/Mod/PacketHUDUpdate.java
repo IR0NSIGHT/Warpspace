@@ -8,6 +8,7 @@ import api.network.PacketWriteBuffer;
 import org.schema.game.common.data.player.PlayerState;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * packet to send a vector3i to a client and set it as the clients navigation waypoint
@@ -25,6 +26,7 @@ public class PacketHUDUpdate extends Packet {
      * value given process has: 1 happening, 0 not happening
      */
     private Integer processValue;
+    private List<String> processArray; //for more detailed info to display (inhibitor name f.e.)
 
     //TODO allow multiple HUD updates in one packet
     /**
@@ -32,9 +34,10 @@ public class PacketHUDUpdate extends Packet {
      * @param warpProcess enum describing what warpjump state the player is in.
      * @param processValue what value process has (1: active, 0: inactive)
      */
-    public PacketHUDUpdate(WarpProcessController.WarpProcess warpProcess, Integer processValue) {
+    public PacketHUDUpdate(WarpProcessController.WarpProcess warpProcess, Integer processValue, List<String> processArray) {
         this.warpProcess = warpProcess;
         this.processValue = processValue;
+        this.processArray = processArray;
     }
 
     /**
@@ -48,17 +51,19 @@ public class PacketHUDUpdate extends Packet {
     public void readPacketData(PacketReadBuffer buf) throws IOException {
         warpProcess = WarpProcessController.WarpProcess.valueOf(buf.readInt());
         processValue = buf.readInt();
+        processArray = buf.readStringList();
     }
 
     @Override
     public void writePacketData(PacketWriteBuffer buf) throws IOException {
         buf.writeInt(warpProcess.ordinal());
         buf.writeInt(processValue);
+        buf.writeStringList(processArray);
     }
 
     @Override
     public void processPacketOnClient() {
-        HUD_core.HUD_processPacket(warpProcess,processValue);
+        HUD_core.HUD_processPacket(warpProcess,processValue,processArray);
     }
 
     @Override

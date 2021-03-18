@@ -1,4 +1,4 @@
-package Mod.server;
+package me.iron.WarpSpace.Mod.server;
 
 /**
  * STARMADE MOD
@@ -7,10 +7,10 @@ package Mod.server;
  * TIME: 15:17
  */
 
-import Mod.WarpEntityManager;
-import Mod.WarpMain;
-import Mod.WarpManager;
 import api.DebugFile;
+import me.iron.WarpSpace.Mod.WarpEntityManager;
+import me.iron.WarpSpace.Mod.WarpMain;
+import me.iron.WarpSpace.Mod.WarpManager;
 import api.common.GameServer;
 import api.utils.StarRunnable;
 import org.schema.game.common.controller.SegmentController;
@@ -39,6 +39,9 @@ public class WarpCheckLoop {
                 //check for every segmentcontroller:
                 Map<String, SegmentController> scList = GameServer.getServerState().getSegmentControllersByName();
                 for (SegmentController sc: scList.values()) {
+                    if (sc == null) {
+                        DebugFile.logError(new NullPointerException(),WarpMain.instance);
+                    }
                     if (WarpManager.IsInWarp(sc) && !WarpEntityManager.isWarpEntity(sc)) {
                         //is in warp and not registered
                         WarpEntityManager.DeclareWarpEntity(sc);

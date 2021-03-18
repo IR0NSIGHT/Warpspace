@@ -17,6 +17,9 @@ public class HUDElementController {
             //clean elements of same type
             //TODO write good find method
             for (HUD_element el: HUD_core.elementList) {
+                if (el.enumValue == null) {
+                    continue;
+                }
                 if (el.enumValue.equals(element)) {
                     clearType(el.type);
                 }
@@ -30,6 +33,9 @@ public class HUDElementController {
      */
     public static void drawType(HUD_element.ElementType type, int value) {
         for (HUD_element el: HUD_core.elementList) {
+            if (el.type == null) {
+                continue;
+            }
             if (el.type.equals(type)) {
                 HUD_core.drawList.put(el.enumValue, value);
             }

@@ -1,0 +1,242 @@
+package me.iron.WarpSpace.Mod.HUD.client;
+
+import api.DebugFile;
+import me.iron.WarpSpace.Mod.WarpMain;
+import me.iron.WarpSpace.Mod.WarpManager;
+import api.utils.StarRunnable;
+import org.schema.game.client.data.GameClientState;
+import org.schema.game.common.data.player.PlayerState;
+import org.schema.game.common.data.world.SimpleTransformableSendableObject;
+import org.schema.game.server.data.GameServerState;
+
+import javax.vecmath.Vector3f;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+/**
+ * STARMADE MOD
+ * CREATOR: Max1M
+ * DATE: 16.12.2020
+ * TIME: 19:23
+ */
+public class HUD_core {
+
+    public static List<HUD_element> elementList = new ArrayList(); //TODO get rid of compiler warning for raw usage
+    public static HashMap<SpriteList, Integer> drawList = new HashMap<>();
+
+    /**
+     * some general HUD element placements to use a position references. any element built with these will move + scale with them
+     */
+    public static HUD_element console = new HUD_element(
+            new Vector3f((float)1622/1920,(float)928/1080,0.01f),
+            new Vector3f((float)0.314/1080,(float)0.314/1080,(float)1/1080),
+            new Vector3f( 1,1,1),
+            SpriteList.CONSOLE_HUD1024,
+            HUD_element.ElementType.BACKGROUND);
+    public static HUD_element spaceIndicator = new HUD_element(
+            new Vector3f((float)1622/1920,(float)928/1080,0.01f),
+            new Vector3f((float)(0.32/1080),(float)(0.32/1080),(float)1/1080),
+            new Vector3f(1,1,1),
+            SpriteList.RSP_ICON,
+            HUD_element.ElementType.INDICATOR); //1625,929 - 512x512
+    public static HUD_element interdictionBox = new HUD_element(
+            new Vector3f ((float) 1735/1920,(float) 928/1080,0),
+            new Vector3f((float)0.35/1080,(float)0.35/1080,(float)1/1080),
+            new Vector3f(1,1,1),SpriteList.INFO_RIGHT,HUD_element.ElementType.INFO_RIGHT);
+    public static HUD_element interdictionShip = new HUD_element(interdictionBox,new Vector3f(-140,-20,0),"Faction: big_bad_shippy_mc_shipface"); //faction of inhibitor
+    public static HUD_element interdictionFaction = new HUD_element(interdictionBox,new Vector3f(-140,20,0),"Faction: XXX EMPIRE CORP"); //faction of inhibitor
+    public static HUD_element interdictionSector = new HUD_element(interdictionBox,new Vector3f(-140,50,0),"Sector: 420, 69, uwu"); //sector of inhibitor
+
+    //TODO maybe split up in placement + available sprites?
+    //TODO move to json
+    //TODO get rid of elementlist, directly put into drawlist.
+    /**
+     * initialize the list of hud elements, add all entries into the drawList.
+     */
+    public static void initList() {
+        elementList.add(new HUD_element(console,SpriteList.CONSOLE_HUD1024, HUD_element.ElementType.BACKGROUND));
+        elementList.add(new HUD_element(console,SpriteList.CONSOLE_HUD1024_SCREEN, HUD_element.ElementType.BACKGROUND));
+        elementList.add(new HUD_element(console,SpriteList.CONSOLE_HUD1024_BOTTOM, HUD_element.ElementType.BACKGROUND));
+
+        elementList.add(new HUD_element(console, SpriteList.WARP_ICON, HUD_element.ElementType.INDICATOR));
+        elementList.add(new HUD_element(console, SpriteList.RSP_ICON, HUD_element.ElementType.INDICATOR));
+        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_RSP_TRAVEL,HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_WARP_TRAVEL,HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_RSP_INACTIVE,HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_WARP_INACTIVE,HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_RSP_BLOCKED, HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_WARP_BLOCKED, HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_SECTOR_LOCKED_DOWN, HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_SECTOR_LOCKED_UP, HUD_element.ElementType.UPPER_Bar)); //1625,929)
+        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_TO_RSP, HUD_element.ElementType.LOWER_BAR)); //1625,929)
+        elementList.add(new HUD_element(console, SpriteList.ICON_OUTLINE_TO_WARP, HUD_element.ElementType.UPPER_Bar)); //1625,929)
+
+        elementList.add(interdictionBox);
+        elementList.add(interdictionShip);
+        elementList.add(interdictionFaction);
+        elementList.add(interdictionSector);
+
+
+
+        for (HUD_element e : elementList) {
+            drawList.put(e.enumValue,0);
+        }
+    }
+
+    /**
+     * is called by me.iron.WarpSpace.Mod.network.PacketHUDUpdate, used to transfer information from the server to the client about what a player is currently doing related to warp.
+     * Sets the received info to WarpProcessController to the ProcessMap
+     */
+    public static void HUD_processPacket(WarpProcessController.WarpProcess processKey, Integer value, List<String> processArray) {
+        playerWarpState = processKey;
+        WarpProcessController.WarpProcessMap.put(processKey, value);
+        if (processKey.equals(WarpProcessController.WarpProcess.RSPSECTORBLOCKED) || processKey.equals(WarpProcessController.WarpProcess.WARPSECTORBLOCKED)) {
+            if (value == 1) {
+                //some kind of inhibition.
+                interdictionShip.setText(processArray.get(0));
+                interdictionFaction.setText(processArray.get(1));
+                interdictionSector.setText(processArray.get(2));
+            } else {
+                interdictionShip.setText("");
+                interdictionSector.setText("");
+                interdictionFaction.setText("");
+            }
+        }
+        UpdateSituation();
+        UpdateDrawElements();
+    }
+
+    public static WarpProcessController.WarpProcess playerWarpState = WarpProcessController.WarpProcess.TRAVEL;
+    public static void HUDLoop() {
+        new StarRunnable() {
+            @Override
+            public void run() {
+                /**
+                 * this method checks for static variables like "is in warp" and decides what elements to draw on the HUD and which to disable.
+                 */
+                UpdateSituation(); //TODO make 100% event based? -> new package from server triggers GUI update
+                UpdateDrawElements();
+                if (GameServerState.isShutdown()) {
+                    cancel();
+                }
+            }
+        }.runTimer(WarpMain.instance,1);
+    }
+
+    private static boolean isDropping = false;
+    private static boolean isEntry;
+    private static boolean isExit;
+    private static boolean isRSPSectorBlocked;
+    private static boolean isWarpSectorBlocked;
+    private static Vector3f noInhibition = new Vector3f((float)1622/1920,(float)928/1080,0.01f);
+    private static Vector3f onInhibition = new Vector3f((float) 1460/1920,(float) 928/1080,0f);
+    /**
+     * update player situation fields from WarpProcessMap
+     */
+    private static void UpdateSituation() {
+        //DebugFile.log("updating warp situation from WarpProcessMap: ");
+
+        isDropping = ( WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPDROP) == 1);
+
+        isExit = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPEXIT) == 1);
+
+        isEntry = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPENTRY) == 1);
+
+        isRSPSectorBlocked = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.RSPSECTORBLOCKED) == 1);
+
+        isWarpSectorBlocked = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.WARPSECTORBLOCKED) == 1);
+    }
+
+    /**
+     * updates which elements to draw/not draw based on info from situation update.
+     */
+    private static void UpdateDrawElements() {
+        PlayerState player = GameClientState.instance.getPlayer();
+        int i = 0;
+        long lastTime = System.currentTimeMillis();
+
+        if (player == null || player.getCurrentSector() == null) { //nullpointer check to avoid drawing before player spawns.
+            // DebugFile.log("playerstate is null or playersector is null");
+            player = GameClientState.instance.getPlayer();
+        } else {
+            SimpleTransformableSendableObject playerShip = player.getFirstControlledTransformableWOExc();
+
+            //turn of HUD if player is not controlling a ship
+            if (null == playerShip || !playerShip.isSegmentController() || GameClientState.instance.isInAnyBuildMode()) {
+                for (HUD_element.ElementType type: HUD_element.ElementType.values()) {
+                    HUDElementController.drawType(type,0);
+                }
+                return;
+            }
+
+
+            //draw decision making method
+
+            //not server situation dependent, 100% passive
+            HUDElementController.drawType(HUD_element.ElementType.BACKGROUND,1);
+            boolean isInWarp = WarpManager.IsInWarp(player.getCurrentSector());
+            if (isInWarp) {
+                HUDElementController.drawElement(SpriteList.WARP_ICON,true);
+                HUDElementController.drawElement(SpriteList.ICON_OUTLINE_WARP_TRAVEL,true);
+                HUDElementController.drawElement(SpriteList.ICON_OUTLINE_RSP_INACTIVE,true);
+            } else {
+                isDropping = false;
+                HUDElementController.drawElement(SpriteList.RSP_ICON,true);
+                HUDElementController.drawElement(SpriteList.ICON_OUTLINE_RSP_TRAVEL,true);
+                HUDElementController.drawElement(SpriteList.ICON_OUTLINE_WARP_INACTIVE,true);
+            }
+
+            //TODO make prettier check for processes
+            if (isDropping || isExit) {
+                //do blinking drop icon
+                if ((i % 12) <= 6) { //once a second
+                    HUDElementController.drawElement(SpriteList.ICON_OUTLINE_TO_RSP,true);
+                }
+            }
+
+            if (isEntry) {
+                //do blinking jump icon
+                if ((i % 12) <= 6) { //once a second
+                    HUDElementController.drawElement(SpriteList.ICON_OUTLINE_TO_WARP,true);
+                }
+            }
+
+            if (isWarpSectorBlocked) {
+                if (isInWarp) { //sector locked down
+                    HUDElementController.drawElement(SpriteList.ICON_OUTLINE_SECTOR_LOCKED_DOWN,true);
+                    HUDElementController.drawElement(SpriteList.ICON_OUTLINE_SECTOR_LOCKED_UP,true);
+                } else { //no jump upwards
+                    HUDElementController.drawElement(SpriteList.ICON_OUTLINE_WARP_BLOCKED,true);
+                }
+            }
+
+            if (isRSPSectorBlocked) {
+                if (isInWarp) {
+                    HUDElementController.drawElement(SpriteList.ICON_OUTLINE_RSP_BLOCKED,true);
+                } else {
+                    HUDElementController.drawElement(SpriteList.ICON_OUTLINE_SECTOR_LOCKED_DOWN,true);
+                    HUDElementController.drawElement(SpriteList.ICON_OUTLINE_SECTOR_LOCKED_UP,true);
+                }
+            }
+
+            //move HUD elements.
+            if (isRSPSectorBlocked || isWarpSectorBlocked) {
+                HUDElementController.drawElement(SpriteList.INFO_RIGHT,true);
+                console.setPos(onInhibition);
+                interdictionBox.getTextElement().text= "interdicted by: EvilEnemyShipThatsVeryEvIL /r next line?";
+            } else {
+                HUDElementController.clearType(HUD_element.ElementType.INFO_RIGHT);
+                console.setPos(noInhibition);
+                interdictionBox.getTextElement().text = "";
+            }
+        }
+        if (i % 25 == 0) {
+            lastTime = System.currentTimeMillis();
+        }
+        i ++;
+        if (i > 1000) {
+            i = 0;
+        }
+    }
+}

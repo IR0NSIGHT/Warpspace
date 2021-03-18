@@ -33,7 +33,9 @@ public enum SpriteList {
     ICON_OUTLINE_SECTOR_LOCKED_DOWN,
 
     ICON_OUTLINE_TO_RSP,    //yellow drop sign
-    ICON_OUTLINE_TO_WARP    //yellow up sign
+    ICON_OUTLINE_TO_WARP,    //yellow up sign
+
+    INFO_RIGHT              //right info box for inhibitor
     ;
 
 

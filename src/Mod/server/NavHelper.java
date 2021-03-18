@@ -73,7 +73,6 @@ public class NavHelper {
 
         }  catch (Exception e) {
             e.printStackTrace();
-            DebugFile.log(e.toString());
         }
     }
 }

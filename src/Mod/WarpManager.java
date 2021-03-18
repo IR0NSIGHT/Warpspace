@@ -38,6 +38,14 @@ public class WarpManager {
      * @return boolean, true if segmentcontrollers position is in warp
      */
     public static boolean IsInWarp(SegmentController object) {
+        if (object == null) {
+            DebugFile.log("isInWarp called with null object");
+            return false;
+        }
+        if (object.getSector(new Vector3i()) == null) {
+            DebugFile.log("isInWarp object has no sector:"+object.getName());
+            return false;
+        }
         return IsInWarp(object.getSector(new Vector3i()));
     }
 

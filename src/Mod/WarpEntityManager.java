@@ -1,4 +1,4 @@
-package Mod;
+package me.iron.WarpSpace.Mod;
 
 /**
  * STARMADE MOD
@@ -7,8 +7,8 @@ package Mod;
  * TIME: 16:42
  */
 
-import Mod.server.InWarpLoop;
 import api.DebugFile;
+import me.iron.WarpSpace.Mod.server.InWarpLoop;
 import org.schema.game.common.controller.SegmentController;
 
 import java.util.ArrayList;
@@ -51,6 +51,10 @@ public class WarpEntityManager {
      * @return boolean, true if a warp entity, false if not.
      */
     public static boolean isWarpEntity(SegmentController ship) {
+        if (ship == null) {
+            DebugFile.logError(new NullPointerException(),WarpMain.instance);
+            return false;
+        }
         if (shipsInWarp.contains(ship)) {
             return true;
         }

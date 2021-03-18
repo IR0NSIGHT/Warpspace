@@ -1,11 +1,10 @@
-package Mod.server;
+package me.iron.WarpSpace.Mod.server;
 
-import Mod.HUD.client.HUD_core;
-import Mod.HUD.client.WarpProcessController;
-import Mod.WarpEntityManager;
-import Mod.WarpJumpManager;
-import Mod.WarpMain;
-import Mod.WarpManager;
+import me.iron.WarpSpace.Mod.HUD.client.WarpProcessController;
+import me.iron.WarpSpace.Mod.WarpEntityManager;
+import me.iron.WarpSpace.Mod.WarpJumpManager;
+import me.iron.WarpSpace.Mod.WarpMain;
+import me.iron.WarpSpace.Mod.WarpManager;
 import api.DebugFile;
 import api.utils.StarRunnable;
 import api.utils.sound.AudioUtils;
@@ -18,7 +17,6 @@ import org.schema.schine.common.language.Lng;
 import org.schema.schine.network.server.ServerMessage;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * STARMADE MOD
@@ -38,14 +36,14 @@ public class InWarpLoop {
                     cancel();
                 }
                 try {
-                    if (!WarpEntityManager.isWarpEntity(ship) || GameServerState.isShutdown()) {
+                    if (!WarpEntityManager.isWarpEntity(ship)) {
                         //left warp
                     //    DebugFile.log("InWarpLoop was terminated bc server is shutdown or ship no longer in warp.");
                         cancel();
                     }
                     if (ship.getSpeedCurrent() < WarpManager.minimumSpeed) {
                         //TODO get better way of turning on and off drop warning
-                        WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,1);
+                        WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,1, new ArrayList<String>());
                         //WarpJumpManager.SendPlayerWarpSituation(ship, HUD_core.WarpSituation.JUMPDROP);
                         //ship is to slow, dropping out of warp!
                         if (countdown < lastWarning) {
@@ -62,7 +60,7 @@ public class InWarpLoop {
                         }
                         countdown --; //runs once a second
                     } else {
-                        WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,0);
+                        WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,0, new ArrayList<String>());
                         if (countdown < 10) {
                             countdown ++;
                             lastWarning = countdown;
@@ -78,7 +76,6 @@ public class InWarpLoop {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    DebugFile.log(e.toString());
                 }
             }
         }.runTimer(WarpMain.instance, 25);

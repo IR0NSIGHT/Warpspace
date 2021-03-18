@@ -1,4 +1,4 @@
-package Mod.HUD.client;
+package me.iron.WarpSpace.Mod.HUD.client;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.UnicodeFont;
@@ -19,6 +19,7 @@ public class TextElement extends GUITextOverlay {
 
 
     public String text = "";
+    public HUD_element parent;
     @Override
     public void onInit() {
         super.onInit();
@@ -32,7 +33,11 @@ public class TextElement extends GUITextOverlay {
 
     @Override
     public void draw() {
-     //   text = "system time " + System.currentTimeMillis();
+        if (parent == null) {
+            return;
+        }
+        setPos(parent.getTextElementPxPos());
+        text = parent.getText();
         super.draw();
     }
 }
