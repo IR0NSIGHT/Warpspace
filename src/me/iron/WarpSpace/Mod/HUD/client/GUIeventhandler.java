@@ -30,7 +30,7 @@ public class GUIeventhandler {
                     hudCreateEvent.addElement(el.getTextElement());
                     el.getTextElement().text = "";
                 }
-                HUD_core.interdictionBox.getTextElement().text = "I AM INTERDICTION!";
+                HUD_core.interdictionBox.getTextElement().text = "";
 
             }
 
