@@ -94,13 +94,14 @@ public class MyGameMapListener implements GameMapDrawListener
 		if (!WarpManager.IsInWarp(drawer.getPlayerSector())) return;
 		
 		Vector3i realCoords = WarpManager.GetRealSpacePos(drawer.getPlayerSector());
-		realCoords.scaleFloat(1f / (WarpManager.scale * 16));
+		realCoords.scaleFloat(1 / 16f);
 		
-		Vector3i galaxyPos = drawer.getState().getCurrentGalaxy().galaxyPos;
+		Vector3i galaxyPos = new Vector3i(drawer.getState().getCurrentGalaxy().galaxyPos);
 		Galaxy.getContainingGalaxyFromSystemPos(realCoords, galaxyPos);
 		
 		Sprite sprite = Controller.getResLoader().getSprite("stellarSprites-2x2-c-");
 		if (stars == null) return;
+		if (stars.get(galaxyPos) == null) return;
 		for(PositionableSubColorSprite[] sp : stars.get(galaxyPos).values())
 		{
 			DrawUtils.drawSprite(drawer, sprite, sp);

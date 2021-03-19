@@ -1,7 +1,9 @@
 package me.iron.WarpSpace.Mod.taswin;
 
 import api.listener.Listener;
+import api.listener.events.gui.HudCreateEvent;
 import api.listener.events.world.GalaxyFinishedGeneratingEvent;
+import api.listener.events.world.StarCreationAttemptEvent;
 import api.listener.fastevents.FastListenerCommon;
 import api.mod.StarLoader;
 import api.mod.StarMod;
@@ -9,10 +11,14 @@ import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.view.gamemap.GameMapDrawer;
+import org.schema.game.client.view.gui.shiphud.newhud.Radar;
 import org.schema.game.server.data.Galaxy;
+import org.schema.schine.common.language.Lng;
 import org.schema.schine.graphicsengine.forms.PositionableSubColorSprite;
 import org.schema.schine.graphicsengine.forms.Sprite;
+import org.schema.schine.graphicsengine.forms.gui.GUITextOverlay;
 
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
@@ -29,7 +35,7 @@ public class WarpSpaceMap
 		FastListenerCommon.gameMapListeners.remove(myGameMapListener);
 	}
 	
-	public static void enable(StarMod instance)
+	public static void enable(final StarMod instance)
 	{
 		myGameMapListener = new MyGameMapListener();
 		FastListenerCommon.gameMapListeners.add(myGameMapListener);
@@ -47,6 +53,21 @@ public class WarpSpaceMap
 				for (int i = 0; i < starPoses.size(); i++)
 				{
 					final int finalI = i;
+					final Vector4f color = galaxy.getSunColor(new Vector3i(starPoses.get(finalI)));
+					final int subSprite = galaxy.getSystemType(new Vector3i(starPoses.get(finalI)));
+					
+					Vector3f systemPos = starPoses.get(finalI);
+					
+					Vector3i sectorPos = new Vector3i((systemPos.x - Galaxy.halfSize) * 16, (systemPos.y - Galaxy.halfSize) * 16, (systemPos.z - Galaxy.halfSize) * 16);
+					final Vector3f pos = WarpManager.GetWarpSpacePos(sectorPos).toVector3f();
+					
+					Vector3f loaclOffset = galaxy.getSunPositionOffset(new Vector3i(systemPos), new Vector3i()).toVector3f();
+					loaclOffset.scale(1f / WarpManager.scale);
+					
+					pos.x = (pos.x + loaclOffset.x + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
+					pos.y = (pos.y + loaclOffset.y + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
+					pos.z = (pos.z + loaclOffset.z + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
+					
 					PositionableSubColorSprite[] s = new PositionableSubColorSprite[]
 						{
 							new PositionableSubColorSprite()
@@ -54,7 +75,7 @@ public class WarpSpaceMap
 								@Override
 								public Vector4f getColor()
 								{
-									return galaxy.getSunColor(new Vector3i(starPoses.get(finalI)));
+									return color;
 								}
 								
 								@Override
@@ -66,7 +87,7 @@ public class WarpSpaceMap
 								@Override
 								public int getSubSprite(Sprite sprite)
 								{
-									return galaxy.getSystemType(new Vector3i(starPoses.get(finalI)));
+									return subSprite;
 								}
 								
 								@Override
@@ -78,21 +99,6 @@ public class WarpSpaceMap
 								@Override
 								public Vector3f getPos()
 								{
-									Vector3f systemPos = starPoses.get(finalI);
-									
-									Vector3i sectorPos = new Vector3i(
-										(systemPos.x - Galaxy.halfSize) * 16,
-										(systemPos.y - Galaxy.halfSize) * 16,
-										(systemPos.z - Galaxy.halfSize) * 16);
-									Vector3f pos = WarpManager.GetWarpSpacePos(sectorPos).toVector3f();
-									
-									Vector3f loaclOffset = galaxy.getSunPositionOffset(new Vector3i(systemPos), new Vector3i()).toVector3f();
-									loaclOffset.scale(1f / WarpManager.scale);
-									
-									pos.x = (pos.x + loaclOffset.x + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
-									pos.y = (pos.y + loaclOffset.y + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
-									pos.z = (pos.z + loaclOffset.z + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
-									
 									return pos;
 								}
 							}
@@ -101,6 +107,52 @@ public class WarpSpaceMap
 					if (!stars.containsKey(galaxy.galaxyPos))
 						stars.put(galaxy.galaxyPos, new HashMap<Vector3f, PositionableSubColorSprite[]>());
 					stars.get(galaxy.galaxyPos).put(starPoses.get(i), s);
+				}
+			}
+		}, instance);
+		
+		StarLoader.registerListener(HudCreateEvent.class, new Listener<HudCreateEvent>()
+		{
+			@Override
+			public void onEvent(HudCreateEvent event)
+			{
+				final Radar r = event.getHud().getRadar();
+				GUITextOverlay l = (GUITextOverlay)(r.getChilds().get(1));
+				l.setTextSimple(new Object() {
+					@Override
+					public String toString() {
+						if (((GameClientState) r.getState()).getPlayer().isInTutorial()) {
+							return "<Tutorial>";
+						}
+						if (((GameClientState) r.getState()).getPlayer().isInPersonalSector()) {
+							return Lng.str("<Personal>");
+						}
+						if (((GameClientState) r.getState()).getPlayer().isInTestSector()) {
+							return Lng.str("<Test>");
+						}
+						if (WarpManager.IsInWarp(((GameClientState) r.getState()).getPlayer().getCurrentSector()))
+						{
+							return Lng.str("<Warp>\n" + WarpManager.GetRealSpacePos(((GameClientState) r.getState()).getPlayer().getCurrentSector()).toStringPure());
+						}
+						return ((GameClientState) r.getState()).getPlayer().getCurrentSector().toStringPure();
+					}
+				});
+			}
+		}, instance);
+		
+		StarLoader.registerListener(StarCreationAttemptEvent.class, new Listener<StarCreationAttemptEvent>()
+		{
+			@Override
+			public void onEvent(StarCreationAttemptEvent event)
+			{
+				Vector3i sectorPos = new Vector3i();
+				sectorPos.x = (event.getGalaxy().galaxyPos.x * Galaxy.size + event.getPosition().x - Galaxy.halfSize) * 16;
+				sectorPos.y = (event.getGalaxy().galaxyPos.y * Galaxy.size + event.getPosition().y - Galaxy.halfSize) * 16;
+				sectorPos.z = (event.getGalaxy().galaxyPos.z * Galaxy.size + event.getPosition().z - Galaxy.halfSize) * 16;
+				
+				if (WarpManager.IsInWarp(sectorPos))
+				{
+					event.setStarWeight((byte) 0);
 				}
 			}
 		}, instance);
