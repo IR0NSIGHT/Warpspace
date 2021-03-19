@@ -1,5 +1,6 @@
 package me.iron.WarpSpace.Mod;
 
+import api.DebugFile;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
 import api.listener.events.world.sector.SegmentControllerUnloadEvent;
@@ -37,6 +38,7 @@ public class WarpMain extends StarMod {
         instance = this;
         PacketUtil.registerPacket(PacketSCUpdateWarp.class);
         PacketUtil.registerPacket(PacketHUDUpdate.class);
+        DebugFile.log("registering HUD packet and SCUpdateWarp packet");
     }
 
     @Override

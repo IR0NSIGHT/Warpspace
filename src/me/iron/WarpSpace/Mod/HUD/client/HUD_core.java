@@ -76,12 +76,15 @@ public class HUD_core {
      * is called by me.iron.WarpSpace.Mod.network.PacketHUDUpdate, used to transfer information from the server to the client about what a player is currently doing related to warp.
      * Sets the received info to WarpProcessController to the ProcessMap
      */
-    public static void HUD_processPacket(WarpProcessController.WarpProcess s, Integer key) {
+    public static void HUD_processPacket(WarpProcessController.WarpProcess s, Integer key, List<String> processArray) {
         //TODO add method to get more precise data like time till warpdrop/jump etc.
         //priority: jump>drop>travel
         //travel kann nur
+        DebugFile.log("processing package on client");
+
         playerWarpState = s;
         WarpProcessController.WarpProcessMap.put(s, key);
+        UpdateSituation();
     }
 
     public static WarpProcessController.WarpProcess playerWarpState = WarpProcessController.WarpProcess.TRAVEL;
@@ -89,14 +92,14 @@ public class HUD_core {
         new StarRunnable() {
             PlayerState player = GameClientState.instance.getPlayer();
 
-            int i = 0;
+            int seconds = 0;
             long lastTime = System.currentTimeMillis();
             @Override
             public void run() {
                 /**
                  * this method checks for static variables like "is in warp" and decides what elements to draw on the HUD and which to disable.
                  */
-                UpdateSituation(); //TODO make 100% event based? -> new package from server triggers GUI update
+            //    UpdateSituation(); //TODO make 100% event based? -> new package from server triggers GUI update
                 if (player == null || player.getCurrentSector() == null) { //nullpointer check to avoid drawing before player spawns.
                    // DebugFile.log("playerstate is null or playersector is null");
                     player = GameClientState.instance.getPlayer();
@@ -134,14 +137,14 @@ public class HUD_core {
                     //TODO make prettier check for processes
                     if (isDropping || isExit) {
                         //do blinking drop icon
-                        if ((i % 12) <= 6) { //once a second
+                        if ((seconds % 2) == 1) { //once a second
                             HUDElementController.drawElement(SpriteList.ICON_OUTLINE_TO_RSP,true);
                         }
                     }
 
                     if (isEntry) {
                         //do blinking jump icon
-                        if ((i % 12) <= 6) { //once a second
+                        if ((seconds % 2) == 0) { //every 2 seconds
                             HUDElementController.drawElement(SpriteList.ICON_OUTLINE_TO_WARP,true);
                         }
                     }
@@ -168,17 +171,22 @@ public class HUD_core {
                     if (isRSPSectorBlocked || isWarpSectorBlocked) {
                         console.setPos(onInhibition);
                         interdictionBox.getTextElement().text= "interdicted by: EvilEnemyShipThatsVeryEvIL /r next line?";
+                        HUDElementController.drawElement(SpriteList.INFO_RIGHT,true);
                     } else {
                         console.setPos(noInhibition);
                         interdictionBox.getTextElement().text = "";
+                        HUDElementController.clearType(HUD_element.ElementType.INFO_RIGHT);
                     }
                 }
-                if (i % 25 == 0) {
-                    lastTime = System.currentTimeMillis();
+
+                //precise timer handling (not super precise but better than serverticks)
+                lastTime = System.currentTimeMillis();
+                if (System.currentTimeMillis() - lastTime > 1000) {
+                    //1 second passed
+                    seconds++;
                 }
-                i ++;
-                if (i > 1000) {
-                    i = 0;
+                if (seconds > 1000) {
+                    seconds = 0;
                 }
             }
         }.runTimer(WarpMain.instance,1);

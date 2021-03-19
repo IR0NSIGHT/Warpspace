@@ -14,6 +14,8 @@ import org.schema.game.server.data.GameServerState;
 import org.schema.game.server.data.PlayerNotFountException;
 import org.schema.schine.network.RegisteredClientOnServer;
 
+import java.util.ArrayList;
+
 /**
  * STARMADE MOD
  * CREATOR: Max1M
@@ -72,8 +74,8 @@ public class InterdictionHUDUpdateLoop {
                         warpinterdicted = 1;
                     }
                    // DebugFile.log("updating player on inhibition: " + player.getName() + warpPos.toString() + "warp " + warpinterdicted +rspPos.toString() + " rsp: " + rspinterdicted);
-                    WarpJumpManager.SendPlayerWarpSituation(player, WarpProcessController.WarpProcess.WARPSECTORBLOCKED,warpinterdicted);
-                    WarpJumpManager.SendPlayerWarpSituation(player, WarpProcessController.WarpProcess.RSPSECTORBLOCKED,rspinterdicted);
+                    WarpJumpManager.SendPlayerWarpSituation(player, WarpProcessController.WarpProcess.WARPSECTORBLOCKED,warpinterdicted, new ArrayList<String>());
+                    WarpJumpManager.SendPlayerWarpSituation(player, WarpProcessController.WarpProcess.RSPSECTORBLOCKED,rspinterdicted, new ArrayList<String>());
                 }
             }
         }.runTimer(WarpMain.instance,12);

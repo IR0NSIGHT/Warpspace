@@ -70,7 +70,7 @@ public class WarpJumpManager {
         //--------------after action is taken
         if (isJump) {
             ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
-            SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPEXIT, 1); //set exiting process to true
+            SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPEXIT, 1, new ArrayList<String>()); //set exiting process to true
         } else {
             //must be a speeddrop situation is already handeled by loop.
             //SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,1);
@@ -101,10 +101,10 @@ public class WarpJumpManager {
                 StarLoader.fireEvent(e, true);
 
                 if (isJump) {
-                    SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPEXIT, 0);
+                    SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPEXIT, 0, new ArrayList<String>());
                 } else {
                     //is a speeddrop (drop bc to slow)
-                    SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,0);
+                    SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,0, new ArrayList<String>());
                 }
 
 
@@ -146,7 +146,7 @@ public class WarpJumpManager {
         entryQueue.add(ship);
 
         //set entry process to true/happening
-        SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,1);
+        SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,1, new ArrayList<String>());
         ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
 
         new StarRunnable() {
@@ -166,7 +166,7 @@ public class WarpJumpManager {
                 StarLoader.fireEvent(e, true);
 
                 //for all attached players send travel update, bc drop is over
-                SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,0);
+                SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,0, new ArrayList<String>());
 
                 if (e.canceled) {
                     cancel();
@@ -375,9 +375,9 @@ public class WarpJumpManager {
      * @param s process thats happening
      * @param v value of process
      */
-    public static void SendPlayerWarpSituation(PlayerState p, WarpProcessController.WarpProcess s, Integer v) {
+    public static void SendPlayerWarpSituation(PlayerState p, WarpProcessController.WarpProcess s, Integer v, List<String> processArray) {
         //make packet with new wp, send it to players client
-        PacketHUDUpdate packet = new PacketHUDUpdate(s, v);
+        PacketHUDUpdate packet = new PacketHUDUpdate(s, v, processArray);
         PacketUtil.sendPacket(p, packet);
     }
 
@@ -387,11 +387,11 @@ public class WarpJumpManager {
      * @param process warpprocess
      * @param processValue value of warpprocess (0 = off, 1 = on)
      */
-    public static void SendPlayerWarpSituation(SegmentController sc, WarpProcessController.WarpProcess process, Integer processValue) {
+    public static void SendPlayerWarpSituation(SegmentController sc, WarpProcessController.WarpProcess process, Integer processValue, List<String> processArray) {
             if ((sc instanceof PlayerControllable && !((PlayerControllable)sc).getAttachedPlayers().isEmpty()))
             {
                 for (PlayerState p: ((PlayerControllable)sc).getAttachedPlayers()) {
-                    SendPlayerWarpSituation(p,process,processValue);
+                    SendPlayerWarpSituation(p,process,processValue, processArray);
                 }
             }
     }

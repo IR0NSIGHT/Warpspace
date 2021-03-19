@@ -16,6 +16,8 @@ import org.schema.game.server.data.GameServerState;
 import org.schema.schine.common.language.Lng;
 import org.schema.schine.network.server.ServerMessage;
 
+import java.util.ArrayList;
+
 /**
  * STARMADE MOD
  * CREATOR: Max1M
@@ -41,7 +43,7 @@ public class InWarpLoop {
                     }
                     if (ship.getSpeedCurrent() < WarpManager.minimumSpeed) {
                         //TODO get better way of turning on and off drop warning
-                        WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,1);
+                        WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,1, new ArrayList<String>());
                         //WarpJumpManager.SendPlayerWarpSituation(ship, HUD_core.WarpSituation.JUMPDROP);
                         //ship is to slow, dropping out of warp!
                         if (countdown < lastWarning) {
@@ -58,7 +60,7 @@ public class InWarpLoop {
                         }
                         countdown --; //runs once a second
                     } else {
-                        WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,0);
+                        WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,0, new ArrayList<String>());
                         if (countdown < 10) {
                             countdown ++;
                             lastWarning = countdown;

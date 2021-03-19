@@ -1,5 +1,6 @@
 package me.iron.WarpSpace.Mod.network;
 
+import api.DebugFile;
 import me.iron.WarpSpace.Mod.HUD.client.HUD_core;
 import me.iron.WarpSpace.Mod.HUD.client.WarpProcessController;
 import api.network.Packet;
@@ -38,6 +39,16 @@ public class PacketHUDUpdate extends Packet {
         this.warpProcess = warpProcess;
         this.processValue = processValue;
         this.processArray = processArray;
+        //DebugFile.log("sending HUD package to client with " + this.toString());
+    }
+
+    @Override
+    public String toString() {
+        return "PacketHUDUpdate{" +
+                "warpProcess=" + warpProcess +
+                ", processValue=" + processValue +
+                ", processArray=" + processArray.toString() +
+                '}';
     }
 
     /**
@@ -52,6 +63,7 @@ public class PacketHUDUpdate extends Packet {
         warpProcess = WarpProcessController.WarpProcess.valueOf(buf.readInt());
         processValue = buf.readInt();
         processArray = buf.readStringList();
+        //DebugFile.log("packet reading" + this.toString());
     }
 
     @Override
@@ -59,11 +71,13 @@ public class PacketHUDUpdate extends Packet {
         buf.writeInt(warpProcess.ordinal());
         buf.writeInt(processValue);
         buf.writeStringList(processArray);
+        //DebugFile.log("packet writing" + this.toString());
     }
 
     @Override
     public void processPacketOnClient() {
-        HUD_core.HUD_processPacket(warpProcess,processValue,processArray);
+        //DebugFile.log("packet class process packet on client " + this.toString());
+        HUD_core.HUD_processPacket(warpProcess,processValue, processArray);
     }
 
     @Override
