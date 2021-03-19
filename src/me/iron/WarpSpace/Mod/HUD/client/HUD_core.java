@@ -29,8 +29,8 @@ public class HUD_core {
      * some general HUD element placements to use a position references. any element built with these will move + scale with them
      */
     public static HUD_element console = new HUD_element(
-            new Vector3f((float)1622/1920,(float)928/1080,0.01f),
-            new Vector3f((float)0.314/1080,(float)0.314/1080,(float)1/1080),
+            new Vector3f((float)1435/1920,(float)975/1080,0.01f),
+            new Vector3f((float)0.25/1080,(float)0.25/1080,(float)1/1080),
             new Vector3f( 1,1,1),
             SpriteList.CONSOLE_HUD1024,
             HUD_element.ElementType.BACKGROUND);
@@ -78,7 +78,7 @@ public class HUD_core {
      */
     public static void HUD_processPacket(WarpProcessController.WarpProcess s, Integer key, List<String> processArray) {
         //TODO add method to get more precise data like time till warpdrop/jump etc.
-        DebugFile.log("processing package on client");
+        //DebugFile.log("processing package on client");
         playerWarpState = s;
         WarpProcessController.WarpProcessMap.put(s, key);
         UpdateSituation();

@@ -55,7 +55,7 @@ public class WarpJumpManager {
         countdown *= 25; //turn seconds into ticks
         //check if already dropping
         if (!force && dropQueue.contains(ship)) { //ship already has a drop queued, and doesnt force another one.
-            ship.sendControllingPlayersServerMessage(Lng.astr("Ship is already jumping"), ServerMessage.MESSAGE_TYPE_INFO);
+        //    ship.sendControllingPlayersServerMessage(Lng.astr("Ship is already jumping"), ServerMessage.MESSAGE_TYPE_INFO);
             //TODO abort already queued jump -> click to jump, click again to abort
             return;
         }
@@ -69,7 +69,6 @@ public class WarpJumpManager {
         //--------------before action is taken
         //--------------after action is taken
         if (isJump) {
-            ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
             SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPEXIT, 1, new ArrayList<String>()); //set exiting process to true
         } else {
             //must be a speeddrop situation is already handeled by loop.
@@ -120,9 +119,7 @@ public class WarpJumpManager {
                 }
                 //queue sector switch
                 doSectorSwitch(ship, sectorF,true);
-                ship.sendControllingPlayersServerMessage(Lng.astr("Dropping out of warp"), ServerMessage.MESSAGE_TYPE_INFO);
                 //TODO add visual effects
-                //TODO drop station to random pos
                 //navigationHelper.handlePilots(ship,intoWarp);
             }
         }.runLater(WarpMain.instance,countdown);
@@ -147,7 +144,7 @@ public class WarpJumpManager {
 
         //set entry process to true/happening
         SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,1, new ArrayList<String>());
-        ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
+        //ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
 
         new StarRunnable() {
             @Override
@@ -194,9 +191,6 @@ public class WarpJumpManager {
         sector.y = (int) Math.round(Math.random() * 200 - 100);
         sector.z = (int) Math.round(Math.random() * 1000 - 500);
         return sector;
-    }
-    private static void handleStation(SegmentController station) {
-        //currently unused.
     }
 
     public static void doSectorSwitch(SegmentController ship, Vector3i newPos, boolean instant) {

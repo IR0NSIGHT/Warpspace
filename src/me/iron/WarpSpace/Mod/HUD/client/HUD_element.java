@@ -19,9 +19,10 @@ class HUD_element {
     private Vector3f pxScale; //scale on current screen.
     private Vector3f moveStep; //used for moving the image, synched vector
     private HUD_element mother = null; //parent object which this element is attached to: uses its position and scale.
-    private TextElement textElement = null; //TODO make 100% sure textelements work here.
+    private TextElement textElement = null;
     private Vector3f textElementOffset = new Vector3f(0,0,0); //in percent of screen
-
+    //TODO refactor into easier inheritance class -> mother updates scale and pos, class only defines offset.
+    //TODO add lerp movement
     private Vector3f textElementPxPos; //absolute position of textelement
     private boolean drawCondition = true;
 

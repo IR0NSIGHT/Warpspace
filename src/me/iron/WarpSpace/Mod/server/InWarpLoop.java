@@ -46,18 +46,6 @@ public class InWarpLoop {
                         WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,1, new ArrayList<String>());
                         //WarpJumpManager.SendPlayerWarpSituation(ship, HUD_core.WarpSituation.JUMPDROP);
                         //ship is to slow, dropping out of warp!
-                        if (countdown < lastWarning) {
-                        //    DebugFile.log("warning player for countdown " + countdown + " and lastwarning " + lastWarning);
-                            ship.sendControllingPlayersServerMessage(Lng.astr("you are to slow! dropping out of warp in " + countdown), ServerMessage.MESSAGE_TYPE_WARNING);
-                            //send warning sound to players in ship
-                            if (ship.isConrolledByActivePlayer()) {
-                                for (PlayerState player: ((PlayerControllable)ship).getAttachedPlayers()) {
-                                //    DebugFile.log("##################### playing warning sound for " + player);
-                                    AudioUtils.serverPlaySound("0022_gameplay - low fuel warning constant beeps (loop)", 1F,1F,player);
-                                }
-                            }
-                            lastWarning = countdown;
-                        }
                         countdown --; //runs once a second
                     } else {
                         WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,0, new ArrayList<String>());
