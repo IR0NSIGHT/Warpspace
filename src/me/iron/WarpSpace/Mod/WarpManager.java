@@ -25,9 +25,15 @@ public class WarpManager {
     public static int scale = 10; //scale warpspace distance to realspace distance
 
     /**
+     * Galaxy size * System size * 64 + Galaxy size * System size * 64 / scale + System size * 2
+     * 64 galaxies realspace + 64 galaxies warpspace + 2 systems buffer.
+     */
+    public static int universeSize = Galaxy.size * 16 * 64;
+
+    /**
      * the offset of warpspace to the realspace sector on the y axis. Use a number outside of the galaxy: empty space
      */
-    public static int offset = (int)(Galaxy.size * 16 * 2 * (1 + 1f / scale)); //offset in sectors
+    public static int offset = (int)(universeSize * (1 + 1f / scale)) + 16 * 2; //offset in sectors
 
     /**
      *  minimum speed required to stay in warp
@@ -57,7 +63,7 @@ public class WarpManager {
      * @return boolean, true if position is in warp
      */
     public static boolean IsInWarp(Vector3i pos) {
-        if (pos.y >= offset - (Galaxy.size * 16 * 2 / scale) && pos.y <= offset + (Galaxy.size * 16 * 2 / scale)) {
+        if (pos.y >= offset - (universeSize / scale) && pos.y <= offset + (universeSize / scale)) {
             return true;
         }
         return false;
@@ -76,10 +82,10 @@ public class WarpManager {
         realPosF.z = Math.round(realPosF.z / scale);
         realPosF.y += offset; //offset sectors to up (y axis)
         warpPos = new Vector3i(realPosF.x,realPosF.y,realPosF.z);
-    
+
         return warpPos;
     }
-    
+
     /**
      * Calculate the realspace position from a warpspace position
      * @param WarpSpacePos sector in warpspace
@@ -93,20 +99,7 @@ public class WarpManager {
         warpPosF.y = Math.round(warpPosF.y * scale);
         warpPosF.z = Math.round(warpPosF.z * scale);
         realPos = new Vector3i(warpPosF.x,warpPosF.y,warpPosF.z);
-    
-        return realPos;
-    }
 
-    /**
-     * return sector matching this other dimension sector. goes both ways
-     * @param sector sector
-     * @return sector in other dimension
-     */
-    public static Vector3i GetPartnerPos(Vector3i sector) {
-        if (IsInWarp(sector)) {
-            return GetRealSpacePos(sector);
-        } else {
-            return GetWarpSpacePos(sector);
-        }
+        return realPos;
     }
 }

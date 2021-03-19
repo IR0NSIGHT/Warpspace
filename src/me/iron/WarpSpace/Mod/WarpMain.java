@@ -1,9 +1,7 @@
 package me.iron.WarpSpace.Mod;
 
-import api.DebugFile;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
-import api.listener.events.world.sector.SegmentControllerUnloadEvent;
 import api.mod.StarMod;
 import api.network.packets.PacketUtil;
 import me.iron.WarpSpace.Mod.HUD.client.*;
@@ -13,7 +11,7 @@ import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpEventHandler;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.network.PacketSCUpdateWarp;
-import org.schema.game.common.controller.SegmentController;
+import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
 
 /**
  * STARMADE MOD
@@ -38,9 +36,15 @@ public class WarpMain extends StarMod {
         instance = this;
         PacketUtil.registerPacket(PacketSCUpdateWarp.class);
         PacketUtil.registerPacket(PacketHUDUpdate.class);
-        DebugFile.log("registering HUD packet and SCUpdateWarp packet");
+        
+        WarpSpaceMap.enable(instance);
     }
-
+    
+    @Override
+    public void onDisable() {
+        WarpSpaceMap.disable();
+    }
+    
     @Override
     public void onServerCreated(ServerInitializeEvent event) {
         super.onServerCreated(event);
