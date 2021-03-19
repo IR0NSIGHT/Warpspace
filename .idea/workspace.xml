@@ -26,26 +26,18 @@
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:dev" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:master" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8c523fa4-e7d5-44e8-bcf5-bc1a977fd3a9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/DebugChatEvent$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/testing/DebugChatEvent$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/DebugChatEvent.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/testing/DebugChatEvent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/WarpSector$inhibitEffect.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/testing/WarpSector$inhibitEffect.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/WarpSector.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/testing/WarpSector.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/testing/main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/HUD_core.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/HUD_core.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/Interdiction/InterdictionHUDUpdateLoop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/Interdiction/InterdictionHUDUpdateLoop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpJumpManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpJumpManager.java" afterDir="false" />
+    <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.run/SM with warpspace.run.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/taswin/MyGameMapListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/taswin/WarpSpaceMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/network/PacketHUDUpdate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/network/PacketHUDUpdate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/server/InWarpLoop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/server/InWarpLoop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starloader.log" beforeDir="false" afterPath="$PROJECT_DIR$/starloader.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,7 +150,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="dev" />
+                        <option value="master" />
                       </list>
                     </value>
                   </entry>
@@ -232,6 +224,10 @@
       <screen x="1920" y="32" width="1536" height="832" />
     </state>
     <state width="1493" height="289" key="GridCell.Tab.1.right/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616186556737" />
+    <state x="2327" y="206" key="MultipleFileMergeDialog" timestamp="1616192089209">
+      <screen x="1920" y="32" width="1536" height="832" />
+    </state>
+    <state x="2327" y="206" key="MultipleFileMergeDialog/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616192089209" />
     <state x="2272" y="32" key="SettingsEditor" timestamp="1616179741097">
       <screen x="1920" y="32" width="1536" height="832" />
     </state>

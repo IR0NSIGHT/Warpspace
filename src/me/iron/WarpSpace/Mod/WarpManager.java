@@ -9,7 +9,9 @@ package me.iron.WarpSpace.Mod;
 
 import api.DebugFile;
 import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.client.view.gamemap.GameMapDrawer;
 import org.schema.game.common.controller.SegmentController;
+import org.schema.game.server.data.Galaxy;
 
 import javax.vecmath.Vector3f;
 
@@ -25,7 +27,7 @@ public class WarpManager {
     /**
      * the offset of warpspace to the realspace sector on the y axis. Use a number outside of the galaxy: empty space
      */
-    public static int offset = 150; //offset in sectors
+    public static int offset = (int)(Galaxy.size * 16 * 2 * (1 + 1f / scale)); //offset in sectors
 
     /**
      *  minimum speed required to stay in warp
@@ -55,7 +57,7 @@ public class WarpManager {
      * @return boolean, true if position is in warp
      */
     public static boolean IsInWarp(Vector3i pos) {
-        if (pos.y >= offset) {
+        if (pos.y >= offset - (Galaxy.size * 16 * 2 / scale) && pos.y <= offset + (Galaxy.size * 16 * 2 / scale)) {
             return true;
         }
         return false;
@@ -72,27 +74,27 @@ public class WarpManager {
         realPosF.x = Math.round(realPosF.x / scale);
         realPosF.y = Math.round(realPosF.y / scale);
         realPosF.z = Math.round(realPosF.z / scale);
-        realPosF.y += offset * 2; //offset sectors to up (y axis)
+        realPosF.y += offset; //offset sectors to up (y axis)
         warpPos = new Vector3i(realPosF.x,realPosF.y,realPosF.z);
-
+    
         return warpPos;
     }
-
+    
     /**
      * Calculate the realspace position from a warpspace position
      * @param WarpSpacePos sector in warpspace
      * @return correlating sector in realspace
      */
     public static Vector3i GetRealSpacePos(Vector3i WarpSpacePos) {
-        Vector3i warpPos;
-        Vector3f realPosF = WarpSpacePos.toVector3f();
-        realPosF.y -= offset * 2; //offset sectors to up (y axis)
-        realPosF.x = Math.round(realPosF.x * scale);
-        realPosF.y = Math.round(realPosF.y * scale);
-        realPosF.z = Math.round(realPosF.z * scale);
-        warpPos = new Vector3i(realPosF.x,realPosF.y,realPosF.z);
-
-        return warpPos;
+        Vector3i realPos;
+        Vector3f warpPosF = WarpSpacePos.toVector3f();
+        warpPosF.y -= offset; //offset sectors to up (y axis)
+        warpPosF.x = Math.round(warpPosF.x * scale);
+        warpPosF.y = Math.round(warpPosF.y * scale);
+        warpPosF.z = Math.round(warpPosF.z * scale);
+        realPos = new Vector3i(warpPosF.x,warpPosF.y,warpPosF.z);
+    
+        return realPos;
     }
 
     /**
