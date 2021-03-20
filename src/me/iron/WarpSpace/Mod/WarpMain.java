@@ -12,6 +12,7 @@ import me.iron.WarpSpace.Mod.server.WarpJumpEventHandler;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.network.PacketSCUpdateWarp;
 import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
+import me.iron.WarpSpace.Mod.visuals.BackgroundEventListener;
 
 /**
  * STARMADE MOD
@@ -33,6 +34,7 @@ public class WarpMain extends StarMod {
     @Override
     public void onEnable() {
         super.onEnable();
+        BackgroundEventListener.AddListener(); //add background color listener
         instance = this;
         PacketUtil.registerPacket(PacketSCUpdateWarp.class);
         PacketUtil.registerPacket(PacketHUDUpdate.class);
