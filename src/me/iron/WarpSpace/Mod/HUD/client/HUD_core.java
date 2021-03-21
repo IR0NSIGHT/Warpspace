@@ -75,12 +75,14 @@ public class HUD_core {
     /**
      * is called by me.iron.WarpSpace.Mod.network.PacketHUDUpdate, used to transfer information from the server to the client about what a player is currently doing related to warp.
      * Sets the received info to WarpProcessController to the ProcessMap, allows additional info in processarray. dependent on what process is updated.
+     * @param value x
+     * @param process x
+     * @param processArray x
      */
-    public static void HUD_processPacket(WarpProcessController.WarpProcess s, Integer key, List<String> processArray) {
+    public static void HUD_processPacket(WarpProcessController.WarpProcess process, Integer value, List<String> processArray) {
         //TODO add method to get more precise data like time till warpdrop/jump etc.
-        //DebugFile.log("processing package on client");
-        playerWarpState = s;
-        WarpProcessController.WarpProcessMap.put(s, key);
+        playerWarpState = process;
+        WarpProcessController.WarpProcessMap.put(process, value);
         UpdateSituation();
     }
 

@@ -18,8 +18,6 @@ public class WarpJumpEventHandler { //TODO is this obsolete?
         StarLoader.registerListener(WarpJumpEvent.class,new Listener<WarpJumpEvent>() {
             @Override
             public void onEvent(WarpJumpEvent event) {
-                //FIXME remove debug message
-
                 //change players nav tool
                 boolean toWarp = (event.getType().equals(WarpJumpEvent.WarpJumpType.ENTRY));
                 NavHelper.handlePilots(event.getShip(), toWarp);

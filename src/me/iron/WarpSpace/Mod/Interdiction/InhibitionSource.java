@@ -1,6 +1,7 @@
 package me.iron.WarpSpace.Mod.Interdiction;
 
 /**
+ * NOT USED
  * wrapper class that gives info about the object causing inhibition.
  */
 public class InhibitionSource {

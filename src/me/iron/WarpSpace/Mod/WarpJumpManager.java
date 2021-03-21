@@ -183,7 +183,7 @@ public class WarpJumpManager {
 
     /**
      * get a random sector in a 500 x 100 x 500 radius
-     * @return
+     * @return random pos Vector3i
      */
     private static Vector3i getRandomSector() {
         Vector3i sector = new Vector3i();
@@ -271,7 +271,7 @@ public class WarpJumpManager {
      * check if this ship is/would be interdicted at specified position.
      * @param ship ship
      * @param position positon to check from
-     * @return
+     * @return true if interdicted
      */
     public static boolean isInterdicted(SegmentController ship, Vector3i position) {
         //TODO add interdiction check for target sector
@@ -356,8 +356,8 @@ public class WarpJumpManager {
 
     /**
      * check if ship is interdicted at its current position
-     * @param ship
-     * @return
+     * @param ship ship to check for
+     * @return true if is interdicted
      */
     public static boolean isInterdicted(SegmentController ship) {
         return isInterdicted(ship,ship.getSector(new Vector3i()));
@@ -368,6 +368,7 @@ public class WarpJumpManager {
      * @param p playerstate player
      * @param s process thats happening
      * @param v value of process
+     * @param processArray extra info, not used atm
      */
     public static void SendPlayerWarpSituation(PlayerState p, WarpProcessController.WarpProcess s, Integer v, List<String> processArray) {
         //make packet with new wp, send it to players client
@@ -380,6 +381,7 @@ public class WarpJumpManager {
      * @param sc ship
      * @param process warpprocess
      * @param processValue value of warpprocess (0 = off, 1 = on)
+     * @param processArray extra info, not used atm
      */
     public static void SendPlayerWarpSituation(SegmentController sc, WarpProcessController.WarpProcess process, Integer processValue, List<String> processArray) {
             if ((sc instanceof PlayerControllable && !((PlayerControllable)sc).getAttachedPlayers().isEmpty()))

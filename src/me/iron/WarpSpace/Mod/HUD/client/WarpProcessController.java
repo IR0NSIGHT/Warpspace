@@ -12,7 +12,7 @@ import java.util.Map;
 public class WarpProcessController {
     /**
      * map that contains all warp related processes of this player with their current state: 0 not happening, 1 happening.
-     * Example: warpEntry 1 -> currently charging drive trying to enter into warp.
+     * Example: warpEntry 1 -- currently charging drive trying to enter into warp.
      */
     public static HashMap<WarpProcess,Integer> WarpProcessMap = new HashMap<>();
     public static void initMap() {

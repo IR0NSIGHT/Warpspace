@@ -26,12 +26,18 @@ class HUD_element {
     private Vector3f textElementPxPos; //absolute position of textelement
     private boolean drawCondition = true;
 
+    /**
+     * attached children that get scaled and moved with the original.
+     */
     private List<HUD_element> children = new ArrayList<HUD_element>();
     public SpriteList enumValue;
     public CustomHudImage image;
     public boolean playShutter = false;
     public ElementType type;
 
+    /**
+     * type to group elements.
+     */
     public enum ElementType {
         LOWER_BAR,
         UPPER_Bar,
@@ -46,10 +52,11 @@ class HUD_element {
      *
      * @param pos       position in % on Full HD screen.
      * @param scale     scale in % on full hd screen
-     * @param moveStep
-     * @param enumValue
-     * @param type
+     * @param moveStep x
+     * @param enumValue x
+     * @param type x
      */
+    //TODO is this still needed?
     public HUD_element(Vector3f pos, Vector3f scale, Vector3f moveStep, SpriteList enumValue, ElementType type) {
         this.enumValue = enumValue;
         this.type = type;
@@ -62,7 +69,7 @@ class HUD_element {
     }
 
     /**
-     * @param reference what position/scale group this belongs to. used for moving & scaling.
+     * @param reference what position or scale group this belongs to. used for moving and scaling.
      * @param image     image to use (from spritelist)
      * @param type      up, down, background, etc, used for collectivley drawing or disabling.
      */
@@ -96,8 +103,7 @@ class HUD_element {
     }
 
     /**
-     * set new position with time it takes to reach that pos
-     *
+     * set new position with time it takes to reach that pos !!doesnt lerp atm, planned feature
      * @param relPos   target position relative in % of screen. f.e. center = 0.5,0.5,0
      * @param lerpTime time to fullfill movement
      */
@@ -107,17 +113,15 @@ class HUD_element {
 
     /**
      * returns copy of position
-     *
-     * @return
+     * @return position
      */
     public Vector3f getPos() {
         return new Vector3f(pos);
     }
 
     /**
-     * sets position to new value
-     *
-     * @param pos
+     * sets position to new value, is inhertied from attached children.
+     * @param pos position
      */
     public void setPos(Vector3f pos) {
         this.pos.set(pos);
@@ -132,9 +136,8 @@ class HUD_element {
     }
 
     /**
-     * returns copy of scale (% of screen)
-     *
-     * @return
+     * returns copy of scale (% of screen) (screen or orgininal sprite?) //TODO findout
+     * @return scale
      */
     public Vector3f getScale() {
         return new Vector3f(scale);
@@ -142,8 +145,7 @@ class HUD_element {
 
     /**
      * sets scale to new values.
-     *
-     * @param scale
+     * @param scale scale in percent of original image (i think?) //TODO findout
      */
     public void setScale(Vector3f scale) {
         this.scale.set(scale);
@@ -157,6 +159,10 @@ class HUD_element {
         return moveStep;
     }
 
+    /**
+     * not used yet. intended for lerped movement.
+     * @param moveStep x
+     */
     public void setMoveStep(Vector3f moveStep) {
         this.moveStep = moveStep;
         //no synch to children necessary bc they inherit position anyways
@@ -173,34 +179,33 @@ class HUD_element {
 
     /**
      * sets pixelposition on screen to this value.
-     *
-     * @param pxPos
+     * @param pxPos absolute position on screen
      */
     public void setPxPos(Vector3f pxPos) {
         this.pxPos = new Vector3f(pxPos);
     }
 
     /**
-     * returns copy of scale of image on current screen. !not size of image in pixel, but abstract scale
-     *
-     * @return
+     * returns copy of scale of image on current screen. !not size of image in pixel, but abstract scale !!IDK what this is anymore. marked with todo
+     * @return ?
      */
+    //TODO what does this do, what does this mean
     public Vector3f getPxScale() {
         return new Vector3f(pxScale);
     }
 
     /**
      * sets value for scale on current screen.
-     *
-     * @param pxScale
+     * @param pxScale scale in pixels
      */
+    //is this actual scale after doing all inheriting stuff etc?
     public void setPxScale(Vector3f pxScale) {
         this.pxScale = new Vector3f(pxScale);
     }
 
     /**
      * get children objects that are attached to this HUDelement.
-     * @return
+     * @return list of attached children
      */
     public List<HUD_element> getChildren() {
         return children;
@@ -208,7 +213,7 @@ class HUD_element {
 
     /**
      * add a child element which is moved and scaled with this HUD element
-     * @param child
+     * @param child HUD element child to be attached
      */
     public void addChild(HUD_element child) {
         this.children.add(child);
@@ -216,7 +221,7 @@ class HUD_element {
 
     /**
      * return the attached textelement, null if doesnt exist
-     * @return
+     * @return textelement
      */
     public TextElement getTextElement() {
         return textElement;
@@ -224,7 +229,7 @@ class HUD_element {
 
     /**
      * set textelement to be attached to this HUD element.
-     * @param textElement
+     * @param textElement element which should be attached.
      */
     public void setTextElement(TextElement textElement) {
         this.textElement = textElement;
@@ -233,7 +238,8 @@ class HUD_element {
 
     /**
      * offset textelement from
-     * @param offset
+     * @param offset vector3f offset from attached position.
+     * @param absolute use absolute (true) or relative (false)
      */
     public void setTextElementOffset(Vector3f offset, boolean absolute) {
         if (absolute) {
@@ -259,8 +265,8 @@ class HUD_element {
     }
 
     /**
-     * set draw condition for this hud element
-     * @param drawCondition
+     * set draw condition for this hud element. doesnt work
+     * @param drawCondition condition on which to draw element.
      */
     public void setDrawCondition(boolean drawCondition) {
         this.drawCondition = drawCondition;

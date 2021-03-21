@@ -6,6 +6,9 @@ import me.iron.WarpSpace.Mod.WarpMain;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * not used. intended for allowing a mod config later on.
+ */
 public class ConfigManager {
     public static String configName = "WarpSpaceConfig.yml";
     public enum entries {
