@@ -1,5 +1,7 @@
 package me.iron.WarpSpace.Mod.taswin;
 
+import api.DebugFile;
+import api.common.GameServer;
 import api.listener.Listener;
 import api.listener.events.gui.HudCreateEvent;
 import api.listener.events.world.GalaxyFinishedGeneratingEvent;
@@ -7,18 +9,26 @@ import api.listener.events.world.StarCreationAttemptEvent;
 import api.listener.fastevents.FastListenerCommon;
 import api.mod.StarLoader;
 import api.mod.StarMod;
+import api.utils.StarRunnable;
+import api.utils.game.PlayerUtils;
+import api.utils.game.SegmentControllerUtils;
+import com.bulletphysics.dynamics.RigidBody;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
+import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.client.view.gamemap.GameMapDrawer;
 import org.schema.game.client.view.gui.shiphud.newhud.Radar;
+import org.schema.game.common.controller.SegmentController;
+import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.server.data.Galaxy;
 import org.schema.schine.common.language.Lng;
 import org.schema.schine.graphicsengine.forms.PositionableSubColorSprite;
 import org.schema.schine.graphicsengine.forms.Sprite;
 import org.schema.schine.graphicsengine.forms.gui.GUITextOverlay;
+import org.schema.schine.network.objects.Sendable;
 
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
@@ -61,12 +71,12 @@ public class WarpSpaceMap
 					Vector3i sectorPos = new Vector3i((systemPos.x - Galaxy.halfSize) * 16, (systemPos.y - Galaxy.halfSize) * 16, (systemPos.z - Galaxy.halfSize) * 16);
 					final Vector3f pos = WarpManager.GetWarpSpacePos(sectorPos).toVector3f();
 					
-					Vector3f loaclOffset = galaxy.getSunPositionOffset(new Vector3i(systemPos), new Vector3i()).toVector3f();
-					loaclOffset.scale(1f / WarpManager.scale);
+					Vector3f localOffset = galaxy.getSunPositionOffset(new Vector3i(systemPos), new Vector3i()).toVector3f();
+					localOffset.scale(1f / WarpManager.scale);
 					
-					pos.x = (pos.x + loaclOffset.x + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
-					pos.y = (pos.y + loaclOffset.y + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
-					pos.z = (pos.z + loaclOffset.z + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
+					pos.x = (pos.x + localOffset.x + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
+					pos.y = (pos.y + localOffset.y + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
+					pos.z = (pos.z + localOffset.z + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
 					
 					PositionableSubColorSprite[] s = new PositionableSubColorSprite[]
 						{
@@ -117,17 +127,22 @@ public class WarpSpaceMap
 			public void onEvent(HudCreateEvent event)
 			{
 				final Radar r = event.getHud().getRadar();
-				GUITextOverlay l = (GUITextOverlay)(r.getChilds().get(1));
-				l.setTextSimple(new Object() {
+				GUITextOverlay l = (GUITextOverlay) (r.getChilds().get(1));
+				l.setTextSimple(new Object()
+				{
 					@Override
-					public String toString() {
-						if (((GameClientState) r.getState()).getPlayer().isInTutorial()) {
+					public String toString()
+					{
+						if (((GameClientState) r.getState()).getPlayer().isInTutorial())
+						{
 							return "<Tutorial>";
 						}
-						if (((GameClientState) r.getState()).getPlayer().isInPersonalSector()) {
+						if (((GameClientState) r.getState()).getPlayer().isInPersonalSector())
+						{
 							return Lng.str("<Personal>");
 						}
-						if (((GameClientState) r.getState()).getPlayer().isInTestSector()) {
+						if (((GameClientState) r.getState()).getPlayer().isInTestSector())
+						{
 							return Lng.str("<Test>");
 						}
 						if (WarpManager.IsInWarp(((GameClientState) r.getState()).getPlayer().getCurrentSector()))
@@ -156,6 +171,45 @@ public class WarpSpaceMap
 				}
 			}
 		}, instance);
+		
+		new StarRunnable()
+		{
+			@Override
+			public void run()
+			{
+				if (GameServer.getServerState() != null)
+				{
+					for (PlayerState player : GameServer.getServerState().getPlayerStatesByName().values())
+					{
+						PlayerControllable currentControl = PlayerUtils.getCurrentControl(player);
+						if (currentControl instanceof SegmentController)
+						{
+							Vector3i sectorPos = ((SegmentController) currentControl).getSector(new Vector3i());
+							if (WarpManager.IsInWarp(sectorPos))
+								return;//sectorPos = WarpManager.GetRealSpacePos(sectorPos);
+							if (Math.abs(sectorPos.y) >= WarpManager.universeHalfSize)
+							{
+								player.sendClientMessage("Out of bounds pushing you back in.", 3);
+								Sendable[] sendables = SegmentControllerUtils.getDualSidedSendable((SegmentController)currentControl);
+								float distanceOverBorder = Math.abs(sectorPos.y) - WarpManager.universeHalfSize;
+								float maxSpeed = ((SegmentController)currentControl).getMaxServerSpeed();
+								
+								for (Sendable s : sendables)
+								{
+									RigidBody rigidBody = (RigidBody) ((SegmentController) s).getPhysicsObject();
+									Vector3f linearVelocity = new Vector3f(rigidBody.getLinearVelocity(new Vector3f()));
+									
+									if (distanceOverBorder > 0)
+										linearVelocity.y = 1.5f * maxSpeed * (sectorPos.y >= 0 ? -1 : 1);
+									else if (Math.abs(linearVelocity.y) > maxSpeed || (linearVelocity.y * (sectorPos.y >= 0 ? 1 : -1) > 0))
+										linearVelocity.y = 0;
+									rigidBody.setLinearVelocity(linearVelocity);
+								}
+							}
+						}
+					}
+				}
+			}
+		}.runTimer(instance, 1);
 	}
-	
 }

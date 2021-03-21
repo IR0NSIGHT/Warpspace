@@ -8,7 +8,6 @@ package me.iron.WarpSpace.Mod;
  */
 
 import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.client.view.gamemap.GameMapDrawer;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.server.data.Galaxy;
 
@@ -27,12 +26,13 @@ public class WarpManager {
      * Galaxy size * System size * 64 + Galaxy size * System size * 64 / scale + System size * 2
      * 64 galaxies realspace + 64 galaxies warpspace + 2 systems buffer.
      */
-    public static int universeSize = Galaxy.size * 16 * 64;
+    public static int universeSize = Galaxy.size * 16 * 127;
+    public static int universeHalfSize = universeSize / 2;
     
     /**
      * the offset of warpspace to the realspace sector on the y axis. Use a number outside of the galaxy: empty space
      */
-    public static int offset = (int)(universeSize * (1 + 1f / scale)) + 16 * 2; //offset in sectors
+    public static int offset = (int)(universeHalfSize * (1 + 1f / scale)) + 16 * 2; //offset in sectors
 
     /**
      *  minimum speed required to stay in warp
@@ -54,7 +54,7 @@ public class WarpManager {
      * @return boolean, true if position is in warp
      */
     public static boolean IsInWarp(Vector3i pos) {
-        if (pos.y >= offset - (universeSize / scale) && pos.y <= offset + (universeSize / scale)) {
+        if (pos.y >= offset - (universeHalfSize / scale) && pos.y <= offset + (universeHalfSize / scale)) {
             return true;
         }
         return false;
