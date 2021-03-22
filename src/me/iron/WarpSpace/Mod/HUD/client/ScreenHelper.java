@@ -17,10 +17,10 @@ import java.awt.*;
  */
 public class ScreenHelper {
     /**
-     * adjust given position in % of screen to current resolution. center: (0.5,0.5,0) -> pxPos (1920/2,1080/2,0) (assuming current screen is full HD).
+     * adjust given position in % of screen to current resolution. center: (0.5,0.5,0) -- pxPos (1920/2,1080/2,0) (assuming current screen is full HD).
      * creates new vector.
-     * @param pos
-     * @return
+     * @param pos relative position in percent on screen
+     * @return position in absolute pixels
      */
     public static Vector3f relPosToPixelPos(Vector3f pos) {
         return relPosToPixelPos(pos,false);
@@ -28,9 +28,9 @@ public class ScreenHelper {
 
     /**
      * get pixel position from relative screen positon, use only screenwidth to scale
-     * @param pos
+     * @param pos relative position in percent on screen
      * @param onlyWidth only use screenwidht to scale pos vector
-     * @return
+     * @return position in absolute pixels
      */
     public static Vector3f relPosToPixelPos(Vector3f pos, boolean onlyWidth) {
         Vector3f screenRes = getCurrentScreenResolution();
@@ -45,9 +45,9 @@ public class ScreenHelper {
 
     /**
      * get relative position on screen from pixel position
-     * @param pos
-     * @param onlyWidth
-     * @return
+     * @param pos pixel position
+     * @param onlyWidth use only width for x and y(for quadratic scaling on resolutionchange)
+     * @return relative screenpos in percent
      */
     public static Vector3f pixelPosToRelPos(Vector3f pos, boolean onlyWidth) {
         Vector3f screenRes = getCurrentScreenResolution();
@@ -77,7 +77,7 @@ public class ScreenHelper {
     /**
      * multiplies every position of a with corresponding pos of b: (a.x * b.x, a.y * b.y, a. z * b.z)
      * @param a Vector to be mutated
-     * @param b
+     * @param b vector which is used to mutate a
      */
     public static void scaleMultiply(Vector3f a, Vector3f b) {
         Vector3f aClone = new Vector3f(a);
@@ -91,9 +91,9 @@ public class ScreenHelper {
 
     /**
      * get the vector from position a to position b
-     * @param a
-     * @param b
-     * @return new vector a->b
+     * @param a point a
+     * @param b point b
+     * @return new vector a--b
      */
     public static Vector3f getDirection(Vector3f a, Vector3f b) {
         //b minus a
@@ -107,7 +107,7 @@ public class ScreenHelper {
      * returns distance between two points
      * @param a point a
      * @param b point b
-     * @return
+     * @return euclidean distance as float
      */
     public static float getDistance (Vector3f a, Vector3f b) {
         return getDirection(a,b).length();

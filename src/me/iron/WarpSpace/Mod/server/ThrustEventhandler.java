@@ -17,6 +17,7 @@ import org.schema.game.common.data.ManagedSegmentController;
  * CREATOR: Max1M
  * DATE: 16.12.2020
  * TIME: 00:33
+ * NOT USED BC DOESNT WORK //TODO zombie code
  * intercept the thrust calculation event provided by vanilla code and overwrite it with a different value for warpships
  */
 public class ThrustEventhandler {

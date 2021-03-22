@@ -18,7 +18,7 @@ import org.schema.game.server.data.GameServerState;
 import java.util.Map;
 
 /**
- * a loop that runs regularly and checks all ships if they are in warp or not. passes the ships to the warpshipmanager
+ * a loop that runs regularly and checks all loaded ships if they are in warp or not. passes the ships to the warpshipmanager
  */
 public class WarpCheckLoop {
     /**

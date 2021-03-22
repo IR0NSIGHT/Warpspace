@@ -16,7 +16,7 @@ import api.mod.StarLoader;
 import org.schema.common.util.linAlg.Vector3i;
 
 /**
- * eventhandler class that will detect FTL jumps, abort them and instead issue a warp entry or warpdrop.
+ * eventhandler class that will detect vanilla FTL jumps, abort them and instead issue a warp entry or warpdrop.
  */
 public class WarpJumpListener {
     /**
