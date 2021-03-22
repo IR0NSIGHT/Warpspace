@@ -25,15 +25,17 @@
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:master" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:hotfix" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/visuals/BackgroundEventListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.run/SM with warpspace.run.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.run/SM with warpspace.run.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/WarpSector$inhibitEffect.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/WarpSector.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Warpspace/testing/main.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +173,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="hotfix" />
                       </list>
                     </value>
                   </entry>
@@ -264,23 +266,23 @@
       <screen x="1920" y="32" width="1536" height="832" />
     </state>
     <state width="1493" height="348" key="GridCell.Tab.1.right/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616249121615" />
-    <state x="1920" y="32" key="MergeDialog" timestamp="1616192715479">
+    <state x="1920" y="32" key="MergeDialog" timestamp="1616450950098">
       <screen x="1920" y="32" width="1536" height="832" />
     </state>
-    <state x="1920" y="32" key="MergeDialog/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616192715479" />
-    <state x="2327" y="206" key="MultipleFileMergeDialog" timestamp="1616192715486">
+    <state x="1920" y="32" key="MergeDialog/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616450950098" />
+    <state x="2327" y="206" key="MultipleFileMergeDialog" timestamp="1616450950105">
       <screen x="1920" y="32" width="1536" height="832" />
     </state>
-    <state x="2327" y="206" key="MultipleFileMergeDialog/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616192715486" />
+    <state x="2327" y="206" key="MultipleFileMergeDialog/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616450950105" />
     <state x="2458" y="147" key="RollbackChangesDialog" timestamp="1616192118418">
       <screen x="1920" y="32" width="1536" height="832" />
     </state>
     <state x="2458" y="147" key="RollbackChangesDialog/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616192118418" />
-    <state x="2272" y="32" key="SettingsEditor" timestamp="1616179741097">
+    <state x="2272" y="32" key="SettingsEditor" timestamp="1616451536488">
       <screen x="1920" y="32" width="1536" height="832" />
     </state>
     <state x="440" y="94" key="SettingsEditor/0.0.1920.1040/1920.32.1536.824@0.0.1920.1040" timestamp="1609333096659" />
-    <state x="2272" y="32" key="SettingsEditor/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616179741097" />
+    <state x="2272" y="32" key="SettingsEditor/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616451536488" />
     <state x="2362" y="234" key="Vcs.Push.Dialog.v2" timestamp="1616198535567">
       <screen x="1920" y="32" width="1536" height="832" />
     </state>
