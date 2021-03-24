@@ -27,7 +27,7 @@ public class WarpManager {
      * 64 galaxies realspace + 64 galaxies warpspace + 2 systems buffer.
      */
     public static int universeSize = Galaxy.size * 16 * 127;
-    public static int universeHalfSize = universeSize / 2;
+    public static int universeHalfSize = (int)(universeSize / 2f);
     
     /**
      * the offset of warpspace to the realspace sector on the y axis. Use a number outside of the galaxy: empty space
