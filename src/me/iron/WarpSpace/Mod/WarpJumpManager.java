@@ -107,7 +107,7 @@ public class WarpJumpManager {
                 }
 
 
-                if (e.canceled) {
+                if (e.isCanceled()) {
                     cancel();
                     return;
                 }
@@ -165,7 +165,7 @@ public class WarpJumpManager {
                 //for all attached players send travel update, bc drop is over
                 SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,0, new ArrayList<String>());
 
-                if (e.canceled) {
+                if (e.isCanceled()) {
                     cancel();
                     return;
                 }
