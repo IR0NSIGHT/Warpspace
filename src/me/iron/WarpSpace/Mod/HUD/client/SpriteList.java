@@ -46,13 +46,9 @@ public enum SpriteList {
         public static void init() { //TODO add java 7 method instead of lambda (j8)
             StarLoaderTexture.runOnGraphicsThread(new SpriteLoader());
         }
-        private static void lambdaReplace() {
-
-        }
         public Sprite getSprite() {
             return sprite;
         }
-
         public String getName() {
             return "warpmain_" + name;
         }
@@ -61,6 +57,8 @@ public enum SpriteList {
     class SpriteLoader implements Runnable {
         @Override
         public void run() {
+            DebugFile.log(" spriteloader running");
+
             synchronized (SpriteList.class) {
                 for (SpriteList value : SpriteList.values()) {
                     String name = value.name().toLowerCase();
@@ -73,7 +71,7 @@ public enum SpriteList {
                             continue;
                         }
                         BufferedImage bi = ImageIO.read(is);
-
+                        DebugFile.log(" spritelist loaded: " + path + " for image " + value.name);
                         value.sprite = StarLoaderTexture.newSprite(bi, WarpMain.instance, "warpmain_" + name);
                     } catch (IOException e) {
                         e.printStackTrace();

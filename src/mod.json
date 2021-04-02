@@ -2,7 +2,7 @@
   "name": "WarpSpace",
   "author": "IR0NSIGHT",
   "description": "an alternative FTL system",
-  "version": "0.9.1 - Taswin's WarpMap",
+  "version": "0.9.2",
   "starmade_version": "dev - v0.202.108",
   "client_mod": false,
   "server_mod": false,

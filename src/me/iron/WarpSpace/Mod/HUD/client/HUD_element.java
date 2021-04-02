@@ -11,6 +11,7 @@ import java.util.List;
  * CREATOR: Max1M
  * DATE: 20.02.2021
  * TIME: 15:14
+ * This is the element which serves as a container for an image (sprite) and a text element. it defines position, size etc.
  */
 class HUD_element {
     private Vector3f pos; //positon in % of screen
@@ -65,7 +66,7 @@ class HUD_element {
         this.moveStep = moveStep;
         setScale(scale);
         setPos(pos);
-        DebugFile.log("created" + this.toString());
+    //    DebugFile.log("created" + this.toString());
     }
 
     /**
@@ -83,7 +84,7 @@ class HUD_element {
         this.mother.addChild(this);
         setScale(scale);
         setPos(pos);
-        DebugFile.log("created " + this.toString());
+    //    DebugFile.log("created " + this.toString());
     }
 
     @Override
