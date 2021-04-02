@@ -86,7 +86,7 @@ public class WarpJumpEvent extends Event {
         //TODO add message and cancel event
         //display string to pilots
         ship.sendControllingPlayersServerMessage(Lng.astr(pilotMessage),ServerMessage.MESSAGE_TYPE_WARNING);
-        this.canceled = true;
+        this.setCanceled(true);
     }
 
     public String toString() {
