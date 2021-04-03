@@ -13,9 +13,11 @@ import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.view.gamemap.GameMapDrawer;
+import org.schema.game.client.view.gui.shiphud.HudIndicatorOverlay;
 import org.schema.game.client.view.gui.shiphud.newhud.Radar;
 import org.schema.game.server.data.Galaxy;
 import org.schema.schine.common.language.Lng;
+import org.schema.schine.graphicsengine.forms.AbstractSceneNode;
 import org.schema.schine.graphicsengine.forms.PositionableSubColorSprite;
 import org.schema.schine.graphicsengine.forms.Sprite;
 import org.schema.schine.graphicsengine.forms.gui.GUITextOverlay;
@@ -23,6 +25,7 @@ import org.schema.schine.graphicsengine.forms.gui.GUITextOverlay;
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 import java.util.HashMap;
+import java.util.List;
 
 public class WarpSpaceMap
 {
@@ -111,34 +114,7 @@ public class WarpSpaceMap
 			}
 		}, instance);
 		
-		StarLoader.registerListener(HudCreateEvent.class, new Listener<HudCreateEvent>()
-		{
-			@Override
-			public void onEvent(HudCreateEvent event)
-			{
-				final Radar r = event.getHud().getRadar();
-				GUITextOverlay l = (GUITextOverlay)(r.getChilds().get(1));
-				l.setTextSimple(new Object() {
-					@Override
-					public String toString() {
-						if (((GameClientState) r.getState()).getPlayer().isInTutorial()) {
-							return "<Tutorial>";
-						}
-						if (((GameClientState) r.getState()).getPlayer().isInPersonalSector()) {
-							return Lng.str("<Personal>");
-						}
-						if (((GameClientState) r.getState()).getPlayer().isInTestSector()) {
-							return Lng.str("<Test>");
-						}
-						if (WarpManager.IsInWarp(((GameClientState) r.getState()).getPlayer().getCurrentSector()))
-						{
-							return Lng.str("<Warp>\n" + WarpManager.GetRealSpacePos(((GameClientState) r.getState()).getPlayer().getCurrentSector()).toStringPure());
-						}
-						return ((GameClientState) r.getState()).getPlayer().getCurrentSector().toStringPure();
-					}
-				});
-			}
-		}, instance);
+		addMiniMapListener(instance);
 		
 		StarLoader.registerListener(StarCreationAttemptEvent.class, new Listener<StarCreationAttemptEvent>()
 		{
@@ -157,5 +133,48 @@ public class WarpSpaceMap
 			}
 		}, instance);
 	}
-	
+
+	private static void addMiniMapListener(StarMod instance) {
+		StarLoader.registerListener(HudCreateEvent.class, new Listener<HudCreateEvent>()
+		{
+			@Override
+			public void onEvent(HudCreateEvent event)
+			{
+				HudIndicatorOverlay indicatorOverlay = event.getHud().getIndicator();
+				List<AbstractSceneNode> childs = indicatorOverlay.getChilds();
+				//GUITextOverlay indicatorGUIOverlay = (GUITextOverlay)(indicatorOverlay.getChilds().get(1));
+				//indicatorGUIOverlay.setTextSimple(new Object() {
+				//	@Override
+				//	public String toString() {
+				//		return "uwu";
+				//	}
+				//});
+
+				//handle radar
+				final Radar radar = event.getHud().getRadar();
+				GUITextOverlay guiTextOverlay = (GUITextOverlay)(radar.getChilds().get(1));
+				guiTextOverlay.setTextSimple(new Object() {
+					@Override
+					public String toString() {
+						if (((GameClientState) radar.getState()).getPlayer().isInTutorial()) {
+							return "<Tutorial>";
+						}
+						if (((GameClientState) radar.getState()).getPlayer().isInPersonalSector()) {
+							return Lng.str("<Personal>");
+						}
+						if (((GameClientState) radar.getState()).getPlayer().isInTestSector()) {
+							return Lng.str("<Test>");
+						}
+						if (WarpManager.IsInWarp(((GameClientState) radar.getState()).getPlayer().getCurrentSector()))
+						{
+							return Lng.str("<Warp>\n" + WarpManager.GetRealSpacePos(((GameClientState) radar.getState()).getPlayer().getCurrentSector()).toStringPure());
+						}
+						return ((GameClientState) radar.getState()).getPlayer().getCurrentSector().toStringPure();
+					}
+				});
+
+
+			}
+		}, instance);
+	}
 }

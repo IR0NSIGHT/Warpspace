@@ -13,6 +13,13 @@ import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.network.PacketSCUpdateWarp;
 import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
 import me.iron.WarpSpace.Mod.visuals.BackgroundEventListener;
+import org.apache.commons.io.IOUtils;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.ProtectionDomain;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * STARMADE MOD
@@ -68,5 +75,31 @@ public class WarpMain extends StarMod {
         HUD_core.HUDLoop();
 
     }
+
+    @Override
+    public byte[] onClassTransform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] byteCode) {
+        if(className.endsWith("/HudIndicatorOverlay")){
+            byte[] bytes = null;
+            try {
+                ZipInputStream file = new ZipInputStream(new FileInputStream(this.getSkeleton().getJarFile()));
+                while (true){
+                    ZipEntry nextEntry = file.getNextEntry();
+                    if(nextEntry == null) break;
+                    if(nextEntry.getName().endsWith("HudIndicatorOverlay.class")){
+                        bytes = IOUtils.toByteArray(file);
+                    }
+                }
+                file.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(bytes != null){
+                System.err.println("[ExtraEffects] Overwrote HUDIndicatorOverlay class.");
+                return bytes;
+            }
+        }
+        return super.onClassTransform(loader, className, classBeingRedefined, protectionDomain, byteCode);
+    }
+
 
 }
