@@ -1,9 +1,11 @@
 package me.iron.WarpSpace.Mod;
 
+import api.DebugFile;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
 import api.mod.StarMod;
 import api.network.packets.PacketUtil;
+import me.iron.WarpSpace.Mod.GUI.client.GUICore;
 import me.iron.WarpSpace.Mod.HUD.client.*;
 import me.iron.WarpSpace.Mod.Interdiction.InterdictionHUDUpdateLoop;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
@@ -74,6 +76,10 @@ public class WarpMain extends StarMod {
         GUIeventhandler.addHUDDrawListener();
         HUD_core.HUDLoop();
 
+        DebugFile.log("client created ");
+        GUICore.CreateGUILoop();
+
+        DebugChatEvent.addDebugChatListener();
     }
 
     @Override

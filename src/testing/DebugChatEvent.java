@@ -10,9 +10,9 @@ import api.common.GameServer;
 import api.listener.Listener;
 import api.listener.events.player.PlayerChatEvent;
 import api.mod.StarLoader;
+import me.iron.WarpSpace.Mod.GUI.client.GUICore;
 import org.schema.game.common.data.player.PlayerState;
-import org.schema.schine.network.server.ServerMessage;
-import org.schema.schine.network.server.ServerState;
+
 
 import javax.vecmath.Vector2d;
 
@@ -61,6 +61,8 @@ public class DebugChatEvent {
 
                     String s = "natural inhibition of sector -> void:" +  EnvironmentManager.IsVoidInhibition(player.getCurrentSector());
                 }
+
+
 
             }
 

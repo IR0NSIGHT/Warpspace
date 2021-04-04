@@ -1,5 +1,6 @@
 package me.iron.WarpSpace.Mod.HUD.client;
 
+import me.iron.WarpSpace.Mod.GUI.client.GUICore;
 import me.iron.WarpSpace.Mod.WarpMain;
 import api.DebugFile;
 import api.ModPlayground;
@@ -33,6 +34,12 @@ public class DebugChatEvent {
                    ModPlayground.broadcastMessage("is on server");
                    return;
                }
+
+               if (e.getText().contains("GUI")) {
+                   ModPlayground.broadcastMessage("allowing GUI now");
+                   GUICore.allowGUI = true;
+               }
+
                DebugFile.log("doing sth in chat listener");
                if (e.getText().contains("domove")) { //move to absolute pixelpos
                    ModPlayground.broadcastMessage("doing move for all HUD stuff");
