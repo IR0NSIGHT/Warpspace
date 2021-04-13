@@ -20,7 +20,8 @@ public class WarpJumpEventHandler { //TODO is this obsolete?
             public void onEvent(WarpJumpEvent event) {
                 //change players nav tool
                 boolean toWarp = (event.getType().equals(WarpJumpEvent.WarpJumpType.ENTRY));
-                NavHelper.handlePilots(event.getShip(), toWarp);
+                //TODO use as event to store the players original WP for use after dropout
+        //        NavHelper.handlePilots(event.getShip(), toWarp);
             }
         }, WarpMain.instance);
     }

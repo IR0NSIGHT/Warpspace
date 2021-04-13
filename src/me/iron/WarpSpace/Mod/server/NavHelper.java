@@ -5,11 +5,15 @@ package me.iron.WarpSpace.Mod.server; /**
  * TIME: 17:36
  */
 
+import api.common.GameClient;
+import api.utils.StarRunnable;
+import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.network.PacketSCUpdateWarp;
 import me.iron.WarpSpace.Mod.WarpManager;
 import api.DebugFile;
 import api.network.packets.PacketUtil;
 import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.data.player.PlayerState;
@@ -19,7 +23,7 @@ import java.util.Iterator;
 /**
  * adds elements that make it easier to tell what warp coord relates to what realspace coord.
  */
-public class NavHelper {
+public class NavHelper { //TODO this class doesnt have to be serverside.
     /**
      * get the players waypoint to its equivalent in warpspace / realspace, so that navigating in warp is easier.
      * @param waypoint name of the player whos navigation waypoint should be changed
@@ -42,7 +46,7 @@ public class NavHelper {
     }
 
     /**
-     * change the players waypoint on their machine so that waypoints point to the correct position when chaning into warp.
+     * change the players waypoint on their machine so that waypoints point to the correct position when chaning into warp. SERVERSIDE!
      * @param ship segmentcontroller of players
      * @param toWarp boolean, true for going into warp, false for dropping out
      */
@@ -72,6 +76,42 @@ public class NavHelper {
 
         }  catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void waypointHandleLoop() {
+        new StarRunnable() {
+            @Override
+            public void run() {
+                DebugFile.log("handling waypoint");
+                HandleNavPoint();
+            }
+        }.runTimer(WarpMain.instance,5);
+    }
+
+
+
+    /**
+     * checks if a players navigation point is across dimensions and corrects that.
+     */
+    private static void HandleNavPoint() {
+        Vector3i waypoint = GameClient.getClientController().getClientGameData().getWaypoint();
+
+        //abort if no waypoint is set (-1 billion or sth)
+
+        if ((waypoint == null) || waypoint.equals(PlayerState.NO_WAYPOINT)) {
+            return;
+        }
+
+        Vector3i playerPos = GameClient.getClientPlayerState().getCurrentSector();
+        //player in warp, waypoint in RSP -> translate wp to rsp
+        if (WarpManager.IsInWarp(playerPos) && !WarpManager.IsInWarp(waypoint)) {
+            GameClient.getClientController().getClientGameData().setWaypoint( WarpManager.GetWarpSpacePos(waypoint));
+        }
+
+        //player in RSP, waypoint in warp -> translate wp to RSP
+        if (!WarpManager.IsInWarp(playerPos) && WarpManager.IsInWarp(waypoint)) {
+            GameClient.getClientController().getClientGameData().setWaypoint(WarpManager.GetRealSpacePos(waypoint));
         }
     }
 }

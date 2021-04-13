@@ -7,6 +7,7 @@ import api.network.packets.PacketUtil;
 import me.iron.WarpSpace.Mod.HUD.client.*;
 import me.iron.WarpSpace.Mod.Interdiction.InterdictionHUDUpdateLoop;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
+import me.iron.WarpSpace.Mod.server.NavHelper;
 import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpEventHandler;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
@@ -73,7 +74,7 @@ public class WarpMain extends StarMod {
         HUD_core.initList();
         GUIeventhandler.addHUDDrawListener();
         HUD_core.HUDLoop();
-
+        NavHelper.waypointHandleLoop();
     }
 
     @Override
