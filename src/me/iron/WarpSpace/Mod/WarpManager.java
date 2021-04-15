@@ -63,7 +63,7 @@ public class WarpManager {
      * @return boolean, true if position is in warp
      */
     public static boolean IsInWarp(Vector3i pos) {
-        if (pos.y >= offset - (universeSize / scale) && pos.y <= offset + (universeSize / scale)) {
+        if (pos != null && pos.y >= offset - (universeSize / scale) && pos.y <= offset + (universeSize / scale)) {
             return true;
         }
         return false;

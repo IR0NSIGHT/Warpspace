@@ -88,60 +88,31 @@ public class NavHelper { //TODO this class doesnt have to be serverside.
         }.runTimer(WarpMain.instance,5);
     }
 
-    //stored across warp travel
-    private static Vector3i orgWaypoint;
     //temp vars
     private static Vector3i playerPos;
     private static Vector3i waypoint;
-    private static Vector3i oldWP; //only written by vanilla system.
     /**
      * checks if a players navigation point is across dimensions and corrects that.
      */
     private static void HandleNavPoint() {
-        DebugFile.log("handling waypoint uwu");
+    //    DebugFile.log("handling waypoint uwu");
 
         waypoint = GameClient.getClientController().getClientGameData().getWaypoint();
+        playerPos = GameClient.getClientPlayerState().getCurrentSector();
 
-        //abort if no waypoint is set (-1 billion or sth)
-        if ((waypoint == null) || waypoint.equals(PlayerState.NO_WAYPOINT)) {
-            orgWaypoint = null;
-            oldWP = null;
+        if (playerPos == null || waypoint == null) {
             return;
         }
-
-        //test if waypoint has changed -> only true if player changed waypoint.
-        if (oldWP != null && !waypoint.equals(oldWP)) {
-            //dont allow setting org waypoint in warp. translate to RSP
-            if (WarpManager.IsInWarp(waypoint)) {
-                orgWaypoint = WarpManager.GetRealSpacePos(waypoint);
-            } else {
-                orgWaypoint = waypoint;
-            }
-
-            //waypoint is actual desired target for player at this point.
-        }
-        oldWP = waypoint;
-
-
-
-        Vector3i playerPos = GameClient.getClientPlayerState().getCurrentSector();
         //player in warp, waypoint in RSP -> translate wp to rsp
         if (WarpManager.IsInWarp(playerPos) && !WarpManager.IsInWarp(waypoint)) {
             waypoint = WarpManager.GetWarpSpacePos(waypoint); //translate to warp pos
             GameClient.getClientController().getClientGameData().setWaypoint(waypoint); //pass to player HUD
-            oldWP = waypoint; //make equal to not trigger the "waypoint was changed by player test" above.
         }
 
         //player in RSP, waypoint in warp -> translate wp to RSP
         if (!WarpManager.IsInWarp(playerPos) && WarpManager.IsInWarp(waypoint)) {
-            //if original WP is null, just translate warp wp.
-            if (!(orgWaypoint == null)) {
-                GameClient.getClientController().getClientGameData().setWaypoint(orgWaypoint);
-                waypoint = orgWaypoint;
-            } else {
-                GameClient.getClientController().getClientGameData().setWaypoint(WarpManager.GetRealSpacePos(waypoint));
-            }
-            oldWP = waypoint; //make equal to not trigger the "waypoint was changed by player test" above.
+            //translate warp wp.
+            GameClient.getClientController().getClientGameData().setWaypoint(WarpManager.GetRealSpacePos(waypoint));
         }
     }
 }

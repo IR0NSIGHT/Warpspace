@@ -1,5 +1,6 @@
 package me.iron.WarpSpace.Mod;
 
+import api.DebugFile;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
 import api.mod.StarMod;
@@ -79,7 +80,9 @@ public class WarpMain extends StarMod {
 
     @Override
     public byte[] onClassTransform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] byteCode) {
+    //    DebugFile.log("class transformer ran for: " + className);
         if(className.endsWith("/HudIndicatorOverlay")){
+            DebugFile.log("overwriting " + className);
             byte[] bytes = null;
             try {
                 ZipInputStream file = new ZipInputStream(new FileInputStream(this.getSkeleton().getJarFile()));
@@ -99,6 +102,27 @@ public class WarpMain extends StarMod {
                 return bytes;
             }
         }
+//
+    //    if(className.endsWith("/ClientGameData")){
+    //        byte[] bytes = null;
+    //        try {
+    //            ZipInputStream file = new ZipInputStream(new FileInputStream(this.getSkeleton().getJarFile()));
+    //            while (true){
+    //                ZipEntry nextEntry = file.getNextEntry();
+    //                if(nextEntry == null) break;
+    //                if(nextEntry.getName().endsWith("/ClientGameData.class")){
+    //                    bytes = IOUtils.toByteArray(file);
+    //                }
+    //            }
+    //            file.close();
+    //        } catch (IOException e) {
+    //            e.printStackTrace();
+    //        }
+    //        if(bytes != null){
+    //            System.err.println("[ExtraEffects] Overwrote ClientGameData class.");
+    //            return bytes;
+    //        }
+    //    }
         return super.onClassTransform(loader, className, classBeingRedefined, protectionDomain, byteCode);
     }
 

@@ -248,7 +248,7 @@ public class HudIndicatorOverlay extends GUIElement {
             var4.set((float)(directionNeighbour.x * sectorSize), (float)(directionNeighbour.y * sectorSize), (float)(directionNeighbour.z * sectorSize));
             String neighbourName = neighbour.toString();
             if (WarpManager.IsInWarp(neighbour)) {
-                neighbourName = WarpManager.GetRealSpacePos(neighbour).toString();
+                neighbourName = "[WARP]" + WarpManager.GetRealSpacePos(neighbour).toString();
             };
             this.neighborSectorsNames[i] = StringTools.format(Lng.ORG_SCHEMA_GAME_CLIENT_VIEW_GUI_SHIPHUD_HUDINDICATOROVERLAY_3, new Object[]{neighbourName});
             this.neighborSectors[i].origin.set(var4);
@@ -381,10 +381,13 @@ public class HudIndicatorOverlay extends GUIElement {
                     Transform waypointTransform;
                     (waypointTransform = new Transform()).setIdentity();
                     this.calcWaypointSecPos(new Vector3i(waypointPos), waypointTransform); //waypoint code
+                    String displayText = "";
                     if (WarpManager.IsInWarp(waypointPos)) {
                       waypointPos = WarpManager.GetRealSpacePos(waypointPos);
+                      displayText += "[WARP]";
                     }
-                    this.drawFor(waypointTransform, StringTools.format(" waypoint " + waypointPos.toString(), new Object[]{waypointPos.toString()}), -300, true, true);
+                    displayText += "waypoint " + waypointPos.toString();
+                    this.drawFor(waypointTransform, StringTools.format(displayText, new Object[]{waypointPos.toString()}), -300, true, true);
                 }
 
                 this.drawStarMarker();
