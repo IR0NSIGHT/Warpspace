@@ -31,14 +31,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpEntityManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpEntityManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpJumpEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpJumpEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpJumpManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpJumpManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/server/NavHelper.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/server/WarpJumpEventHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/schema/game/client/data/ClientGameData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/schema/game/client/data/ClientGameData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -235,7 +229,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618767253325</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="GameClientData now displays message when dropout point reached.">
+      <created>1618771825376</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1618771825376</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -279,7 +280,8 @@
     <MESSAGE value="hud now prefixes neighbour pos and waypoint in warp with [WARP].&#10;deactivated class overwrite for GameClientData for now.&#10;waypoint setting works from both planes now." />
     <MESSAGE value="0.9.3 navigation update, json update&#10;fixes #11," />
     <MESSAGE value="GameCLientData coremod enabled, waypoints now remeber original destination through warptravel" />
-    <option name="LAST_COMMIT_MESSAGE" value="GameCLientData coremod enabled, waypoints now remeber original destination through warptravel" />
+    <MESSAGE value="GameClientData now displays message when dropout point reached." />
+    <option name="LAST_COMMIT_MESSAGE" value="GameClientData now displays message when dropout point reached." />
   </component>
   <component name="WindowStateProjectService">
     <state x="605" y="234" key="#BuildArtifactsBeforeRunChooser" timestamp="1618770681300">
