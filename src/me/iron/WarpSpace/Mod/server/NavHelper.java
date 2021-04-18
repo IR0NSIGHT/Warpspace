@@ -96,7 +96,9 @@ public class NavHelper { //TODO this class doesnt have to be serverside.
      */
     private static void HandleNavPoint() {
     //    DebugFile.log("handling waypoint uwu");
-
+        if (GameClientState.instance == null) {
+            return;
+        }
         waypoint = GameClient.getClientController().getClientGameData().getWaypoint();
         playerPos = GameClient.getClientPlayerState().getCurrentSector();
 

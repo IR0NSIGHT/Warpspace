@@ -51,30 +51,32 @@ public class ClientGameData {
         System.err.println("SETTING WAYPOINT: " + newWaypoint);
 
         //never allow setting direction in warp. always use RSP pos.
-        if (WarpManager.IsInWarp(newWaypoint)) {
+        if (newWaypoint != null && WarpManager.IsInWarp(newWaypoint)) {
             newWaypoint = WarpManager.GetRealSpacePos(newWaypoint);
         }
 
         this.waypoint = newWaypoint;
-        this.warpWP = WarpManager.GetWarpSpacePos(waypoint);
+        if (waypoint != null) {
+            this.warpWP = WarpManager.GetWarpSpacePos(waypoint);
+        }
         this.nearestToWayPoint = null;
         this.updateNearest(this.state.getCurrentSectorId());
     }
 
-    public void updateNearest(int var1) {
+    public void updateNearest(int currentSectorID) {
         if (this.getWaypoint() != null) {
-            RemoteSector var3;
-            if ((var3 = (RemoteSector)this.state.getLocalAndRemoteObjectContainer().getLocalObjects().get(var1)) == null) {
+            RemoteSector remoteSector;
+            if ((remoteSector = (RemoteSector)this.state.getLocalAndRemoteObjectContainer().getLocalObjects().get(currentSectorID)) == null) {
                 this.state.getController().flagWaypointUpdate = true;
                 return;
             }
 
-            Vector3i var4 = var3.clientPos();
+            Vector3i clientPos = remoteSector.clientPos();
             if (this.nearestToWayPoint == null) {
                 this.nearestToWayPoint = new Vector3i();
             }
 
-            if (var4.equals(this.getWaypoint())) {
+            if (clientPos.equals(this.getWaypoint())) {
                 this.setWaypoint((Vector3i)null);
                 return;
             }
@@ -82,9 +84,9 @@ public class ClientGameData {
             this.ltmp.set(0, 0, 0);
 
             for(int var2 = 0; var2 < Element.DIRECTIONSi.length; ++var2) {
-                this.tmp.add(var4, Element.DIRECTIONSi[var2]);
+                this.tmp.add(clientPos, Element.DIRECTIONSi[var2]);
                 if (this.tmp.equals(this.getWaypoint())) {
-                    this.nearestToWayPoint.add(var4, Element.DIRECTIONSi[var2]);
+                    this.nearestToWayPoint.add(clientPos, Element.DIRECTIONSi[var2]);
                     break;
                 }
 
@@ -92,7 +94,7 @@ public class ClientGameData {
                 if (this.ltmp.length() != 0.0F && this.tmp.length() >= this.ltmp.length()) {
                     System.err.println("NOT TAKING: " + this.tmp.length() + " / " + this.ltmp.length());
                 } else {
-                    this.nearestToWayPoint.add(var4, Element.DIRECTIONSi[var2]);
+                    this.nearestToWayPoint.add(clientPos, Element.DIRECTIONSi[var2]);
                     this.ltmp.set(this.tmp);
                 }
             }

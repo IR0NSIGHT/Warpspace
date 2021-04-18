@@ -3,7 +3,8 @@
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
       <artifact name="WarpSpaceDedicated" />
-      <artifact name="WarpSpacev0.9.2" />
+      <artifact name="WarpSpaceOut" />
+      <artifact name="WarpSpacev0.9.3" />
     </artifacts-to-build>
   </component>
   <component name="BranchesTreeState">
@@ -26,14 +27,18 @@
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:dev" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:master" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mod.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/mod.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.run/SM with warpspace.run.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.run/SM with warpspace.run.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/server/NavHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/server/NavHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/testing/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/testing/main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/schema/game/client/data/ClientGameData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/schema/game/client/data/ClientGameData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +55,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="3bc041f09e8c988e0cfc6b62b74f3416efaa90e5" />
+        <entry key="$PROJECT_DIR$" value="dev" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -82,6 +87,19 @@
     </key>
   </component>
   <component name="RunManager" selected="JAR Application.SM with warpspace">
+    <configuration name="main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="me.iron.WarpSpace.Mod.testing.main" />
+      <module name="Warpspace" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="me.iron.WarpSpace.Mod.testing.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="testing.main" />
       <module name="Warpspace" />
@@ -96,13 +114,14 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.main (1)" />
       <item itemvalue="Application.main" />
       <item itemvalue="JAR Application.SM with warpspace" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.main" />
-        <item itemvalue="Application.main" />
+        <item itemvalue="Application.main (1)" />
         <item itemvalue="Application.main" />
         <item itemvalue="Application.main" />
         <item itemvalue="Application.main" />
@@ -202,7 +221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618479165983</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="0.9.3 navigation update, json update&#10;fixes #11,">
+      <created>1618481181898</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1618481181898</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -216,7 +242,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="dev" />
+                        <option value="master" />
                       </list>
                     </value>
                   </entry>
@@ -244,17 +270,18 @@
     <MESSAGE value="Deleted and rebuilt javadoc bc it didnt deploye correctly on github." />
     <MESSAGE value="Something wierd with the spriteloader" />
     <MESSAGE value="hud now prefixes neighbour pos and waypoint in warp with [WARP].&#10;deactivated class overwrite for GameClientData for now.&#10;waypoint setting works from both planes now." />
-    <option name="LAST_COMMIT_MESSAGE" value="hud now prefixes neighbour pos and waypoint in warp with [WARP].&#10;deactivated class overwrite for GameClientData for now.&#10;waypoint setting works from both planes now." />
+    <MESSAGE value="0.9.3 navigation update, json update&#10;fixes #11," />
+    <option name="LAST_COMMIT_MESSAGE" value="0.9.3 navigation update, json update&#10;fixes #11," />
   </component>
   <component name="WindowStateProjectService">
-    <state x="605" y="234" key="#BuildArtifactsBeforeRunChooser" timestamp="1618478637723">
+    <state x="605" y="234" key="#BuildArtifactsBeforeRunChooser" timestamp="1618764921559">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="605" y="234" key="#BuildArtifactsBeforeRunChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1618478637723" />
-    <state x="279" y="84" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1618478638051">
+    <state x="605" y="234" key="#BuildArtifactsBeforeRunChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1618764921559" />
+    <state x="279" y="84" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1618766518592">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="279" y="84" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1618478638051" />
+    <state x="279" y="84" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1618766518592" />
     <state x="2143" y="99" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616192339674" />
     <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1618307825921">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -282,49 +309,49 @@
       <screen x="1920" y="32" width="1536" height="832" />
     </state>
     <state x="2411" y="345" key="Git.Rebase.Log.Action.NewCommitMessage.Dialog/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616192263483" />
-    <state width="1877" height="369" key="GridCell.Tab.0.bottom" timestamp="1618479094448">
+    <state width="1877" height="369" key="GridCell.Tab.0.bottom" timestamp="1618766662428">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="369" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1618479094448" />
+    <state width="1877" height="369" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1618766662428" />
     <state width="1877" height="282" key="GridCell.Tab.0.bottom/1920.32.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1616336934544" />
     <state width="1493" height="278" key="GridCell.Tab.0.bottom/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616450614137" />
-    <state width="1877" height="369" key="GridCell.Tab.0.center" timestamp="1618479094448">
+    <state width="1877" height="369" key="GridCell.Tab.0.center" timestamp="1618766662428">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="369" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1618479094448" />
+    <state width="1877" height="369" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1618766662428" />
     <state width="1877" height="282" key="GridCell.Tab.0.center/1920.32.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1616336934544" />
     <state width="1493" height="278" key="GridCell.Tab.0.center/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616450614137" />
-    <state width="1877" height="369" key="GridCell.Tab.0.left" timestamp="1618479094448">
+    <state width="1877" height="369" key="GridCell.Tab.0.left" timestamp="1618766662428">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="369" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1618479094448" />
+    <state width="1877" height="369" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1618766662428" />
     <state width="1877" height="282" key="GridCell.Tab.0.left/1920.32.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1616336934544" />
     <state width="1493" height="278" key="GridCell.Tab.0.left/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616450614137" />
-    <state width="1877" height="369" key="GridCell.Tab.0.right" timestamp="1618479094448">
+    <state width="1877" height="369" key="GridCell.Tab.0.right" timestamp="1618766662428">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="369" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1618479094448" />
+    <state width="1877" height="369" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1618766662428" />
     <state width="1877" height="282" key="GridCell.Tab.0.right/1920.32.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1616336934544" />
     <state width="1493" height="278" key="GridCell.Tab.0.right/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616450614137" />
-    <state width="1877" height="369" key="GridCell.Tab.1.bottom" timestamp="1618479094448">
+    <state width="1877" height="369" key="GridCell.Tab.1.bottom" timestamp="1618766662429">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="369" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1618479094448" />
+    <state width="1877" height="369" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1618766662429" />
     <state width="1493" height="278" key="GridCell.Tab.1.bottom/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616450613887" />
-    <state width="1877" height="369" key="GridCell.Tab.1.center" timestamp="1618479094448">
+    <state width="1877" height="369" key="GridCell.Tab.1.center" timestamp="1618766662428">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="369" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1618479094448" />
+    <state width="1877" height="369" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1618766662428" />
     <state width="1493" height="278" key="GridCell.Tab.1.center/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616450613887" />
-    <state width="1877" height="369" key="GridCell.Tab.1.left" timestamp="1618479094448">
+    <state width="1877" height="369" key="GridCell.Tab.1.left" timestamp="1618766662428">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="369" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1618479094448" />
+    <state width="1877" height="369" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1618766662428" />
     <state width="1493" height="278" key="GridCell.Tab.1.left/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616450613887" />
-    <state width="1877" height="369" key="GridCell.Tab.1.right" timestamp="1618479094448">
+    <state width="1877" height="369" key="GridCell.Tab.1.right" timestamp="1618766662429">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="369" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1618479094448" />
+    <state width="1877" height="369" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1618766662429" />
     <state width="1493" height="278" key="GridCell.Tab.1.right/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616450613887" />
     <state x="1920" y="32" key="MergeDialog" timestamp="1616192715479">
       <screen x="1920" y="32" width="1536" height="832" />
@@ -338,20 +365,25 @@
       <screen x="1920" y="32" width="1536" height="832" />
     </state>
     <state x="2458" y="147" key="RollbackChangesDialog/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616192118418" />
-    <state x="440" y="0" key="SettingsEditor" timestamp="1618479409401">
+    <state x="440" y="0" key="SettingsEditor" timestamp="1618766686823">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="440" y="0" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1618479409401" />
+    <state x="440" y="0" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1618766686823" />
     <state x="2272" y="32" key="SettingsEditor/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616450841963" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1616333331774">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1618481185430">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1618481185430" />
     <state x="552" y="253" key="Vcs.Push.Dialog.v2/1920.32.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1616333331774" />
     <state x="2362" y="234" key="Vcs.Push.Dialog.v2/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616251243772" />
     <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1618327005453">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1618327005453" />
+    <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1618481050032">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1618481050032" />
     <state x="515" y="256" width="889" height="629" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1618325131252">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -360,28 +392,5 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1617821377831" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/org/schema/game/client/data/ClientGameData.java</url>
-          <line>53</line>
-          <option name="timeStamp" value="146" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-field">
-          <url>file://$PROJECT_DIR$/src/org/schema/game/client/data/ClientGameData.java</url>
-          <line>24</line>
-          <properties field="warpWP" class="org.schema.game.client.data.ClientGameData" />
-          <option name="timeStamp" value="144" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-field">
-          <url>file://$PROJECT_DIR$/src/org/schema/game/client/data/ClientGameData.java</url>
-          <line>23</line>
-          <properties field="playerPosTmp" class="org.schema.game.client.data.ClientGameData" />
-          <option name="timeStamp" value="145" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

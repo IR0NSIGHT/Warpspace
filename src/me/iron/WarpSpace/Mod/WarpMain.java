@@ -78,51 +78,31 @@ public class WarpMain extends StarMod {
         NavHelper.waypointHandleLoop();
     }
 
+    private String[] classReplacements = new String[] {"/HudIndicatorOverlay","/ClientGameData"};
     @Override
     public byte[] onClassTransform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] byteCode) {
-    //    DebugFile.log("class transformer ran for: " + className);
-        if(className.endsWith("/HudIndicatorOverlay")){
-            DebugFile.log("overwriting " + className);
-            byte[] bytes = null;
-            try {
-                ZipInputStream file = new ZipInputStream(new FileInputStream(this.getSkeleton().getJarFile()));
-                while (true){
-                    ZipEntry nextEntry = file.getNextEntry();
-                    if(nextEntry == null) break;
-                    if(nextEntry.getName().endsWith("HudIndicatorOverlay.class")){
-                        bytes = IOUtils.toByteArray(file);
+        for (String classReplacementName : classReplacements) {
+            if(className.endsWith(classReplacementName)){
+                byte[] bytes = null;
+                try {
+                    ZipInputStream file = new ZipInputStream(new FileInputStream(this.getSkeleton().getJarFile()));
+                    while (true){
+                        ZipEntry nextEntry = file.getNextEntry();
+                        if(nextEntry == null) break;
+                        if(nextEntry.getName().endsWith(classReplacementName + ".class")){
+                            bytes = IOUtils.toByteArray(file);
+                        }
                     }
+                    file.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                file.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if(bytes != null){
-                System.err.println("[ExtraEffects] Overwrote HUDIndicatorOverlay class.");
-                return bytes;
+                if(bytes != null){
+                    DebugFile.log("overwrote class '" + classReplacementName + "'",instance);
+                    return bytes;
+                }
             }
         }
-//
-    //    if(className.endsWith("/ClientGameData")){
-    //        byte[] bytes = null;
-    //        try {
-    //            ZipInputStream file = new ZipInputStream(new FileInputStream(this.getSkeleton().getJarFile()));
-    //            while (true){
-    //                ZipEntry nextEntry = file.getNextEntry();
-    //                if(nextEntry == null) break;
-    //                if(nextEntry.getName().endsWith("/ClientGameData.class")){
-    //                    bytes = IOUtils.toByteArray(file);
-    //                }
-    //            }
-    //            file.close();
-    //        } catch (IOException e) {
-    //            e.printStackTrace();
-    //        }
-    //        if(bytes != null){
-    //            System.err.println("[ExtraEffects] Overwrote ClientGameData class.");
-    //            return bytes;
-    //        }
-    //    }
         return super.onClassTransform(loader, className, classBeingRedefined, protectionDomain, byteCode);
     }
 
