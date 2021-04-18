@@ -119,8 +119,6 @@ public class WarpJumpManager {
                 }
                 //queue sector switch
                 doSectorSwitch(ship, sectorF,true);
-                //TODO add visual effects
-                //navigationHelper.handlePilots(ship,intoWarp);
             }
         }.runLater(WarpMain.instance,countdown);
     }
@@ -194,7 +192,6 @@ public class WarpJumpManager {
     }
 
     public static void doSectorSwitch(SegmentController ship, Vector3i newPos, boolean instant) {
-        //TODO refactor method, make instant?
         SectorSwitch sectorSwitch = GameServer.getServerState().getController().queueSectorSwitch(ship,newPos,SectorSwitch.TRANS_JUMP,false,true,true);
         if (sectorSwitch != null) {
             sectorSwitch.delay = System.currentTimeMillis();
@@ -328,7 +325,7 @@ public class WarpJumpManager {
                         continue; //sector is not loaded
                     }
                     //get inhibitor level //returns [0..9]
-                    inhibitorStrength = neighbourSector.getRemoteSector().getConfigManager().apply(StatusEffectType.WARP_INTERDICTION_STRENGTH, 1); //TODO change apply value to 300K?
+                    inhibitorStrength = neighbourSector.getRemoteSector().getConfigManager().apply(StatusEffectType.WARP_INTERDICTION_STRENGTH, 1);
                     catchesLvl = inhibitorStrength * 60; //will catch anything up to
                     //max inhRange of inhibitor
                     inhRange = Math.max(0, neighbourSector.getRemoteSector().getConfigManager().apply(StatusEffectType.WARP_INTERDICTION_DISTANCE,  1));

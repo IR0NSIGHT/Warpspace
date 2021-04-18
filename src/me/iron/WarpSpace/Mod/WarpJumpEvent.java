@@ -79,11 +79,11 @@ public class WarpJumpEvent extends Event {
     }
 
     /**
+     * NOT IN USE; WARPJUMPS CAN NOT BE ABORTED BY PLAYER
      * cancel warpevent
      * @param pilotMessage message to be displayed to pilots for cause of failed warp
      */
     public void cancel(String pilotMessage) {
-        //TODO add message and cancel event
         //display string to pilots
         ship.sendControllingPlayersServerMessage(Lng.astr(pilotMessage),ServerMessage.MESSAGE_TYPE_WARNING);
         this.setCanceled(true);

@@ -7,10 +7,13 @@ package org.schema.game.client.data;
 
 import api.DebugFile;
 import me.iron.WarpSpace.Mod.WarpManager;
+import org.newdawn.slick.Game;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.element.Element;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.RemoteSector;
+import org.schema.schine.common.language.Lng;
+import org.schema.schine.network.server.ServerMessage;
 
 /**
  * decompiled version edited by ironsight
@@ -34,9 +37,11 @@ public class ClientGameData {
 
     public Vector3i getWaypoint() {
         playerPosTmp = GameClientState.instance.getPlayer().getCurrentSector();
+
         //if player is sitting in his waypoint, in warp -> dont return true wp -> dont delete waypoint.
-        Vector3i wwp = warpWP;
         if (waypoint != null && playerPosTmp != null && playerPosTmp.equals(warpWP)) {
+            //TODO send player message that WP is reached -> dropout
+            GameClientState.instance.message(Lng.astr("dropout point reached."),3);
             return null;
         }
         //return warp pos if player is in warp

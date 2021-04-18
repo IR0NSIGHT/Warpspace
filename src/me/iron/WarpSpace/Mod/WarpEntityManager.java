@@ -31,7 +31,6 @@ public class WarpEntityManager {
      * @param ship Segmentcontroller to be registered
      */
     public static void DeclareWarpEntity(SegmentController ship) {
-        //TODO write method
         if (WarpEntityManager.isWarpEntity(ship)) {
             return;
         }
