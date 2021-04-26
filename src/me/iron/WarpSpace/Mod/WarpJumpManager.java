@@ -273,7 +273,7 @@ public class WarpJumpManager {
     public static boolean isInterdicted(SegmentController ship, Vector3i position) {
         //TODO add interdiction check for target sector
         JumpAddOn warpdrive;
-        if(ship instanceof ManagedSegmentController<?>) {
+        if(ship instanceof Ship) {
             warpdrive =((Ship)ship).getManagerContainer().getJumpAddOn();
         } else {
             return false;
