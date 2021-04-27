@@ -54,15 +54,17 @@ public class ClientGameData {
 
     public void setWaypoint(Vector3i newWaypoint) {
         System.err.println("SETTING WAYPOINT: " + newWaypoint);
-
+        DebugFile.log("setting new waypoint." + newWaypoint);
         //never allow setting direction in warp. always use RSP pos.
         if (newWaypoint != null && WarpManager.IsInWarp(newWaypoint)) {
             newWaypoint = WarpManager.GetRealSpacePos(newWaypoint);
+            DebugFile.log("new waypoint is in warp. RSP:" + newWaypoint);
         }
 
         this.waypoint = newWaypoint;
         if (waypoint != null) {
             this.warpWP = WarpManager.GetWarpSpacePos(waypoint);
+            DebugFile.log("warp wp:" + warpWP);
         }
         this.nearestToWayPoint = null;
         this.updateNearest(this.state.getCurrentSectorId());

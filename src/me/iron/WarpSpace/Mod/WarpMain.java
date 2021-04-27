@@ -10,7 +10,6 @@ import me.iron.WarpSpace.Mod.Interdiction.InterdictionHUDUpdateLoop;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
-import me.iron.WarpSpace.Mod.network.PacketSCUpdateWarp;
 import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
 import me.iron.WarpSpace.Mod.visuals.BackgroundEventListener;
 import org.apache.commons.io.IOUtils;
@@ -43,7 +42,6 @@ public class WarpMain extends StarMod {
         super.onEnable();
         BackgroundEventListener.AddListener(); //add background color listener
         instance = this;
-        PacketUtil.registerPacket(PacketSCUpdateWarp.class);
         PacketUtil.registerPacket(PacketHUDUpdate.class);
         
         WarpSpaceMap.enable(instance);

@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="WarpSpaceDedicated" />
-      <artifact name="WarpSpaceOut" />
-      <artifact name="WarpSpacev0.9.3" />
+      <artifact name="WarpSpacev0.9.5" />
     </artifacts-to-build>
   </component>
   <component name="BranchesTreeState">
@@ -27,15 +25,16 @@
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:master" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:hotfix" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpJumpManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpJumpManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mod.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/mod.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.run/SM with warpspace.run.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.run/SM with warpspace.run.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/network/PacketSCUpdateWarp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/network/PacketSCUpdateWarp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/schema/game/client/data/ClientGameData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/schema/game/client/data/ClientGameData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -267,7 +266,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="hotfix" />
                       </list>
                     </value>
                   </entry>
@@ -395,10 +394,10 @@
       <screen x="1920" y="32" width="1536" height="832" />
     </state>
     <state x="2458" y="147" key="RollbackChangesDialog/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616192118418" />
-    <state x="440" y="0" key="SettingsEditor" timestamp="1618766686823">
+    <state x="440" y="0" key="SettingsEditor" timestamp="1619547330997">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="440" y="0" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1618766686823" />
+    <state x="440" y="0" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1619547330997" />
     <state x="2272" y="32" key="SettingsEditor/1920.32.1536.832/0.0.1920.1040@1920.32.1536.832" timestamp="1616450841963" />
     <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1618481185430">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -410,10 +409,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1618327005453" />
-    <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1618481050032">
+    <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1619547492826">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1618481050032" />
+    <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1619547492826" />
     <state x="515" y="256" width="889" height="629" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1618325131252">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

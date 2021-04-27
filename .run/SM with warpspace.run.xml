@@ -8,7 +8,7 @@
     <option name="ALTERNATIVE_JRE_PATH" value="1.7" />
     <method v="2">
       <option name="BuildArtifacts" enabled="true">
-        <artifact name="WarpSpacev0.9.3" />
+        <artifact name="WarpSpacev0.9.5" />
         <artifact name="WarpSpaceDedicated" />
         <artifact name="WarpSpaceOut" />
       </option>
