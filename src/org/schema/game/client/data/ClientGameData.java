@@ -40,12 +40,12 @@ public class ClientGameData {
 
         //if player is sitting in his waypoint, in warp -> dont return true wp -> dont delete waypoint.
         if (waypoint != null && playerPosTmp != null && playerPosTmp.equals(warpWP)) {
-            //TODO send player message that WP is reached -> dropout
             GameClientState.instance.message(Lng.astr("dropout point reached."),3);
             return null;
         }
+
         //return warp pos if player is in warp
-        if (WarpManager.IsInWarp(playerPosTmp)) {
+        if (waypoint != null && WarpManager.IsInWarp(playerPosTmp)) {
             return warpWP;
         }
 
@@ -54,15 +54,16 @@ public class ClientGameData {
 
     public void setWaypoint(Vector3i newWaypoint) {
         System.err.println("SETTING WAYPOINT: " + newWaypoint);
-        DebugFile.log("setting new waypoint." + newWaypoint);
+        DebugFile.log("setting new waypoint: " + newWaypoint);
         //never allow setting direction in warp. always use RSP pos.
+        //false
         if (newWaypoint != null && WarpManager.IsInWarp(newWaypoint)) {
             newWaypoint = WarpManager.GetRealSpacePos(newWaypoint);
-            DebugFile.log("new waypoint is in warp. RSP:" + newWaypoint);
+            DebugFile.log("new waypoint is in warp. RSP: " + newWaypoint);
         }
 
-        this.waypoint = newWaypoint;
-        if (waypoint != null) {
+        this.waypoint = newWaypoint;    //set to null
+        if (waypoint != null) { //false
             this.warpWP = WarpManager.GetWarpSpacePos(waypoint);
             DebugFile.log("warp wp:" + warpWP);
         }
@@ -71,7 +72,8 @@ public class ClientGameData {
     }
 
     public void updateNearest(int currentSectorID) {
-        if (this.getWaypoint() != null) {
+        Vector3i wpOut = this.getWaypoint();
+        if (wpOut  != null) {
             RemoteSector remoteSector;
             if ((remoteSector = (RemoteSector)this.state.getLocalAndRemoteObjectContainer().getLocalObjects().get(currentSectorID)) == null) {
                 this.state.getController().flagWaypointUpdate = true;
@@ -83,6 +85,7 @@ public class ClientGameData {
                 this.nearestToWayPoint = new Vector3i();
             }
 
+            //set waypoint to null bc player reached it
             if (clientPos.equals(this.getWaypoint())) {
                 this.setWaypoint((Vector3i)null);
                 return;
