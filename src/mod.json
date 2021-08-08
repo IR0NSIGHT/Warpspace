@@ -1,7 +1,7 @@
 {
   "name": "WarpSpace",
   "author": "IR0NSIGHT",
-  "description": "an alternative FTL system",
+  "description": "an alternative FTL system EXP 01",
   "version": "0.9.7",
   "starmade_version": "dev - v0.202.108",
   "client_mod": false,
@@ -12,5 +12,5 @@
     -1
   ],
   "core_mod": true,
-  "requires_class_resize": false
+  "requires_class_resize": true
 }
