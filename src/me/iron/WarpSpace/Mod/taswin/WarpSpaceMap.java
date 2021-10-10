@@ -114,7 +114,7 @@ public class WarpSpaceMap
 			}
 		}, instance);
 		
-		addMiniMapListener(instance);
+		//addMiniMapListener(instance);
 		
 		StarLoader.registerListener(StarCreationAttemptEvent.class, new Listener<StarCreationAttemptEvent>()
 		{
