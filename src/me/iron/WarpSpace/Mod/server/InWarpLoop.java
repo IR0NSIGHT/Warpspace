@@ -59,7 +59,7 @@ public class InWarpLoop {
                     }
                     if (countdown <= 0) {
                         //drop entity out of warp.
-                        WarpJumpManager.invokeDrop(1,ship,WarpManager.GetRealSpacePos(ship.getSector(new Vector3i())),false, false);
+                        WarpJumpManager.invokeDrop(1,ship,false, false);
                         cancel();
                     }
                 } catch (Exception e) {

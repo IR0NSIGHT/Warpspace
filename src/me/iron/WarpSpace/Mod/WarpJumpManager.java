@@ -47,11 +47,10 @@ public class WarpJumpManager {
      * Automatically handles effects etc.
      * @param countdown do jump in x second
      * @param ship ship to warp
-     * @param sector targeted sector to drop into
      * @param isJump is a jump or an autodrop, will empty warpdrive if true
      * @param force overwrite all checks, admin
      */
-    public static void invokeDrop(long countdown, final SegmentController ship, Vector3i sector, final boolean isJump, boolean force) {
+    public static void invokeDrop(long countdown, final SegmentController ship, final boolean isJump, boolean force) {
         countdown *= 25; //turn seconds into ticks
         //check if already dropping
         if (!force && dropQueue.contains(ship)) { //ship already has a drop queued, and doesnt force another one.
@@ -59,12 +58,13 @@ public class WarpJumpManager {
             //TODO abort already queued jump -> click to jump, click again to abort
             return;
         }
+        final boolean isRandom;
         if (ship.getType().equals(SimpleTransformableSendableObject.EntityType.SPACE_STATION) )
         {
             //its a spacestation. drop to a random sector.
             // reason: could drop second station into realspace sector by spawning in warp otherwise.
             // also: could drop battlestation from warp into sector, maybe even homebase
-            sector = WarpJumpManager.getRandomSector();
+            isRandom = true;
         }
         //--------------before action is taken
         //--------------after action is taken
@@ -76,7 +76,6 @@ public class WarpJumpManager {
         }
 
 
-        final Vector3i sectorF = sector;
         dropQueue.add(ship);
         new StarRunnable() {
             @Override
@@ -84,19 +83,16 @@ public class WarpJumpManager {
                 if (GameServerState.isShutdown() || GameServerState.isFlagShutdown()) {
                     cancel();
                 }
-                if (dropQueue.contains(ship)) { //remove from queue
-                    dropQueue.remove(ship);
-                }
+                //remove from queue
+                dropQueue.remove(ship);
 
                 //create, fire event, get back params
                 WarpJumpEvent.WarpJumpType type;
-                if (isJump) {
-                    type = WarpJumpEvent.WarpJumpType.EXIT;
-                } else {
-                    type = WarpJumpEvent.WarpJumpType.DROP;
-                }
 
-                WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),sectorF);
+                type = isJump?WarpJumpEvent.WarpJumpType.EXIT:WarpJumpEvent.WarpJumpType.DROP;
+
+                Vector3i targetSector = WarpManager.GetRealSpacePos(ship.getSector(new Vector3i()));
+                WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),targetSector);
                 StarLoader.fireEvent(e, true);
 
                 if (isJump) {
@@ -107,7 +103,7 @@ public class WarpJumpManager {
                 }
 
 
-                if (e.isCanceled()) {
+                if (e.isCanceled() || !isAllowedDropJump(ship)) {
                     cancel();
                     return;
                 }
@@ -118,7 +114,7 @@ public class WarpJumpManager {
                     emptyWarpdrive(ship);
                 }
                 //queue sector switch
-                doSectorSwitch(ship, sectorF,true);
+                doSectorSwitch(ship, targetSector,true);
             }
         }.runLater(WarpMain.instance,countdown);
     }
@@ -127,10 +123,9 @@ public class WarpJumpManager {
      * will make the given ship entry warp after x seconds to specified sector.
      * @param countdown in seconds
      * @param ship segmentcontroller
-     * @param sector target sector to enter
      * @param force true if ignore all checks and force jump anyways
      */
-    public static void invokeEntry(long countdown, final SegmentController ship, final Vector3i sector, boolean force) {
+    public static void invokeEntry(long countdown, final SegmentController ship, boolean force) {
         countdown *= 25; //turn seconds into ticks
 
         //check if already dropping
@@ -157,13 +152,14 @@ public class WarpJumpManager {
                 //create, fire event, get back params
                 WarpJumpEvent.WarpJumpType  type = WarpJumpEvent.WarpJumpType.ENTRY;
 
+                Vector3i sector = WarpManager.GetWarpSpacePos(ship.getSector(new Vector3i()));
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),sector);
                 StarLoader.fireEvent(e, true);
 
                 //for all attached players send travel update, bc drop is over
                 SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,0, new ArrayList<String>());
 
-                if (e.isCanceled()) {
+                if (e.isCanceled() || !WarpJumpManager.isAllowedEntry(ship)) {
                     cancel();
                     return;
                 }
