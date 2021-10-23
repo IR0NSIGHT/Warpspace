@@ -2,6 +2,7 @@ package me.iron.WarpSpace.Mod;
 
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
+import api.mod.ModStarter;
 import api.mod.StarMod;
 import api.network.packets.PacketUtil;
 import me.iron.WarpSpace.Mod.HUD.client.*;
@@ -11,6 +12,10 @@ import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
 import me.iron.WarpSpace.Mod.visuals.BackgroundEventListener;
+import me.iron.WarpSpace.Mod.visuals.WarpSkybox;
+import org.schema.schine.graphicsengine.shader.Shader;
+import org.schema.schine.resource.MeshLoader;
+import org.schema.schine.resource.ResourceLoader;
 
 
 /*
@@ -35,11 +40,17 @@ public class WarpMain extends StarMod {
         super.onEnable();
         BackgroundEventListener.AddListener(); //add background color listener
         instance = this;
+        WarpSkybox.instantiate();
         PacketUtil.registerPacket(PacketHUDUpdate.class);
         
         WarpSpaceMap.enable(instance);
     }
-    
+
+    @Override
+    public void onResourceLoad(ResourceLoader loader) {
+        WarpSkybox.loadResources(loader.getMeshLoader(), this);
+    }
+
     @Override
     public void onDisable() {
         WarpSpaceMap.disable();
