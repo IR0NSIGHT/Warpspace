@@ -32,7 +32,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/map/DropPointMapDrawer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/map/DropPointMapDrawer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mod.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/mod.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +85,7 @@
       <recent name="C:\Users\Max1M\IdeaProjects\Warpspace\lib" />
     </key>
   </component>
-  <component name="RunManager" selected="JAR Application.singleplayer">
+  <component name="RunManager" selected="JAR Application.client">
     <configuration name="main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="me.iron.WarpSpace.Mod.testing.main" />
       <module name="Warpspace" />
@@ -111,10 +112,38 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="client" type="JarApplication">
+      <option name="JAR_PATH" value="$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/StarMade.jar" />
+      <option name="VM_PARAMETERS" value="-Xmx3G -Xms3G" />
+      <option name="PROGRAM_PARAMETERS" value="-force -uplink 127.0.0.1 4242 8166,-1" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\Max1M\Desktop\Starmade\server testarea\client\StarMade" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="ALTERNATIVE_JRE_PATH" value="1.7" />
+      <method v="2">
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="WarpspaceClient" />
+        </option>
+      </method>
+    </configuration>
+    <configuration name="server" type="JarApplication">
+      <option name="JAR_PATH" value="$USER_HOME$/Desktop/Starmade/server testarea/server/StarMade/StarMade.jar" />
+      <option name="VM_PARAMETERS" value="-Xmx3G -Xms3G" />
+      <option name="PROGRAM_PARAMETERS" value="-force -server 8166,-1" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\Max1M\Desktop\Starmade\server testarea\server\StarMade" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="ALTERNATIVE_JRE_PATH" value="1.7" />
+      <method v="2">
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="WarpspaceServer" />
+        </option>
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.main (1)" />
       <item itemvalue="Application.main" />
       <item itemvalue="JAR Application.singleplayer" />
+      <item itemvalue="JAR Application.client" />
+      <item itemvalue="JAR Application.server" />
     </list>
     <recent_temporary>
       <list>
@@ -275,7 +304,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635175700135</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="droppoint color now bright blue">
+      <created>1635176048010</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1635176048010</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -325,16 +361,19 @@
     <MESSAGE value="got rid of HudIndicatorOverlay.java.&#10;HUD markers softly replace their vanilla parts." />
     <MESSAGE value="Framework for warpbeacons that ship the exit point" />
     <MESSAGE value="show warp exit points on map, including beacons" />
-    <option name="LAST_COMMIT_MESSAGE" value="show warp exit points on map, including beacons" />
+    <MESSAGE value="droppoint color now bright blue" />
+    <option name="LAST_COMMIT_MESSAGE" value="droppoint color now bright blue" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2540" y="465" key="#BuildArtifactsBeforeRunChooser" timestamp="1635162774558">
-      <screen x="1920" y="155" width="1680" height="1010" />
+    <state x="709" y="319" key="#BuildArtifactsBeforeRunChooser" timestamp="1635177572784">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="709" y="319" key="#BuildArtifactsBeforeRunChooser/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635177572784" />
     <state x="2540" y="465" key="#BuildArtifactsBeforeRunChooser/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635162774558" />
-    <state x="2214" y="315" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1635162840071">
-      <screen x="1920" y="155" width="1680" height="1010" />
+    <state x="336" y="165" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1635177574765">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="336" y="165" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635177574765" />
     <state x="2214" y="315" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635162840071" />
     <state x="832" y="186" key="#com.intellij.ide.util.MemberChooser" timestamp="1635161597986">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -349,41 +388,46 @@
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="2449" y="401" key="FileChooserDialogImpl/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635171525769" />
-    <state width="1637" height="330" key="GridCell.Tab.0.bottom" timestamp="1635175745373">
+    <state width="1637" height="330" key="GridCell.Tab.0.bottom" timestamp="1635177253125">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745373" />
-    <state width="1637" height="330" key="GridCell.Tab.0.center" timestamp="1635175745372">
+    <state width="1637" height="330" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635177253125" />
+    <state width="1637" height="330" key="GridCell.Tab.0.center" timestamp="1635177253125">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745372" />
-    <state width="1637" height="330" key="GridCell.Tab.0.left" timestamp="1635175745372">
+    <state width="1637" height="330" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635177253125" />
+    <state width="1637" height="330" key="GridCell.Tab.0.left" timestamp="1635177253124">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745372" />
-    <state width="1637" height="330" key="GridCell.Tab.0.right" timestamp="1635175745373">
+    <state width="1637" height="330" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635177253124" />
+    <state width="1637" height="330" key="GridCell.Tab.0.right" timestamp="1635177253125">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745373" />
-    <state width="1637" height="330" key="GridCell.Tab.1.bottom" timestamp="1635175745242">
+    <state width="1637" height="330" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635177253125" />
+    <state width="1637" height="330" key="GridCell.Tab.1.bottom" timestamp="1635177253126">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745242" />
-    <state width="1637" height="330" key="GridCell.Tab.1.center" timestamp="1635175745242">
+    <state width="1637" height="330" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635177253126" />
+    <state width="1637" height="330" key="GridCell.Tab.1.center" timestamp="1635177253125">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745242" />
-    <state width="1637" height="330" key="GridCell.Tab.1.left" timestamp="1635175745242">
+    <state width="1637" height="330" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635177253125" />
+    <state width="1637" height="330" key="GridCell.Tab.1.left" timestamp="1635177253125">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745242" />
-    <state width="1637" height="330" key="GridCell.Tab.1.right" timestamp="1635175745242">
+    <state width="1637" height="330" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635177253125" />
+    <state width="1637" height="330" key="GridCell.Tab.1.right" timestamp="1635177253126">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745242" />
-    <state x="2240" y="234" width="1040" height="509" key="SettingsEditor" timestamp="1635174063289">
-      <screen x="1920" y="155" width="1680" height="1010" />
+    <state width="1637" height="330" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635177253126" />
+    <state x="731" y="241" key="RollbackChangesDialog" timestamp="1635177385639">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="731" y="241" key="RollbackChangesDialog/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635177385639" />
+    <state x="366" y="81" width="1040" height="509" key="SettingsEditor" timestamp="1635177563726">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="366" y="81" key="SettingsEditor/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635177563726" />
     <state x="2240" y="234" width="1040" height="509" key="SettingsEditor/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635174063289" />
     <state x="2576" y="575" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1633866343056">
       <screen x="1920" y="155" width="1680" height="1010" />
@@ -397,11 +441,11 @@
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="2476" y="400" width="567" height="520" key="find.popup/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1633866696652" />
-    <state x="575" y="223" width="768" height="699" key="search.everywhere.popup" timestamp="1635162259158">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2423" y="372" width="672" height="678" key="search.everywhere.popup" timestamp="1635176916804">
+      <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635162259158" />
-    <state x="2423" y="372" width="672" height="678" key="search.everywhere.popup/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1633862903054" />
+    <state x="2423" y="372" width="672" height="678" key="search.everywhere.popup/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635176916804" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

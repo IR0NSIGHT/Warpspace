@@ -70,7 +70,7 @@ public class WarpMain extends StarMod {
         HUD_core.initList();
         GUIeventhandler.addHUDDrawListener();
         HUD_core.HUDLoop();
-
+        beaconManager = new BeaconManager();
     }
 
     @Override
