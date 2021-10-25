@@ -27,7 +27,7 @@ import javax.vecmath.Vector4f;
 public class DropPointMapDrawer extends MapDrawer {
     private Sprite mapSprite;
     private Vector3i lastSector = new Vector3i();
-    private Vector4f markerColor = new Vector4f(0.5f,1,1,0.5f);
+    private Vector4f markerColor = new Vector4f(0,1,1,0.8f);
 
     public DropPointMapDrawer(StarMod mod) {
         super(mod);

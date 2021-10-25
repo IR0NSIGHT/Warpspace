@@ -31,24 +31,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/MapDrawerUtils.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/map/DropPointMapDrawer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/mapsprite.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Warpspace.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Warpspace.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/DebugChatEvent$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/DebugChatEvent.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/HUD_core.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/HUD_core.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/WarpHUDPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/WarpHUDPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/Interdiction/InterdictionHUDUpdateLoop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/Interdiction/InterdictionHUDUpdateLoop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpJumpManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpJumpManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/taswin/MyGameMapListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/taswin/MyGameMapListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/taswin/WarpSpaceMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/taswin/WarpSpaceMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/schema/game/client/data/ClientGameData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/schema/game/client/data/ClientGameData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/map/DropPointMapDrawer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/map/DropPointMapDrawer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -284,7 +268,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635171422243</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="show warp exit points on map, including beacons">
+      <created>1635175700135</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1635175700135</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -333,7 +324,8 @@
     <MESSAGE value="updates json to 0.9.4" />
     <MESSAGE value="got rid of HudIndicatorOverlay.java.&#10;HUD markers softly replace their vanilla parts." />
     <MESSAGE value="Framework for warpbeacons that ship the exit point" />
-    <option name="LAST_COMMIT_MESSAGE" value="Framework for warpbeacons that ship the exit point" />
+    <MESSAGE value="show warp exit points on map, including beacons" />
+    <option name="LAST_COMMIT_MESSAGE" value="show warp exit points on map, including beacons" />
   </component>
   <component name="WindowStateProjectService">
     <state x="2540" y="465" key="#BuildArtifactsBeforeRunChooser" timestamp="1635162774558">
@@ -357,38 +349,38 @@
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="2449" y="401" key="FileChooserDialogImpl/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635171525769" />
-    <state width="1637" height="330" key="GridCell.Tab.0.bottom" timestamp="1635175000427">
+    <state width="1637" height="330" key="GridCell.Tab.0.bottom" timestamp="1635175745373">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175000427" />
-    <state width="1637" height="330" key="GridCell.Tab.0.center" timestamp="1635175000427">
+    <state width="1637" height="330" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745373" />
+    <state width="1637" height="330" key="GridCell.Tab.0.center" timestamp="1635175745372">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175000427" />
-    <state width="1637" height="330" key="GridCell.Tab.0.left" timestamp="1635175000427">
+    <state width="1637" height="330" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745372" />
+    <state width="1637" height="330" key="GridCell.Tab.0.left" timestamp="1635175745372">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175000427" />
-    <state width="1637" height="330" key="GridCell.Tab.0.right" timestamp="1635175000427">
+    <state width="1637" height="330" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745372" />
+    <state width="1637" height="330" key="GridCell.Tab.0.right" timestamp="1635175745373">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175000427" />
-    <state width="1637" height="330" key="GridCell.Tab.1.bottom" timestamp="1635174640643">
+    <state width="1637" height="330" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745373" />
+    <state width="1637" height="330" key="GridCell.Tab.1.bottom" timestamp="1635175745242">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635174640643" />
-    <state width="1637" height="330" key="GridCell.Tab.1.center" timestamp="1635174640643">
+    <state width="1637" height="330" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745242" />
+    <state width="1637" height="330" key="GridCell.Tab.1.center" timestamp="1635175745242">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635174640643" />
-    <state width="1637" height="330" key="GridCell.Tab.1.left" timestamp="1635174640642">
+    <state width="1637" height="330" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745242" />
+    <state width="1637" height="330" key="GridCell.Tab.1.left" timestamp="1635175745242">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635174640642" />
-    <state width="1637" height="330" key="GridCell.Tab.1.right" timestamp="1635174640643">
+    <state width="1637" height="330" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745242" />
+    <state width="1637" height="330" key="GridCell.Tab.1.right" timestamp="1635175745242">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635174640643" />
+    <state width="1637" height="330" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175745242" />
     <state x="2240" y="234" width="1040" height="509" key="SettingsEditor" timestamp="1635174063289">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
