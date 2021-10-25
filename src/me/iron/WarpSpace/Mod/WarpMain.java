@@ -6,6 +6,7 @@ import api.mod.StarMod;
 import api.mod.config.PersistentObjectUtil;
 import api.network.packets.PacketUtil;
 import me.iron.WarpSpace.Mod.HUD.client.*;
+import me.iron.WarpSpace.Mod.HUD.client.map.DropPointMapDrawer;
 import me.iron.WarpSpace.Mod.Interdiction.InterdictionHUDUpdateLoop;
 import me.iron.WarpSpace.Mod.beacon.BeaconManager;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
@@ -13,6 +14,7 @@ import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
 import me.iron.WarpSpace.Mod.visuals.BackgroundEventListener;
+import org.schema.schine.resource.ResourceLoader;
 
 
 /*
@@ -68,6 +70,12 @@ public class WarpMain extends StarMod {
         HUD_core.initList();
         GUIeventhandler.addHUDDrawListener();
         HUD_core.HUDLoop();
+
     }
 
+    @Override
+    public void onResourceLoad(ResourceLoader loader) {
+        super.onResourceLoad(loader);
+        new DropPointMapDrawer(this).loadSprite();
+    }
 }

@@ -1,6 +1,5 @@
 package me.iron.WarpSpace.Mod.Interdiction;
 
-import api.DebugFile;
 import api.utils.StarRunnable;
 import me.iron.WarpSpace.Mod.HUD.client.WarpProcessController;
 import me.iron.WarpSpace.Mod.WarpJumpManager;
@@ -38,7 +37,7 @@ public class InterdictionHUDUpdateLoop {
                     try {
                         player = GameServerState.instance.getPlayerFromName(client.getPlayerName());
                     } catch (PlayerNotFountException e) {
-                        e.printStackTrace();
+                    //    e.printStackTrace();
                     //    DebugFile.logError(e, WarpMain.instance);
                         continue;
                     }
@@ -57,10 +56,10 @@ public class InterdictionHUDUpdateLoop {
                     Vector3i warpPos = null;
                     if (WarpManager.IsInWarp(sc)) {
                         warpPos = sc.getSector(new Vector3i());
-                        rspPos = WarpManager.GetRealSpacePos(warpPos);
+                        rspPos = WarpManager.getRealSpacePos(warpPos);
                     } else {
                         rspPos = sc.getSector(new Vector3i());
-                        warpPos = WarpManager.GetWarpSpacePos(rspPos);
+                        warpPos = WarpManager.getWarpSpacePos(rspPos);
                     }
                     if (rspPos == null || warpPos == null) {
                      //   DebugFile.log("rsp or warppos is null");

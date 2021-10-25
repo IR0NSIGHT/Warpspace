@@ -1,21 +1,15 @@
 package me.iron.WarpSpace.Mod.beacon;
 
 import api.ModPlayground;
-import api.listener.Listener;
-import api.listener.events.player.PlayerChatEvent;
 import api.mod.ModSkeleton;
-import api.mod.StarLoader;
 import api.mod.config.PersistentObjectUtil;
 import api.mod.config.SimpleSerializerWrapper;
 import api.network.PacketReadBuffer;
 import api.network.PacketWriteBuffer;
-import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
-import org.lwjgl.Sys;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -47,17 +41,17 @@ public class BeaconManager extends SimpleSerializerWrapper {
     private HashMap<Vector3i,ArrayList<BeaconObject>> sectorToBeaconMap = new HashMap<>();
     private Random random;
     public BeaconManager() {
-        addBeacon(new BeaconObject(
-                new Vector3i(2,2,2),
-                true,
-                "TEST BEACON UID",
-                -1,
-                100,
-                SimpleTransformableSendableObject.EntityType.ASTEROID,
-                true,
-                "UWU EMPIRE NOOB TRAP",
-                "UWU EMPIRE"
-        ));
+   //     addBeacon(new BeaconObject(
+   //             new Vector3i(2,2,2),
+   //             true,
+   //             "TEST BEACON UID",
+   //             -1,
+   //             100,
+   //             SimpleTransformableSendableObject.EntityType.ASTEROID,
+   //             true,
+   //             "UWU EMPIRE NOOB TRAP",
+   //             "UWU EMPIRE"
+   //     ));
     }
 
     public void onInit() {
@@ -74,7 +68,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
         if (strongest != null)
             dropPos.set(strongest.getPosition());
 
-        print();
+        //print();
         return strongest;
     }
 
@@ -111,7 +105,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
     }
 
     public void addBeacon(BeaconObject beacon) {
-        Vector3i warpPos = WarpManager.GetWarpSpacePos(beacon.getPosition());
+        Vector3i warpPos = WarpManager.getWarpSpacePos(beacon.getPosition());
         ArrayList<BeaconObject> list = sectorToBeaconMap.get(warpPos);
         if (list == null) {
             list = new ArrayList<>();
@@ -123,7 +117,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
     }
 
     public void removeBeacon(BeaconObject beacon) {
-        Vector3i warpPos = WarpManager.GetWarpSpacePos(beacon.getPosition());
+        Vector3i warpPos = WarpManager.getWarpSpacePos(beacon.getPosition());
         ArrayList<BeaconObject> list = sectorToBeaconMap.get(warpPos);
         if (list == null) {
             return;

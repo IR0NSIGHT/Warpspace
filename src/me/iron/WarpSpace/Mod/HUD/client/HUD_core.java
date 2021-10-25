@@ -1,11 +1,7 @@
 package me.iron.WarpSpace.Mod.HUD.client;
 
-import api.DebugFile;
-import api.ModPlayground;
-import api.common.GameClient;
 import api.listener.Listener;
 import api.listener.events.gui.HudCreateEvent;
-import api.listener.events.player.PlayerSpawnEvent;
 import api.mod.StarLoader;
 import me.iron.WarpSpace.Mod.TimedRunnable;
 import me.iron.WarpSpace.Mod.WarpMain;
@@ -13,10 +9,7 @@ import me.iron.WarpSpace.Mod.WarpManager;
 import api.utils.StarRunnable;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
-import org.schema.game.client.view.WorldDrawer;
-import org.schema.game.client.view.gui.GuiDrawer;
 import org.schema.game.client.view.gui.shiphud.HudIndicatorOverlay;
-import org.schema.game.client.view.gui.shiphud.newhud.Hud;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
@@ -253,7 +246,7 @@ public class HUD_core {
 
         HudIndicatorOverlay overlay = GameClientState.instance.getWorldDrawer().getGuiDrawer().getHud().getIndicator();
         for (int i = 0; i < overlay.neighborSectorsNames.length; i++) {
-            overlay.neighborSectorsNames[i] = "[WARP]\n"+ WarpManager.GetRealSpacePos(overlay.neighborSectorsPos[i]);
+            overlay.neighborSectorsNames[i] = "[WARP]\n"+ WarpManager.getRealSpacePos(overlay.neighborSectorsPos[i]);
         }
 
         //Radar.location ==> sector coord HUD under radar
@@ -276,7 +269,7 @@ public class HUD_core {
                     if (sector.equals(69,69,69))
                         return "nice.";
 
-                    return inWarp?"[WARP]\n"+WarpManager.GetRealSpacePos(sector).toStringPure():sector.toStringPure();
+                    return inWarp?"[WARP]\n"+WarpManager.getRealSpacePos(sector).toStringPure():sector.toStringPure();
                 } catch (Exception e) {
                     return "error";
                 }

@@ -92,7 +92,7 @@ public class WarpJumpManager {
                 type = isJump?WarpJumpEvent.WarpJumpType.EXIT:WarpJumpEvent.WarpJumpType.DROP;
 
                 Vector3i warpPos = ship.getSector(new Vector3i());
-                Vector3i targetSector = WarpManager.GetRealSpacePos(warpPos);
+                Vector3i targetSector = WarpManager.getRealSpacePos(warpPos);
 
                 //apply warp-beacon. inform player if beacon had effect.
                 BeaconObject puller = WarpMain.instance.beaconManager.modifyDroppoint(warpPos,targetSector);
@@ -161,7 +161,7 @@ public class WarpJumpManager {
                 //create, fire event, get back params
                 WarpJumpEvent.WarpJumpType  type = WarpJumpEvent.WarpJumpType.ENTRY;
 
-                Vector3i sector = WarpManager.GetWarpSpacePos(ship.getSector(new Vector3i()));
+                Vector3i sector = WarpManager.getWarpSpacePos(ship.getSector(new Vector3i()));
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),sector);
                 StarLoader.fireEvent(e, true);
 
@@ -217,7 +217,7 @@ public class WarpJumpManager {
      * @return boolean, true if allowed entry, false if interdicted or can fire warpdrive
      */
     public static boolean isAllowedEntry(SegmentController ship) {
-        if (isInterdicted(ship,WarpManager.GetWarpSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
+        if (isInterdicted(ship,WarpManager.getWarpSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
             return false;
         }
     //    DebugFile.log("isAllowedEntry is an empty check");
@@ -232,7 +232,7 @@ public class WarpJumpManager {
      * @return boolean, true if not interdicted and can fire warpdrive
      */
     public static boolean isAllowedDropJump(SegmentController ship) {
-        if (isInterdicted(ship,WarpManager.GetRealSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
+        if (isInterdicted(ship,WarpManager.getRealSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
             return false;
         }
     //    DebugFile.log("isAllowedDrop is an empty check");

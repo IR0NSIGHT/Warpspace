@@ -54,9 +54,9 @@ public class WarpHUDPanel { //TODO refactor messy class, make instatiable like C
                     oldPos = new Vector3i(getPlayerSector());
 
                     if (WarpManager.IsInWarp(getPlayerSector())) {
-                        newPos = WarpManager.GetRealSpacePos(getPlayerSector());
+                        newPos = WarpManager.getRealSpacePos(getPlayerSector());
                     } else {
-                        newPos = WarpManager.GetWarpSpacePos(getPlayerSector());
+                        newPos = WarpManager.getWarpSpacePos(getPlayerSector());
                     }
                     Vector<Integer> vec = new Vector<Integer>();
                     vec.add(newPos.x);

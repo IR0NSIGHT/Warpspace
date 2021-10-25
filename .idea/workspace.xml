@@ -31,13 +31,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/MapDrawerUtils.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/map/DropPointMapDrawer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/mapsprite.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.run/SM with warpspace.run.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.run/SM with warpspace.run.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warpspace.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Warpspace.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/DebugChatEvent$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/DebugChatEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Warpspace/testing/main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/HUD_core.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/HUD_core.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/WarpHUDPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/WarpHUDPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/Interdiction/InterdictionHUDUpdateLoop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/Interdiction/InterdictionHUDUpdateLoop.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpJumpManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpJumpManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/taswin/MyGameMapListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/taswin/MyGameMapListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/taswin/WarpSpaceMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/taswin/WarpSpaceMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/schema/game/client/data/ClientGameData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/schema/game/client/data/ClientGameData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +86,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/mods" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/MapDrawerUtils.jar" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -83,6 +94,10 @@
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="testing" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Max1M\IdeaProjects\Warpspace\src\me\iron\WarpSpace\Mod\res" />
+      <recent name="C:\Users\Max1M\IdeaProjects\Warpspace\lib" />
     </key>
   </component>
   <component name="RunManager" selected="JAR Application.singleplayer">
@@ -262,7 +277,14 @@
       <option name="project" value="LOCAL" />
       <updated>1633867062500</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Framework for warpbeacons that ship the exit point">
+      <created>1635171422243</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1635171422243</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -310,7 +332,8 @@
     <MESSAGE value="Deleted now obsolete NavHelper.java, WarpJumpEventHandler.java." />
     <MESSAGE value="updates json to 0.9.4" />
     <MESSAGE value="got rid of HudIndicatorOverlay.java.&#10;HUD markers softly replace their vanilla parts." />
-    <option name="LAST_COMMIT_MESSAGE" value="got rid of HudIndicatorOverlay.java.&#10;HUD markers softly replace their vanilla parts." />
+    <MESSAGE value="Framework for warpbeacons that ship the exit point" />
+    <option name="LAST_COMMIT_MESSAGE" value="Framework for warpbeacons that ship the exit point" />
   </component>
   <component name="WindowStateProjectService">
     <state x="2540" y="465" key="#BuildArtifactsBeforeRunChooser" timestamp="1635162774558">
@@ -330,42 +353,46 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="517" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635159053177" />
-    <state width="1637" height="330" key="GridCell.Tab.0.bottom" timestamp="1635166117795">
+    <state x="2449" y="401" key="FileChooserDialogImpl" timestamp="1635171525769">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635166117795" />
-    <state width="1637" height="330" key="GridCell.Tab.0.center" timestamp="1635166117795">
+    <state x="2449" y="401" key="FileChooserDialogImpl/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635171525769" />
+    <state width="1637" height="330" key="GridCell.Tab.0.bottom" timestamp="1635175000427">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635166117795" />
-    <state width="1637" height="330" key="GridCell.Tab.0.left" timestamp="1635166117795">
+    <state width="1637" height="330" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175000427" />
+    <state width="1637" height="330" key="GridCell.Tab.0.center" timestamp="1635175000427">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635166117795" />
-    <state width="1637" height="330" key="GridCell.Tab.0.right" timestamp="1635166117795">
+    <state width="1637" height="330" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175000427" />
+    <state width="1637" height="330" key="GridCell.Tab.0.left" timestamp="1635175000427">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635166117795" />
-    <state width="1637" height="330" key="GridCell.Tab.1.bottom" timestamp="1635166127101">
+    <state width="1637" height="330" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175000427" />
+    <state width="1637" height="330" key="GridCell.Tab.0.right" timestamp="1635175000427">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635166127101" />
-    <state width="1637" height="330" key="GridCell.Tab.1.center" timestamp="1635166127101">
+    <state width="1637" height="330" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635175000427" />
+    <state width="1637" height="330" key="GridCell.Tab.1.bottom" timestamp="1635174640643">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635166127101" />
-    <state width="1637" height="330" key="GridCell.Tab.1.left" timestamp="1635166127101">
+    <state width="1637" height="330" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635174640643" />
+    <state width="1637" height="330" key="GridCell.Tab.1.center" timestamp="1635174640643">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635166127101" />
-    <state width="1637" height="330" key="GridCell.Tab.1.right" timestamp="1635166127101">
+    <state width="1637" height="330" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635174640643" />
+    <state width="1637" height="330" key="GridCell.Tab.1.left" timestamp="1635174640642">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state width="1637" height="330" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635166127101" />
-    <state x="2240" y="234" key="SettingsEditor" timestamp="1635162767742">
+    <state width="1637" height="330" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635174640642" />
+    <state width="1637" height="330" key="GridCell.Tab.1.right" timestamp="1635174640643">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state x="2240" y="234" key="SettingsEditor/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635162767742" />
+    <state width="1637" height="330" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635174640643" />
+    <state x="2240" y="234" width="1040" height="509" key="SettingsEditor" timestamp="1635174063289">
+      <screen x="1920" y="155" width="1680" height="1010" />
+    </state>
+    <state x="2240" y="234" width="1040" height="509" key="SettingsEditor/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635174063289" />
     <state x="2576" y="575" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1633866343056">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
@@ -395,32 +422,14 @@
           </properties>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java</url>
-          <line>138</line>
-          <properties class="me.iron.WarpSpace.Mod.beacon.BeaconManager" method="onDeserialize">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="46" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java</url>
-          <line>35</line>
-          <option name="timeStamp" value="49" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java</url>
-          <line>37</line>
-          <option name="timeStamp" value="50" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java</url>
-          <line>145</line>
+          <line>139</line>
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java</url>
-          <line>140</line>
+          <line>134</line>
           <option name="timeStamp" value="52" />
         </line-breakpoint>
       </breakpoints>
