@@ -1,16 +1,14 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="SM with warpspace" type="JarApplication">
+  <configuration default="false" name="singleplayer" type="JarApplication">
     <option name="JAR_PATH" value="$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/StarMade.jar" />
     <option name="VM_PARAMETERS" value="-Xmx3G -Xms3G" />
-    <option name="PROGRAM_PARAMETERS" value="-force -uplink 127.0.0.1 4242 8166,-1" />
+    <option name="PROGRAM_PARAMETERS" value="-force -uplink localhost 4242 8166,-1" />
     <option name="WORKING_DIRECTORY" value="C:\Users\Max1M\Desktop\Starmade\server testarea\client\StarMade" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="ALTERNATIVE_JRE_PATH" value="1.7" />
     <method v="2">
       <option name="BuildArtifacts" enabled="true">
-        <artifact name="WarpSpaceDedicated" />
-        <artifact name="WarpSpaceOut" />
-        <artifact name="WarpSpacev0.9.9" />
+        <artifact name="WarpspaceClient" />
       </option>
     </method>
   </configuration>

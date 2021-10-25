@@ -3,9 +3,11 @@ package me.iron.WarpSpace.Mod;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
 import api.mod.StarMod;
+import api.mod.config.PersistentObjectUtil;
 import api.network.packets.PacketUtil;
 import me.iron.WarpSpace.Mod.HUD.client.*;
 import me.iron.WarpSpace.Mod.Interdiction.InterdictionHUDUpdateLoop;
+import me.iron.WarpSpace.Mod.beacon.BeaconManager;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
@@ -28,8 +30,8 @@ public class WarpMain extends StarMod {
     public static void main(String[] args) {
         System.out.println("hello space!");
     }
-    public static StarMod instance;
-
+    public static WarpMain instance;
+    public BeaconManager beaconManager;
     @Override
     public void onEnable() {
         super.onEnable();
@@ -43,6 +45,7 @@ public class WarpMain extends StarMod {
     @Override
     public void onDisable() {
         WarpSpaceMap.disable();
+        PersistentObjectUtil.save(this.getSkeleton());
     }
     
     @Override
@@ -52,6 +55,8 @@ public class WarpMain extends StarMod {
     //TODO thrust    ThrustEventhandler.createListener();
         WarpCheckLoop.loop(25);
         InterdictionHUDUpdateLoop.CreateServerLoop();
+        beaconManager = BeaconManager.getSavedOrNew(this.getSkeleton());
+        beaconManager.onInit();
     }
 
     @Override

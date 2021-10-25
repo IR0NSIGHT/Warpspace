@@ -1,11 +1,11 @@
 package me.iron.WarpSpace.Mod;
 
 import me.iron.WarpSpace.Mod.HUD.client.WarpProcessController;
-import api.DebugFile;
 import api.common.GameServer;
 import api.mod.StarLoader;
 import api.network.packets.PacketUtil;
 import api.utils.StarRunnable;
+import me.iron.WarpSpace.Mod.beacon.BeaconObject;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.PlayerControllable;
@@ -91,8 +91,16 @@ public class WarpJumpManager {
 
                 type = isJump?WarpJumpEvent.WarpJumpType.EXIT:WarpJumpEvent.WarpJumpType.DROP;
 
-                Vector3i targetSector = WarpManager.GetRealSpacePos(ship.getSector(new Vector3i()));
-                WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),targetSector);
+                Vector3i warpPos = ship.getSector(new Vector3i());
+                Vector3i targetSector = WarpManager.GetRealSpacePos(warpPos);
+
+                //apply warp-beacon. inform player if beacon had effect.
+                BeaconObject puller = WarpMain.instance.beaconManager.modifyDroppoint(warpPos,targetSector);
+                if (puller != null) {
+                    ship.sendControllingPlayersServerMessage(Lng.astr("BEACON ACTIVE: " + puller.getName()+"["+puller.getFactionName()+"]"),ServerMessage.MESSAGE_TYPE_WARNING);
+                }
+
+                WarpJumpEvent e = new WarpJumpEvent(ship,type,warpPos,targetSector);
                 StarLoader.fireEvent(e, true);
 
                 if (isJump) {
@@ -113,6 +121,7 @@ public class WarpJumpManager {
                     //empty warpdrive
                     emptyWarpdrive(ship);
                 }
+
                 //queue sector switch
                 doSectorSwitch(ship, targetSector,true);
             }
