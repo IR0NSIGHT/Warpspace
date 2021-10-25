@@ -1,11 +1,15 @@
 package me.iron.WarpSpace.Mod.HUD.client;
 
+import api.mod.config.PersistentObjectUtil;
 import me.iron.WarpSpace.Mod.WarpMain;
 import api.DebugFile;
 import api.ModPlayground;
 import api.listener.Listener;
 import api.listener.events.player.PlayerChatEvent;
 import api.mod.StarLoader;
+import me.iron.WarpSpace.Mod.beacon.BeaconObject;
+import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3f;
@@ -31,6 +35,29 @@ public class DebugChatEvent {
                DebugFile.log("playerchat event"); //FIXME debug
                if (e.isServer()) {
                    ModPlayground.broadcastMessage("is on server");
+                   if (e.getText().contains("beacon")) {
+                       WarpMain.instance.beaconManager.addBeacon(new BeaconObject(
+
+                            new Vector3i(2,2,2),
+                            true,
+                            "TEST BEACON UID",
+                            -1,
+                            100,
+                            SimpleTransformableSendableObject.EntityType.ASTEROID,
+                            true,
+                            "UWU EMPIRE NOOB TRAP",
+                            "UWU EMPIRE"
+
+                       ));
+                   }
+
+                   if (e.getText().contains("list")) {
+                       WarpMain.instance.beaconManager.print();
+                   }
+
+                   if (e.getText().contains("save")) {
+                       PersistentObjectUtil.save(WarpMain.instance.getSkeleton());
+                   }
                    return;
                }
                DebugFile.log("doing sth in chat listener");

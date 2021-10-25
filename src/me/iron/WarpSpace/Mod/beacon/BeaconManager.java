@@ -1,18 +1,23 @@
 package me.iron.WarpSpace.Mod.beacon;
 
+import api.DebugFile;
 import api.ModPlayground;
 import api.mod.ModSkeleton;
 import api.mod.config.PersistentObjectUtil;
 import api.mod.config.SimpleSerializerWrapper;
 import api.network.PacketReadBuffer;
 import api.network.PacketWriteBuffer;
+import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 
+import javax.jdo.annotations.Persistent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * STARMADE MOD
@@ -21,6 +26,7 @@ import java.util.Random;
  * TIME: 12:05
  */
 public class BeaconManager extends SimpleSerializerWrapper {
+    private String s;
     public static BeaconManager getSavedOrNew(ModSkeleton skeleton) {
         try {
             ArrayList<Object> objs = PersistentObjectUtil.getObjects(skeleton,BeaconManager.class);
@@ -31,6 +37,10 @@ public class BeaconManager extends SimpleSerializerWrapper {
             } else {
                 manager = (BeaconManager)objs.get(0);
             }
+
+            PersistentObjectUtil.removeObject(WarpMain.instance.getSkeleton(), manager);
+
+            PersistentObjectUtil.addObject(WarpMain.instance.getSkeleton(), manager);
             return manager;
         } catch (Exception ex) {
             System.out.println("BEACONMANAGER FAILED TO LOAD FOR WARPSPACE");
@@ -38,8 +48,18 @@ public class BeaconManager extends SimpleSerializerWrapper {
         }
     }
 
-    private HashMap<Vector3i,ArrayList<BeaconObject>> sectorToBeaconMap = new HashMap<>();
-    private Random random;
+    transient private HashMap<Vector3i,ArrayList<BeaconObject>> sectorToBeaconMap = new HashMap(){
+        @Override
+        public void clear() {
+            super.clear();
+        }
+
+        @Override
+        public Object remove(Object key) {
+            return super.remove(key);
+        }
+    };
+    transient private Random random;
     public BeaconManager() {
    //     addBeacon(new BeaconObject(
    //             new Vector3i(2,2,2),
@@ -131,7 +151,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
 
     @Override
     public void onDeserialize(PacketReadBuffer buffer) {
-    /*    try {
+        try {
             int totalSize = buffer.readInt();
             for (int i = 0; i < totalSize; i ++) {
                 BeaconObject beacon = buffer.readObject(BeaconObject.class);
@@ -142,32 +162,38 @@ public class BeaconManager extends SimpleSerializerWrapper {
         } catch (Exception e) {
             System.out.println("BEACONMANAGER BUFFER READ ERROR");
             e.printStackTrace();
-        } */
+        }
     }
 
     @Override
     public void onSerialize(PacketWriteBuffer packetWriteBuffer) {
-    /*    try {
+        try {
             //collect ALL beacons in one big list
             ArrayList<BeaconObject> all = new ArrayList<>();
-            packetWriteBuffer.writeInt(sectorToBeaconMap.values().size());
             for (ArrayList<BeaconObject> sector: sectorToBeaconMap.values()) {
                 all.addAll(sector);
             }
+
+
             packetWriteBuffer.writeInt(all.size());
+            DebugFile.log("buffer wrote int : " +all.size());
+
             for (BeaconObject beaconObject : all) {
                 packetWriteBuffer.writeObject(beaconObject);
+                DebugFile.log("buffer wrote obj : " +beaconObject.toString());
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("BEACONMANAGER BUFFER WRITE ERROR");
             e.printStackTrace();
         }
-    */
+
     }
 
     //DEBUG STUFF
-    private void print() {
+    public void print() {
+        s ="uwu im the runtime manager";
+
         StringBuilder b = new StringBuilder();
         b.append("BeaconManager:\n");
         for (ArrayList<BeaconObject> beaconObjects: sectorToBeaconMap.values()) {

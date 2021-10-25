@@ -47,7 +47,7 @@ public class WarpMain extends StarMod {
     @Override
     public void onDisable() {
         WarpSpaceMap.disable();
-        PersistentObjectUtil.save(this.getSkeleton());
+    //    PersistentObjectUtil.save(this.getSkeleton());
     }
     
     @Override
@@ -59,6 +59,7 @@ public class WarpMain extends StarMod {
         InterdictionHUDUpdateLoop.CreateServerLoop();
         beaconManager = BeaconManager.getSavedOrNew(this.getSkeleton());
         beaconManager.onInit();
+    //    DebugChatEvent.addDebugChatListener();
     }
 
     @Override
@@ -70,7 +71,6 @@ public class WarpMain extends StarMod {
         HUD_core.initList();
         GUIeventhandler.addHUDDrawListener();
         HUD_core.HUDLoop();
-        beaconManager = new BeaconManager();
     }
 
     @Override
