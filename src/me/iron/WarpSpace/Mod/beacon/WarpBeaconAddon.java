@@ -1,6 +1,7 @@
 package me.iron.WarpSpace.Mod.beacon;
 
 import api.ModPlayground;
+import api.common.GameServer;
 import api.config.BlockConfig;
 import api.listener.Listener;
 import api.listener.events.register.RegisterAddonsEvent;
@@ -11,9 +12,11 @@ import api.utils.game.SegmentControllerUtils;
 import me.iron.WarpSpace.Mod.WarpMain;
 import org.schema.game.common.controller.SpaceStation;
 import org.schema.game.common.controller.elements.ManagerContainer;
+import org.schema.game.common.controller.elements.SingleModuleActivation;
 import org.schema.game.common.controller.elements.power.reactor.tree.ReactorElement;
 import org.schema.game.common.data.element.ElementInformation;
 import org.schema.game.common.data.element.ElementKeyMap;
+import org.schema.game.server.data.GameServerState;
 
 /**
  * STARMADE MOD
@@ -50,25 +53,25 @@ public class WarpBeaconAddon extends SimpleAddOn {
 
     @Override
     public boolean isPlayerUsable() { //called every frame (or often)
-        ReactorElement warpBeaconChamber = SegmentControllerUtils.getChamberFromElement(getManagerUsableSegmentController(), beaconChamber);
-        if (warpBeaconChamber == null)// || !(this.segmentController instanceof SpaceStation))
-            return false;
+    //    ReactorElement warpBeaconChamber = SegmentControllerUtils.getChamberFromElement(getManagerUsableSegmentController(), beaconChamber);
+    //    if (warpBeaconChamber == null)// || !(this.segmentController instanceof SpaceStation))
+    //        return false;
         return super.isPlayerUsable();
     }
 
     @Override
     public float getChargeRateFull() { //in seconds
-        return 5;
+        return 3;
     }
 
     @Override
     public double getPowerConsumedPerSecondResting() {
-        return powerCost;
+        return 0;
     }
 
     @Override
     public double getPowerConsumedPerSecondCharging() {
-        return powerCost;
+        return 0;
     }
 
     @Override
@@ -77,7 +80,21 @@ public class WarpBeaconAddon extends SimpleAddOn {
     }
 
     @Override
+    public boolean isAutoChargeOn() {
+        return super.isAutoChargeOn();
+    }
+
+    @Override
+    protected boolean isDeactivatableManually() {
+        return true;
+    }
+
+    @Override
     public boolean onExecuteServer() {
+        activation = new SingleModuleActivation();
+        activation.startTime = System.currentTimeMillis();
+        if (GameServerState.instance == null)
+            return true;
         ModPlayground.broadcastMessage("warp beacon activated by " + this.segmentController.getName());
         beacon = new BeaconObject(this.segmentController);
         WarpMain.instance.beaconManager.addBeacon(beacon);
@@ -98,11 +115,11 @@ public class WarpBeaconAddon extends SimpleAddOn {
 
     @Override
     public void onInactive() { //called when?
-        if (beacon != null) {
-            beacon.setFlagForDelete();
-            WarpMain.instance.beaconManager.updateBeacon(beacon);
-            beacon = null;
-        }
+       if (beacon != null) {
+           beacon.setFlagForDelete();
+           WarpMain.instance.beaconManager.updateBeacon(beacon);
+           beacon = null;
+       }
     }
 
     @Override

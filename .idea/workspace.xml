@@ -31,11 +31,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -320,7 +317,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635177716660</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="warpbeacon chamber and addon">
+      <created>1635277165609</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1635277165609</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -372,7 +376,8 @@
     <MESSAGE value="show warp exit points on map, including beacons" />
     <MESSAGE value="droppoint color now bright blue" />
     <MESSAGE value="bump 0.10.0" />
-    <option name="LAST_COMMIT_MESSAGE" value="bump 0.10.0" />
+    <MESSAGE value="warpbeacon chamber and addon" />
+    <option name="LAST_COMMIT_MESSAGE" value="warpbeacon chamber and addon" />
   </component>
   <component name="WindowStateProjectService">
     <state x="709" y="319" key="#BuildArtifactsBeforeRunChooser" timestamp="1635177572784">
@@ -398,46 +403,46 @@
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="2449" y="401" key="FileChooserDialogImpl/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635171525769" />
-    <state width="1637" height="264" key="GridCell.Tab.0.bottom" timestamp="1635276667502">
+    <state width="1637" height="264" key="GridCell.Tab.0.bottom" timestamp="1635277797816">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993733" />
-    <state width="1637" height="264" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635276667502" />
-    <state width="1637" height="264" key="GridCell.Tab.0.center" timestamp="1635276667502">
+    <state width="1637" height="264" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635277797816" />
+    <state width="1637" height="264" key="GridCell.Tab.0.center" timestamp="1635277797816">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993733" />
-    <state width="1637" height="264" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635276667502" />
-    <state width="1637" height="264" key="GridCell.Tab.0.left" timestamp="1635276667501">
+    <state width="1637" height="264" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635277797816" />
+    <state width="1637" height="264" key="GridCell.Tab.0.left" timestamp="1635277797816">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993733" />
-    <state width="1637" height="264" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635276667501" />
-    <state width="1637" height="264" key="GridCell.Tab.0.right" timestamp="1635276667502">
+    <state width="1637" height="264" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635277797816" />
+    <state width="1637" height="264" key="GridCell.Tab.0.right" timestamp="1635277797816">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993733" />
-    <state width="1637" height="264" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635276667502" />
-    <state width="1637" height="264" key="GridCell.Tab.1.bottom" timestamp="1635276676951">
+    <state width="1637" height="264" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635277797816" />
+    <state width="1637" height="264" key="GridCell.Tab.1.bottom" timestamp="1635277797702">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993734" />
-    <state width="1637" height="264" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635276676951" />
-    <state width="1637" height="264" key="GridCell.Tab.1.center" timestamp="1635276676950">
+    <state width="1637" height="264" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635277797702" />
+    <state width="1637" height="264" key="GridCell.Tab.1.center" timestamp="1635277797702">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993734" />
-    <state width="1637" height="264" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635276676950" />
-    <state width="1637" height="264" key="GridCell.Tab.1.left" timestamp="1635276676950">
+    <state width="1637" height="264" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635277797702" />
+    <state width="1637" height="264" key="GridCell.Tab.1.left" timestamp="1635277797702">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993734" />
-    <state width="1637" height="264" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635276676950" />
-    <state width="1637" height="264" key="GridCell.Tab.1.right" timestamp="1635276676951">
+    <state width="1637" height="264" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635277797702" />
+    <state width="1637" height="264" key="GridCell.Tab.1.right" timestamp="1635277797702">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993734" />
-    <state width="1637" height="264" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635276676951" />
+    <state width="1637" height="264" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635277797702" />
     <state x="731" y="241" key="RollbackChangesDialog" timestamp="1635177385639">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -474,7 +479,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java</url>
-          <line>36</line>
+          <line>39</line>
           <properties class="me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon" method="init">
             <option name="EMULATED" value="true" />
           </properties>
@@ -482,7 +487,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java</url>
-          <line>27</line>
+          <line>30</line>
           <properties class="me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon" method="registerChamberBlock">
             <option name="EMULATED" value="true" />
           </properties>
@@ -520,9 +525,17 @@
           </properties>
           <option name="timeStamp" value="89" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java</url>
+          <line>92</line>
+          <properties class="me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon" method="onExecuteServer">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="90" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java</url>
-          <line>35</line>
+          <line>38</line>
           <option name="timeStamp" value="77" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
