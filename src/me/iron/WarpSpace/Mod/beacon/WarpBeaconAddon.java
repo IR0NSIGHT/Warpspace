@@ -1,7 +1,6 @@
 package me.iron.WarpSpace.Mod.beacon;
 
 import api.ModPlayground;
-import api.common.GameServer;
 import api.config.BlockConfig;
 import api.listener.Listener;
 import api.listener.events.register.RegisterAddonsEvent;
@@ -10,7 +9,6 @@ import api.mod.StarMod;
 import api.utils.addon.SimpleAddOn;
 import api.utils.game.SegmentControllerUtils;
 import me.iron.WarpSpace.Mod.WarpMain;
-import org.schema.game.common.controller.SpaceStation;
 import org.schema.game.common.controller.elements.ManagerContainer;
 import org.schema.game.common.controller.elements.SingleModuleActivation;
 import org.schema.game.common.controller.elements.power.reactor.tree.ReactorElement;
@@ -26,18 +24,19 @@ import org.schema.game.server.data.GameServerState;
  */
 public class WarpBeaconAddon extends SimpleAddOn {
     private  float powerCost = 10000;
-    public static final String UIDName = "WarpBeaconSimple";
+    public static final String UIDName = "WARP_BEACON_SIMPLE";
     public static ElementInformation beaconChamber;
     public static void registerChamberBlock() {
         //short rootID = (short) ElementKeyMap.getInfo().chamberRoot;
          StarMod mod = WarpMain.instance;
-        beaconChamber = BlockConfig.newChamber(mod, "Warp Beacon", ElementKeyMap.REACTOR_CHAMBER_JUMP);
+         short rootID = ElementKeyMap.REACTOR_CHAMBER_JUMP;
+        beaconChamber = BlockConfig.newChamber(mod, "Warp Beacon", rootID);
         beaconChamber.chamberCapacity = 0.5f;
-        beaconChamber.setTextureId(ElementKeyMap.getInfo(ElementKeyMap.REACTOR_CHAMBER_JUMP).getTextureIds());
+        beaconChamber.setTextureId(ElementKeyMap.getInfo(rootID).getTextureIds());
         beaconChamber.setDescription("Shift the closest warp droppoint to this sector.");
         BlockConfig.add(beaconChamber);
     }
-    public static void init() {
+    public static void registerAddonAddEventListener() {
         StarLoader.registerListener(RegisterAddonsEvent.class, new Listener<RegisterAddonsEvent>() {
             @Override
             public void onEvent(RegisterAddonsEvent event) {
@@ -53,9 +52,9 @@ public class WarpBeaconAddon extends SimpleAddOn {
 
     @Override
     public boolean isPlayerUsable() { //called every frame (or often)
-    //    ReactorElement warpBeaconChamber = SegmentControllerUtils.getChamberFromElement(getManagerUsableSegmentController(), beaconChamber);
-    //    if (warpBeaconChamber == null)// || !(this.segmentController instanceof SpaceStation))
-    //        return false;
+        ReactorElement warpBeaconChamber = SegmentControllerUtils.getChamberFromElement(getManagerUsableSegmentController(), beaconChamber);
+        if (warpBeaconChamber == null)// || !(this.segmentController instanceof SpaceStation))
+            return false;
         return super.isPlayerUsable();
     }
 
@@ -97,7 +96,7 @@ public class WarpBeaconAddon extends SimpleAddOn {
             return true;
         ModPlayground.broadcastMessage("warp beacon activated by " + this.segmentController.getName());
         beacon = new BeaconObject(this.segmentController);
-        WarpMain.instance.beaconManager.addBeacon(beacon);
+        WarpMain.instance.beaconManagerServer.addBeacon(beacon);
         return true;
     }
 
@@ -117,7 +116,7 @@ public class WarpBeaconAddon extends SimpleAddOn {
     public void onInactive() { //called when?
        if (beacon != null) {
            beacon.setFlagForDelete();
-           WarpMain.instance.beaconManager.updateBeacon(beacon);
+           WarpMain.instance.beaconManagerServer.updateBeacon(beacon);
            beacon = null;
        }
     }

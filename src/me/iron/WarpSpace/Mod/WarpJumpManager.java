@@ -95,7 +95,7 @@ public class WarpJumpManager {
                 Vector3i targetSector = WarpManager.getRealSpacePos(warpPos);
 
                 //apply warp-beacon. inform player if beacon had effect.
-                BeaconObject puller = WarpMain.instance.beaconManager.modifyDroppoint(warpPos,targetSector);
+                BeaconObject puller = WarpMain.instance.beaconManagerServer.modifyDroppoint(warpPos,targetSector);
                 if (puller != null) {
                     ship.sendControllingPlayersServerMessage(Lng.astr("BEACON ACTIVE: " + puller.getName()+"["+puller.getFactionName()+"]"),ServerMessage.MESSAGE_TYPE_WARNING);
                 }

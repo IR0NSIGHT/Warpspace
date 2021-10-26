@@ -61,17 +61,6 @@ public class BeaconManager extends SimpleSerializerWrapper {
     };
     transient private Random random;
     public BeaconManager() {
-   //     addBeacon(new BeaconObject(
-   //             new Vector3i(2,2,2),
-   //             true,
-   //             "TEST BEACON UID",
-   //             -1,
-   //             100,
-   //             SimpleTransformableSendableObject.EntityType.ASTEROID,
-   //             true,
-   //             "UWU EMPIRE NOOB TRAP",
-   //             "UWU EMPIRE"
-   //     ));
     }
 
     public void onInit() {
@@ -135,6 +124,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
             list.add(beacon);
         }
 
+        synchAll();
         print();
     }
 
@@ -145,14 +135,20 @@ public class BeaconManager extends SimpleSerializerWrapper {
             return;
         }
         list.remove(beacon);
+        synchAll();
     }
 
     public ArrayList<BeaconObject> getBeacons(Vector3i warpPos) {
         return sectorToBeaconMap.get(warpPos);
     }
 
+    private void synchAll() {
+        new BeaconUpdatePacket().sendToAll();
+    }
+
     @Override
     public void onDeserialize(PacketReadBuffer buffer) {
+        sectorToBeaconMap.clear();
         try {
             int totalSize = buffer.readInt();
             for (int i = 0; i < totalSize; i ++) {

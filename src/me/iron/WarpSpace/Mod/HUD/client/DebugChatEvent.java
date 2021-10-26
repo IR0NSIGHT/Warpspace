@@ -1,6 +1,8 @@
 package me.iron.WarpSpace.Mod.HUD.client;
 
+import api.config.BlockConfig;
 import api.mod.config.PersistentObjectUtil;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import me.iron.WarpSpace.Mod.WarpMain;
 import api.DebugFile;
 import api.ModPlayground;
@@ -9,10 +11,12 @@ import api.listener.events.player.PlayerChatEvent;
 import api.mod.StarLoader;
 import me.iron.WarpSpace.Mod.beacon.BeaconObject;
 import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.common.data.element.ElementInformation;
+import org.schema.game.common.data.element.ElementKeyMap;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 
-import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3f;
+import java.util.ArrayList;
 
 /**
  * STARMADE MOD
@@ -36,7 +40,7 @@ public class DebugChatEvent {
                if (e.isServer()) {
                    ModPlayground.broadcastMessage("is on server");
                    if (e.getText().contains("beacon")) {
-                       WarpMain.instance.beaconManager.addBeacon(new BeaconObject(
+                       WarpMain.instance.beaconManagerServer.addBeacon(new BeaconObject(
 
                             new Vector3i(2,2,2),
                             true,
@@ -52,11 +56,19 @@ public class DebugChatEvent {
                    }
 
                    if (e.getText().contains("list")) {
-                       WarpMain.instance.beaconManager.print();
+                       WarpMain.instance.beaconManagerServer.print();
                    }
 
                    if (e.getText().contains("save")) {
                        PersistentObjectUtil.save(WarpMain.instance.getSkeleton());
+                   }
+
+                   if (e.getText().contains("key")) {
+                       Short2ObjectOpenHashMap map = ElementKeyMap.informationKeyMap;
+                       int size = map.size();
+                       ArrayList<ElementInformation> blocks = BlockConfig.getElements();
+
+                       String s = "uwu";
                    }
                    return;
                }

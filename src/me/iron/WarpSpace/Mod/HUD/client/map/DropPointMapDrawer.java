@@ -1,18 +1,13 @@
 package me.iron.WarpSpace.Mod.HUD.client.map;
 
-import api.mod.StarLoader;
 import api.mod.StarMod;
-import api.utils.StarRunnable;
-import api.utils.textures.StarLoaderTexture;
 import libpackage.drawer.MapDrawer;
 import libpackage.drawer.SpriteLoader;
 import libpackage.markers.SimpleMapMarker;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
-import me.iron.WarpSpace.Mod.beacon.BeaconManager;
 import me.iron.WarpSpace.Mod.beacon.BeaconObject;
 import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.view.gamemap.GameMapDrawer;
 import org.schema.schine.graphicsengine.forms.Sprite;
 
@@ -67,7 +62,10 @@ public class DropPointMapDrawer extends MapDrawer {
                     tempWarp.set(warpPos);
                     tempWarp.add(x,y,z);
                     tempDrop = WarpManager.getRealSpacePos(tempWarp);
-                    BeaconObject beaconObject = WarpMain.instance.beaconManager.modifyDroppoint(tempWarp,tempDrop);
+                    BeaconObject beaconObject = null;
+                    if (WarpMain.instance.beaconManagerServer != null)
+                       beaconObject = WarpMain.instance.beaconManagerServer.modifyDroppoint(tempWarp,tempDrop);
+
                     int subsprite = (beaconObject == null)?0:1;
                     addMarker(new SimpleMapMarker(mapSprite,subsprite,markerColor,posFromSector(tempDrop,true)));
                 }

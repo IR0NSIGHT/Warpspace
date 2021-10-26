@@ -10,6 +10,7 @@ import me.iron.WarpSpace.Mod.HUD.client.*;
 import me.iron.WarpSpace.Mod.HUD.client.map.DropPointMapDrawer;
 import me.iron.WarpSpace.Mod.Interdiction.InterdictionHUDUpdateLoop;
 import me.iron.WarpSpace.Mod.beacon.BeaconManager;
+import me.iron.WarpSpace.Mod.beacon.BeaconUpdatePacket;
 import me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
@@ -35,14 +36,17 @@ public class WarpMain extends StarMod {
         System.out.println("hello space!");
     }
     public static WarpMain instance;
-    public BeaconManager beaconManager;
+    public BeaconManager beaconManagerServer;
+    public BeaconManager beaconManagerClient;
     @Override
     public void onEnable() {
         super.onEnable();
         BackgroundEventListener.AddListener(); //add background color listener
         instance = this;
+
         PacketUtil.registerPacket(PacketHUDUpdate.class);
-        
+        PacketUtil.registerPacket(BeaconUpdatePacket.class);
+
         WarpSpaceMap.enable(instance);
     }
     
@@ -59,9 +63,10 @@ public class WarpMain extends StarMod {
     //TODO thrust    ThrustEventhandler.createListener();
         WarpCheckLoop.loop(25);
         InterdictionHUDUpdateLoop.CreateServerLoop();
-        beaconManager = BeaconManager.getSavedOrNew(this.getSkeleton());
-        beaconManager.onInit();
+        beaconManagerServer = BeaconManager.getSavedOrNew(this.getSkeleton());
+        beaconManagerServer.onInit();
         DebugChatEvent.addDebugChatListener();
+        WarpBeaconAddon.registerAddonAddEventListener();
     }
 
     @Override
@@ -73,6 +78,8 @@ public class WarpMain extends StarMod {
         HUD_core.initList();
         GUIeventhandler.addHUDDrawListener();
         HUD_core.HUDLoop();
+        beaconManagerClient = new BeaconManager();
+        beaconManagerClient.onInit();
     }
 
     @Override
@@ -83,14 +90,13 @@ public class WarpMain extends StarMod {
 
     @Override
     public void onBlockConfigLoad(BlockConfig blockConfig) {
-        WarpBeaconAddon.registerChamberBlock();
         super.onBlockConfigLoad(blockConfig);
+        WarpBeaconAddon.registerChamberBlock();
     }
 
     @Override
     public void onUniversalRegistryLoad() {
         super.onUniversalRegistryLoad();
         UniversalRegistry.registerURV(UniversalRegistry.RegistryType.PLAYER_USABLE_ID,this.getSkeleton(), WarpBeaconAddon.UIDName);
-        WarpBeaconAddon.init();
     }
 }
