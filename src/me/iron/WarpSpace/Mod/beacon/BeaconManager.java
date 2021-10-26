@@ -115,7 +115,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
         return strongest;
     }
 
-    private void updateBeacon(BeaconObject beacon) {
+    public void updateBeacon(BeaconObject beacon) {
         if (beacon == null)
             return;
         beacon.update();
@@ -134,6 +134,8 @@ public class BeaconManager extends SimpleSerializerWrapper {
         if (!list.contains(beacon)) {
             list.add(beacon);
         }
+
+        print();
     }
 
     public void removeBeacon(BeaconObject beacon) {

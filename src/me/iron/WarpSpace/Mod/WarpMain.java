@@ -1,14 +1,16 @@
 package me.iron.WarpSpace.Mod;
 
+import api.config.BlockConfig;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
 import api.mod.StarMod;
-import api.mod.config.PersistentObjectUtil;
 import api.network.packets.PacketUtil;
+import api.utils.registry.UniversalRegistry;
 import me.iron.WarpSpace.Mod.HUD.client.*;
 import me.iron.WarpSpace.Mod.HUD.client.map.DropPointMapDrawer;
 import me.iron.WarpSpace.Mod.Interdiction.InterdictionHUDUpdateLoop;
 import me.iron.WarpSpace.Mod.beacon.BeaconManager;
+import me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
@@ -59,7 +61,7 @@ public class WarpMain extends StarMod {
         InterdictionHUDUpdateLoop.CreateServerLoop();
         beaconManager = BeaconManager.getSavedOrNew(this.getSkeleton());
         beaconManager.onInit();
-    //    DebugChatEvent.addDebugChatListener();
+        DebugChatEvent.addDebugChatListener();
     }
 
     @Override
@@ -77,5 +79,18 @@ public class WarpMain extends StarMod {
     public void onResourceLoad(ResourceLoader loader) {
         super.onResourceLoad(loader);
         new DropPointMapDrawer(this).loadSprite();
+    }
+
+    @Override
+    public void onBlockConfigLoad(BlockConfig blockConfig) {
+        WarpBeaconAddon.registerChamberBlock();
+        super.onBlockConfigLoad(blockConfig);
+    }
+
+    @Override
+    public void onUniversalRegistryLoad() {
+        super.onUniversalRegistryLoad();
+        UniversalRegistry.registerURV(UniversalRegistry.RegistryType.PLAYER_USABLE_ID,this.getSkeleton(), WarpBeaconAddon.UIDName);
+        WarpBeaconAddon.init();
     }
 }

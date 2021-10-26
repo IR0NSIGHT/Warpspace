@@ -1,7 +1,11 @@
 package me.iron.WarpSpace.Mod.beacon;
 
+import api.utils.game.SegmentControllerUtils;
 import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.common.controller.ManagedUsableSegmentController;
+import org.schema.game.common.controller.PlayerUsableInterface;
 import org.schema.game.common.controller.SegmentController;
+import org.schema.game.common.controller.elements.power.reactor.tree.ReactorElement;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.EntityRequest;
 import org.schema.game.server.data.GameServerState;
@@ -75,6 +79,21 @@ public class BeaconObject implements Serializable {
     }
 
     private void updateLoaded(SegmentController sc) {
+        if (!sc.getSector(new Vector3i()).equals(position)) {
+            setFlagForDelete();
+            return;
+        }
+
+        if (sc instanceof ManagedUsableSegmentController) {
+            ReactorElement beaconChamber = SegmentControllerUtils.getChamberFromElement((ManagedUsableSegmentController)sc,WarpBeaconAddon.beaconChamber);
+            if (beaconChamber == null || !beaconChamber.isAllValid() || beaconChamber.isDamaged()){
+                setFlagForDelete();
+                return;
+            }
+            //TODO test if warpBeaconAddon is active
+        //    PlayerUsableInterface beaconAddon = SegmentControllerUtils.getAddon((ManagedUsableSegmentController)sc,WarpBeaconAddon.class);
+        //    if (beaconAddon.)
+        }
 
     }
 
@@ -83,6 +102,9 @@ public class BeaconObject implements Serializable {
     }
 
     //getter and setter
+    public void setFlagForDelete() {
+        flagForDelete = true;
+    }
 
     public boolean isFlagForDelete() {
         return flagForDelete;
