@@ -10,7 +10,9 @@ import api.network.PacketWriteBuffer;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
+import org.schema.game.server.data.GameServerState;
 
 import javax.jdo.annotations.Persistent;
 import java.io.IOException;
@@ -143,6 +145,9 @@ public class BeaconManager extends SimpleSerializerWrapper {
     }
 
     private void synchAll() {
+        if (!WarpMain.instance.beaconManagerServer.equals(this))
+            return;
+
         new BeaconUpdatePacket().sendToAll();
     }
 
