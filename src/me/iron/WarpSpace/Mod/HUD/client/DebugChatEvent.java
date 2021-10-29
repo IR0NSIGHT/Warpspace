@@ -64,6 +64,7 @@ public class DebugChatEvent {
                    }
 
                    if (e.getText().contains("key")) {
+                       ElementInformation ei = ElementKeyMap.getInfo(1203);
                        Short2ObjectOpenHashMap map = ElementKeyMap.informationKeyMap;
                        int size = map.size();
                        ArrayList<ElementInformation> blocks = BlockConfig.getElements();

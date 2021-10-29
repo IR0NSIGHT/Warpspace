@@ -1,5 +1,6 @@
 package me.iron.WarpSpace.Mod.beacon;
 
+import api.DebugFile;
 import api.ModPlayground;
 import api.config.BlockConfig;
 import api.listener.Listener;
@@ -15,6 +16,8 @@ import org.schema.game.common.controller.elements.power.reactor.tree.ReactorElem
 import org.schema.game.common.data.element.ElementInformation;
 import org.schema.game.common.data.element.ElementKeyMap;
 import org.schema.game.server.data.GameServerState;
+
+import java.util.Arrays;
 
 /**
  * STARMADE MOD
@@ -35,6 +38,15 @@ public class WarpBeaconAddon extends SimpleAddOn {
         beaconChamber.setTextureId(ElementKeyMap.getInfo(rootID).getTextureIds());
         beaconChamber.setDescription("Shift the closest warp droppoint to this sector.");
         BlockConfig.add(beaconChamber);
+        short moddedBlockID = beaconChamber.id;
+        StringBuilder out = new StringBuilder();
+        for (int i = 0; i < ElementKeyMap.infoArray.length; i++) {
+            ElementInformation ei = ElementKeyMap.infoArray[i];
+            out.append("idx:"+i+"\t\t"+(ei==null?"NULL":ei.toString())).append("\n");
+        }
+        DebugFile.log("\n\n\n\n"+out.toString()+"\n\n\n\n");
+        ElementInformation ei = ElementKeyMap.getInfo(beaconChamber.id);
+
     }
     public static void registerAddonAddEventListener() {
         StarLoader.registerListener(RegisterAddonsEvent.class, new Listener<RegisterAddonsEvent>() {
