@@ -48,6 +48,8 @@ public class WarpMain extends StarMod {
         PacketUtil.registerPacket(BeaconUpdatePacket.class);
 
         WarpSpaceMap.enable(instance);
+        WarpBeaconAddon.registerAddonAddEventListener();
+
     }
     
     @Override
@@ -66,7 +68,6 @@ public class WarpMain extends StarMod {
         beaconManagerServer = BeaconManager.getSavedOrNew(this.getSkeleton());
         beaconManagerServer.onInit();
         DebugChatEvent.addDebugChatListener();
-        WarpBeaconAddon.registerAddonAddEventListener();
     }
 
     @Override

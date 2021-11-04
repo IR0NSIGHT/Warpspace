@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="WarpspaceClient" />
+      <artifact name="WarpspaceServer" />
     </artifacts-to-build>
   </component>
   <component name="BranchesTreeState">
@@ -32,7 +32,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/DebugChatEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/DebugChatEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -85,7 +85,7 @@
       <recent name="C:\Users\Max1M\IdeaProjects\Warpspace\lib" />
     </key>
   </component>
-  <component name="RunManager" selected="JAR Application.client">
+  <component name="RunManager" selected="JAR Application.server">
     <configuration name="main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="me.iron.WarpSpace.Mod.testing.main" />
       <module name="Warpspace" />
@@ -346,7 +346,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635282003093</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="bump bump">
+      <created>1635519554594</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1635519554594</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -374,7 +381,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="void RSP sectors are now inhibited." />
     <MESSAGE value="keep jar application stepper config." />
     <MESSAGE value="taswins warpmap added. (master-&gt; dev)" />
     <MESSAGE value="Working state basic inhibtion (no inforight, only markers)." />
@@ -399,19 +405,20 @@
     <MESSAGE value="beacon infiinte runtime working" />
     <MESSAGE value="bump for jake debug" />
     <MESSAGE value="stop deadly send-receive-send cycle for singleplayer beaconmanager." />
-    <option name="LAST_COMMIT_MESSAGE" value="stop deadly send-receive-send cycle for singleplayer beaconmanager." />
+    <MESSAGE value="bump bump" />
+    <option name="LAST_COMMIT_MESSAGE" value="bump bump" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="709" y="319" key="#BuildArtifactsBeforeRunChooser" timestamp="1635177572784">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2540" y="465" key="#BuildArtifactsBeforeRunChooser" timestamp="1635519682790">
+      <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="709" y="319" key="#BuildArtifactsBeforeRunChooser/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635177572784" />
-    <state x="2540" y="465" key="#BuildArtifactsBeforeRunChooser/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635162774558" />
-    <state x="336" y="165" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1635177574765">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2540" y="465" key="#BuildArtifactsBeforeRunChooser/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635519682790" />
+    <state x="2214" y="315" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1635519684228">
+      <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="336" y="165" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635177574765" />
-    <state x="2214" y="315" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635162840071" />
+    <state x="2214" y="315" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635519684228" />
     <state x="2565" y="367" key="#com.intellij.ide.util.MemberChooser" timestamp="1635278317201">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
@@ -425,63 +432,63 @@
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="2449" y="401" key="FileChooserDialogImpl/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635171525769" />
-    <state width="1637" height="443" key="GridCell.Tab.0.bottom" timestamp="1635286087615">
+    <state width="1637" height="482" key="GridCell.Tab.0.bottom" timestamp="1636060921507">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993733" />
-    <state width="1637" height="443" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635286087615" />
-    <state width="1637" height="443" key="GridCell.Tab.0.center" timestamp="1635286087615">
+    <state width="1637" height="482" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636060921507" />
+    <state width="1637" height="482" key="GridCell.Tab.0.center" timestamp="1636060921507">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993733" />
-    <state width="1637" height="443" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635286087615" />
-    <state width="1637" height="443" key="GridCell.Tab.0.left" timestamp="1635286087615">
+    <state width="1637" height="482" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636060921507" />
+    <state width="1637" height="482" key="GridCell.Tab.0.left" timestamp="1636060921507">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993733" />
-    <state width="1637" height="443" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635286087615" />
-    <state width="1637" height="443" key="GridCell.Tab.0.right" timestamp="1635286087615">
+    <state width="1637" height="482" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636060921507" />
+    <state width="1637" height="482" key="GridCell.Tab.0.right" timestamp="1636060921507">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993733" />
-    <state width="1637" height="443" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635286087615" />
-    <state width="1637" height="443" key="GridCell.Tab.1.bottom" timestamp="1635286087615">
+    <state width="1637" height="482" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636060921507" />
+    <state width="1637" height="482" key="GridCell.Tab.1.bottom" timestamp="1636060921508">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993734" />
-    <state width="1637" height="443" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635286087615" />
-    <state width="1637" height="443" key="GridCell.Tab.1.center" timestamp="1635286087615">
+    <state width="1637" height="482" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636060921508" />
+    <state width="1637" height="482" key="GridCell.Tab.1.center" timestamp="1636060921507">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993734" />
-    <state width="1637" height="443" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635286087615" />
-    <state width="1637" height="443" key="GridCell.Tab.1.left" timestamp="1635286087615">
+    <state width="1637" height="482" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636060921507" />
+    <state width="1637" height="482" key="GridCell.Tab.1.left" timestamp="1636060921507">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993734" />
-    <state width="1637" height="443" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635286087615" />
-    <state width="1637" height="443" key="GridCell.Tab.1.right" timestamp="1635286087615">
+    <state width="1637" height="482" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636060921507" />
+    <state width="1637" height="482" key="GridCell.Tab.1.right" timestamp="1636060921507">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="274" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635273993734" />
-    <state width="1637" height="443" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635286087615" />
+    <state width="1637" height="482" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636060921507" />
     <state x="731" y="241" key="RollbackChangesDialog" timestamp="1635177385639">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="731" y="241" key="RollbackChangesDialog/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635177385639" />
-    <state x="366" y="81" width="1040" height="509" key="SettingsEditor" timestamp="1635177563726">
+    <state x="366" y="81" width="1040" height="509" key="SettingsEditor" timestamp="1636050092395">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="366" y="81" key="SettingsEditor/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635177563726" />
+    <state x="366" y="81" key="SettingsEditor/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636050092395" />
     <state x="2240" y="234" width="1040" height="509" key="SettingsEditor/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635174063289" />
     <state x="2576" y="575" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1633866343056">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="2576" y="575" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1633866343056" />
-    <state x="2167" y="576" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1635283462484">
+    <state x="2167" y="576" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1636050192208">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state x="2167" y="576" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1635283462484" />
+    <state x="2167" y="576" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636050192208" />
     <state x="1920" y="155" width="1555" height="740" maximized="true" key="dock-window-1" timestamp="1635161692387">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
@@ -500,90 +507,37 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconUpdatePacket.java</url>
-          <line>34</line>
-          <option name="timeStamp" value="91" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconUpdatePacket.java</url>
-          <line>27</line>
-          <option name="timeStamp" value="92" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/DebugChatEvent.java</url>
-          <line>73</line>
-          <option name="timeStamp" value="100" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java</url>
-          <line>39</line>
-          <option name="timeStamp" value="101" />
+          <line>53</line>
+          <option name="timeStamp" value="134" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java</url>
           <line>49</line>
-          <option name="timeStamp" value="102" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/DebugChatEvent.java</url>
-          <line>71</line>
-          <option name="timeStamp" value="103" />
+          <option name="timeStamp" value="135" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java</url>
-          <line>35</line>
-          <option name="timeStamp" value="104" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/StarMade.jar!/org/schema/game/common/controller/elements/power/reactor/tree/graph/ReactorGraphContainerElementInformation.class</url>
-          <line>68</line>
-          <option name="timeStamp" value="109" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/StarMade.jar!/org/schema/game/client/view/gui/reactor/GUIReactorNodeOptions.class</url>
-          <line>139</line>
-          <option name="timeStamp" value="110" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/StarMade.jar!/org/schema/game/client/view/gui/reactor/GUIReactorNodeOptions.class</url>
-          <line>174</line>
-          <option name="timeStamp" value="111" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/StarMade.jar!/org/schema/game/client/view/gui/reactor/GUIReactorNodeOptions.class</url>
-          <line>219</line>
-          <option name="timeStamp" value="112" />
+          <line>51</line>
+          <option name="timeStamp" value="136" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java</url>
-          <line>47</line>
-          <option name="timeStamp" value="121" />
+          <line>59</line>
+          <option name="timeStamp" value="137" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/DebugChatEvent.java</url>
-          <line>65</line>
-          <option name="timeStamp" value="125" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/StarMade.jar!/org/schema/game/common/data/element/ElementKeyMap.class</url>
-          <line>468</line>
-          <option name="timeStamp" value="130" />
+          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java</url>
+          <line>56</line>
+          <option name="timeStamp" value="138" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
-          <url>jar://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/StarMade.jar!/api/config/BlockConfig.class</url>
-          <line>298</line>
-          <properties class="api.config.BlockConfig" method="add">
+          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java</url>
+          <line>33</line>
+          <properties class="me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon" method="registerChamberBlock">
             <option name="EMULATED" value="true" />
           </properties>
-          <option name="timeStamp" value="128" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>jar://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/StarMade.jar!/org/schema/game/common/data/element/ElementKeyMap.class</url>
-          <line>434</line>
-          <properties class="org.schema.game.common.data.element.ElementKeyMap" method="addInformationToExisting">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="129" />
+          <option name="timeStamp" value="133" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

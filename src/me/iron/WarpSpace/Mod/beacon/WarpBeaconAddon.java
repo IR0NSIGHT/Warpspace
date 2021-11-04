@@ -10,6 +10,8 @@ import api.mod.StarMod;
 import api.utils.addon.SimpleAddOn;
 import api.utils.game.SegmentControllerUtils;
 import me.iron.WarpSpace.Mod.WarpMain;
+import org.schema.game.common.controller.ManagedUsableSegmentController;
+import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.elements.ManagerContainer;
 import org.schema.game.common.controller.elements.SingleModuleActivation;
 import org.schema.game.common.controller.elements.power.reactor.tree.ReactorElement;
@@ -53,6 +55,8 @@ public class WarpBeaconAddon extends SimpleAddOn {
             @Override
             public void onEvent(RegisterAddonsEvent event) {
                 event.addModule(new WarpBeaconAddon(event.getContainer(),WarpMain.instance));
+                DebugFile.log("################################ REGISTERES WARP BEACON ADDON FOR:" + event.getSegmentController().getName() +                 event.addons
+                .toString());
             }
         }, WarpMain.instance);
     }
@@ -64,10 +68,14 @@ public class WarpBeaconAddon extends SimpleAddOn {
 
     @Override
     public boolean isPlayerUsable() { //called every frame (or often)
-        ReactorElement warpBeaconChamber = SegmentControllerUtils.getChamberFromElement(getManagerUsableSegmentController(), beaconChamber);
+        SegmentController sc = getSegmentController();
+        if (!(sc instanceof ManagedUsableSegmentController<?>))
+            return false;
+        ReactorElement warpBeaconChamber = SegmentControllerUtils.getChamberFromElement((ManagedUsableSegmentController<?> )sc, beaconChamber);
         if (warpBeaconChamber == null)// || !(this.segmentController instanceof SpaceStation))
             return false;
-        return super.isPlayerUsable();
+        boolean isUsable = super.isPlayerUsable();
+        return isUsable;
     }
 
     @Override
