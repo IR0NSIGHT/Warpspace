@@ -11,20 +11,9 @@ Some core effects are:
 - warp entry points are created (this is a sideeffect of the downscaling by factor 10). since all ships entering warp in a 10x10x10 sector cube end up in the same warpsector,
   all ships exiting the warp end up in the same realspace sector. This creates warpnodes, or travel routes where each starsystem has 4 nodes. Any ship entering the starsystem  through warp will end up at one of them.
   These nodes could be defended or used for trade, taxing, piracy etc. 
-- Planned features are:
-   + ~~t interdiction to work (is ignored atm)~~ done, even better than vanilla
-   + ~~build custom HUD~~ done
-   + make damaged ships automatically fall out of warp
-   + create means to force-pull warping ships out, like the Star-Wars interdictors.
-   + give warp custom visual effects to highlight the difference to realspace
-   + make the thrust strength (= possible travel speed) in warp depend on the FTL drives level
-   + explore means of making warp more interesting and different to realspace
-        + core principles here are that warp should not be just a smaller realspace 2.0 but behave differently
-        + one such difference could be that station building is impossible (done)
-        + shields not working
-        + a limited time in warp, where a counter autodrops the ship back out (using speed limit, done)
 
-# Ingame behaviour
+
+# Ingame behaviour/How to use
 - the mod will notice any FTL jump a ship performs. instead of arriving at your location, you will enter the warp.
 - Your navmarker will be changed to its warp position as well. Just follow the marker to get to the correct position in warp.
 - to drop out of warp you can either use your FTL drive again, or slow down to below 50m/s.
@@ -32,6 +21,20 @@ Some core effects are:
 - if you spawn a spacestation in warp, it will drop out to a random sector! thats wanted behaviour to prohibit warpcamping.
 - astronauts will not drop out of warp automatically.
 - if you want to avoid the warp completely, you can create Warpgates. they keep their vanilla behaviour and offer a way to travel instantly, precisely and safely.
+
+# Planned features are:
+   + ~~t interdiction to work (is ignored atm)~~ done, even better than vanilla
+   + ~~build custom HUD~~ done
+   + make damaged ships automatically fall out of warp
+   + create means to force-pull warping ships out, like the Star-Wars interdictors.
+   + ~~give warp custom visual effects to highlight the difference to realspace~~ semi done with recolored backgrounds
+   + ~~make the thrust strength (= possible travel speed) in warp depend on the FTL drives level~~ waiting for SM update for hook
+   + explore means of making warp more interesting and different to realspace
+        + core principles here are that warp should not be just a smaller realspace 2.0 but behave differently
+        + ~~make station building impossible~~ (done, autodrop)
+        + shields not working
+        + ~~a limited time in warp, where a counter autodrops the ship back out (using speed limit, done)~~
+   + Make AI/fleets be able to use warp
 
 Gain insight to how the mod handles ingame with this showcase video (very early version):
 https://www.youtube.com/watch?v=0t-y4ZppfLg
@@ -49,8 +52,7 @@ Starloader community discord for bugreports/feedback/help:
 https://discord.gg/hcpSphM
 
 # Install guide
-- Activate starloader (built into the game already): https://youtu.be/checi1VHsnY
-- use the ingame modbrowser, find WarpSpace and click "install".
+- use the builtin, ingame modbrowser, find WarpSpace and click "install".
 - make sure the mod is activated.
 
 If you have the suspicion that something is not working or the mod is not running at all, contact me or the starloader discord.
