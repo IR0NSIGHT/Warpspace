@@ -5,6 +5,7 @@ import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
 import org.schema.game.common.controller.PlayerUsableInterface;
 import org.schema.game.common.controller.SegmentController;
+import org.schema.game.common.controller.SpaceStation;
 import org.schema.game.common.controller.elements.power.reactor.tree.ReactorElement;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.EntityRequest;
@@ -83,16 +84,21 @@ public class BeaconObject implements Serializable {
             setFlagForDelete();
             return;
         }
-
+        boolean isHB = (sc instanceof SpaceStation && ((SpaceStation)sc).isHomeBase());
         if (sc instanceof ManagedUsableSegmentController) {
-            ReactorElement beaconChamber = SegmentControllerUtils.getChamberFromElement((ManagedUsableSegmentController)sc,WarpBeaconAddon.beaconChamber);
-            if (beaconChamber == null || !beaconChamber.isAllValid() || beaconChamber.isDamaged()){
+            ManagedUsableSegmentController msc = (ManagedUsableSegmentController)sc;
+            ReactorElement beaconChamber = SegmentControllerUtils.getChamberFromElement(msc,WarpBeaconAddon.beaconChamber);
+            if (beaconChamber == null || sc.isCoreOverheating() || isHB) {
+            //todo test: (those are borked, always false)   boolean valid = beaconChamber.isAllValid();
+            //todo test: (those are borked, always false)   boolean damaged = beaconChamber.isDamaged();
                 setFlagForDelete();
                 return;
             }
+            //TODO flag for delete doesnt cause deletion?
             //TODO test if warpBeaconAddon is active
         //    PlayerUsableInterface beaconAddon = SegmentControllerUtils.getAddon((ManagedUsableSegmentController)sc,WarpBeaconAddon.class);
         //    if (beaconAddon.)
+        //    msc.getManagerContainer().getEffectAddOnManager().
         }
 
     }

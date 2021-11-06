@@ -18,6 +18,10 @@ import java.io.IOException;
  * TIME: 21:58
  */
 public class BeaconUpdatePacket extends Packet {
+   // public static void requestUpdateFromServer() {
+   //     BeaconUpdatePacket packet = new BeaconUpdatePacket();
+   //     PacketUtil.sendPacketToServer(packet);
+   // }
     @Override
     public void readPacketData(PacketReadBuffer packetReadBuffer) throws IOException {
         BeaconManager client = WarpMain.instance.beaconManagerClient;
@@ -25,7 +29,6 @@ public class BeaconUpdatePacket extends Packet {
             return;
         client.onDeserialize(packetReadBuffer);
         ModPlayground.broadcastMessage("READ BEACON DATA FROM SERVER");
-        client.print();
     }
 
     @Override
@@ -41,7 +44,6 @@ public class BeaconUpdatePacket extends Packet {
 
     @Override
     public void processPacketOnServer(PlayerState playerState) {
-
     }
 
     public void sendToAll() {

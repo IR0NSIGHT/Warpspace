@@ -59,6 +59,9 @@ public class DebugChatEvent {
                        WarpMain.instance.beaconManagerServer.print();
                    }
 
+                   if (e.getText().contains("clear")) {
+                       WarpMain.instance.beaconManagerServer.clearBeacons();
+                   }
                    if (e.getText().contains("save")) {
                        PersistentObjectUtil.save(WarpMain.instance.getSkeleton());
                    }

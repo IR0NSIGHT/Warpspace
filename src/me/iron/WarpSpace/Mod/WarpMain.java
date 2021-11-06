@@ -38,6 +38,8 @@ public class WarpMain extends StarMod {
     public static WarpMain instance;
     public BeaconManager beaconManagerServer;
     public BeaconManager beaconManagerClient;
+    public DropPointMapDrawer dropPointMapDrawer;
+
     @Override
     public void onEnable() {
         super.onEnable();
@@ -50,6 +52,7 @@ public class WarpMain extends StarMod {
         WarpSpaceMap.enable(instance);
         WarpBeaconAddon.registerAddonAddEventListener();
 
+        dropPointMapDrawer = new DropPointMapDrawer(this);
     }
     
     @Override
@@ -81,12 +84,13 @@ public class WarpMain extends StarMod {
         HUD_core.HUDLoop();
         beaconManagerClient = new BeaconManager();
         beaconManagerClient.onInit();
+        dropPointMapDrawer.activate();
     }
 
     @Override
     public void onResourceLoad(ResourceLoader loader) {
         super.onResourceLoad(loader);
-        new DropPointMapDrawer(this).loadSprite();
+        dropPointMapDrawer.loadSprite();
     }
 
     @Override

@@ -7,6 +7,7 @@ import api.network.packets.PacketUtil;
 import api.utils.StarRunnable;
 import me.iron.WarpSpace.Mod.beacon.BeaconObject;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
+import org.lwjgl.util.vector.Vector;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
@@ -92,13 +93,7 @@ public class WarpJumpManager {
                 type = isJump?WarpJumpEvent.WarpJumpType.EXIT:WarpJumpEvent.WarpJumpType.DROP;
 
                 Vector3i warpPos = ship.getSector(new Vector3i());
-                Vector3i targetSector = WarpManager.getRealSpacePos(warpPos);
-
-                //apply warp-beacon. inform player if beacon had effect.
-                BeaconObject puller = WarpMain.instance.beaconManagerServer.modifyDroppoint(warpPos,targetSector);
-                if (puller != null) {
-                    ship.sendControllingPlayersServerMessage(Lng.astr("BEACON ACTIVE: " + puller.getName()+"["+puller.getFactionName()+"]"),ServerMessage.MESSAGE_TYPE_WARNING);
-                }
+                Vector3i targetSector = getDropPoint(warpPos);
 
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,warpPos,targetSector);
                 StarLoader.fireEvent(e, true);
@@ -393,4 +388,11 @@ public class WarpJumpManager {
             }
     }
 
+    public static Vector3i getDropPoint(Vector3i warpSector) {
+        //apply warp-beacon. inform player if beacon had effect.
+        Vector3i drop = WarpManager.getRealSpacePos(warpSector);
+        WarpMain.instance.beaconManagerServer.updateStrongest(warpSector);
+        WarpMain.instance.beaconManagerServer.modifyDroppoint(warpSector, drop);
+        return drop;
+    }
 }

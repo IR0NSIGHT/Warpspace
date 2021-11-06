@@ -2,24 +2,21 @@ package me.iron.WarpSpace.Mod.beacon;
 
 import api.DebugFile;
 import api.ModPlayground;
+import api.listener.Listener;
+import api.listener.events.player.PlayerSpawnEvent;
 import api.mod.ModSkeleton;
+import api.mod.StarLoader;
 import api.mod.config.PersistentObjectUtil;
 import api.mod.config.SimpleSerializerWrapper;
 import api.network.PacketReadBuffer;
 import api.network.PacketWriteBuffer;
+import api.utils.StarRunnable;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.client.data.GameClientState;
-import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
 
-import javax.jdo.annotations.Persistent;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * STARMADE MOD
@@ -28,7 +25,7 @@ import java.util.UUID;
  * TIME: 12:05
  */
 public class BeaconManager extends SimpleSerializerWrapper {
-    private String s;
+    private boolean isServer;
     public static BeaconManager getSavedOrNew(ModSkeleton skeleton) {
         try {
             ArrayList<Object> objs = PersistentObjectUtil.getObjects(skeleton,BeaconManager.class);
@@ -63,24 +60,68 @@ public class BeaconManager extends SimpleSerializerWrapper {
     };
     transient private Random random;
     public BeaconManager() {
+
     }
 
     public void onInit() {
         random = new Random(420);
+        if (GameServerState.instance != null)         {
+            isServer = true;
+            StarLoader.registerListener(PlayerSpawnEvent.class, new Listener<PlayerSpawnEvent>() {
+                @Override
+                public void onEvent(PlayerSpawnEvent event) {
+                    synchAll();
+                }
+            },WarpMain.instance);
+
+            new StarRunnable() {
+                long next = System.currentTimeMillis();
+                @Override
+                public void run() {
+                    if (next<System.currentTimeMillis()) {
+                        next = System.currentTimeMillis()+1000;
+                        try {
+                            updateAllBeacons();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }.runTimer(WarpMain.instance,10);
+        }
     }
 
+    public void clearBeacons() {
+        sectorToBeaconMap.clear();
+        synchAll();
+    }
+
+    private void updateAllBeacons() {
+        ArrayList<BeaconObject> temp = new ArrayList();
+        for (ArrayList<BeaconObject> bs: sectorToBeaconMap.values()) {
+            if (bs == null || bs.size() == 0)
+                continue;
+            temp.clear();
+            temp.addAll(bs);
+            for (BeaconObject b: temp) {
+                updateBeacon(b);
+            }
+        }
+
+        print();
+    }
     /**
      * will modify the given droppoint with existing beacon positions.
      * @param warpPos
      * @param dropPos
      */
     public BeaconObject modifyDroppoint(Vector3i warpPos, Vector3i dropPos) {
-        BeaconObject strongest = getStrongestBeaconAt(warpPos);
-        if (strongest != null)
-            dropPos.set(strongest.getPosition());
+        ArrayList<BeaconObject> beacons = sectorToBeaconMap.get(warpPos);
+        if (beacons == null || beacons.size() == 0)
+            return null;
+        dropPos.set(beacons.get(0).getPosition());
 
-        //print();
-        return strongest;
+        return beacons.get(0);
     }
 
     /**
@@ -88,22 +129,24 @@ public class BeaconManager extends SimpleSerializerWrapper {
      * @param warpPos
      * @return null if no beacon.
      */
-    public BeaconObject getStrongestBeaconAt(Vector3i warpPos) {
+    public void updateStrongest(Vector3i warpPos) {
+        //sort the list of beacons by their strength.
         ArrayList<BeaconObject> list = sectorToBeaconMap.get(warpPos);
         if (list == null)
-            return null;
-        ArrayList<BeaconObject> beacons = new ArrayList<>(list);
-        //loop over all beacons registered for this sector, pick strongest.
-        BeaconObject strongest = null;
-        for (BeaconObject beacon: beacons) {
-            updateBeacon(beacon);
-            if (beacon.isFlagForDelete())
-                continue;
-            if (strongest == null || beacon.getStrength()>strongest.getStrength() || (strongest.getStrength()==beacon.getStrength()&&random.nextBoolean()))
-                strongest = beacon;
+            return;
+        for (BeaconObject o: list) {
+            o.update();
         }
-
-        return strongest;
+        Collections.sort(list, new Comparator<BeaconObject>() {
+            @Override
+            public int compare(BeaconObject o1, BeaconObject o2) {
+                if (o1.getStrength()==o2.getStrength()) {
+                    random.setSeed(o1.getPosition().code());
+                    return random.nextInt();
+                }
+                return o1.getStrength()-o2.getStrength();
+            }
+        });
     }
 
     public void updateBeacon(BeaconObject beacon) {
@@ -125,9 +168,10 @@ public class BeaconManager extends SimpleSerializerWrapper {
         if (!list.contains(beacon)) {
             list.add(beacon);
         }
-
-        synchAll();
-        print();
+        if (isServer) {
+            updateStrongest(warpPos);
+            synchAll();
+        }
     }
 
     public void removeBeacon(BeaconObject beacon) {
@@ -137,14 +181,17 @@ public class BeaconManager extends SimpleSerializerWrapper {
             return;
         }
         list.remove(beacon);
-        synchAll();
+        if (isServer) {
+            updateStrongest(warpPos);
+            synchAll();
+        }
     }
 
     public ArrayList<BeaconObject> getBeacons(Vector3i warpPos) {
         return sectorToBeaconMap.get(warpPos);
     }
 
-    private void synchAll() {
+    public void synchAll() {
         if (!WarpMain.instance.beaconManagerServer.equals(this))
             return;
 
@@ -162,6 +209,9 @@ public class BeaconManager extends SimpleSerializerWrapper {
                     continue;
                 addBeacon(beacon);
             }
+            if (!isServer) //clientside
+                WarpMain.instance.dropPointMapDrawer.flagForUpdate();
+
         } catch (Exception e) {
             System.out.println("BEACONMANAGER BUFFER READ ERROR");
             e.printStackTrace();
@@ -195,8 +245,6 @@ public class BeaconManager extends SimpleSerializerWrapper {
 
     //DEBUG STUFF
     public void print() {
-        s ="uwu im the runtime manager";
-
         StringBuilder b = new StringBuilder();
         b.append("BeaconManager:\n");
         for (ArrayList<BeaconObject> beaconObjects: sectorToBeaconMap.values()) {

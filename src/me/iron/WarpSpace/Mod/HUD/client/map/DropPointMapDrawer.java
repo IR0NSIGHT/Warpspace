@@ -1,6 +1,8 @@
 package me.iron.WarpSpace.Mod.HUD.client.map;
 
+import api.listener.fastevents.FastListenerCommon;
 import api.mod.StarMod;
+import api.utils.StarRunnable;
 import libpackage.drawer.MapDrawer;
 import libpackage.drawer.SpriteLoader;
 import libpackage.markers.SimpleMapMarker;
@@ -23,11 +25,21 @@ public class DropPointMapDrawer extends MapDrawer {
     private Sprite mapSprite;
     private Vector3i lastSector = new Vector3i();
     private Vector4f markerColor = new Vector4f(0,1,1,0.8f);
-
+    private boolean updateFlag;
     public DropPointMapDrawer(StarMod mod) {
         super(mod);
+        FastListenerCommon.gameMapListeners.remove(this);
     }
 
+    public void activate() {
+        FastListenerCommon.gameMapListeners.add(this);
+    }
+
+    public void flagForUpdate() {
+        synchronized (this) {
+            updateFlag = true;
+        }
+    }
     public void loadSprite() {
         synchronized (DropPointMapDrawer.class) {
             SpriteLoader sl = new SpriteLoader("me/iron/WarpSpace/Mod/res/","mapsprite.png",30,30,2,2);
@@ -43,8 +55,13 @@ public class DropPointMapDrawer extends MapDrawer {
     private void updateDropMarkers(Vector3i currentPos) {
         if (mapSprite == null)
             return;
-        if (lastSector.equals(WarpManager.getWarpSpacePos(currentPos))) //only update if the camera pos has changed.
-            return;
+        synchronized (this) {
+            //only update if the camera pos has changed.
+            Vector3i currentWarpPos = WarpManager.getWarpSpacePos(currentPos);
+            if (lastSector.equals(currentWarpPos) && !updateFlag)
+                return;
+            updateFlag = false;
+        }
         lastSector.set(WarpManager.getWarpSpacePos(currentPos));
 
         clearMarkers();
@@ -63,11 +80,13 @@ public class DropPointMapDrawer extends MapDrawer {
                     tempWarp.add(x,y,z);
                     tempDrop = WarpManager.getRealSpacePos(tempWarp);
                     BeaconObject beaconObject = null;
-                    if (WarpMain.instance.beaconManagerServer != null)
-                       beaconObject = WarpMain.instance.beaconManagerServer.modifyDroppoint(tempWarp,tempDrop);
+                    if (WarpMain.instance.beaconManagerClient != null)
+                       beaconObject = WarpMain.instance.beaconManagerClient.modifyDroppoint(tempWarp,tempDrop);
 
                     int subsprite = (beaconObject == null)?0:1;
-                    addMarker(new SimpleMapMarker(mapSprite,subsprite,markerColor,posFromSector(tempDrop,true)));
+                    SimpleMapMarker drop = new SimpleMapMarker(mapSprite,subsprite,markerColor,posFromSector(tempDrop,true));
+                    drop.setScale(0.2f);
+                    addMarker(drop);
                 }
             }
         }

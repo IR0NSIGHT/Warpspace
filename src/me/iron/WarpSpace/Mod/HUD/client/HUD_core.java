@@ -7,6 +7,7 @@ import me.iron.WarpSpace.Mod.TimedRunnable;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import api.utils.StarRunnable;
+import me.iron.WarpSpace.Mod.beacon.BeaconManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.view.gui.shiphud.HudIndicatorOverlay;
@@ -268,8 +269,9 @@ public class HUD_core {
                     //im funny
                     if (sector.equals(69,69,69))
                         return "nice.";
-
-                    return inWarp?"[WARP]\n"+WarpManager.getRealSpacePos(sector).toStringPure():sector.toStringPure();
+                    Vector3i drop =  WarpManager.getRealSpacePos(sector);
+                    WarpMain.instance.beaconManagerClient.modifyDroppoint(sector, drop);
+                    return inWarp?"[WARP]\n"+drop.toStringPure():sector.toStringPure();
                 } catch (Exception e) {
                     return "error";
                 }
