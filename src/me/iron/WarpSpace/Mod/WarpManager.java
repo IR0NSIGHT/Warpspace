@@ -12,6 +12,7 @@ import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.view.gamemap.GameMapDrawer;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.server.data.Galaxy;
+import org.schema.game.server.data.GameServerState;
 
 import javax.vecmath.Vector3f;
 
@@ -70,11 +71,11 @@ public class WarpManager {
     }
 
     /**
-     * Calculate the Warpspace position from a realworld position
+     * Calculate the Warpspace position from a realworld position, will round to closest point on scale: -5->0<-+4 at scale = 10
      * @param RealSpacePos sector in realspace
      * @return correlating sector in warpspace
      */
-    public static Vector3i GetWarpSpacePos(Vector3i RealSpacePos) {
+    public static Vector3i getWarpSpacePos(Vector3i RealSpacePos) {
         Vector3i warpPos;
         Vector3f realPosF = RealSpacePos.toVector3f();
         realPosF.x = Math.round(realPosF.x / scale);
@@ -91,7 +92,7 @@ public class WarpManager {
      * @param WarpSpacePos sector in warpspace
      * @return correlating sector in realspace
      */
-    public static Vector3i GetRealSpacePos(Vector3i WarpSpacePos) {
+    public static Vector3i getRealSpacePos(Vector3i WarpSpacePos) {
         Vector3i realPos;
         Vector3f warpPosF = WarpSpacePos.toVector3f();
         warpPosF.y -= offset; //offset sectors to up (y axis)

@@ -93,7 +93,7 @@ public class MyGameMapListener implements GameMapDrawListener
 	{
 		if (!WarpManager.IsInWarp(drawer.getPlayerSector())) return;
 		
-		Vector3i realCoords = WarpManager.GetRealSpacePos(drawer.getPlayerSector());
+		Vector3i realCoords = WarpManager.getRealSpacePos(drawer.getPlayerSector());
 		realCoords.scaleFloat(1 / 16f);
 		
 		Vector3i galaxyPos = new Vector3i(drawer.getState().getCurrentGalaxy().galaxyPos);
@@ -116,7 +116,7 @@ public class MyGameMapListener implements GameMapDrawListener
 		{
 			float r = WarpManager.scale / 2f;
 			
-			Vector3i realPos = WarpManager.GetRealSpacePos(sector);
+			Vector3i realPos = WarpManager.getRealSpacePos(sector);
 			drawCube(new Vector3f(
 				(realPos.x - 8f) * GameMapDrawer.sectorSize,
 				(realPos.y - 8f) * GameMapDrawer.sectorSize,

@@ -7,13 +7,10 @@ package org.schema.game.client.data;
 
 import api.DebugFile;
 import me.iron.WarpSpace.Mod.WarpManager;
-import org.newdawn.slick.Game;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.element.Element;
-import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.RemoteSector;
 import org.schema.schine.common.language.Lng;
-import org.schema.schine.network.server.ServerMessage;
 
 /**
  * decompiled version edited by ironsight
@@ -58,13 +55,13 @@ public class ClientGameData {
         //never allow setting direction in warp. always use RSP pos.
         //false
         if (newWaypoint != null && WarpManager.IsInWarp(newWaypoint)) {
-            newWaypoint = WarpManager.GetRealSpacePos(newWaypoint);
+            newWaypoint = WarpManager.getRealSpacePos(newWaypoint);
             DebugFile.log("new waypoint is in warp. RSP: " + newWaypoint);
         }
 
         this.waypoint = newWaypoint;    //set to null
         if (waypoint != null) { //false
-            this.warpWP = WarpManager.GetWarpSpacePos(waypoint);
+            this.warpWP = WarpManager.getWarpSpacePos(waypoint);
             DebugFile.log("warp wp:" + warpWP);
         }
         this.nearestToWayPoint = null;

@@ -1,7 +1,6 @@
 package me.iron.WarpSpace.Mod.taswin;
 
 import api.listener.Listener;
-import api.listener.events.gui.HudCreateEvent;
 import api.listener.events.world.GalaxyFinishedGeneratingEvent;
 import api.listener.events.world.StarCreationAttemptEvent;
 import api.listener.fastevents.FastListenerCommon;
@@ -11,21 +10,14 @@ import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.view.gamemap.GameMapDrawer;
-import org.schema.game.client.view.gui.shiphud.HudIndicatorOverlay;
-import org.schema.game.client.view.gui.shiphud.newhud.Radar;
 import org.schema.game.server.data.Galaxy;
-import org.schema.schine.common.language.Lng;
-import org.schema.schine.graphicsengine.forms.AbstractSceneNode;
 import org.schema.schine.graphicsengine.forms.PositionableSubColorSprite;
 import org.schema.schine.graphicsengine.forms.Sprite;
-import org.schema.schine.graphicsengine.forms.gui.GUITextOverlay;
 
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 import java.util.HashMap;
-import java.util.List;
 
 public class WarpSpaceMap
 {
@@ -62,7 +54,7 @@ public class WarpSpaceMap
 					Vector3f systemPos = starPoses.get(finalI);
 					
 					Vector3i sectorPos = new Vector3i((systemPos.x - Galaxy.halfSize) * 16, (systemPos.y - Galaxy.halfSize) * 16, (systemPos.z - Galaxy.halfSize) * 16);
-					final Vector3f pos = WarpManager.GetWarpSpacePos(sectorPos).toVector3f();
+					final Vector3f pos = WarpManager.getWarpSpacePos(sectorPos).toVector3f();
 					
 					Vector3f loaclOffset = galaxy.getSunPositionOffset(new Vector3i(systemPos), new Vector3i()).toVector3f();
 					loaclOffset.scale(1f / WarpManager.scale);

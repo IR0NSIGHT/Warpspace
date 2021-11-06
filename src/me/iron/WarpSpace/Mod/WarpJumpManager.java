@@ -1,11 +1,11 @@
 package me.iron.WarpSpace.Mod;
 
 import me.iron.WarpSpace.Mod.HUD.client.WarpProcessController;
-import api.DebugFile;
 import api.common.GameServer;
 import api.mod.StarLoader;
 import api.network.packets.PacketUtil;
 import api.utils.StarRunnable;
+import me.iron.WarpSpace.Mod.beacon.BeaconObject;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.PlayerControllable;
@@ -91,8 +91,16 @@ public class WarpJumpManager {
 
                 type = isJump?WarpJumpEvent.WarpJumpType.EXIT:WarpJumpEvent.WarpJumpType.DROP;
 
-                Vector3i targetSector = WarpManager.GetRealSpacePos(ship.getSector(new Vector3i()));
-                WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),targetSector);
+                Vector3i warpPos = ship.getSector(new Vector3i());
+                Vector3i targetSector = WarpManager.getRealSpacePos(warpPos);
+
+                //apply warp-beacon. inform player if beacon had effect.
+                BeaconObject puller = WarpMain.instance.beaconManagerServer.modifyDroppoint(warpPos,targetSector);
+                if (puller != null) {
+                    ship.sendControllingPlayersServerMessage(Lng.astr("BEACON ACTIVE: " + puller.getName()+"["+puller.getFactionName()+"]"),ServerMessage.MESSAGE_TYPE_WARNING);
+                }
+
+                WarpJumpEvent e = new WarpJumpEvent(ship,type,warpPos,targetSector);
                 StarLoader.fireEvent(e, true);
 
                 if (isJump) {
@@ -113,6 +121,7 @@ public class WarpJumpManager {
                     //empty warpdrive
                     emptyWarpdrive(ship);
                 }
+
                 //queue sector switch
                 doSectorSwitch(ship, targetSector,true);
             }
@@ -152,7 +161,7 @@ public class WarpJumpManager {
                 //create, fire event, get back params
                 WarpJumpEvent.WarpJumpType  type = WarpJumpEvent.WarpJumpType.ENTRY;
 
-                Vector3i sector = WarpManager.GetWarpSpacePos(ship.getSector(new Vector3i()));
+                Vector3i sector = WarpManager.getWarpSpacePos(ship.getSector(new Vector3i()));
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),sector);
                 StarLoader.fireEvent(e, true);
 
@@ -208,7 +217,7 @@ public class WarpJumpManager {
      * @return boolean, true if allowed entry, false if interdicted or can fire warpdrive
      */
     public static boolean isAllowedEntry(SegmentController ship) {
-        if (isInterdicted(ship,WarpManager.GetWarpSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
+        if (isInterdicted(ship,WarpManager.getWarpSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
             return false;
         }
     //    DebugFile.log("isAllowedEntry is an empty check");
@@ -223,7 +232,7 @@ public class WarpJumpManager {
      * @return boolean, true if not interdicted and can fire warpdrive
      */
     public static boolean isAllowedDropJump(SegmentController ship) {
-        if (isInterdicted(ship,WarpManager.GetRealSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
+        if (isInterdicted(ship,WarpManager.getRealSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
             return false;
         }
     //    DebugFile.log("isAllowedDrop is an empty check");
