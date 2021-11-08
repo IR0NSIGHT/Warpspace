@@ -17,6 +17,7 @@ import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
 import me.iron.WarpSpace.Mod.visuals.BackgroundEventListener;
+import me.iron.WarpSpace.Mod.visuals.WarpSkybox;
 import org.schema.schine.resource.ResourceLoader;
 
 
@@ -43,15 +44,15 @@ public class WarpMain extends StarMod {
         super.onEnable();
         BackgroundEventListener.AddListener(); //add background color listener
         instance = this;
+        WarpSkybox.registerForRegistration();
 
         PacketUtil.registerPacket(PacketHUDUpdate.class);
         PacketUtil.registerPacket(BeaconUpdatePacket.class);
 
         WarpSpaceMap.enable(instance);
         WarpBeaconAddon.registerAddonAddEventListener();
-
     }
-    
+
     @Override
     public void onDisable() {
         WarpSpaceMap.disable();
@@ -87,6 +88,7 @@ public class WarpMain extends StarMod {
     public void onResourceLoad(ResourceLoader loader) {
         super.onResourceLoad(loader);
         new DropPointMapDrawer(this).loadSprite();
+        WarpSkybox.loadResources(loader.getMeshLoader(),this);
     }
 
     @Override

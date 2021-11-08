@@ -1,11 +1,17 @@
 #version 120
 
-varying vec4 diffuse,ambient;
-varying vec3 normal,lightDir,halfVector;
+varying vec4 ambient;
+varying vec3 normal;
+varying vec3 vert;
+varying vec3 vertPos;
+float time; //internal time; rate can vary
 
-uniform float time;
+uniform float timeBasis;
+uniform float warpDepth; //TODO
+uniform vec3 flightVel; //TODO
+uniform float maxSpeed;
+const float afreq = 14.5; //maximum ring frequency for warp velocity indicator
 varying float mainRadius;
-
 
 float rand(vec2 n) {
     return fract(cos(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
@@ -26,67 +32,100 @@ float fbm(vec2 n) {
     }
     return total;
 }
-vec3 create(float ycoord){
-    float totalLength = gl_TexCoord[0].z;
+vec3 create(float x, float y, float z){
+    vec3 stthing = vec3(x,y,z) * 11;
+    vec3 color = vec3(0);
 
-    const vec3 c1 = vec3(166.0/255.0, 244.0/255.0, 255.0/255.0);
-    const vec3 c2 = vec3(173.0/255.0, 100.0/255.0, 121.4/255.0);
-    const vec3 c3 = vec3(1.6, 1.6, 1.6);
-    const vec3 c4 = vec3(164.0/255.0, 33.0/255.0, 214.4/255.0);
-    const vec3 c5 = vec3(0.6);
-    const vec3 c6 = vec3(0.9);
-    vec2 p = vec2(gl_TexCoord[0].x*(totalLength*0.85), ycoord*mainRadius*6.0);// * 5.0 / 1024.0;
-    float q = fbm(p - time * 0.1);
-    vec2 r = vec2(fbm(p + q + time * 1.0 - p.x - p.y), fbm(p + q - time * 1.0));
-    vec3 c = mix(c1, c2, fbm(p + r)) + mix(c3, c4, r.x) - mix(c5, c6, r.y);
-    return c;
+    vec3 fv = normalize(flightVel) * 0.25;
+    float flightSpeed = length(flightVel)/maxSpeed; //between 0 and 1 based on max speed
+    float dotVel = dot(fv,normalize(vertPos));
+    float proxToWarpVector = 0.5 + (dotVel * 0.5);
+    float attFactor = smoothstep(0,1,min(flightSpeed*8,1)); //quick ramp to full 1
+
+    float attProx = smoothstep(1,proxToWarpVector,attFactor); //Attenuated flight orientation effect so that there won't be a sudden transition at 0 speed to some other state
+    float bgRingFunc = (0.95+0.05*attFactor) * sin(afreq*1.7452 * ((time * 0.5 * attFactor) + attProx));
+
+    vec3 weirdmathq = vec3(0);
+
+    weirdmathq.x = fbm(stthing.xy + vec2(0.35*time,13*time + bgRingFunc * 0.1));
+    weirdmathq.y = fbm(stthing.yz + vec2(0.5*time,10*time + bgRingFunc));
+    weirdmathq.z = fbm(stthing.zx + vec2(0.44 * time + (bgRingFunc*0.4),0.6465742 + 3.1*time));
+
+    vec3 weirdmathr = vec3(0);
+
+    weirdmathr.x = fbm(stthing.xz + weirdmathq.xz + vec2(1.7,9.2) + 2.315*time);
+    weirdmathr.y = fbm(stthing.yx + weirdmathq.yx + vec2(8.3,2.8) + 3.126*time);
+    weirdmathr.z = fbm(stthing.zy + weirdmathq.zy + vec2(9.5,4.6) + 2.731*time);
+
+    float f = fbm(mix(stthing.xy,stthing.zx,0.5 + (0.5 * sin(0.1*time))));
+
+    color = mix(vec3(0.101961,0.619608,0.666667),
+    vec3(0.666667,0.666667,0.498039),
+    clamp((f*f)*4.0,0.0,1.0));
+
+    color = mix(color,
+    vec3(0.3,0.1,0),
+    clamp(length(weirdmathq),0.0,1.0));
+
+    color = mix(color,
+    vec3(0.666667,0.13,0),
+    clamp(weirdmathr.x,0.0,1.0));
+
+    color.xyz *= (f*f*f+.6*f*f+.5*f);
+    //TODO: Where is that static BG coming from??
+    return color;
 }
+
 void main()
 {
-
-
-
-
-
-    vec3 n,halfV,viewV,ldir;
-    float NdotL,NdotHV;
+    time = (timeBasis/80);// * 1 + (someVeryLargeNumber * (1-warpDepth));
+    float t = time * 7;
     vec4 color = ambient;
-
-    float t = time * 0.2;
-    float glow = 0.6 - abs(((t - float(int(t)))*1.5-0.25) - gl_TexCoord[0].x);
-
+    vec3 loc = normalize(vertPos);
 
     color -= 0.3;
-    color.rg *= max(1.0,  pow(0.66+glow,16));
 
     color *= gl_Color;
 
-    /* a fragment shader can't write a verying variable, hence we need
-    a new variable to store the normalized interpolated normal */
-    n = normalize(normal);
+    float flightSpeed = length(flightVel)/maxSpeed;
+    vec3 flightDir = normalize(flightVel); //normalized heading
+    vec3 c = create(loc.x,loc.y,loc.z);
 
-    /* compute the dot product between normal and ldir */
-    NdotL = max(dot(n,lightDir),0.0);
+    flightDir *= -1; //rings should progress opposite the direction of travel
+    float dotVel = dot(flightDir,loc);
+    float proxToWarpVector = 0.5 + (dotVel * 0.5);
+    float smoothprox = smoothstep(0,1,proxToWarpVector);
+    float peakprox = pow(proxToWarpVector,8);
+    float opp = 1 - proxToWarpVector; //distance from backward vector
+    //float localFrequency = (afreq + (0.1 * pow(opp,0.25))); //up to 0.2 extra frequency if far enough behind
+    float flightSpeedMult = 1 - (0.07 * flightSpeed); //greatly reduced range to avoid rapid flashing at high speed (and create an impression of distance)
+    float localTime = flightSpeedMult * t;// * (0.8 + (opp * 0.2)); //rate that time passes can reduce 20% depending on distance from heading point... oor could, but that was probably causing runaway pile-up
 
-    if (NdotL > 0.0) {
-        halfV = normalize(halfVector)*0.97;
-        NdotHV = max(dot(n,halfV),0.0);
-        color += gl_FrontMaterial.specular * gl_LightSource[0].specular * pow(NdotHV,gl_FrontMaterial.shininess);
-        color += diffuse*NdotL*0.45;
-    }
+    float vRingFunc = flightSpeed * sin(afreq * (localTime + (smoothprox * flightSpeedMult)));
 
-    float m = gl_TexCoord[0].y - 0.5;
-    float d = 0.5 - abs(m);
-    vec3 c;
-    if(d < 0.2){
-        //fixes seam from noon looping texture on y tex coord
-        vec3 c1 = create(gl_TexCoord[0].y);
-        vec3 c2 = create(0.9+d);
+    float foreAftReduction = pow(smoothstep(0,1,(abs(min(flightSpeed*8,1)*dotVel) * pow(flightSpeed,0.125))),4); //maybe remove pow idk
+    float vRingFinal = vRingFunc * 0.08 * (1-foreAftReduction); //increased orig. amplitude (0.031) because of fore-aft reduction mechanic
 
-        c = mix(c2, c1, d*5.0);
-    }else{
-        c = create(gl_TexCoord[0].y);
-    }
+    vec3 finalColor = c.rgb * color.rgb * 0.6;
 
-    gl_FragColor = vec4(c.rgb*color.rgb, 1.0);//vec4(c*color.rgb, 1.0);
+    finalColor += 0.05 * opp;
+    finalColor.r += 0.2;
+    finalColor.g += min(1,pow(proxToWarpVector,12)) * flightSpeed * 0.3;
+    finalColor.b += smoothprox * flightSpeed * 0.2;
+
+    finalColor = normalize(finalColor);
+
+    finalColor.r = 1 - pow(finalColor.r,6);
+    finalColor.gb *= 0.1;
+    finalColor.b += finalColor.g * 1.25;
+
+    finalColor.r += 0.3 * vRingFinal;
+    finalColor.r *= 0.7;
+    finalColor.g += 0.2 * vRingFinal;
+    finalColor.rgb -= 0.4 * vRingFinal;
+    //TODO:
+    // -shift colours and alpha slightly by speed
+    // -increase time multiplier, increase brightness, and drop alpha when leaving warp (and do reverse when entering) ... should be nonlinear between 0 and 1; will have to do some function fitting in Desmos. potentially just x^6
+
+    gl_FragColor = vec4(finalColor, 1);//vec4(c*color.rgb, 1.0);
 }
