@@ -9,6 +9,7 @@ import api.ModPlayground;
 import api.listener.Listener;
 import api.listener.events.player.PlayerChatEvent;
 import api.mod.StarLoader;
+import me.iron.WarpSpace.Mod.beacon.BeaconManager;
 import me.iron.WarpSpace.Mod.beacon.BeaconObject;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.element.ElementInformation;
@@ -59,6 +60,9 @@ public class DebugChatEvent {
                        WarpMain.instance.beaconManagerServer.print();
                    }
 
+                   if (e.getText().contains("ON")) {
+                       WarpMain.instance.beaconManagerServer.activateAll();
+                   }
                    if (e.getText().contains("clear")) {
                        WarpMain.instance.beaconManagerServer.clearBeacons();
                    }

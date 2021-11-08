@@ -11,6 +11,7 @@ import api.utils.addon.SimpleAddOn;
 import api.utils.game.SegmentControllerUtils;
 import me.iron.WarpSpace.Mod.WarpMain;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
+import org.schema.game.common.controller.PlayerUsableInterface;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.elements.ManagerContainer;
 import org.schema.game.common.controller.elements.SingleModuleActivation;
@@ -50,6 +51,7 @@ public class WarpBeaconAddon extends SimpleAddOn {
         ElementInformation ei = ElementKeyMap.getInfo(beaconChamber.id);
 
     }
+    public static long addonID;
     public static void registerAddonAddEventListener() {
         StarLoader.registerListener(RegisterAddonsEvent.class, new Listener<RegisterAddonsEvent>() {
             @Override
@@ -60,10 +62,20 @@ public class WarpBeaconAddon extends SimpleAddOn {
             }
         }, WarpMain.instance);
     }
+    public static WarpBeaconAddon getAddon(SegmentController s) {
+        if (!(s instanceof ManagedUsableSegmentController))
+            return null;
+        ManagedUsableSegmentController msc = (ManagedUsableSegmentController)s;
+        PlayerUsableInterface pui = SegmentControllerUtils.getAddon(msc,WarpBeaconAddon.addonID);
+        if (pui == null || !(pui instanceof WarpBeaconAddon))
+            return null;
+        return (WarpBeaconAddon)pui;
+    }
 
     private BeaconObject beacon;
     public WarpBeaconAddon(ManagerContainer<?> managerContainer, StarMod starMod) {
         super(managerContainer, ElementKeyMap.REACTOR_CHAMBER_JUMP, starMod, UIDName);
+        addonID = this.usableId;
     }
 
     @Override
@@ -74,11 +86,10 @@ public class WarpBeaconAddon extends SimpleAddOn {
         ReactorElement warpBeaconChamber = SegmentControllerUtils.getChamberFromElement((ManagedUsableSegmentController<?> )sc, beaconChamber);
         if (warpBeaconChamber == null)// || !(this.segmentController instanceof SpaceStation))
             return false;
-        boolean isUsable = super.isPlayerUsable();
-        return isUsable;
+        return super.isPlayerUsable();
     }
 
-    @Override
+    @Override //time in seconds required to fully charge
     public float getChargeRateFull() { //in seconds
         return 3;
     }
@@ -125,11 +136,8 @@ public class WarpBeaconAddon extends SimpleAddOn {
         return true;
     }
 
-    private int timer;
     @Override
-    public void onActive() { //called every frame
-        if (timer++%100==0 && beacon != null)
-            beacon.update();
+    public void onActive() {
     }
 
     @Override
@@ -138,11 +146,22 @@ public class WarpBeaconAddon extends SimpleAddOn {
            beacon.setFlagForDelete();
            WarpMain.instance.beaconManagerServer.updateBeacon(beacon);
            beacon = null;
+
        }
     }
 
     @Override
     public String getName() {
         return "Warp Beacon";
+    }
+
+    @Override
+    public void setCharge(float v) {
+        super.setCharge(v);
+    }
+
+    @Override
+    public void setCharges(int i) {
+        super.setCharges(i);
     }
 }

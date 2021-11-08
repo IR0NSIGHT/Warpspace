@@ -1,5 +1,6 @@
 package me.iron.WarpSpace.Mod.beacon;
 
+import api.ModPlayground;
 import api.utils.game.SegmentControllerUtils;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
@@ -23,7 +24,7 @@ import java.io.Serializable;
 public class BeaconObject implements Serializable {
     //important values
     private Vector3i position = new Vector3i();
-    private String UID;
+    private final String UID;
     private int factionID;
     private int strength;
     private SimpleTransformableSendableObject.EntityType entityType;
@@ -63,7 +64,7 @@ public class BeaconObject implements Serializable {
         this.factionName = factionName;
     }
 
-    public void update() {
+    void update() {
         if (godMode)
             return;
 
@@ -75,8 +76,20 @@ public class BeaconObject implements Serializable {
 
         //test if loaded
         SegmentController beaconSC = GameServerState.instance.getSegmentControllersByName().get(UID);
-        if (beaconSC != null)
+        if (beaconSC != null && beaconSC.isFullyLoadedWithDock())
             updateLoaded(beaconSC);
+        else
+            ModPlayground.broadcastMessage(getUID() + " is unloaded beacon.");
+    }
+
+    //will attempt to execute the beacon module of this segementcontroller. used when objects are loaded in.
+    void activateAddon(SegmentController s) {
+        WarpBeaconAddon addon = WarpBeaconAddon.getAddon(s);
+        if (addon == null || !addon.isPlayerUsable())
+            return;
+        addon.setCharges(1);
+        addon.executeModule();
+        addon.sendChargeUpdate();
     }
 
     private void updateLoaded(SegmentController sc) {
@@ -84,21 +97,24 @@ public class BeaconObject implements Serializable {
             setFlagForDelete();
             return;
         }
-        boolean isHB = (sc instanceof SpaceStation && ((SpaceStation)sc).isHomeBase());
+        boolean isHB = (sc instanceof SpaceStation && sc.isHomeBase());
         if (sc instanceof ManagedUsableSegmentController) {
             ManagedUsableSegmentController msc = (ManagedUsableSegmentController)sc;
             ReactorElement beaconChamber = SegmentControllerUtils.getChamberFromElement(msc,WarpBeaconAddon.beaconChamber);
-            if (beaconChamber == null || sc.isCoreOverheating() || isHB) {
-            //todo test: (those are borked, always false)   boolean valid = beaconChamber.isAllValid();
-            //todo test: (those are borked, always false)   boolean damaged = beaconChamber.isDamaged();
+            //beaconchamber is null after loading. -> is that an issue that gets solved by waiting for th chamber to be loaded in?
+            if (beaconChamber == null)
+                return;
+            if (sc.isCoreOverheating() || isHB || beaconChamber.isDamagedRec()) {
                 setFlagForDelete();
                 return;
             }
+            WarpBeaconAddon addon = WarpBeaconAddon.getAddon(msc);
+            if (addon == null) //seems to sometimes just randomly be null?
+                return;
+            if (!addon.isActive() || !addon.isPlayerUsable()) //TODO playerusable for unmanned craft too?
+                setFlagForDelete();
+            ModPlayground.broadcastMessage("addon for " + UID + " is active:" + addon.isActive());
             //TODO flag for delete doesnt cause deletion?
-            //TODO test if warpBeaconAddon is active
-        //    PlayerUsableInterface beaconAddon = SegmentControllerUtils.getAddon((ManagedUsableSegmentController)sc,WarpBeaconAddon.class);
-        //    if (beaconAddon.)
-        //    msc.getManagerContainer().getEffectAddOnManager().
         }
 
     }
@@ -150,5 +166,9 @@ public class BeaconObject implements Serializable {
 
     public void setGodMode(boolean godMode) {
         this.godMode = godMode;
+    }
+
+    public String getUID() {
+        return UID;
     }
 }
