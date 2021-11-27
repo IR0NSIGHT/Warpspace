@@ -31,7 +31,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/beaconHelp.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/HUD_core.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/HUD_core.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mod.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/mod.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -392,7 +395,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638049682989</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="removed debugchat handler">
+      <created>1638049729568</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1638049729568</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -420,7 +430,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Revert &quot;Added Taswin to contributors file&quot;&#10;&#10;This reverts commit 11e31d41" />
     <MESSAGE value="Revert &quot;Background recoloration working. Only recolors existing backgrounds, doesnt work if background is pitchblack.&quot;&#10;&#10;This reverts commit 52944d4e" />
     <MESSAGE value="Did lots of javadoc, mainly HUD classes" />
     <MESSAGE value="Deleted and rebuilt javadoc bc it didnt deploye correctly on github." />
@@ -445,7 +454,8 @@
     <MESSAGE value="merging stuff and deleting debug prints" />
     <MESSAGE value="possibly fixed persistence across restarts?" />
     <MESSAGE value="removed comments" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed comments" />
+    <MESSAGE value="removed debugchat handler" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed debugchat handler" />
   </component>
   <component name="WindowStateProjectService">
     <state x="709" y="319" key="#BuildArtifactsBeforeRunChooser" timestamp="1636229456113">
@@ -533,10 +543,10 @@
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="1920" y="155" width="1555" height="740" maximized="true" key="dock-window-1/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635161692387" />
-    <state x="2476" y="400" width="567" height="520" key="find.popup" timestamp="1638049610890">
+    <state x="2476" y="400" width="567" height="520" key="find.popup" timestamp="1638050603716">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state x="2476" y="400" width="567" height="520" key="find.popup/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049610890" />
+    <state x="2476" y="400" width="567" height="520" key="find.popup/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638050603716" />
     <state x="2423" y="372" width="672" height="678" key="search.everywhere.popup" timestamp="1636379278618">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
