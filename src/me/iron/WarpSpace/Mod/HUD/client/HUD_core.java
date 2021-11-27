@@ -4,6 +4,7 @@ import api.listener.Listener;
 import api.listener.events.gui.HudCreateEvent;
 import api.mod.StarLoader;
 import me.iron.WarpSpace.Mod.TimedRunnable;
+import me.iron.WarpSpace.Mod.WarpJumpEvent;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import api.utils.StarRunnable;
@@ -172,6 +173,13 @@ public class HUD_core {
                 initRadarSectorGUI();
             }
         }, WarpMain.instance);
+
+        StarLoader.registerListener(WarpJumpEvent.class, new Listener<WarpJumpEvent>() {
+            @Override
+            public void onEvent(WarpJumpEvent warpJumpEvent) {
+                initRadarSectorGUI();
+            }
+        },WarpMain.instance);
     }
 
     //TODO maybe split up in placement + available sprites?
