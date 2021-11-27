@@ -11,6 +11,7 @@ import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
+import org.schema.game.common.controller.elements.VoidElementManager;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
 
@@ -127,7 +128,8 @@ public class BeaconManager extends SimpleSerializerWrapper {
         }
 
         synchAll();
-        print();
+        ModPlayground.broadcastMessage("added beacon: " + beacon.getName());
+        //print();
     }
 
     public void removeBeacon(BeaconObject beacon) {
@@ -145,7 +147,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
     }
 
     private void synchAll() {
-        if (!WarpMain.instance.beaconManagerServer.equals(this))
+        if (!this.equals(WarpMain.instance.beaconManagerServer))
             return;
 
         new BeaconUpdatePacket().sendToAll();
@@ -202,6 +204,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
         for (ArrayList<BeaconObject> beaconObjects: sectorToBeaconMap.values()) {
             for (BeaconObject beacon: beaconObjects) {
                 b.append(beacon.getName()).append("[").append(beacon.getStrength()).append("] : ").append(beacon.getPosition().toStringPure());
+                b.append("pwr blocks:" + beacon.getPowerCost()/ VoidElementManager.REACTOR_POWER_CAPACITY_MULTIPLIER);
                 if (beacon.isGodMode())
                     b.append("  (god)");
                 b.append("\n");

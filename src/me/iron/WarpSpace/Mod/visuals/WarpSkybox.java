@@ -94,18 +94,22 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
         GlUtil.updateShaderFloat(shader, "timeBasis", time); //speed of effect 'animation'
         if(GameClientState.instance != null){
             ManagedUsableSegmentController<?> vessel = currentlyOnBoardEntity();
-            if(vessel != null) {
-                GlUtil.updateShaderVector3f(shader, "flightVel", vessel.getPhysicsObject().getLinearVelocity(vel));
-                GlUtil.updateShaderFloat(shader, "maxSpeed", vessel.getMaxServerSpeed());
-                //GlUtil.updateShaderFloat(shader, "warpDepth", someWeirdWSStateInformationIDK);
-            }
+            //    if(vessel != null) {
+            //        synchronized (vessel) { //useless? produced nullpointer, guessed it might be non threadsafe cause
+            //            GlUtil.updateShaderVector3f(shader, "flightVel", vessel.getPhysicsObject().getLinearVelocity(vel));
+            //            GlUtil.updateShaderFloat(shader, "maxSpeed", vessel.getMaxServerSpeed());
+            //            GlUtil.updateShaderVector3f(shader,"vesselOrigin",vessel.getClientTransform().origin);
+            //            //GlUtil.updateShaderFloat(shader, "warpDepth", someWeirdWSStateInformationIDK);
+            //        }
+            //}
+
         }
         //TODO: Darken/lighten over time when entering/leaving
     }
 
     @Override
     public void preCameraPrepare() { //Basically background draw; everything else except skybox draws on top of this stuff
-        if (!WarpManager.IsInWarp(getClientPlayerState().getCurrentSector())) return;
+    //    if (!WarpManager.IsInWarp(getClientPlayerState().getCurrentSector())) return;
         float sectorSize = GameClientState.instance.getSectorSize();
         float scale = SCALE_FACTOR * sectorSize;
         scale *= -0.35f;

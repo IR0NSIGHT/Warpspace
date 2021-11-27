@@ -38,7 +38,7 @@ public class DebugChatEvent {
             public void onEvent(PlayerChatEvent e) {
                DebugFile.log("playerchat event"); //FIXME debug
                if (e.isServer()) {
-                   ModPlayground.broadcastMessage("is on server");
+               //    ModPlayground.broadcastMessage("is on server");
                    if (e.getText().contains("beacon")) {
                        WarpMain.instance.beaconManagerServer.addBeacon(new BeaconObject(
 

@@ -24,14 +24,14 @@ public class BeaconUpdatePacket extends Packet {
         if (client == null)
             return;
         client.onDeserialize(packetReadBuffer);
-        ModPlayground.broadcastMessage("READ BEACON DATA FROM SERVER");
-        client.print();
+    //    ModPlayground.broadcastMessage("READ BEACON DATA FROM SERVER");
+    //    client.print();
     }
 
     @Override
     public void writePacketData(PacketWriteBuffer packetWriteBuffer) throws IOException {
         WarpMain.instance.beaconManagerServer.onSerialize(packetWriteBuffer);
-        ModPlayground.broadcastMessage("WRITE BEACON DATA FOR CLIENT");
+    //    ModPlayground.broadcastMessage("WRITE BEACON DATA FOR CLIENT");
     }
 
     @Override

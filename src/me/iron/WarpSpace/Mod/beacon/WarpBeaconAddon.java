@@ -10,6 +10,7 @@ import api.mod.StarMod;
 import api.utils.addon.SimpleAddOn;
 import api.utils.game.SegmentControllerUtils;
 import me.iron.WarpSpace.Mod.WarpMain;
+import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.elements.ManagerContainer;
@@ -17,6 +18,7 @@ import org.schema.game.common.controller.elements.SingleModuleActivation;
 import org.schema.game.common.controller.elements.power.reactor.tree.ReactorElement;
 import org.schema.game.common.data.element.ElementInformation;
 import org.schema.game.common.data.element.ElementKeyMap;
+import org.schema.game.mod.Mod;
 import org.schema.game.server.data.GameServerState;
 
 import java.util.Arrays;
@@ -28,7 +30,6 @@ import java.util.Arrays;
  * TIME: 19:31
  */
 public class WarpBeaconAddon extends SimpleAddOn {
-    private  float powerCost = 10000;
     public static final String UIDName = "WARP_BEACON_SIMPLE";
     public static ElementInformation beaconChamber;
     public static void registerChamberBlock() {
@@ -39,6 +40,7 @@ public class WarpBeaconAddon extends SimpleAddOn {
         beaconChamber.chamberCapacity = 0.5f;
         beaconChamber.setTextureId(ElementKeyMap.getInfo(rootID).getTextureIds());
         beaconChamber.setDescription("Shift the closest warp droppoint to this sector.");
+        beaconChamber.chamberPermission = ElementInformation.CHAMBER_PERMISSION_STATION;
         BlockConfig.add(beaconChamber);
         short moddedBlockID = beaconChamber.id;
         StringBuilder out = new StringBuilder();
@@ -85,12 +87,27 @@ public class WarpBeaconAddon extends SimpleAddOn {
 
     @Override
     public double getPowerConsumedPerSecondResting() {
-        return 0;
+        if (getSegmentController().isDocked() || !isActive())
+            return 0;
+        if (beacon == null)
+            return BeaconObject.calcPowerCost(getSegmentController().getSector(new Vector3i()));
+        return beacon.getPowerCost();
+    }
+
+    @Override
+    public void onUnpowered() {
+        super.onUnpowered();
+        if (isActive()) //deactivate when underpowered.
+            this.activation = null;
     }
 
     @Override
     public double getPowerConsumedPerSecondCharging() {
-        return 0;
+        if (getSegmentController().isDocked() || !isActive()) //TODO prevent propagating to docks in the first place.
+            return 0;
+        if (beacon == null)
+            return BeaconObject.calcPowerCost(getSegmentController().getSector(new Vector3i()));
+        return beacon.getPowerCost();
     }
 
     @Override
@@ -110,6 +127,9 @@ public class WarpBeaconAddon extends SimpleAddOn {
 
     @Override
     public boolean onExecuteServer() {
+        if (getSegmentController().isDocked())
+            return false;
+
         activation = new SingleModuleActivation();
         activation.startTime = System.currentTimeMillis();
         if (GameServerState.instance == null)
@@ -128,14 +148,22 @@ public class WarpBeaconAddon extends SimpleAddOn {
     private int timer;
     @Override
     public void onActive() { //called every frame
+        if (GameServerState.instance == null || getSegmentController().isDocked())
+            return;
+
         if (timer++%100==0 && beacon != null)
-            beacon.update();
+            WarpMain.instance.beaconManagerServer.updateBeacon(beacon);
+        if (beacon == null || beacon.isFlagForDelete()) {
+            this.activation = null; //deactivate
+            ModPlayground.broadcastMessage("deactivate addon");
+        }
     }
 
     @Override
     public void onInactive() { //called when?
-       if (beacon != null) {
+       if (beacon != null && !getSegmentController().isDocked()) {
            beacon.setFlagForDelete();
+           ModPlayground.broadcastMessage("addon.onInactive.");
            WarpMain.instance.beaconManagerServer.updateBeacon(beacon);
            beacon = null;
        }
