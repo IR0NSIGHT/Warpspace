@@ -42,14 +42,14 @@ public class WarpBeaconAddon extends SimpleAddOn {
         beaconChamber.setDescription("Shift the closest warp droppoint to this sector.");
         beaconChamber.chamberPermission = ElementInformation.CHAMBER_PERMISSION_STATION;
         BlockConfig.add(beaconChamber);
-        short moddedBlockID = beaconChamber.id;
-        StringBuilder out = new StringBuilder();
+     /*    short moddedBlockID = beaconChamber.id;
+       StringBuilder out = new StringBuilder();
         for (int i = 0; i < ElementKeyMap.infoArray.length; i++) {
             ElementInformation ei = ElementKeyMap.infoArray[i];
             out.append("idx:"+i+"\t\t"+(ei==null?"NULL":ei.toString())).append("\n");
         }
         DebugFile.log("\n\n\n\n"+out.toString()+"\n\n\n\n");
-        ElementInformation ei = ElementKeyMap.getInfo(beaconChamber.id);
+        ElementInformation ei = ElementKeyMap.getInfo(beaconChamber.id); */
 
     }
     public static long addonID;
@@ -122,11 +122,11 @@ public class WarpBeaconAddon extends SimpleAddOn {
 
     @Override
     public boolean onExecuteServer() {
-        activation = new SingleModuleActivation();
-        activation.startTime = System.currentTimeMillis();
+    //    activation = new SingleModuleActivation();
+    //    activation.startTime = System.currentTimeMillis();
         if (GameServerState.instance == null)
             return true;
-        //ModPlayground.broadcastMessage("warp beacon activated by " + this.segmentController.getName());
+        ModPlayground.broadcastMessage("warp beacon activated by " + this.segmentController.getName());
         beacon = new BeaconObject(this.segmentController);
         WarpMain.instance.beaconManagerServer.addBeacon(beacon);
         return true;
@@ -139,15 +139,16 @@ public class WarpBeaconAddon extends SimpleAddOn {
 
     @Override
     public void onActive() {
+        if (GameServerState.instance != null && isActive() && (beacon == null || beacon.isFlagForDelete()))
+            deactivate();
     }
 
     @Override
     public void onInactive() { //called when?
-       if (beacon != null) {
+       if (GameServerState.instance != null && !isActive() && beacon != null) {
            beacon.setFlagForDelete();
            WarpMain.instance.beaconManagerServer.updateBeacon(beacon);
            beacon = null;
-
        }
     }
 
@@ -164,5 +165,9 @@ public class WarpBeaconAddon extends SimpleAddOn {
     @Override
     public void setCharges(int i) {
         super.setCharges(i);
+    }
+
+    private void deactivate() {
+        this.activation = null;
     }
 }

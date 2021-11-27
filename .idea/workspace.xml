@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="WarpspaceClient" />
+      <artifact name="WarpspaceServer" />
     </artifacts-to-build>
   </component>
   <component name="BranchesTreeState">
@@ -32,11 +32,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/DebugChatEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/DebugChatEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/SkyboxEventHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/SkyboxEventHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconUpdatePacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconUpdatePacket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -89,7 +87,7 @@
       <recent name="C:\Users\Max1M\IdeaProjects\Warpspace\lib" />
     </key>
   </component>
-  <component name="RunManager" selected="JAR Application.client">
+  <component name="RunManager" selected="JAR Application.server">
     <configuration name="main (1)" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="me.iron.WarpSpace.Mod.testing.main" />
       <module name="Warpspace" />
@@ -377,7 +375,14 @@
       <option name="project" value="LOCAL" />
       <updated>1636387424193</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="merging stuff and deleting debug prints">
+      <created>1638039154351</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1638039154351</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -405,7 +410,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="taswins warpmap added. (master-&gt; dev)" />
     <MESSAGE value="Working state basic inhibtion (no inforight, only markers)." />
     <MESSAGE value="Background recoloration working.&#10;Only recolors existing backgrounds, doesnt work if background is pitchblack." />
     <MESSAGE value="Revert &quot;Added Taswin to contributors file&quot;&#10;&#10;This reverts commit 11e31d41" />
@@ -430,7 +434,8 @@
     <MESSAGE value="stop deadly send-receive-send cycle for singleplayer beaconmanager." />
     <MESSAGE value="bump bump" />
     <MESSAGE value="working beacon chambers, also synch properly.&#10;to test: disabling them through dmg etc" />
-    <option name="LAST_COMMIT_MESSAGE" value="working beacon chambers, also synch properly.&#10;to test: disabling them through dmg etc" />
+    <MESSAGE value="merging stuff and deleting debug prints" />
+    <option name="LAST_COMMIT_MESSAGE" value="merging stuff and deleting debug prints" />
   </component>
   <component name="WindowStateProjectService">
     <state x="709" y="319" key="#BuildArtifactsBeforeRunChooser" timestamp="1636229456113">
@@ -456,46 +461,46 @@
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="2449" y="401" key="FileChooserDialogImpl/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636380953220" />
-    <state width="1637" height="265" key="GridCell.Tab.0.bottom" timestamp="1638038987168">
+    <state width="1637" height="328" key="GridCell.Tab.0.bottom" timestamp="1638042448768">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
-    <state width="1637" height="265" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638038987168" />
-    <state width="1637" height="265" key="GridCell.Tab.0.center" timestamp="1638038987168">
+    <state width="1637" height="328" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448768" />
+    <state width="1637" height="328" key="GridCell.Tab.0.center" timestamp="1638042448768">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
-    <state width="1637" height="265" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638038987168" />
-    <state width="1637" height="265" key="GridCell.Tab.0.left" timestamp="1638038987167">
+    <state width="1637" height="328" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448768" />
+    <state width="1637" height="328" key="GridCell.Tab.0.left" timestamp="1638042448768">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
-    <state width="1637" height="265" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638038987167" />
-    <state width="1637" height="265" key="GridCell.Tab.0.right" timestamp="1638038987168">
+    <state width="1637" height="328" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448768" />
+    <state width="1637" height="328" key="GridCell.Tab.0.right" timestamp="1638042448768">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
-    <state width="1637" height="265" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638038987168" />
-    <state width="1637" height="265" key="GridCell.Tab.1.bottom" timestamp="1638038987168">
+    <state width="1637" height="328" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448768" />
+    <state width="1637" height="328" key="GridCell.Tab.1.bottom" timestamp="1638042448649">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
-    <state width="1637" height="265" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638038987168" />
-    <state width="1637" height="265" key="GridCell.Tab.1.center" timestamp="1638038987168">
+    <state width="1637" height="328" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448649" />
+    <state width="1637" height="328" key="GridCell.Tab.1.center" timestamp="1638042448648">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
-    <state width="1637" height="265" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638038987168" />
-    <state width="1637" height="265" key="GridCell.Tab.1.left" timestamp="1638038987168">
+    <state width="1637" height="328" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448648" />
+    <state width="1637" height="328" key="GridCell.Tab.1.left" timestamp="1638042448648">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
-    <state width="1637" height="265" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638038987168" />
-    <state width="1637" height="265" key="GridCell.Tab.1.right" timestamp="1638038987168">
+    <state width="1637" height="328" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448648" />
+    <state width="1637" height="328" key="GridCell.Tab.1.right" timestamp="1638042448649">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
-    <state width="1637" height="265" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638038987168" />
+    <state width="1637" height="328" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448649" />
     <state x="731" y="241" key="RollbackChangesDialog" timestamp="1635177385639">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -509,11 +514,11 @@
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="2576" y="575" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1633866343056" />
-    <state x="2167" y="576" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1636378572689">
+    <state x="2167" y="576" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1638042259992">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="282" y="434" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229582933" />
-    <state x="2167" y="576" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636378572689" />
+    <state x="2167" y="576" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042259992" />
     <state x="1920" y="155" width="1555" height="740" maximized="true" key="dock-window-1" timestamp="1635161692387">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
@@ -532,32 +537,29 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/StarMade.jar!/api/utils/addon/PacketSCSyncSimpleAddOn.class</url>
-          <line>65</line>
-          <option name="timeStamp" value="245" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$USER_HOME$/Desktop/Starmade/server testarea/client/StarMade/StarMade.jar!/api/utils/addon/SimpleAddOn.class</url>
-          <line>44</line>
-          <option name="timeStamp" value="251" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java</url>
-          <line>127</line>
-          <option name="timeStamp" value="253" />
+          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java</url>
+          <line>75</line>
+          <option name="timeStamp" value="307" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java</url>
-          <line>78</line>
-          <option name="timeStamp" value="254" />
+          <line>99</line>
+          <option name="timeStamp" value="308" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java</url>
-          <line>94</line>
-          <properties class="me.iron.WarpSpace.Mod.beacon.BeaconObject" method="updateLoaded">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="255" />
+          <line>108</line>
+          <option name="timeStamp" value="309" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java</url>
+          <line>113</line>
+          <option name="timeStamp" value="310" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java</url>
+          <line>120</line>
+          <option name="timeStamp" value="312" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

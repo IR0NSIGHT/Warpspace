@@ -65,12 +65,15 @@ public class BeaconObject implements Serializable {
     }
 
     void update() {
+        if (GameServerState.instance == null)
+            return;
+
         if (godMode)
             return;
 
         boolean existsDBorLoaded = EntityRequest.existsIdentifierWOExc(GameServerState.instance,UID);
         if (!existsDBorLoaded) {
-            flagForDelete = true;
+            setFlagForDelete();
             return;
         }
 

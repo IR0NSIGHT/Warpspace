@@ -4,6 +4,7 @@ import api.config.BlockConfig;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
 import api.mod.StarMod;
+import api.mod.config.PersistentObjectUtil;
 import api.network.packets.PacketUtil;
 import api.utils.registry.UniversalRegistry;
 import me.iron.WarpSpace.Mod.HUD.client.*;

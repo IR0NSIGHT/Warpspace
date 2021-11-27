@@ -16,6 +16,7 @@ import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
+import org.schema.game.mod.Mod;
 import org.schema.game.server.data.GameServerState;
 
 import java.util.*;
@@ -124,6 +125,9 @@ public class BeaconManager extends SimpleSerializerWrapper {
     }
 
     private void updateAllBeacons() {
+        if (GameServerState.instance == null)
+            return;
+
         ArrayList<BeaconObject> temp = new ArrayList<>(beacons_by_UID.values());
         for (BeaconObject b : temp) {
             if (b == null)
@@ -131,7 +135,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
             updateBeacon(b);
 
         }
-    //    print();
+        print();
     }
 
     private BeaconObject getBeaconByUID(String UID) {
@@ -167,7 +171,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
             b = getBeaconByUID(uid);
             if (b == null)
                 continue;
-            b.update();
+           updateBeacon(b);
         }
         Collections.sort(list, new Comparator<String>() {
             @Override
@@ -194,6 +198,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
     }
 
     public void addBeacon(BeaconObject beacon) {
+
         Vector3i warpPos = WarpManager.getWarpSpacePos(beacon.getPosition());
         ArrayList<String> list = beacons_by_sector.get(warpPos);
         if (list == null) {
@@ -204,13 +209,15 @@ public class BeaconManager extends SimpleSerializerWrapper {
             list.add(beacon.getUID());
         }
         beacons_by_UID.put(beacon.getUID(),beacon);
-        if (isServer) {
+        if (isServer && GameServerState.instance != null) {
+            ModPlayground.broadcastMessage("added beacon: " + beacon.getName());
             updateStrongest(warpPos);
             synchAll();
         }
     }
 
     public void removeBeacon(BeaconObject beacon) {
+
         Vector3i warpPos = WarpManager.getWarpSpacePos(beacon.getPosition());
         ArrayList<String> list = beacons_by_sector.get(warpPos);
         if (list == null) {
@@ -220,6 +227,8 @@ public class BeaconManager extends SimpleSerializerWrapper {
         beacons_by_UID.remove(beacon.getUID());
 
         if (isServer) {
+            ModPlayground.broadcastMessage("removed beacon: " + beacon.getName());
+
             updateStrongest(warpPos);
             synchAll();
         }
@@ -258,6 +267,9 @@ public class BeaconManager extends SimpleSerializerWrapper {
 
     @Override
     public void onSerialize(PacketWriteBuffer packetWriteBuffer) {
+        if (GameServerState.instance==null) //client doesnt need that.
+            return;
+
         try {
             //collect ALL beacons in one big list
             ArrayList<BeaconObject> all = new ArrayList<>(beacons_by_UID.values());
