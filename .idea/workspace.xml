@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="WarpspaceServer" />
+      <artifact name="WarpspaceClient" />
     </artifacts-to-build>
   </component>
   <component name="BranchesTreeState">
@@ -31,9 +31,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/beaconHelp.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/HUD_core.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/HUD_core.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mod.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/mod.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -402,7 +399,21 @@
       <option name="project" value="LOCAL" />
       <updated>1638049729568</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="try to overwrite derps radar-hud breaker.">
+      <created>1638050808009</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1638050808009</updated>
+    </task>
+    <task id="LOCAL-00034" summary="bump to 0.11.0 - beacons">
+      <created>1638050824213</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1638050824213</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -430,8 +441,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Revert &quot;Background recoloration working. Only recolors existing backgrounds, doesnt work if background is pitchblack.&quot;&#10;&#10;This reverts commit 52944d4e" />
-    <MESSAGE value="Did lots of javadoc, mainly HUD classes" />
     <MESSAGE value="Deleted and rebuilt javadoc bc it didnt deploye correctly on github." />
     <MESSAGE value="Something wierd with the spriteloader" />
     <MESSAGE value="hud now prefixes neighbour pos and waypoint in warp with [WARP].&#10;deactivated class overwrite for GameClientData for now.&#10;waypoint setting works from both planes now." />
@@ -455,7 +464,9 @@
     <MESSAGE value="possibly fixed persistence across restarts?" />
     <MESSAGE value="removed comments" />
     <MESSAGE value="removed debugchat handler" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed debugchat handler" />
+    <MESSAGE value="try to overwrite derps radar-hud breaker." />
+    <MESSAGE value="bump to 0.11.0 - beacons" />
+    <option name="LAST_COMMIT_MESSAGE" value="bump to 0.11.0 - beacons" />
   </component>
   <component name="WindowStateProjectService">
     <state x="709" y="319" key="#BuildArtifactsBeforeRunChooser" timestamp="1636229456113">
