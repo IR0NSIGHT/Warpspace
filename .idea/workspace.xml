@@ -31,9 +31,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -387,7 +385,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638042890697</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="removed comments">
+      <created>1638049682989</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1638049682989</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -415,7 +420,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Background recoloration working.&#10;Only recolors existing backgrounds, doesnt work if background is pitchblack." />
     <MESSAGE value="Revert &quot;Added Taswin to contributors file&quot;&#10;&#10;This reverts commit 11e31d41" />
     <MESSAGE value="Revert &quot;Background recoloration working. Only recolors existing backgrounds, doesnt work if background is pitchblack.&quot;&#10;&#10;This reverts commit 52944d4e" />
     <MESSAGE value="Did lots of javadoc, mainly HUD classes" />
@@ -440,7 +444,8 @@
     <MESSAGE value="working beacon chambers, also synch properly.&#10;to test: disabling them through dmg etc" />
     <MESSAGE value="merging stuff and deleting debug prints" />
     <MESSAGE value="possibly fixed persistence across restarts?" />
-    <option name="LAST_COMMIT_MESSAGE" value="possibly fixed persistence across restarts?" />
+    <MESSAGE value="removed comments" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed comments" />
   </component>
   <component name="WindowStateProjectService">
     <state x="709" y="319" key="#BuildArtifactsBeforeRunChooser" timestamp="1636229456113">

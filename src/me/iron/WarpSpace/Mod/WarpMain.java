@@ -71,7 +71,7 @@ public class WarpMain extends StarMod {
         InterdictionHUDUpdateLoop.CreateServerLoop();
         beaconManagerServer = BeaconManager.getSavedOrNew(this.getSkeleton());
         beaconManagerServer.onInit();
-        DebugChatEvent.addDebugChatListener();
+    //    DebugChatEvent.addDebugChatListener();
     }
 
     @Override
