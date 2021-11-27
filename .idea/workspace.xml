@@ -32,9 +32,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/WarpBeaconAddon.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -382,7 +380,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638039154351</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="possibly fixed persistence across restarts?">
+      <created>1638042890697</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1638042890697</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -410,7 +415,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Working state basic inhibtion (no inforight, only markers)." />
     <MESSAGE value="Background recoloration working.&#10;Only recolors existing backgrounds, doesnt work if background is pitchblack." />
     <MESSAGE value="Revert &quot;Added Taswin to contributors file&quot;&#10;&#10;This reverts commit 11e31d41" />
     <MESSAGE value="Revert &quot;Background recoloration working. Only recolors existing backgrounds, doesnt work if background is pitchblack.&quot;&#10;&#10;This reverts commit 52944d4e" />
@@ -435,7 +439,8 @@
     <MESSAGE value="bump bump" />
     <MESSAGE value="working beacon chambers, also synch properly.&#10;to test: disabling them through dmg etc" />
     <MESSAGE value="merging stuff and deleting debug prints" />
-    <option name="LAST_COMMIT_MESSAGE" value="merging stuff and deleting debug prints" />
+    <MESSAGE value="possibly fixed persistence across restarts?" />
+    <option name="LAST_COMMIT_MESSAGE" value="possibly fixed persistence across restarts?" />
   </component>
   <component name="WindowStateProjectService">
     <state x="709" y="319" key="#BuildArtifactsBeforeRunChooser" timestamp="1636229456113">
@@ -461,46 +466,46 @@
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="2449" y="401" key="FileChooserDialogImpl/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636380953220" />
-    <state width="1637" height="328" key="GridCell.Tab.0.bottom" timestamp="1638042448768">
+    <state width="1637" height="328" key="GridCell.Tab.0.bottom" timestamp="1638049611019">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
-    <state width="1637" height="328" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448768" />
-    <state width="1637" height="328" key="GridCell.Tab.0.center" timestamp="1638042448768">
+    <state width="1637" height="328" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611019" />
+    <state width="1637" height="328" key="GridCell.Tab.0.center" timestamp="1638049611017">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
-    <state width="1637" height="328" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448768" />
-    <state width="1637" height="328" key="GridCell.Tab.0.left" timestamp="1638042448768">
+    <state width="1637" height="328" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611017" />
+    <state width="1637" height="328" key="GridCell.Tab.0.left" timestamp="1638049611017">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
-    <state width="1637" height="328" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448768" />
-    <state width="1637" height="328" key="GridCell.Tab.0.right" timestamp="1638042448768">
+    <state width="1637" height="328" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611017" />
+    <state width="1637" height="328" key="GridCell.Tab.0.right" timestamp="1638049611019">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
-    <state width="1637" height="328" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448768" />
-    <state width="1637" height="328" key="GridCell.Tab.1.bottom" timestamp="1638042448649">
+    <state width="1637" height="328" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611019" />
+    <state width="1637" height="328" key="GridCell.Tab.1.bottom" timestamp="1638049611019">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
-    <state width="1637" height="328" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448649" />
-    <state width="1637" height="328" key="GridCell.Tab.1.center" timestamp="1638042448648">
+    <state width="1637" height="328" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611019" />
+    <state width="1637" height="328" key="GridCell.Tab.1.center" timestamp="1638049611019">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
-    <state width="1637" height="328" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448648" />
-    <state width="1637" height="328" key="GridCell.Tab.1.left" timestamp="1638042448648">
+    <state width="1637" height="328" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611019" />
+    <state width="1637" height="328" key="GridCell.Tab.1.left" timestamp="1638049611019">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
-    <state width="1637" height="328" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448648" />
-    <state width="1637" height="328" key="GridCell.Tab.1.right" timestamp="1638042448649">
+    <state width="1637" height="328" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611019" />
+    <state width="1637" height="328" key="GridCell.Tab.1.right" timestamp="1638049611019">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
-    <state width="1637" height="328" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042448649" />
+    <state width="1637" height="328" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611019" />
     <state x="731" y="241" key="RollbackChangesDialog" timestamp="1635177385639">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -523,10 +528,10 @@
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="1920" y="155" width="1555" height="740" maximized="true" key="dock-window-1/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635161692387" />
-    <state x="2476" y="400" width="567" height="520" key="find.popup" timestamp="1638038987020">
+    <state x="2476" y="400" width="567" height="520" key="find.popup" timestamp="1638049610890">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state x="2476" y="400" width="567" height="520" key="find.popup/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638038987020" />
+    <state x="2476" y="400" width="567" height="520" key="find.popup/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049610890" />
     <state x="2423" y="372" width="672" height="678" key="search.everywhere.popup" timestamp="1636379278618">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
@@ -560,6 +565,11 @@
           <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java</url>
           <line>120</line>
           <option name="timeStamp" value="312" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java</url>
+          <line>195</line>
+          <option name="timeStamp" value="314" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -126,7 +126,7 @@ public class WarpBeaconAddon extends SimpleAddOn {
     //    activation.startTime = System.currentTimeMillis();
         if (GameServerState.instance == null)
             return true;
-        ModPlayground.broadcastMessage("warp beacon activated by " + this.segmentController.getName());
+    //    ModPlayground.broadcastMessage("warp beacon activated by " + this.segmentController.getName());
         beacon = new BeaconObject(this.segmentController);
         WarpMain.instance.beaconManagerServer.addBeacon(beacon);
         return true;

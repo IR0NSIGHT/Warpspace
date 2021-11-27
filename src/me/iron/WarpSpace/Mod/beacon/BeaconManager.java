@@ -135,7 +135,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
             updateBeacon(b);
 
         }
-        print();
+    //    print();
     }
 
     private BeaconObject getBeaconByUID(String UID) {
@@ -210,7 +210,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
         }
         beacons_by_UID.put(beacon.getUID(),beacon);
         if (isServer && GameServerState.instance != null) {
-            ModPlayground.broadcastMessage("added beacon: " + beacon.getName());
+        //    ModPlayground.broadcastMessage("added beacon: " + beacon.getName());
             updateStrongest(warpPos);
             synchAll();
         }
@@ -227,7 +227,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
         beacons_by_UID.remove(beacon.getUID());
 
         if (isServer) {
-            ModPlayground.broadcastMessage("removed beacon: " + beacon.getName());
+        //    ModPlayground.broadcastMessage("removed beacon: " + beacon.getName());
 
             updateStrongest(warpPos);
             synchAll();
