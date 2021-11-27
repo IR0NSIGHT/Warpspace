@@ -57,7 +57,7 @@ public class DebugChatEvent {
                    }
 
                    if (e.getText().contains("list")) {
-                       WarpMain.instance.beaconManagerServer.print();
+                       //WarpMain.instance.beaconManagerServer;
                    }
 
                    if (e.getText().contains("ON")) {
@@ -82,7 +82,7 @@ public class DebugChatEvent {
                }
                DebugFile.log("doing sth in chat listener");
                if (e.getText().contains("domove")) { //move to absolute pixelpos
-                   ModPlayground.broadcastMessage("doing move for all HUD stuff");
+                   //ModPlayground.broadcastMessage("doing move for all HUD stuff");
                    Integer[] integers = parseText(e.getText(),"domove",",");
                    if (integers.length < 4) {
                        return;

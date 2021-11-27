@@ -131,7 +131,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
             updateBeacon(b);
 
         }
-        print();
+    //    print();
     }
 
     private BeaconObject getBeaconByUID(String UID) {

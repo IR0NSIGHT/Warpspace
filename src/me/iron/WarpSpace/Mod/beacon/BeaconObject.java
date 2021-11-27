@@ -78,8 +78,8 @@ public class BeaconObject implements Serializable {
         SegmentController beaconSC = GameServerState.instance.getSegmentControllersByName().get(UID);
         if (beaconSC != null && beaconSC.isFullyLoadedWithDock())
             updateLoaded(beaconSC);
-        else
-            ModPlayground.broadcastMessage(getUID() + " is unloaded beacon.");
+        //else
+        //    ModPlayground.broadcastMessage(getUID() + " is unloaded beacon.");
     }
 
     //will attempt to execute the beacon module of this segementcontroller. used when objects are loaded in.
@@ -102,8 +102,11 @@ public class BeaconObject implements Serializable {
             ManagedUsableSegmentController msc = (ManagedUsableSegmentController)sc;
             ReactorElement beaconChamber = SegmentControllerUtils.getChamberFromElement(msc,WarpBeaconAddon.beaconChamber);
             //beaconchamber is null after loading. -> is that an issue that gets solved by waiting for th chamber to be loaded in?
-            if (beaconChamber == null)
+            if (beaconChamber == null) {
+                setFlagForDelete();
+            //    ModPlayground.broadcastMessage("doesnt have chamber.");
                 return;
+            }
             if (sc.isCoreOverheating() || isHB || beaconChamber.isDamagedRec()) {
                 setFlagForDelete();
                 return;
@@ -113,7 +116,7 @@ public class BeaconObject implements Serializable {
                 return;
             if (!addon.isActive() || !addon.isPlayerUsable()) //TODO playerusable for unmanned craft too?
                 setFlagForDelete();
-            ModPlayground.broadcastMessage("addon for " + UID + " is active:" + addon.isActive());
+           // ModPlayground.broadcastMessage("addon for " + UID + " is active:" + addon.isActive());
             //TODO flag for delete doesnt cause deletion?
         }
 

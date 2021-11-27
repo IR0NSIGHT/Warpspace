@@ -24,7 +24,7 @@ public class SkyboxEventHandler { //TODO figure out how to draw a skybox
             @Override
             public void onEvent(ProceduralSkyboxColorEvent e) {
         //        DebugFile.log("skybox created",WarpMain.instance);
-                ModPlayground.broadcastMessage("skybox created with color: " + e.getColor1() + e.getColor2());
+                //ModPlayground.broadcastMessage("skybox created with color: " + e.getColor1() + e.getColor2());
                 if (WarpManager.IsInWarp(GameClient.getClientPlayerState().getCurrentSector())) {
                     //change skybox to cool color to make warp more obvious
                     Vector4f c1 = new Vector4f(0.033f,1,0.941f,1); //neon bright blue

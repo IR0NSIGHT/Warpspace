@@ -40,6 +40,7 @@ public class WarpBeaconAddon extends SimpleAddOn {
         beaconChamber.chamberCapacity = 0.5f;
         beaconChamber.setTextureId(ElementKeyMap.getInfo(rootID).getTextureIds());
         beaconChamber.setDescription("Shift the closest warp droppoint to this sector.");
+        beaconChamber.chamberPermission = ElementInformation.CHAMBER_PERMISSION_STATION;
         BlockConfig.add(beaconChamber);
         short moddedBlockID = beaconChamber.id;
         StringBuilder out = new StringBuilder();
@@ -125,7 +126,7 @@ public class WarpBeaconAddon extends SimpleAddOn {
         activation.startTime = System.currentTimeMillis();
         if (GameServerState.instance == null)
             return true;
-        ModPlayground.broadcastMessage("warp beacon activated by " + this.segmentController.getName());
+        //ModPlayground.broadcastMessage("warp beacon activated by " + this.segmentController.getName());
         beacon = new BeaconObject(this.segmentController);
         WarpMain.instance.beaconManagerServer.addBeacon(beacon);
         return true;
