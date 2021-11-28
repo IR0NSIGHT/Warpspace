@@ -17,26 +17,20 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public enum SpriteList {
-    CONSOLE_HUD1024,
-    CONSOLE_HUD1024_SCREEN,
-    CONSOLE_HUD1024_BOTTOM,
-    RSP_ICON,
-    WARP_ICON,
-    ICON_OUTLINE_RSP_TRAVEL,    //green lower bottom
-    ICON_OUTLINE_WARP_TRAVEL, //green up
 
-    ICON_OUTLINE_RSP_INACTIVE, //greyed out lower bottom
-    ICON_OUTLINE_WARP_INACTIVE, //grey top
+    ARROW_TO_RSP,
+    ARROW_TO_RSP_BLOCKED,
+    ARROW_TO_RSP_JUMP,
 
-    ICON_OUTLINE_RSP_BLOCKED,   //red lower
-    ICON_OUTLINE_WARP_BLOCKED,   //red up
-    ICON_OUTLINE_SECTOR_LOCKED_UP,  //red up and down
-    ICON_OUTLINE_SECTOR_LOCKED_DOWN,
+    ARROW_TO_WARP,
+    ARROW_TO_WARP_BLOCKED,
+    ARROW_TO_WARP_JUMP,
 
-    ICON_OUTLINE_TO_RSP,    //yellow drop sign
-    ICON_OUTLINE_TO_WARP,    //yellow up sign
-
-    INFO_RIGHT              //right info box for inhibitor
+    BORDER,
+    SPIRAL,
+    SPIRAL_BLOCKED,
+    PEARL,
+    PEARL_BLOCKED
     ;
 
 
