@@ -31,7 +31,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/mod.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/mod.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/CustomHudImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/CustomHudImage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/DebugChatEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/DebugChatEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/GUIeventhandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/GUIeventhandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/HUD_core.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/HUD_core.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/HUD_element.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/HUD_element.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/arrow_to_rsp.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/arrow_to_rsp.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/arrow_to_rsp_blocked.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/arrow_to_rsp_blocked.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/arrow_to_rsp_jump.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/arrow_to_rsp_jump.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/arrow_to_warp.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/arrow_to_warp.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/arrow_to_warp_blocked.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/arrow_to_warp_blocked.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/arrow_to_warp_jump.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/arrow_to_warp_jump.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/border.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/border.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/pearl.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/pearl.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/pearl_blocked.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/pearl_blocked.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/spiral.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/spiral.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/spiral_blocked.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/res/spiral_blocked.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +100,7 @@
       <recent name="C:\Users\Max1M\IdeaProjects\Warpspace\lib" />
     </key>
   </component>
-  <component name="RunManager" selected="JAR Application.server">
+  <component name="RunManager" selected="JAR Application.client">
     <configuration name="main (1)" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="me.iron.WarpSpace.Mod.testing.main" />
       <module name="Warpspace" />
@@ -492,46 +509,46 @@
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="2449" y="401" key="FileChooserDialogImpl/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636380953220" />
-    <state width="1637" height="328" key="GridCell.Tab.0.bottom" timestamp="1638049611019">
+    <state width="1637" height="426" key="GridCell.Tab.0.bottom" timestamp="1638189311238">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
-    <state width="1637" height="328" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611019" />
-    <state width="1637" height="328" key="GridCell.Tab.0.center" timestamp="1638049611017">
+    <state width="1637" height="426" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638189311238" />
+    <state width="1637" height="426" key="GridCell.Tab.0.center" timestamp="1638189311238">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
-    <state width="1637" height="328" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611017" />
-    <state width="1637" height="328" key="GridCell.Tab.0.left" timestamp="1638049611017">
+    <state width="1637" height="426" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638189311238" />
+    <state width="1637" height="426" key="GridCell.Tab.0.left" timestamp="1638189311238">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
-    <state width="1637" height="328" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611017" />
-    <state width="1637" height="328" key="GridCell.Tab.0.right" timestamp="1638049611019">
+    <state width="1637" height="426" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638189311238" />
+    <state width="1637" height="426" key="GridCell.Tab.0.right" timestamp="1638189311238">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
-    <state width="1637" height="328" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611019" />
-    <state width="1637" height="328" key="GridCell.Tab.1.bottom" timestamp="1638049611019">
+    <state width="1637" height="426" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638189311238" />
+    <state width="1637" height="426" key="GridCell.Tab.1.bottom" timestamp="1638189311139">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
-    <state width="1637" height="328" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611019" />
-    <state width="1637" height="328" key="GridCell.Tab.1.center" timestamp="1638049611019">
+    <state width="1637" height="426" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638189311139" />
+    <state width="1637" height="426" key="GridCell.Tab.1.center" timestamp="1638189311138">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
-    <state width="1637" height="328" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611019" />
-    <state width="1637" height="328" key="GridCell.Tab.1.left" timestamp="1638049611019">
+    <state width="1637" height="426" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638189311138" />
+    <state width="1637" height="426" key="GridCell.Tab.1.left" timestamp="1638189311138">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
-    <state width="1637" height="328" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611019" />
-    <state width="1637" height="328" key="GridCell.Tab.1.right" timestamp="1638049611019">
+    <state width="1637" height="426" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638189311138" />
+    <state width="1637" height="426" key="GridCell.Tab.1.right" timestamp="1638189311139">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state width="1877" height="510" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
-    <state width="1637" height="328" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638049611019" />
+    <state width="1637" height="426" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638189311139" />
     <state x="731" y="241" key="RollbackChangesDialog" timestamp="1635177385639">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -554,10 +571,10 @@
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="1920" y="155" width="1555" height="740" maximized="true" key="dock-window-1/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635161692387" />
-    <state x="2476" y="400" width="567" height="520" key="find.popup" timestamp="1638050603716">
+    <state x="2476" y="400" width="567" height="520" key="find.popup" timestamp="1638184616972">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
-    <state x="2476" y="400" width="567" height="520" key="find.popup/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638050603716" />
+    <state x="2476" y="400" width="567" height="520" key="find.popup/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638184616972" />
     <state x="2423" y="372" width="672" height="678" key="search.everywhere.popup" timestamp="1636379278618">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
@@ -596,6 +613,11 @@
           <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java</url>
           <line>195</line>
           <option name="timeStamp" value="314" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/CustomHudImage.java</url>
+          <line>86</line>
+          <option name="timeStamp" value="315" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

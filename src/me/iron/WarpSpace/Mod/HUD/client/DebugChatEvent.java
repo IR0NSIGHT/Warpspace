@@ -38,69 +38,13 @@ public class DebugChatEvent {
             @Override
             public void onEvent(PlayerChatEvent e) {
                DebugFile.log("playerchat event"); //FIXME debug
-               if (e.isServer()) {
-               //    ModPlayground.broadcastMessage("is on server");
-                   if (e.getText().contains("beacon")) {
-                       WarpMain.instance.beaconManagerServer.addBeacon(new BeaconObject(
-
-                            new Vector3i(2,2,2),
-                            true,
-                            "TEST BEACON UID",
-                            -1,
-                            100,
-                            SimpleTransformableSendableObject.EntityType.ASTEROID,
-                            true,
-                            "UWU EMPIRE NOOB TRAP",
-                            "UWU EMPIRE"
-
-                       ));
-                   }
-
-                   if (e.getText().contains("list")) {
-                       //WarpMain.instance.beaconManagerServer;
-                   }
-
-                   if (e.getText().contains("ON")) {
-                       WarpMain.instance.beaconManagerServer.activateAll();
-                   }
-                   if (e.getText().contains("clear")) {
-                       WarpMain.instance.beaconManagerServer.clearBeacons();
-                   }
-                   if (e.getText().contains("save")) {
-                       PersistentObjectUtil.save(WarpMain.instance.getSkeleton());
-                   }
-
-                   if (e.getText().contains("key")) {
-                       ElementInformation ei = ElementKeyMap.getInfo(1203);
-                       Short2ObjectOpenHashMap map = ElementKeyMap.informationKeyMap;
-                       int size = map.size();
-                       ArrayList<ElementInformation> blocks = BlockConfig.getElements();
-
-                       String s = "uwu";
-                   }
-                   return;
-               }
-               DebugFile.log("doing sth in chat listener");
-               if (e.getText().contains("domove")) { //move to absolute pixelpos
-                   //ModPlayground.broadcastMessage("doing move for all HUD stuff");
-                   Integer[] integers = parseText(e.getText(),"domove",",");
-                   if (integers.length < 4) {
-                       return;
-                   }
-                   Vector3f newPos = ScreenHelper.pixelPosToRelPos(new Vector3f(integers[0],integers[1],integers[2]),false);
-                   DebugFile.log("newPos: " + newPos.toString());
-                   if (integers[3] == 0) { //move box
-                       HUD_element[] arr = new HUD_element[] {HUD_core.console}; //position groups
-                       for (HUD_element element : arr) {
-                           element.setPos(newPos);
-                           element.toString();
-                       }
-                       DebugFile.log("moving element to " + newPos.toString());
-                   } else { //move text
-                       HUD_core.interdictionBox.setTextElementOffset(newPos,false);
-                   }
-
-               }
+                if (e.getText().contains("hud")) {
+                    Vector3f pos = new Vector3f((float)1435/1920,(float)975/1080,0.01f);
+                    float s = 1;
+                    Vector3f scale = new Vector3f((float)s/1080,(float)s/1080,1f);
+                    HUD_core.console.setPos(pos);
+                    HUD_core.console.setScale(scale);
+                }
 
             }
 

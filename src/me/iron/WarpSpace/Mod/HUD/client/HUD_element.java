@@ -40,9 +40,9 @@ class HUD_element {
      * type to group elements.
      */
     public enum ElementType {
-        LOWER_BAR,
-        UPPER_Bar,
-        INDICATOR, //warp or rsp
+        ARROW,
+        PEARL,
+        SPIRAL, //warp or rsp
         BACKGROUND,
         INFO_LEFT,
         INFO_RIGHT

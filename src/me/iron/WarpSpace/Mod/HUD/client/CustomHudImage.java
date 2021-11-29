@@ -4,10 +4,13 @@ package me.iron.WarpSpace.Mod.HUD.client;
  */
 
 import api.DebugFile;
+import me.iron.WarpSpace.Mod.WarpManager;
+import org.schema.game.client.data.GameClientState;
 import org.schema.schine.graphicsengine.forms.Sprite;
 import org.schema.schine.graphicsengine.shader.ShaderLibrary;
 import org.schema.schine.input.InputState;
 
+import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 import java.awt.*;
 
@@ -37,6 +40,7 @@ class CustomHudImage extends org.schema.schine.graphicsengine.forms.gui.GUIEleme
 
         if (el.enumValue.getSprite() != null) {
             this.sprite = el.enumValue.getSprite();
+            sprite.setPositionCenter(true);
         }
         el.image = this; //write itself to its creator
         //AdjustToScreenSize();
@@ -67,9 +71,23 @@ class CustomHudImage extends org.schema.schine.graphicsengine.forms.gui.GUIEleme
                 ShaderLibrary.scanlineShader.load();
             }
             this.setScale(el.getPxScale());
+
             this.setPos(el.getPxPos());
             sprite.setScale(el.getPxScale());
             sprite.setPos(el.getPxPos());
+
+            //its all jank, gotta switch to vanilla GUI at some point.
+            if (this.el.enumValue.equals(SpriteList.SPIRAL) || el.enumValue.equals(SpriteList.SPIRAL_BLOCKED)) {
+                float rotateAngle;
+                if (WarpManager.IsInWarp(GameClientState.instance.getPlayer().getCurrentSector())) {
+                    rotateAngle = -.5f;
+                } else {
+                    rotateAngle = -.05f;
+                }
+                sprite.rotateBy(0,0,rotateAngle);
+            }
+
+
             sprite.draw();
             if (el.playShutter) {
                 ShaderLibrary.scanlineShader.unload();

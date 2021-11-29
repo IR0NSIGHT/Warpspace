@@ -77,7 +77,6 @@ public class WarpMain extends StarMod {
     @Override
     public void onClientCreated(ClientInitializeEvent event) {
         super.onClientCreated(event);
-    //    DebugChatEvent.addDebugChatListener();
         WarpProcessController.initMap(); //build situation map for warp processes
         SpriteList.init();
         HUD_core.initList();
