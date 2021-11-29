@@ -22,6 +22,9 @@ Some core effects are:
 - astronauts will not drop out of warp automatically.
 - if you want to avoid the warp completely, you can create Warpgates. they keep their vanilla behaviour and offer a way to travel instantly, precisely and safely.
 
+### Beacons:
+https://github.com/IR0NSIGHT/Warpspace/blob/master/src/me/iron/WarpSpace/Mod/beacon/beaconHelp.md
+
 # Planned features are:
    + ~~t interdiction to work (is ignored atm)~~ done, even better than vanilla
    + ~~build custom HUD~~ done
