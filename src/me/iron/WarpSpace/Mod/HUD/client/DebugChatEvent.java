@@ -3,6 +3,7 @@ package me.iron.WarpSpace.Mod.HUD.client;
 import api.config.BlockConfig;
 import api.mod.config.PersistentObjectUtil;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
+import me.iron.WarpSpace.Mod.HUD.client.glossar.GlossarControlManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import api.DebugFile;
 import api.ModPlayground;
@@ -15,6 +16,7 @@ import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.element.ElementInformation;
 import org.schema.game.common.data.element.ElementKeyMap;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
+import org.schema.schine.graphicsengine.forms.font.FontLibrary;
 
 import javax.vecmath.Vector3f;
 import java.util.ArrayList;
@@ -39,11 +41,7 @@ public class DebugChatEvent {
             public void onEvent(PlayerChatEvent e) {
                DebugFile.log("playerchat event"); //FIXME debug
                 if (e.getText().contains("hud")) {
-                    Vector3f pos = new Vector3f((float)1435/1920,(float)975/1080,0.01f);
-                    float s = 1;
-                    Vector3f scale = new Vector3f((float)s/1080,(float)s/1080,1f);
-                    HUD_core.console.setPos(pos);
-                    HUD_core.console.setScale(scale);
+                    GlossarControlManager.textFont = FontLibrary.getBlenderProHeavy20();
                 }
 
             }

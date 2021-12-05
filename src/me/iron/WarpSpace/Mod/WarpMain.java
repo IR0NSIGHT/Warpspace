@@ -1,13 +1,17 @@
 package me.iron.WarpSpace.Mod;
 
+import api.ModPlayground;
 import api.config.BlockConfig;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
 import api.mod.StarMod;
 import api.mod.config.PersistentObjectUtil;
 import api.network.packets.PacketUtil;
+import api.utils.StarRunnable;
+import api.utils.gui.ModGUIHandler;
 import api.utils.registry.UniversalRegistry;
 import me.iron.WarpSpace.Mod.HUD.client.*;
+import me.iron.WarpSpace.Mod.HUD.client.glossar.GlossarControlManager;
 import me.iron.WarpSpace.Mod.HUD.client.map.DropPointMapDrawer;
 import me.iron.WarpSpace.Mod.Interdiction.InterdictionHUDUpdateLoop;
 import me.iron.WarpSpace.Mod.beacon.BeaconManager;
@@ -18,6 +22,7 @@ import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
 import me.iron.WarpSpace.Mod.visuals.BackgroundEventListener;
+import org.schema.game.client.data.GameClientState;
 import org.schema.schine.resource.ResourceLoader;
 
 
@@ -85,6 +90,16 @@ public class WarpMain extends StarMod {
         beaconManagerClient = new BeaconManager();
         beaconManagerClient.onInit();
         dropPointMapDrawer.activate();
+        new StarRunnable(){
+            @Override
+            public void run() {
+                GlossarControlManager c = new GlossarControlManager(GameClientState.instance);
+                ModGUIHandler.registerNewControlManager(getSkeleton(),c);
+                ModPlayground.broadcastMessage("READY");
+            }
+        }.runLater(this,100);
+
+        DebugChatEvent.addDebugChatListener();
     }
 
     @Override
