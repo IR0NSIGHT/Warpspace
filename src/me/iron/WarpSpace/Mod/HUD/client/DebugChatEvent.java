@@ -16,6 +16,7 @@ import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.element.ElementInformation;
 import org.schema.game.common.data.element.ElementKeyMap;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
+import org.schema.schine.graphicsengine.core.GLFrame;
 import org.schema.schine.graphicsengine.forms.font.FontLibrary;
 
 import javax.vecmath.Vector3f;
@@ -43,7 +44,6 @@ public class DebugChatEvent {
                 if (e.getText().contains("hud")) {
                     GlossarControlManager.textFont = FontLibrary.getBlenderProHeavy20();
                 }
-
             }
 
         }, WarpMain.instance);

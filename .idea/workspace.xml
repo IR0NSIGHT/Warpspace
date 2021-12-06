@@ -26,14 +26,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a50c0474-8c4f-4b3c-af8e-c6949eadf1eb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarControlManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarModList.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarPage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarPageList.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/GlossarInit.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarCatergory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarEntry.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/DebugChatEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/DebugChatEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/WarpMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mod.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/mod.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarControlManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarControlManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarPageList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarPageList.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -489,75 +489,76 @@
     <state x="2214" y="290" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638735971226" />
     <state x="336" y="165" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229456929" />
     <state x="2214" y="315" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638038538892" />
-    <state x="832" y="186" key="#com.intellij.ide.util.MemberChooser" timestamp="1638735825379">
+    <state x="832" y="186" key="#com.intellij.ide.util.MemberChooser" timestamp="1638810395378">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="832" y="186" key="#com.intellij.ide.util.MemberChooser/1920.130.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1638735825379" />
+    <state x="832" y="186" key="#com.intellij.ide.util.MemberChooser/1920.130.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1638810395378" />
     <state x="832" y="186" key="#com.intellij.ide.util.MemberChooser/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636370299176" />
     <state x="2565" y="367" key="#com.intellij.ide.util.MemberChooser/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636238021559" />
-    <state x="2372" y="130" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1638740135318">
-      <screen x="1920" y="130" width="1680" height="1010" />
+    <state x="517" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1638810634179">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="517" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/1920.130.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1638810634179" />
     <state x="2372" y="130" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638740135318" />
     <state x="517" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635159053177" />
     <state x="2449" y="401" key="FileChooserDialogImpl" timestamp="1636380953220">
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="2449" y="401" key="FileChooserDialogImpl/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636380953220" />
-    <state width="1637" height="407" key="GridCell.Tab.0.bottom" timestamp="1638746550722">
+    <state width="1637" height="407" key="GridCell.Tab.0.bottom" timestamp="1638819247679">
       <screen x="1920" y="130" width="1680" height="1010" />
     </state>
     <state width="1877" height="426" key="GridCell.Tab.0.bottom/1920.130.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1638736699336" />
-    <state width="1637" height="407" key="GridCell.Tab.0.bottom/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638746550722" />
+    <state width="1637" height="407" key="GridCell.Tab.0.bottom/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638819247679" />
     <state width="1877" height="510" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
     <state width="1637" height="426" key="GridCell.Tab.0.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638190341575" />
-    <state width="1637" height="407" key="GridCell.Tab.0.center" timestamp="1638746550722">
+    <state width="1637" height="407" key="GridCell.Tab.0.center" timestamp="1638819247679">
       <screen x="1920" y="130" width="1680" height="1010" />
     </state>
     <state width="1877" height="426" key="GridCell.Tab.0.center/1920.130.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1638736699336" />
-    <state width="1637" height="407" key="GridCell.Tab.0.center/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638746550722" />
+    <state width="1637" height="407" key="GridCell.Tab.0.center/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638819247679" />
     <state width="1877" height="510" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
     <state width="1637" height="426" key="GridCell.Tab.0.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638190341575" />
-    <state width="1637" height="407" key="GridCell.Tab.0.left" timestamp="1638746550722">
+    <state width="1637" height="407" key="GridCell.Tab.0.left" timestamp="1638819247679">
       <screen x="1920" y="130" width="1680" height="1010" />
     </state>
     <state width="1877" height="426" key="GridCell.Tab.0.left/1920.130.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1638736699336" />
-    <state width="1637" height="407" key="GridCell.Tab.0.left/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638746550722" />
+    <state width="1637" height="407" key="GridCell.Tab.0.left/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638819247679" />
     <state width="1877" height="510" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
     <state width="1637" height="426" key="GridCell.Tab.0.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638190341575" />
-    <state width="1637" height="407" key="GridCell.Tab.0.right" timestamp="1638746550722">
+    <state width="1637" height="407" key="GridCell.Tab.0.right" timestamp="1638819247679">
       <screen x="1920" y="130" width="1680" height="1010" />
     </state>
     <state width="1877" height="426" key="GridCell.Tab.0.right/1920.130.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1638736699336" />
-    <state width="1637" height="407" key="GridCell.Tab.0.right/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638746550722" />
+    <state width="1637" height="407" key="GridCell.Tab.0.right/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638819247679" />
     <state width="1877" height="510" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717332" />
     <state width="1637" height="426" key="GridCell.Tab.0.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638190341575" />
-    <state width="1637" height="407" key="GridCell.Tab.1.bottom" timestamp="1638746576832">
+    <state width="1637" height="407" key="GridCell.Tab.1.bottom" timestamp="1638819247593">
       <screen x="1920" y="130" width="1680" height="1010" />
     </state>
     <state width="1877" height="426" key="GridCell.Tab.1.bottom/1920.130.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1638736699336" />
-    <state width="1637" height="407" key="GridCell.Tab.1.bottom/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638746576832" />
+    <state width="1637" height="407" key="GridCell.Tab.1.bottom/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638819247593" />
     <state width="1877" height="510" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
     <state width="1637" height="426" key="GridCell.Tab.1.bottom/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638190341576" />
-    <state width="1637" height="407" key="GridCell.Tab.1.center" timestamp="1638746576832">
+    <state width="1637" height="407" key="GridCell.Tab.1.center" timestamp="1638819247593">
       <screen x="1920" y="130" width="1680" height="1010" />
     </state>
     <state width="1877" height="426" key="GridCell.Tab.1.center/1920.130.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1638736699336" />
-    <state width="1637" height="407" key="GridCell.Tab.1.center/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638746576832" />
+    <state width="1637" height="407" key="GridCell.Tab.1.center/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638819247593" />
     <state width="1877" height="510" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
     <state width="1637" height="426" key="GridCell.Tab.1.center/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638190341575" />
-    <state width="1637" height="407" key="GridCell.Tab.1.left" timestamp="1638746576832">
+    <state width="1637" height="407" key="GridCell.Tab.1.left" timestamp="1638819247593">
       <screen x="1920" y="130" width="1680" height="1010" />
     </state>
     <state width="1877" height="426" key="GridCell.Tab.1.left/1920.130.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1638736699336" />
-    <state width="1637" height="407" key="GridCell.Tab.1.left/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638746576832" />
+    <state width="1637" height="407" key="GridCell.Tab.1.left/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638819247593" />
     <state width="1877" height="510" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
     <state width="1637" height="426" key="GridCell.Tab.1.left/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638190341575" />
-    <state width="1637" height="407" key="GridCell.Tab.1.right" timestamp="1638746576832">
+    <state width="1637" height="407" key="GridCell.Tab.1.right" timestamp="1638819247593">
       <screen x="1920" y="130" width="1680" height="1010" />
     </state>
     <state width="1877" height="426" key="GridCell.Tab.1.right/1920.130.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1638736699336" />
-    <state width="1637" height="407" key="GridCell.Tab.1.right/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638746576832" />
+    <state width="1637" height="407" key="GridCell.Tab.1.right/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638819247593" />
     <state width="1877" height="510" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229717164" />
     <state width="1637" height="426" key="GridCell.Tab.1.right/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638190341575" />
     <state x="731" y="241" key="RollbackChangesDialog" timestamp="1635177385639">
@@ -573,9 +574,10 @@
       <screen x="1920" y="155" width="1680" height="1010" />
     </state>
     <state x="2576" y="575" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1633866343056" />
-    <state x="2167" y="576" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1638042259992">
-      <screen x="1920" y="155" width="1680" height="1010" />
+    <state x="2167" y="551" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1638804070564">
+      <screen x="1920" y="130" width="1680" height="1010" />
     </state>
+    <state x="2167" y="551" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638804070564" />
     <state x="282" y="434" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1636229582933" />
     <state x="2167" y="576" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1638042259992" />
     <state x="1920" y="155" width="1555" height="740" maximized="true" key="dock-window-1" timestamp="1635161692387">
@@ -591,9 +593,10 @@
       <screen x="1920" y="130" width="1680" height="1010" />
     </state>
     <state x="2416" y="298" key="run.anything.popup/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638743493798" />
-    <state x="2423" y="372" width="672" height="678" key="search.everywhere.popup" timestamp="1636379278618">
-      <screen x="1920" y="155" width="1680" height="1010" />
+    <state x="2423" y="347" width="672" height="678" key="search.everywhere.popup" timestamp="1638807918734">
+      <screen x="1920" y="130" width="1680" height="1010" />
     </state>
+    <state x="2423" y="347" width="672" height="678" key="search.everywhere.popup/1920.130.1680.1010/0.0.1920.1040@1920.130.1680.1010" timestamp="1638807918734" />
     <state x="575" y="223" width="768" height="699" key="search.everywhere.popup/1920.155.1680.1010/0.0.1920.1040@0.0.1920.1040" timestamp="1635162259158" />
     <state x="2423" y="372" width="672" height="678" key="search.everywhere.popup/1920.155.1680.1010/0.0.1920.1040@1920.155.1680.1010" timestamp="1636379278618" />
   </component>
@@ -601,64 +604,17 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java</url>
-          <line>75</line>
-          <option name="timeStamp" value="307" />
+          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarPageList.java</url>
+          <line>188</line>
+          <option name="timeStamp" value="349" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java</url>
-          <line>99</line>
-          <option name="timeStamp" value="308" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java</url>
-          <line>108</line>
-          <option name="timeStamp" value="309" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java</url>
-          <line>113</line>
-          <option name="timeStamp" value="310" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconObject.java</url>
-          <line>120</line>
-          <option name="timeStamp" value="312" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/beacon/BeaconManager.java</url>
-          <line>195</line>
-          <option name="timeStamp" value="314" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/CustomHudImage.java</url>
-          <line>86</line>
-          <option name="timeStamp" value="315" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarModList.java</url>
-          <line>40</line>
-          <option name="timeStamp" value="332" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarModList.java</url>
-          <line>41</line>
-          <option name="timeStamp" value="333" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarControlManager.java</url>
-          <line>61</line>
-          <option name="timeStamp" value="339" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarControlManager.java</url>
-          <line>74</line>
-          <option name="timeStamp" value="341" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarControlManager.java</url>
-          <line>57</line>
-          <option name="timeStamp" value="342" />
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/me/iron/WarpSpace/Mod/HUD/client/glossar/GlossarPageList.java</url>
+          <line>180</line>
+          <properties class="me.iron.WarpSpace.Mod.HUD.client.glossar.GlossarPageList" method="initCats">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="348" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

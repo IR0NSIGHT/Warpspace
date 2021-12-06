@@ -1,13 +1,13 @@
 package me.iron.WarpSpace.Mod.HUD.client.glossar;
 
-import org.newdawn.slick.UnicodeFont;
+import api.ModPlayground;
 import org.schema.schine.graphicsengine.forms.gui.GUIColoredRectangle;
-import org.schema.schine.graphicsengine.forms.gui.GUIElement;
+import org.schema.schine.graphicsengine.forms.gui.GUIScrollablePanel;
 import org.schema.schine.graphicsengine.forms.gui.GUITextOverlay;
 import org.schema.schine.input.InputState;
 
+import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
-import java.util.ArrayList;
 
 /**
  * STARMADE MOD
@@ -22,8 +22,9 @@ public class GlossarPage extends GUIColoredRectangle {
     private GUITextOverlay titleText;
     private GUITextOverlay contentText;
 
-    public GlossarPage(InputState inputState, GUIElement autoWrap, int width, int height, String title, String text) {
+    public GlossarPage(InputState inputState, int width, int height, String title, String text) {
         super(inputState, width, height, new Vector4f(0,0,0,0));
+        ModPlayground.broadcastMessage("page has: w" + getWidth() + " ,h" + getHeight());
         this.text = text;
         this.title = title;
         onInit();
@@ -32,34 +33,49 @@ public class GlossarPage extends GUIColoredRectangle {
     @Override
     public void onInit() {
         super.onInit();
-        GUIColoredRectangle background = new GUIColoredRectangle(getState(),(int)(getWidth()*0.98f),(int)(getHeight()-getWidth()*0.02f),new Vector4f(0,0,0,0));
-        background.setPos(getWidth()*0.01f,getWidth()*0.01f,0);
+        GUIColoredRectangle background = new GUIColoredRectangle(getState(),(int)(getWidth()),(int)(getHeight()),new Vector4f(0,0,1,0));
 
         titleText = new GUITextOverlay((int)getWidth(),5,GlossarControlManager.titleFont,getState());
-        titleText.setTextSimple(title);
-        titleText.autoHeight = true;
+        titleText.setTextSimple(new Object(){
+            @Override
+            public String toString() {
+                if (GlossarPageList.getSelected() != null) {
+                    return GlossarPageList.getSelected().getTitle();
+                }
+                return "";
+            }
+        });
         titleText.updateTextSize();
+        titleText.setHeight(titleText.getTextHeight());
         titleText.autoWrapOn = background;
-
         background.attach(titleText);
+
+        Vector2f clip = new Vector2f(0,(int)(background.getHeight()-titleText.getHeight()));
+
 
         contentText = new GUITextOverlay((int)getWidth(),5,GlossarControlManager.textFont,getState());
 
-        contentText.setTextSimple(text);
+        contentText.setTextSimple(new Object(){
+            @Override
+            public String toString() {
+                if (GlossarPageList.getSelected() != null) {
+                    return GlossarPageList.getSelected().getContent();
+                }
+                return "";
+            }
+        });
         contentText.updateTextSize();
-        contentText.autoHeight = true;
-        contentText.autoWrapOn = background;
-        contentText.setPos(0,GlossarControlManager.titleFont.getLineHeight() *1.2f,0);
-        background.attach(contentText);
 
+        contentText.autoWrapOn = background;
+        contentText.autoHeight = true; //doesnt impact drawing limits
+
+        GUIScrollablePanel contentScroll = new GUIScrollablePanel(background.getWidth(),clip.y,getState());
+        contentScroll.setPos(0,titleText.getHeight(),0);
+
+        contentScroll.setContent(contentText);
+
+        background.attach(contentScroll);
         this.attach(background);
 
-    }
-
-    @Override
-    public float getHeight() {
-        if (titleText == null ||contentText == null)
-            return 5;
-        return titleText.getHeight() + contentText.getHeight();
     }
 }

@@ -1,5 +1,6 @@
 package me.iron.WarpSpace.Mod.HUD.client.glossar;
 
+import api.ModPlayground;
 import api.listener.Listener;
 import api.listener.events.player.PlayerChatEvent;
 import api.mod.StarLoader;
@@ -38,7 +39,7 @@ public class GlossarControlManager extends GUIControlManager {
             @Override
             public void recreateTabs() {
                 guiWindow.getTabs().clear();
-
+                guiWindow.setResizable(false);
                 int w = guiWindow.getInnerWidth();
                 int h = guiWindow.getInnerHeigth();
 
@@ -49,9 +50,11 @@ public class GlossarControlManager extends GUIControlManager {
                       return currentMod==null?"glossar":currentMod;
                   }
               });
+                ModPlayground.broadcastMessage("guiWindow has: w" + w + " ,h" + h);
+                ModPlayground.broadcastMessage("guiWindowTAB has: bottom" + guiWindow.getInnerCornerBottomDistY() + " ,top" + guiWindow.getInnerCornerTopDistY());
 
-              GlossarPageList list = new GlossarPageList(w,h,modGlossar.getContent(0),getState());
-              modGlossar.getContent(0).attach(list);
+                GlossarPageList list = new GlossarPageList(w,h,modGlossar.getContent(0),getState());
+                modGlossar.setContent(0,list);
             }
         };
         if (panel == null) {
