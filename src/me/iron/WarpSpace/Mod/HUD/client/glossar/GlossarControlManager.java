@@ -3,16 +3,22 @@ package me.iron.WarpSpace.Mod.HUD.client.glossar;
 import api.ModPlayground;
 import api.listener.Listener;
 import api.listener.events.player.PlayerChatEvent;
+import api.listener.events.player.PlayerSpawnEvent;
+import api.mod.ServerModInfo;
 import api.mod.StarLoader;
+import api.utils.StarRunnable;
+import api.utils.game.PlayerUtils;
 import api.utils.gui.GUIControlManager;
 import api.utils.gui.GUIMenuPanel;
 import api.utils.gui.ModGUIHandler;
 import me.iron.WarpSpace.Mod.WarpMain;
 import org.newdawn.slick.UnicodeFont;
 import org.schema.game.client.data.GameClientState;
+import org.schema.schine.common.language.Lng;
 import org.schema.schine.graphicsengine.core.GLFrame;
 import org.schema.schine.graphicsengine.forms.font.FontLibrary;
 import org.schema.schine.graphicsengine.forms.gui.newgui.GUIContentPane;
+import org.schema.schine.network.server.ServerMessage;
 
 import javax.vecmath.Vector4f;
 
@@ -31,6 +37,7 @@ public class GlossarControlManager extends GUIControlManager {
     public GlossarControlManager(GameClientState gameClientState) {
         super(gameClientState);
         addKeyListener();
+        addAdvertisement();
     }
 
     @Override
@@ -50,16 +57,12 @@ public class GlossarControlManager extends GUIControlManager {
                       return currentMod==null?"glossar":currentMod;
                   }
               });
-                ModPlayground.broadcastMessage("guiWindow has: w" + w + " ,h" + h);
-                ModPlayground.broadcastMessage("guiWindowTAB has: bottom" + guiWindow.getInnerCornerBottomDistY() + " ,top" + guiWindow.getInnerCornerTopDistY());
 
                 GlossarPageList list = new GlossarPageList(w,h,modGlossar.getContent(0),getState());
                 modGlossar.setContent(0,list);
             }
         };
-        if (panel == null) {
-            new NullPointerException("no panel? :(");
-        }
+
         panel.onInit();
         panel.recreateTabs();
         return panel;
@@ -69,15 +72,33 @@ public class GlossarControlManager extends GUIControlManager {
         StarLoader.registerListener(PlayerChatEvent.class, new Listener<PlayerChatEvent>() {
             @Override
             public void onEvent(PlayerChatEvent event) {
-                if (event.getText().contains("gls")) {
+                if (event.getText().contains("!warp")) {
                     for (GUIControlManager manager: ModGUIHandler.getAllModControlManagers()) {
                         manager.setActive(false);
                     }
                     setActive(true);
                     if (panel != null)
                         panel.recreateTabs();
+                    event.setCanceled(true);
                 }
             }
         }, WarpMain.instance);
+    }
+    private void addAdvertisement() {
+        final String ad = "type !warp to open the glossar.";
+            new StarRunnable(){
+                long last = System.currentTimeMillis()-1000*60*30 + 10*1000;
+                @Override
+                public void run() {
+                    if (last + 1000*60*30<System.currentTimeMillis()) {
+                        last = System.currentTimeMillis();
+                        sendClientMssg(ad);
+                    }
+                }
+            }.runTimer(WarpMain.instance,10);
+    }
+    private void sendClientMssg(String mssg) {
+        GameClientState.instance.getServerMessages().add(new ServerMessage(Lng.astr(mssg),ServerMessage.MESSAGE_TYPE_SIMPLE));
+
     }
 }

@@ -24,7 +24,6 @@ public class GlossarPage extends GUIColoredRectangle {
 
     public GlossarPage(InputState inputState, int width, int height, String title, String text) {
         super(inputState, width, height, new Vector4f(0,0,0,0));
-        ModPlayground.broadcastMessage("page has: w" + getWidth() + " ,h" + getHeight());
         this.text = text;
         this.title = title;
         onInit();

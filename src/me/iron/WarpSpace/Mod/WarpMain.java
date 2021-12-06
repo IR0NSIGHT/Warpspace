@@ -95,7 +95,6 @@ public class WarpMain extends StarMod {
             public void run() {
                 GlossarControlManager c = new GlossarControlManager(GameClientState.instance);
                 ModGUIHandler.registerNewControlManager(getSkeleton(),c);
-                ModPlayground.broadcastMessage("READY");
             }
         }.runLater(this,100);
 
