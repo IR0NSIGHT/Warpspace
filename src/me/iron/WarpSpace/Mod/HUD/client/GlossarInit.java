@@ -26,14 +26,14 @@ public class GlossarInit {
 
         cat.addEntry(new GlossarEntry("Inhibition","Inhibition has been reworked and enhanced. Your HUD will tell you, if an inhibitor is impacting you. It will show red symbols for inhibitors denying you leaving your current dimension or entering the other one. An active inhibitor will prevent ships from entering your sector and leaving your sector by using the jumpdrive. Note that slowing down and 'speeddropping' in warp pierces the inhibitor. Ships/Stations that field an inhibitor can deny warping to any ships, that have up to 3 times bigger reactors in a 3 sector radius. Inhibitors only work while being loaded."));
 
-        cat = new GlossarCatergory("mGine missions");
-        cat.addEntry(new GlossarEntry("Introduction","TBD"));
-        cat.addEntry(new GlossarEntry("Finding/Accepting missions","fly close to a ! on the map, if its got a circle, press left-control + m to open to GUI"));
-        cat.addEntry(new GlossarEntry("Transport mission","TBD"));
-        cat.addEntry(new GlossarEntry("Scout mission","TBD"));
-        cat.addEntry(new GlossarEntry("Patrol mission","TBD"));
-        cat.addEntry(new GlossarEntry("Kill mission","TBD"));
-        GlossarPageList.addGlossarCat(cat);
+    //    cat = new GlossarCatergory("mGine missions");
+    //    cat.addEntry(new GlossarEntry("Introduction","TBD"));
+    //    cat.addEntry(new GlossarEntry("Finding/Accepting missions","fly close to a ! on the map, if its got a circle, press left-control + m to open to GUI"));
+    //    cat.addEntry(new GlossarEntry("Transport mission","TBD"));
+    //    cat.addEntry(new GlossarEntry("Scout mission","TBD"));
+    //    cat.addEntry(new GlossarEntry("Patrol mission","TBD"));
+    //    cat.addEntry(new GlossarEntry("Kill mission","TBD"));
+    //    GlossarPageList.addGlossarCat(cat);
 
 
     }
