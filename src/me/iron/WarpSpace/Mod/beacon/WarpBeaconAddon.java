@@ -58,8 +58,6 @@ public class WarpBeaconAddon extends SimpleAddOn {
             @Override
             public void onEvent(RegisterAddonsEvent event) {
                 event.addModule(new WarpBeaconAddon(event.getContainer(),WarpMain.instance));
-                DebugFile.log("################################ REGISTERES WARP BEACON ADDON FOR:" + event.getSegmentController().getName() +                 event.addons
-                .toString());
             }
         }, WarpMain.instance);
     }

@@ -275,11 +275,9 @@ public class BeaconManager extends SimpleSerializerWrapper {
             ArrayList<BeaconObject> all = new ArrayList<>(beacons_by_UID.values());
 
             packetWriteBuffer.writeInt(all.size());
-            DebugFile.log("buffer wrote int : " +all.size());
 
             for (BeaconObject beaconObject : all) {
                 packetWriteBuffer.writeObject(beaconObject);
-                DebugFile.log("buffer wrote obj : " +beaconObject.toString());
             }
 
         } catch (Exception e) {

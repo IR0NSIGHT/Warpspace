@@ -44,7 +44,6 @@ class CustomHudImage extends org.schema.schine.graphicsengine.forms.gui.GUIEleme
         }
         el.image = this; //write itself to its creator
         //AdjustToScreenSize();
-        DebugFile.log("HUDImage " + el.enumValue.name + " has pos " + position.toString()  + " HUDelement pos: " + el.getPos());
     }
 
 

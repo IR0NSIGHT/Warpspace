@@ -51,7 +51,6 @@ public enum SpriteList {
     class SpriteLoader implements Runnable {
         @Override
         public void run() {
-            DebugFile.log(" spriteloader running");
 
             synchronized (SpriteList.class) {
                 for (SpriteList value : SpriteList.values()) {
@@ -61,11 +60,9 @@ public enum SpriteList {
                         String path = "me/iron/WarpSpace/Mod/res/" + name + ".png"; //console.png
                         InputStream is = WarpMain.instance.getJarResource(path);
                         if (is == null) {
-                            DebugFile.err("spritelist initialization could not get a valid path for image " + name + " at path: " + path);
                             continue;
                         }
                         BufferedImage bi = ImageIO.read(is);
-                        DebugFile.log(" spritelist loaded: " + path + " for image " + value.name);
                         value.sprite = StarLoaderTexture.newSprite(bi, WarpMain.instance, "warpmain_" + name);
                     } catch (IOException e) {
                         e.printStackTrace();

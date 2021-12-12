@@ -24,7 +24,6 @@ public class GUIeventhandler {
                 //register all HUD elements
                 Vector3f moveStep = new Vector3f(1,1,0); //placehold. is synched between all elements of same type
                 for (HUD_element el: HUD_core.elementList) {
-                    DebugFile.log("GUI eventhandler creating CustomHUDImages for element: " + el.toString());
                     hudCreateEvent.addElement(new CustomHudImage(hudCreateEvent.getInputState(),el));
                     el.setTextElement(new TextElement(FontLibrary.getBlenderProMedium16(), hudCreateEvent.getInputState()));
                     hudCreateEvent.addElement(el.getTextElement());

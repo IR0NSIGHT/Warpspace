@@ -2,7 +2,6 @@ package me.iron.WarpSpace.Mod.HUD.client.map;
 
 import api.listener.fastevents.FastListenerCommon;
 import api.mod.StarMod;
-import api.utils.StarRunnable;
 import libpackage.drawer.MapDrawer;
 import libpackage.drawer.SpriteLoader;
 import libpackage.markers.SimpleMapMarker;
@@ -12,7 +11,6 @@ import me.iron.WarpSpace.Mod.beacon.BeaconObject;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.view.gamemap.GameMapDrawer;
 import org.schema.schine.graphicsengine.forms.Sprite;
-
 import javax.vecmath.Vector4f;
 
 /**
