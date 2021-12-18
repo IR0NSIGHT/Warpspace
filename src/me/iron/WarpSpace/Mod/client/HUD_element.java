@@ -1,6 +1,4 @@
-package me.iron.WarpSpace.Mod.HUD.client;
-
-import api.DebugFile;
+package me.iron.WarpSpace.Mod.client;
 
 import javax.vecmath.Vector3f;
 import java.util.ArrayList;

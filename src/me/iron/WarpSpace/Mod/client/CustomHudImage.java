@@ -1,4 +1,4 @@
-package me.iron.WarpSpace.Mod.HUD.client;
+package me.iron.WarpSpace.Mod.client;
 /**
  * partly stolen from StarAPI (i think)
  */
@@ -10,9 +10,7 @@ import org.schema.schine.graphicsengine.forms.Sprite;
 import org.schema.schine.graphicsengine.shader.ShaderLibrary;
 import org.schema.schine.input.InputState;
 
-import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
-import java.awt.*;
 
 /**
  * this class draws an image onto screen. it is a worker class for HUD_element. dont use it without HUD_element.

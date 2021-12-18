@@ -1,4 +1,4 @@
-package me.iron.WarpSpace.Mod.HUD.client;
+package me.iron.WarpSpace.Mod.client;
 
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;

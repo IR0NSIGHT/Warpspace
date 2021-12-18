@@ -1,4 +1,4 @@
-package me.iron.WarpSpace.Mod.HUD.client;
+package me.iron.WarpSpace.Mod.client;
 
 import api.listener.Listener;
 import api.listener.events.gui.HudCreateEvent;
@@ -7,6 +7,7 @@ import me.iron.WarpSpace.Mod.TimedRunnable;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import api.utils.StarRunnable;
+import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.view.gui.shiphud.HudIndicatorOverlay;
@@ -201,10 +202,17 @@ public class HUD_core {
         UpdateSituation();
     }
 
+
     /**
      * update player situation fields from WarpProcessMap
      */
     private static void UpdateSituation() {
+        boolean dropOld = isDropping,
+        exitOld = isExit,
+        entryOld = isEntry,
+        rspBlocked = isRSPSectorBlocked,
+        warpBlocked = isWarpSectorBlocked;
+
         //DebugFile.log("updating warp situation from WarpProcessMap: ");
 
         isDropping = ( WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPDROP) == 1);
@@ -216,6 +224,35 @@ public class HUD_core {
         isRSPSectorBlocked = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.RSPSECTORBLOCKED) == 1);
 
         isWarpSectorBlocked = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.WARPSECTORBLOCKED) == 1);
+
+        //todo build listener/event system
+        if (!dropOld && isDropping) { //now dropping
+            WarpSounds.instance.queueSound(WarpSounds.Sound.dropping);
+        }
+
+        if (!exitOld && isExit) { //now exit
+            WarpSounds.instance.queueSound(WarpSounds.Sound.warping);
+        }
+
+        if (!entryOld && isEntry) { //now warping
+            WarpSounds.instance.queueSound(WarpSounds.Sound.warping);
+        }
+
+        if (!rspBlocked && isRSPSectorBlocked) { //now rps blocked
+            WarpSounds.instance.queueSound(WarpSounds.Sound.inhibitor_detected);
+
+        }
+
+        if (!warpBlocked && isWarpSectorBlocked) { //now warp blocked
+            WarpSounds.instance.queueSound(WarpSounds.Sound.inhibitor_detected);
+        }
+
+        if ((warpBlocked && !isWarpSectorBlocked) || (rspBlocked && !isRSPSectorBlocked)) { //not inhibited anymore.
+
+        }
+
+
+
 
         if (GameClientState.instance == null)
             return;

@@ -1,8 +1,7 @@
 package me.iron.WarpSpace.Mod.network;
 
-import api.DebugFile;
-import me.iron.WarpSpace.Mod.HUD.client.HUD_core;
-import me.iron.WarpSpace.Mod.HUD.client.WarpProcessController;
+import me.iron.WarpSpace.Mod.client.HUD_core;
+import me.iron.WarpSpace.Mod.client.WarpProcessController;
 import api.network.Packet;
 import api.network.PacketReadBuffer;
 import api.network.PacketWriteBuffer;

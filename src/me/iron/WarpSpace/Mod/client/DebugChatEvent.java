@@ -1,13 +1,7 @@
-package me.iron.WarpSpace.Mod.HUD.client;
+package me.iron.WarpSpace.Mod.client;
 
 
-import me.iron.WarpSpace.Mod.WarpMain;
 import api.DebugFile;
-import api.listener.Listener;
-import api.listener.events.player.PlayerChatEvent;
-import api.mod.StarLoader;
-
-import org.schema.schine.graphicsengine.forms.font.FontLibrary;
 
 
 /**

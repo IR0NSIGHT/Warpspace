@@ -1,4 +1,4 @@
-package me.iron.WarpSpace.Mod.HUD.client;
+package me.iron.WarpSpace.Mod.client;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.UnicodeFont;

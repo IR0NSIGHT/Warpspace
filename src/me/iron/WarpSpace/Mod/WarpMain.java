@@ -1,6 +1,5 @@
 package me.iron.WarpSpace.Mod;
 
-import api.ModPlayground;
 import api.config.BlockConfig;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
@@ -10,12 +9,14 @@ import api.utils.registry.UniversalRegistry;
 import glossar.GlossarCategory;
 import glossar.GlossarEntry;
 import glossar.GlossarInit;
-import me.iron.WarpSpace.Mod.HUD.client.*;
-import me.iron.WarpSpace.Mod.HUD.client.map.DropPointMapDrawer;
+
+import me.iron.WarpSpace.Mod.client.*;
+import me.iron.WarpSpace.Mod.client.map.DropPointMapDrawer;
 import me.iron.WarpSpace.Mod.Interdiction.InterdictionHUDUpdateLoop;
 import me.iron.WarpSpace.Mod.beacon.BeaconManager;
 import me.iron.WarpSpace.Mod.beacon.BeaconUpdatePacket;
 import me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon;
+import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
@@ -50,6 +51,8 @@ public class WarpMain extends StarMod {
         WarpBeaconAddon.registerAddonAddEventListener();
 
         dropPointMapDrawer = new DropPointMapDrawer(this);
+
+
     }
     
     @Override
@@ -83,6 +86,7 @@ public class WarpMain extends StarMod {
         DebugChatEvent.addDebugChatListener();
         GlossarInit.initGlossar(this);
         GlossarInit.addCategory(getWiki());
+        new WarpSounds();
     }
 
     @Override

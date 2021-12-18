@@ -1,4 +1,4 @@
-package me.iron.WarpSpace.Mod.HUD.client;
+package me.iron.WarpSpace.Mod.client;
 /**
  * provided by Jake
  * thanks jake!
@@ -6,13 +6,11 @@ package me.iron.WarpSpace.Mod.HUD.client;
  */
 
 import me.iron.WarpSpace.Mod.WarpMain;
-import api.DebugFile;
 import api.utils.textures.StarLoaderTexture;
 import org.schema.schine.graphicsengine.forms.Sprite;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 

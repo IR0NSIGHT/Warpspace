@@ -1,4 +1,4 @@
-package me.iron.WarpSpace.Mod.HUD.client.map;
+package me.iron.WarpSpace.Mod.client.map;
 
 import api.listener.fastevents.FastListenerCommon;
 import api.mod.StarMod;

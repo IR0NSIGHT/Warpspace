@@ -1,7 +1,5 @@
 package me.iron.WarpSpace.Mod.beacon;
 
-import api.DebugFile;
-import api.ModPlayground;
 import api.config.BlockConfig;
 import api.listener.Listener;
 import api.listener.events.register.RegisterAddonsEvent;
@@ -10,17 +8,16 @@ import api.mod.StarMod;
 import api.utils.addon.SimpleAddOn;
 import api.utils.game.SegmentControllerUtils;
 import me.iron.WarpSpace.Mod.WarpMain;
+import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
+import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
 import org.schema.game.common.controller.PlayerUsableInterface;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.elements.ManagerContainer;
-import org.schema.game.common.controller.elements.SingleModuleActivation;
 import org.schema.game.common.controller.elements.power.reactor.tree.ReactorElement;
 import org.schema.game.common.data.element.ElementInformation;
 import org.schema.game.common.data.element.ElementKeyMap;
 import org.schema.game.server.data.GameServerState;
-
-import java.util.Arrays;
 
 /**
  * STARMADE MOD
@@ -132,17 +129,27 @@ public class WarpBeaconAddon extends SimpleAddOn {
 
     @Override
     public boolean onExecuteClient() {
+        if (getSegmentController().equals(GameClientState.instance.getPlayer().getFirstControlledTransformableWOExc())) {
+            WarpSounds.instance.queueSound(WarpSounds.Sound.beacon_activated);
+        }
         return true;
     }
+
 
     @Override
     public void onActive() {
         if (GameServerState.instance != null && isActive() && (beacon == null || beacon.isFlagForDelete()))
             deactivate();
+        notify = true;
     }
 
+    private boolean notify; //on deactivation
     @Override
     public void onInactive() { //called when?
+        if (GameClientState.instance!=null && notify && (getSegmentController().equals(GameClientState.instance.getPlayer().getFirstControlledTransformableWOExc()))) {
+            WarpSounds.instance.queueSound(WarpSounds.Sound.beacon_deactivated);
+            notify = false;
+        }
        if (GameServerState.instance != null && !isActive() && beacon != null) {
            beacon.setFlagForDelete();
            WarpMain.instance.beaconManagerServer.updateBeacon(beacon);

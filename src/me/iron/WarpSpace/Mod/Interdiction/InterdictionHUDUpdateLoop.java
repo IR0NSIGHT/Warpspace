@@ -1,7 +1,7 @@
 package me.iron.WarpSpace.Mod.Interdiction;
 
 import api.utils.StarRunnable;
-import me.iron.WarpSpace.Mod.HUD.client.WarpProcessController;
+import me.iron.WarpSpace.Mod.client.WarpProcessController;
 import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;

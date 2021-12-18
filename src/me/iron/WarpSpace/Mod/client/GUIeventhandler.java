@@ -1,6 +1,5 @@
-package me.iron.WarpSpace.Mod.HUD.client;
+package me.iron.WarpSpace.Mod.client;
 
-import api.DebugFile;
 import me.iron.WarpSpace.Mod.WarpMain;
 import api.listener.Listener;
 import api.listener.events.gui.HudCreateEvent;

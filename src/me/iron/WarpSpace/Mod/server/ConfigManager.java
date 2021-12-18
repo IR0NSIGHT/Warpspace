@@ -1,6 +1,6 @@
 package me.iron.WarpSpace.Mod.server;
 
-import me.iron.WarpSpace.Mod.HUD.client.WarpProcessController;
+import me.iron.WarpSpace.Mod.client.WarpProcessController;
 import me.iron.WarpSpace.Mod.WarpMain;
 
 import java.util.HashMap;
