@@ -37,6 +37,7 @@ public class WarpMain extends StarMod {
     public BeaconManager beaconManagerServer;
     public BeaconManager beaconManagerClient;
     public DropPointMapDrawer dropPointMapDrawer;
+    public WarpThrusterListener warpThrusterListener;
 
     @Override
     public void onEnable() {
@@ -51,7 +52,7 @@ public class WarpMain extends StarMod {
         WarpBeaconAddon.registerAddonAddEventListener();
 
         dropPointMapDrawer = new DropPointMapDrawer(this);
-
+        warpThrusterListener = new WarpThrusterListener(this);
 
     }
     
