@@ -2,7 +2,7 @@
   "name": "WarpSpace",
   "author": "IR0NSIGHT",
   "description": "an alternative FTL system",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "starmade_version": "dev - v0.202.108",
   "client_mod": false,
   "server_mod": false,
