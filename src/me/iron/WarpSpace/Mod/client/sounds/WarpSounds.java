@@ -7,8 +7,12 @@ import api.mod.StarLoader;
 import api.utils.StarRunnable;
 import api.utils.sound.AudioUtils;
 import me.iron.WarpSpace.Mod.WarpMain;
+import org.schema.game.client.data.GameClientState;
+import org.schema.game.client.view.MainGameGraphics;
 import org.schema.schine.graphicsengine.core.Controller;
+import org.schema.schine.graphicsengine.util.WorldToScreenConverter;
 
+import javax.vecmath.Vector3f;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -28,19 +32,22 @@ public class WarpSounds {
     public WarpSounds() {
         instance = this;
         String path = "D:/Max1M/Music/warp/";
-    //    path = getClass().getRe
-        //add test sound to soundpool
-        File f;
-        for (int i = 0; i< Sound.values().length; i++) {
-            f = new File(path + Sound.values()[i].getSoundName()+".ogg");
-            if (f.exists()) {
-                addSound(Sound.values()[i].getSoundName(), f);
-            } else {
-                new FileNotFoundException("warp sounds file " + Sound.values()[i].getSoundName()).printStackTrace();
-            }
-        }
-        initDebug();
+        path = WarpMain.instance.getSkeleton().getResourcesFolder().getPath().replace("\\","/")+"/resources/sounds/"; //in moddata
+
+   //   //    path = getClass().getRe
+   //   //add test sound to soundpool
+   //   File f;
+   //   for (int i = 0; i< Sound.values().length; i++) {
+   //       f = new File(path + Sound.values()[i].getSoundName()+".ogg");
+   //       if (f.exists()) {
+   //           addSound(Sound.values()[i].getSoundName(), f);
+   //       } else {
+   //           new FileNotFoundException("warp sounds file " + Sound.values()[i].getSoundName()).printStackTrace();
+   //       }
+   //   }
+    //    initDebug();
         initLoop();
+
     }
 
     /**
