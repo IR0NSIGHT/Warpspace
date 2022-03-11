@@ -14,29 +14,67 @@ uniform float maxSpeed;
 const float afreq = 14.5; //maximum ring frequency for warp velocity indicator
 varying float mainRadius;
 
-float rand(vec2 n) {
-    return fract(cos(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+const int MAX_OCTAVE = 8;
+const float PI = 3.14159265359;
+const float thetaToPerlinScale = 2.0 / PI;
+
+float cosineInterpolate(float a, float b, float x) {
+    float ft = x * PI;
+    float f = (1.0 - cos(ft)) * 0.5;
+
+    return a*(1.0-f) + b*f;
 }
 
-float noise(vec2 n) {
-    const vec2 d = vec2(0.0, 1.0);
-    vec2 b = floor(n), f = smoothstep(vec2(0.0), vec2(1.0), fract(n));
-    return mix(mix(rand(b), rand(b + d.yx), f.x), mix(rand(b + d.xy), rand(b + d.yy), f.x), f.y);
+float seededRandom(float seed) {
+    int x = int(seed);
+    x = x << 13 ^ x;
+    x = (x * (x * x * 15731 + 789221) + 1376312589);
+    x = x & 0x7fffffff;
+    return float(x)/1073741824.0;
 }
 
-float fbm(vec2 n) {
-    float total = 0.0, amplitude = 1.0;
-    for (int i = 0; i < 4; i++) {
-        total += noise(n) * amplitude;
-        n += n;
-        amplitude *= 0.5;
+float planeAngle(vec3 p1a, vec3 p1b, vec3 p2a, vec3 p2b){
+    return acos(dot(normalize(cross(p1a,p1b)),normalize(cross(p2a,p2b)))); //ohgods
+}
+
+float perlinNoise(float theta, float r, float time) {
+    float sum = 0.0;
+    for (int octave=0; octave<MAX_OCTAVE; ++octave) {
+        float sf = pow(2.0, float(octave));
+        float sf8 = sf*64.0;
+
+        float new_theta = sf*theta;
+        float new_r = sf*r/4.0 + time; // Add current time to this to get an animated effect
+
+        float new_theta_floor = floor(new_theta);
+        float new_r_floor = floor(new_r);
+        float fraction_r = new_r - new_r_floor;
+        float fraction_theta = new_theta - new_theta_floor;
+
+        float t1 = seededRandom( new_theta_floor	+	sf8 *  new_r_floor      );
+        float t2 = seededRandom( new_theta_floor	+	sf8 * (new_r_floor+1.0) );
+
+        new_theta_floor += 1.0;
+        float maxVal = sf*2.0;
+        if (new_theta_floor >= maxVal) {
+            new_theta_floor -= maxVal; // So that interpolation with angle 0-360° doesn't do weird things with angles > 360°
+        }
+
+        float t3 = seededRandom( new_theta_floor	+	sf8 *  new_r_floor      );
+        float t4 = seededRandom( new_theta_floor	+	sf8 * (new_r_floor+1.0) );
+
+        float i1 = cosineInterpolate(t1, t2, fraction_r);
+        float i2 = cosineInterpolate(t3, t4, fraction_r);
+
+        sum += cosineInterpolate(i1, i2, fraction_theta)/sf;
     }
-    return total;
+    return 2.0*sum;
 }
-vec3 create(float x, float y, float z){
-    vec3 stthing = vec3(x,y,z) * 11.0;
-    vec3 color = vec3(0);
 
+
+void main()
+{
+    //BEGIN OLD ITHI VARIABLES
     vec3 fv = normalize(flightVel) * 0.25;
     float flightSpeed = length(flightVel)/maxSpeed; //between 0 and 1 based on max speed
     float dotVel = dot(fv,normalize(vertPos));
@@ -45,64 +83,44 @@ vec3 create(float x, float y, float z){
 
     float attProx = smoothstep(1.,proxToWarpVector,attFactor); //Attenuated flight orientation effect so that there won't be a sudden transition at 0 speed to some other state
     float bgRingFunc = (0.95+0.05*attFactor) * sin(afreq*1.7452 * ((time * 0.5 * attFactor) + attProx));
+    //END OLD ITHI VARIABLES
 
-    vec3 weirdmathq = vec3(0);
-
-    weirdmathq.x = fbm(stthing.xy + vec2(0.35*time,13.*time + bgRingFunc * 0.1));
-    weirdmathq.y = fbm(stthing.yz + vec2(0.5*time,10.*time + bgRingFunc));
-    weirdmathq.z = fbm(stthing.zx + vec2(0.44 * time + (bgRingFunc*0.4),0.6465742 + 3.1*time));
-
-    vec3 weirdmathr = vec3(0);
-
-    weirdmathr.x = fbm(stthing.xz + weirdmathq.xz + vec2(1.7,9.2) + 2.315*time);
-    weirdmathr.y = fbm(stthing.yx + weirdmathq.yx + vec2(8.3,2.8) + 3.126*time);
-    weirdmathr.z = fbm(stthing.zy + weirdmathq.zy + vec2(9.5,4.6) + 2.731*time);
-
-    float f = fbm(mix(stthing.xy,stthing.zx,0.5 + (0.5 * sin(0.1*time))));
-
-    color = mix(vec3(0.101961,0.619608,0.666667),
-    vec3(0.666667,0.666667,0.498039),
-    clamp((f*f)*4.0,0.0,1.0));
-
-    color = mix(color,
-    vec3(0.3,0.1,0),
-    clamp(length(weirdmathq),0.0,1.0));
-
-    color = mix(color,
-    vec3(0.666667,0.13,0),
-    clamp(weirdmathr.x,0.0,1.0));
-
-    color.xyz *= (f*f*f+.6*f*f+.5*f);
-    //TODO: Where is that static BG coming from??
-    return color;
-}
-
-float sinus(vec3 pos, float period, float amplitude)
-{
-    //3 sinus functions overlaying, each with higher frequency and smaller amplitude
-    float point =(sin(pos.x*period/6.3)+sin(pos.y*period/6.3)+sin(pos.z*period/6.3))*(1./3.)*amplitude;
-    return point;
-}
-
-void main()
-{
     time = (timeBasis/80.);// * 1 + (someVeryLargeNumber * (1-warpDepth));
     float t = time * 7.;
     vec4 color = ambient;
     vec3 loc = normalize(vertPos);
 
+    vec3 colorForward = vec3(0.96, 0.63, 0.02);
+    vec3 colorAft = vec3(0.07,0.0,0.35);
+    vec3 colorDark = vec3(0.0,0.001,0.01);
 
-    vec3 colorA = vec3(0.0, 0.0, 0.0);
-    vec3 colorB = vec3(1.0, 0.0, 0.702);
+    vec3 shiftColor = mix(colorForward,colorAft,proxToWarpVector);
+    vec3 refY = vec3(0,1,0); //reference UP vector
+    float theta = 0.5 * planeAngle(/*plane 1*/normalize(flightVel),refY,/*plane 2*/normalize(flightVel),normalize(vertPos));
+    theta += 0.01;
+    float noiseRaw = perlinNoise(theta,(1-proxToWarpVector)*50.,timeBasis * flightSpeed * 0.5);
+    float noiseAdj = pow((noiseRaw/2) - 0.5,1.1); //todo: adj
+
+    //vec3 finalColor = vec3(noiseAdj,noiseAdj*0.64,0.05);//TODO: add everything else into this
+    vec3 finalColor = mix(colorDark,shiftColor,noiseAdj);
+    gl_FragColor = vec4(finalColor, 1);//vec4(c*color.rgb, 1.0);
+    /*krap
+
 
     vec3 flightDir = normalize(flightVel);
     vec3 pxNormal = normalize((-1.)*vertPos); //cam centered sphere => pos = normal
-    float pct = abs(smoothstep(0.,0.25,dot(flightDir,pxNormal)));
+    float pct = 1 - abs(smoothstep(0.,0.25,dot(flightDir,pxNormal)));
 
     pct *= length(flightVel)/400.;
 
-    vec3 finalColor = mix(colorA, colorB, pct);
-
+    float extremeness = 1 - pow(abs(dot(flightDir,pxNormal)),3);
+    colorForward = mix(colorForward,colorDark,extremeness);
+    colorAft = mix(colorAft,colorDark,extremeness);
+    vec3 finalColor = mix(colorForward, colorAft, pct);
+    finalColor *= 0.25;
+    finalColor.rg = tunnel(time*0.05*(1+length(flightVel)),0);
+    finalColor.g *= 0.7;
 
     gl_FragColor = vec4(finalColor, 1);//vec4(c*color.rgb, 1.0);
+    */
 }
