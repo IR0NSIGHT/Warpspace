@@ -1,2 +1,12 @@
-[StarLoader] 30-12-2020 at 21:52:57 MEZ  translating (2, 2, 2) to ID-4197431580537901556
-[StarLoader] 19-03-2021 at 21:36:02 MEZ  translating (2, 2, 2) to ID-4197431580537901556
+[StarLoader] 10-03-2022 at 16:29:02 EST  [INFO] Starting StarLoader with args:
+[StarLoader] 10-03-2022 at 16:29:02 EST  [INFO] -force
+[StarLoader] 10-03-2022 at 16:29:02 EST  [INFO] -uplink
+[StarLoader] 10-03-2022 at 16:29:02 EST  [INFO] localhost
+[StarLoader] 10-03-2022 at 16:29:02 EST  [INFO] 4242
+[StarLoader] 10-03-2022 at 16:29:02 EST  [INFO] 8157,8292,8166,8239
+[StarLoader] 10-03-2022 at 16:29:02 EST  [INFO] =====================
+[StarLoader] 10-03-2022 at 16:29:02 EST  Starting starloader...
+[StarLoader] 10-03-2022 at 16:29:02 EST  Checking for mod updates...
+[StarLoader] 10-03-2022 at 16:29:03 EST  [WARNING] Mod: StarLoader (0.5.100) [-1] was not found on SMD. resId: -1
+[StarLoader] 10-03-2022 at 16:29:03 EST  Done.
+[StarLoader] 10-03-2022 at 16:29:03 EST  Loading -uplink/-server mods right away

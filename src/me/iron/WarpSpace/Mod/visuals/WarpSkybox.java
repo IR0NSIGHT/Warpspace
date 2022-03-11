@@ -94,7 +94,7 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
         GlUtil.updateShaderFloat(shader, "timeBasis", time); //speed of effect 'animation'
         if(GameClientState.instance != null){
             ManagedUsableSegmentController<?> vessel = currentlyOnBoardEntity();
-            if(vessel != null) {
+            if(vessel != null && vessel.getPhysicsObject() != null) {
                 //synchronized (vessel) { //useless? produced nullpointer, guessed it might be non threadsafe cause
                 GlUtil.updateShaderVector3f(shader, "flightVel", vessel.getPhysicsObject().getLinearVelocity(vel));
                 GlUtil.updateShaderFloat(shader, "maxSpeed", vessel.getMaxServerSpeed());

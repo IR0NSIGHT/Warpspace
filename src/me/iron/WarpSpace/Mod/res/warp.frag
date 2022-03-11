@@ -37,7 +37,7 @@ float planeAngle(vec3 p1a, vec3 p1b, vec3 p2a, vec3 p2b){
     return acos(dot(normalize(cross(p1a,p1b)),normalize(cross(p2a,p2b)))); //ohgods
 }
 
-float perlinNoise(float theta, float r, float time) {
+float perlinNoise(float theta, float r, float time, float seed) {
     float sum = 0.0;
     for (int octave=0; octave<MAX_OCTAVE; ++octave) {
         float sf = pow(2.0, float(octave));
@@ -51,8 +51,8 @@ float perlinNoise(float theta, float r, float time) {
         float fraction_r = new_r - new_r_floor;
         float fraction_theta = new_theta - new_theta_floor;
 
-        float t1 = seededRandom( new_theta_floor	+	sf8 *  new_r_floor      );
-        float t2 = seededRandom( new_theta_floor	+	sf8 * (new_r_floor+1.0) );
+        float t1 = seededRandom( new_theta_floor	+	sf8 *  new_r_floor      + seed);
+        float t2 = seededRandom( new_theta_floor	+	sf8 * (new_r_floor+1.0) + seed);
 
         new_theta_floor += 1.0;
         float maxVal = sf*2.0;
@@ -93,15 +93,16 @@ void main()
     vec3 colorForward = vec3(0.96, 0.63, 0.02);
     vec3 colorAft = vec3(0.07,0.0,0.35);
     vec3 colorDark = vec3(0.0,0.001,0.01);
+    vec3 color2 = vec3(0.96,0.03,0.005);
 
     vec3 shiftColor = mix(colorForward,colorAft,proxToWarpVector);
     vec3 refY = vec3(0,1,0); //reference UP vector
     float theta = 0.5 * planeAngle(/*plane 1*/normalize(flightVel),refY,/*plane 2*/normalize(flightVel),normalize(vertPos));
+    float r = (1-proxToWarpVector)*20.;
     theta += 0.01;
-    float noiseRaw = perlinNoise(theta,(1-proxToWarpVector)*50.,timeBasis * flightSpeed * 0.5);
-    float noiseAdj = pow((noiseRaw/2) - 0.5,1.1); //todo: adj
+    float noiseRaw = perlinNoise(theta,r,timeBasis * flightSpeed * 0.45,0.);
+    float noiseAdj = pow((noiseRaw/2.5) - 0.65,1.5); //todo: adjust awful maths
 
-    //vec3 finalColor = vec3(noiseAdj,noiseAdj*0.64,0.05);//TODO: add everything else into this
     vec3 finalColor = mix(colorDark,shiftColor,noiseAdj);
     gl_FragColor = vec4(finalColor, 1);//vec4(c*color.rgb, 1.0);
     /*krap
