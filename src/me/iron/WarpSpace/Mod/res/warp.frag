@@ -29,7 +29,7 @@ uniform float maxSpeed;
 const float afreq = 125; //maximum ring frequency for warp velocity indicator
 varying float mainRadius;
 
-const int MAX_OCTAVE = 8;
+const int MAX_OCTAVE = 10;
 const float PI = 3.14159265359;
 const float thetaToPerlinScale = 2.0 / PI;
 
@@ -196,7 +196,7 @@ void main()
 
     float timeAdj = timeBasis * 0.31;
     timeAdj += 1 - (0.1 * proxToWarpVector); //idk if this does anything
-    //timeAdj = mix(timeAdj,timeBasis,flightSpeed);
+    //TODO: By this way comes floating-point imprecision, and in time, decay and ruin in the form of increasingly bad noise quality and banding. Not sure how to fix this.
 
     float r = proxToWarpVector;
     float maximumPower = mix(10,2,flightSpeed);

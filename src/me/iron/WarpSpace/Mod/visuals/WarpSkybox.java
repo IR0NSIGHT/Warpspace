@@ -71,7 +71,7 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
      * This version of time increments slower when flying slower.
      * This allows noise to move by faster/slower based on flight velocity
      * without MULTIPLYING by flight speed inside the shader - as that method causes problems with acceleration/deceleration
-     * creating more and more seizure-inducing speed transitions as time goes on
+     * and would create more and more seizure-inducing speed transitions as time goes on
      */
     static float distortedTime = 0;
 
@@ -103,7 +103,6 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
     @Override
     public void onInit() {
         mesh = (Mesh) Controller.getResLoader().getMeshLoader().getModMesh(instance, "planet_sphere").getChilds().iterator().next();
-        //This is the way that the base game makes the tube shader; trying this first to see what happens
     }
 
     @Override
@@ -128,8 +127,8 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
         active = warpDepth > EPSILON;
 
         if(active){
-            time += timer.getDelta() * 10.1F;
-            if(vessel != null) distortedTime += timer.getDelta() * 10.1F * (vessel.getSpeedCurrent() / vessel.getMaxServerSpeed());
+            time += timer.getDelta() * 5.05F;
+            if(vessel != null) distortedTime += timer.getDelta() * 5.05F * (vessel.getSpeedCurrent() / vessel.getMaxServerSpeed());
             else distortedTime += timer.getDelta(); //very temporary case
         } else {
             time = 0;
