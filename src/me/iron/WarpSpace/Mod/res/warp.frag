@@ -151,6 +151,10 @@ float ithnoise(vec3 vertPos, float posCoeff, float time){
     return cumuNoise;
 }
 
+float pnoiseq(float x, float y, float t) { //Unused alternate warp noise function
+    return 0.5+(0.5*sin(ithnoise(vec3(x*9,y*3,t/100),1,t)));
+}
+
 void main()
 {
     time = (timeBasis/80.);// * 1 + (someVeryLargeNumber * (1-warpDepth));
@@ -256,8 +260,14 @@ void main()
     float speedMixture = mix(warpDepth,1-dotVel,pow(attFactor,0.5)); //need coordinate warping ahead and behind, not in flanking doughnut
     //scaling coefficient varying with speeds and proximity to flight vector (if there is a flight vector at all)
     //neat-looking and unifying transition out of stationary - coordinate system warps ahead and behind as speed increases
+    float staticVFX = max(0,1 - ithnoise(vertPos,speedMixture,time));
+    vec3 staticColor = mix(
+                            vec3(0.7,0,0),
+                            mix(vec3(0.7,0,0),vec3(0.7,0.075,0),warpDepth), //orangey peaks fade away as ships slip from warp
+                            pow(3,staticVFX)
+    );
 
-    stoppedInWarp = mix(stoppedInWarp,vec3(0,0,0),max(0,ithnoise(vertPos,speedMixture,time)));
+    stoppedInWarp = mix(staticColor,vec3(0,0,0),staticVFX);
 
     //TODO: Replace this with formalized octaves. At least eight of them.
 
