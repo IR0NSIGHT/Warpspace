@@ -215,6 +215,7 @@ public class HUD_core {
 
         //DebugFile.log("updating warp situation from WarpProcessMap: ");
 
+        //FIXME gives false positive on velocity close to 50: 65m/s -> fix for now: test clientside speed.
         isDropping = ( WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPDROP) == 1);
 
         isExit = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPEXIT) == 1);
@@ -226,7 +227,8 @@ public class HUD_core {
         isWarpSectorBlocked = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.WARPSECTORBLOCKED) == 1);
 
         //todo build listener/event system
-        if (!dropOld && isDropping) { //now dropping
+        if (!dropOld && isDropping && WarpManager.IsInWarp(GameClientState.instance.getPlayer().getCurrentSector())
+        && GameClientState.instance.getPlayer().getFirstControlledTransformableWOExc().getSpeedCurrent() <  WarpManager.minimumSpeed) { //now dropping
             WarpSounds.instance.queueSound(WarpSounds.Sound.dropping);
         }
 
@@ -248,7 +250,7 @@ public class HUD_core {
         }
 
         if ((warpBlocked && !isWarpSectorBlocked) || (rspBlocked && !isRSPSectorBlocked)) { //not inhibited anymore.
-
+            //TODO "inhibitor gone/free to jump again" sound
         }
 
 
