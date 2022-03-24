@@ -31,21 +31,17 @@ public class WarpSounds {
     }
     public WarpSounds() {
         instance = this;
-        String path = "D:/Max1M/Music/warp/";
-        path = WarpMain.instance.getSkeleton().getResourcesFolder().getPath().replace("\\","/")+"/resources/sounds/"; //in moddata
+        String path = WarpMain.instance.getSkeleton().getResourcesFolder().getPath().replace("\\","/")+"/resources/sounds/"; //in moddata
 
-      //    path = getClass().getRe
-      //add test sound to soundpool
-      File f;
-      for (int i = 0; i< Sound.values().length; i++) {
-          f = new File(path + Sound.values()[i].getSoundName()+".ogg");
-          if (f.exists()) {
-              addSound(Sound.values()[i].getSoundName(), f);
-          } else {
-              new FileNotFoundException("warp sounds file " + Sound.values()[i].getSoundName()).printStackTrace();
+          File f;
+          for (int i = 0; i< Sound.values().length; i++) {
+              f = new File(path + Sound.values()[i].getSoundName()+".ogg");
+              if (f.exists()) {
+                  addSound(Sound.values()[i].getSoundName(), f);
+              } else {
+                  new FileNotFoundException("warp sounds file " + Sound.values()[i].getSoundName()).printStackTrace();
+              }
           }
-      }
-    //    initDebug();
         initLoop();
 
     }
