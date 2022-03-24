@@ -9,17 +9,17 @@ package me.iron.WarpSpace.Mod;
 
 import api.DebugFile;
 import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.client.view.gamemap.GameMapDrawer;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.server.data.Galaxy;
-import org.schema.game.server.data.GameServerState;
 
 import javax.vecmath.Vector3f;
+import java.util.Random;
 
 /**
  * defines mechanics in warp, hold settings of the warp like its position.
  */
 public class WarpManager {
+    private static Random random = new Random();
     /**
      *  the scale of realspace to warpspace in sectors.
      */
@@ -96,9 +96,10 @@ public class WarpManager {
         Vector3i realPos;
         Vector3f warpPosF = WarpSpacePos.toVector3f();
         warpPosF.y -= offset; //offset sectors to up (y axis)
-        warpPosF.x = Math.round(warpPosF.x * scale);
-        warpPosF.y = Math.round(warpPosF.y * scale);
-        warpPosF.z = Math.round(warpPosF.z * scale);
+       random.setSeed(WarpSpacePos.code());
+        warpPosF.x = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*2.25f)+warpPosF.x * scale);
+        warpPosF.y = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*2.25f)+warpPosF.y * scale);
+        warpPosF.z = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*2.25f)+warpPosF.z * scale);
         realPos = new Vector3i(warpPosF.x,warpPosF.y,warpPosF.z);
 
         return realPos;
