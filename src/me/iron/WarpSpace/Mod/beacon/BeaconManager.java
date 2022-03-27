@@ -228,7 +228,6 @@ public class BeaconManager extends SimpleSerializerWrapper {
         }
         beacon_by_UID.remove(beacon.getUID());
         if (isServer) {
-
             updateStrongest(warpPos);
             synchAll();
         }
