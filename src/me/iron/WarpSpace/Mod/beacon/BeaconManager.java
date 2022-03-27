@@ -217,17 +217,17 @@ public class BeaconManager extends SimpleSerializerWrapper {
     }
 
     public void removeBeacon(BeaconObject beacon) {
-
         Vector3i warpPos = WarpManager.getWarpSpacePos(beacon.getPosition());
         Collection<String> list = beaconUIDs_by_sector.get(warpPos);
         if (list == null) {
             return;
         }
         list.remove(beacon.getUID());
+        if (list.isEmpty()) {
+            beaconUIDs_by_sector.remove(warpPos);
+        }
         beacon_by_UID.remove(beacon.getUID());
-        //ModPlayground.broadcastMessage("REMOVING BEACON "+beacon.getUID());
         if (isServer) {
-        //    ModPlayground.broadcastMessage("removed beacon: " + beacon.getName());
 
             updateStrongest(warpPos);
             synchAll();

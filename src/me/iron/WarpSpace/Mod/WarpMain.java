@@ -1,10 +1,14 @@
 package me.iron.WarpSpace.Mod;
 
 import api.config.BlockConfig;
+import api.listener.Listener;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
+import api.listener.events.network.ClientLoginEvent;
 import api.mod.StarLoader;
 import api.mod.StarMod;
+import api.mod.config.FileConfiguration;
+import api.mod.config.SyncedConfigUtil;
 import api.network.packets.PacketUtil;
 import api.utils.registry.UniversalRegistry;
 import glossar.GlossarCategory;
@@ -40,6 +44,7 @@ public class WarpMain extends StarMod {
     public BeaconManager beaconManagerClient;
     public DropPointMapDrawer dropPointMapDrawer;
     public WarpThrusterListener warpThrusterListener;
+    private FileConfiguration config;
 
     @Override
     public void onEnable() {
@@ -59,6 +64,17 @@ public class WarpMain extends StarMod {
 
         dropPointMapDrawer = new DropPointMapDrawer(this);
         warpThrusterListener = new WarpThrusterListener(this);
+
+        //synch config to client
+        final FileConfiguration config = getConfig("config");
+        config.set("important", "this is an important message");
+        StarLoader.registerListener(ClientLoginEvent.class, new Listener<ClientLoginEvent>() {
+            @Override
+            public void onEvent(ClientLoginEvent event) {
+                SyncedConfigUtil.sendConfigToClient(event.getServerProcessor(), config);
+            }
+        }, this);
+
     }
     
     @Override
@@ -71,8 +87,10 @@ public class WarpMain extends StarMod {
     @Override
     public void onServerCreated(ServerInitializeEvent event) {
         super.onServerCreated(event);
+        config = getConfig("config");
+
         WarpJumpListener.createListener();
-    //TODO thrust    ThrustEventhandler.createListener();
+
         WarpCheckLoop.loop(25);
         InterdictionHUDUpdateLoop.CreateServerLoop();
         beaconManagerServer = BeaconManager.getSavedOrNew(this.getSkeleton());
@@ -118,7 +136,7 @@ public class WarpMain extends StarMod {
     private GlossarCategory getWiki() {
         GlossarCategory cat = new GlossarCategory("WarpSpace");
 
-        cat.addEntry(new GlossarEntry("Introduction","WarpSpace changes the jumping mechanic. Instead of being teleported to your waypoint or in the direction of the waypoint, instead you enter a parallel dimension that is a scaled down version of realspace: the warp. Here you can travel, just as in realspace, but distances are ten times shorter. \nThis means that you can follow others/be followed when you are travelling faster than light. The core feature is, that fast-travel becomes predictable.\n This renders raid-attacks, that rely on jumping away to hide, useless and greatly improves the ability to defend your territory.\nSince the warp is shared by everyone, its not unlikely to meet other players in it.\n "));
+        cat.addEntry(new GlossarEntry("Introduction","WarpSpace changes the jumping mechanic. Instead of being teleported to your waypoint or in the direction of the waypoint, instead you enter a parallel dimension that is a scaled down version of realspace: the warp. Here you can travel, just as in realspace, but distances are ten times shorter. \nThis means that you can follow others/be followed when you are travelling faster than light. The core feature is, that fast-travel becomes predictable.\n This renders raid-attacks, that rely on jumping away to hide, useless and greatly improves the ability to defend your territory.\nSince the warp is shared by everyone, its not unlikely to meet other players in it.\n\n\nContributors:\nIR0NSIGHT(author)\nJakeV(thrust in warp)\nTaswin(Map in Warp)\nMekTek(GUI)\nIthirahad(VFX)"));
         cat.addEntry(new GlossarEntry("Jumping","Set your desired destination as your navigation waypoint ('N'). Then activate your jumpdrive. After a couple seconds you will switch dimensions and enter the Warp. " +
                 "The Warp is a parallel dimension where distances are 10 times shorter. Follow your waypoint while you are in warp, until you reach it. You will see a notification 'droppoint' reached. Activate your jumpdrive again or slow down below 50 m/s for more than 10 seconds, to drop out of warp. You will re-enter realspace at the corresponding droppoint. This is your waypoint rounded to 10. After dropping, fly the remaining distance to your waypoint in realspace."));
 
