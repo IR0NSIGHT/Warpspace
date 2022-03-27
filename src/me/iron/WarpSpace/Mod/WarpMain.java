@@ -3,6 +3,7 @@ package me.iron.WarpSpace.Mod;
 import api.config.BlockConfig;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
+import api.mod.StarLoader;
 import api.mod.StarMod;
 import api.network.packets.PacketUtil;
 import api.utils.registry.UniversalRegistry;
@@ -43,6 +44,8 @@ public class WarpMain extends StarMod {
     @Override
     public void onEnable() {
         super.onEnable();
+        StarLoader.registerCommand(new DebugUI());
+
         BackgroundEventListener.AddListener(); //add background color listener
         instance = this;
 
@@ -62,7 +65,9 @@ public class WarpMain extends StarMod {
     public void onDisable() {
         WarpSpaceMap.disable();
     }
-    
+
+
+
     @Override
     public void onServerCreated(ServerInitializeEvent event) {
         super.onServerCreated(event);
@@ -86,7 +91,6 @@ public class WarpMain extends StarMod {
         beaconManagerClient = new BeaconManager();
         beaconManagerClient.onInit();
         dropPointMapDrawer.activate();
-        DebugChatEvent.addDebugChatListener();
         GlossarInit.initGlossar(this);
         GlossarInit.addCategory(getWiki());
         new WarpSounds();

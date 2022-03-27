@@ -1,5 +1,6 @@
 package me.iron.WarpSpace.Mod.beacon;
 
+import api.ModPlayground;
 import api.config.BlockConfig;
 import api.listener.Listener;
 import api.listener.events.register.RegisterAddonsEvent;
@@ -121,8 +122,10 @@ public class WarpBeaconAddon extends SimpleAddOn {
     //    activation.startTime = System.currentTimeMillis();
         if (GameServerState.instance == null)
             return true;
-    //    ModPlayground.broadcastMessage("warp beacon activated by " + this.segmentController.getName());
+
+        //    ModPlayground.broadcastMessage("warp beacon activated by " + this.segmentController.getName());
         beacon = new BeaconObject(this.segmentController);
+        ModPlayground.broadcastMessage("ACTIVATE BEACON");
         WarpMain.instance.beaconManagerServer.addBeacon(beacon);
         return true;
     }
@@ -151,6 +154,7 @@ public class WarpBeaconAddon extends SimpleAddOn {
             notify = false;
         }
        if (GameServerState.instance != null && !isActive() && beacon != null) {
+           ModPlayground.broadcastMessage("ON INACTIVE BEACON");
            beacon.setFlagForDelete();
            WarpMain.instance.beaconManagerServer.updateBeacon(beacon);
            beacon = null;

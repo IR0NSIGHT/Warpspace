@@ -39,10 +39,6 @@ public class BeaconManager extends SimpleSerializerWrapper {
             } else {
                 manager = (BeaconManager)objs.get(0);
             }
-
-            PersistentObjectUtil.removeObject(WarpMain.instance.getSkeleton(), manager);
-
-            PersistentObjectUtil.addObject(WarpMain.instance.getSkeleton(), manager);
             return manager;
         } catch (Exception ex) {
             System.out.println("BEACONMANAGER FAILED TO LOAD FOR WARPSPACE");
@@ -96,7 +92,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
                     BeaconObject b = beacons_by_UID.get(event.getController().getUniqueIdentifier());
                     if (b == null)
                         return;
-                    b.activateAddon(event.getController());
+                    //FIXME infinite loop? b.activateAddon(event.getController());
                     updateBeacon(b);
                 }
             }, WarpMain.instance);
@@ -198,7 +194,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
     }
 
     public void addBeacon(BeaconObject beacon) {
-
+        //FIXME decline
         Vector3i warpPos = WarpManager.getWarpSpacePos(beacon.getPosition());
         ArrayList<String> list = beacons_by_sector.get(warpPos);
         if (list == null) {
@@ -234,8 +230,13 @@ public class BeaconManager extends SimpleSerializerWrapper {
         }
     }
 
+    //TODO use linkedlist
     public ArrayList<String> getBeacons(Vector3i warpPos) {
         return beacons_by_sector.get(warpPos);
+    }
+
+    public Collection<Vector3i> getBeaconSectors() {
+        return beacons_by_sector.keySet();
     }
 
     public void synchAll() {
@@ -245,9 +246,13 @@ public class BeaconManager extends SimpleSerializerWrapper {
         new BeaconUpdatePacket().sendToAll();
     }
 
+    /**
+     * used for loading and reading server sent packets.
+     * @param buffer
+     */
     @Override
     public void onDeserialize(PacketReadBuffer buffer) {
-        beacons_by_sector.clear();
+
         try {
             int totalSize = buffer.readInt();
             for (int i = 0; i < totalSize; i ++) {

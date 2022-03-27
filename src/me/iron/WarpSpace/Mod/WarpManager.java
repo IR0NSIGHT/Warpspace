@@ -96,7 +96,7 @@ public class WarpManager {
         Vector3i realPos;
         Vector3f warpPosF = WarpSpacePos.toVector3f();
         warpPosF.y -= offset; //offset sectors to up (y axis)
-       random.setSeed(WarpSpacePos.code());
+        random.setSeed(WarpSpacePos.code());
         warpPosF.x = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*2.25f)+warpPosF.x * scale);
         warpPosF.y = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*2.25f)+warpPosF.y * scale);
         warpPosF.z = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*2.25f)+warpPosF.z * scale);
