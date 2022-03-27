@@ -46,7 +46,7 @@ public class WarpManager {
      * @param object segmentcontroller to check
      * @return boolean, true if segmentcontrollers position is in warp
      */
-    public static boolean IsInWarp(SegmentController object) {
+    public static boolean isInWarp(SegmentController object) {
         if (object == null) {
             DebugFile.log("isInWarp called with null object");
             return false;
@@ -55,7 +55,7 @@ public class WarpManager {
             DebugFile.log("isInWarp object has no sector:"+object.getName());
             return false;
         }
-        return IsInWarp(object.getSector(new Vector3i()));
+        return isInWarp(object.getSector(new Vector3i()));
     }
 
     /**
@@ -63,7 +63,7 @@ public class WarpManager {
      * @param pos  position to check
      * @return boolean, true if position is in warp
      */
-    public static boolean IsInWarp(Vector3i pos) {
+    public static boolean isInWarp(Vector3i pos) {
         if (pos != null && pos.y >= offset - (universeSize / scale) && pos.y <= offset + (universeSize / scale)) {
             return true;
         }
@@ -72,12 +72,14 @@ public class WarpManager {
 
     /**
      * Calculate the Warpspace position from a realworld position, will round to closest point on scale: -5->0<-+4 at scale = 10
-     * @param RealSpacePos sector in realspace
+     * @param rspPos sector in realspace
      * @return correlating sector in warpspace
      */
-    public static Vector3i getWarpSpacePos(Vector3i RealSpacePos) {
+    public static Vector3i getWarpSpacePos(Vector3i rspPos) {
+        if (isInWarp(rspPos))
+            return rspPos;
         Vector3i warpPos;
-        Vector3f realPosF = RealSpacePos.toVector3f();
+        Vector3f realPosF = rspPos.toVector3f();
         realPosF.x = Math.round(realPosF.x / scale);
         realPosF.y = Math.round(realPosF.y / scale);
         realPosF.z = Math.round(realPosF.z / scale);

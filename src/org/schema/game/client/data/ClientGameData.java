@@ -5,7 +5,6 @@
 
 package org.schema.game.client.data;
 
-import api.DebugFile;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.element.Element;
@@ -42,7 +41,7 @@ public class ClientGameData {
         }
 
         //return warp pos if player is in warp
-        if (waypoint != null && WarpManager.IsInWarp(playerPosTmp)) {
+        if (waypoint != null && WarpManager.isInWarp(playerPosTmp)) {
             return warpWP;
         }
 
@@ -53,7 +52,7 @@ public class ClientGameData {
 
         //never allow setting direction in warp. always use RSP pos.
         //false
-        if (newWaypoint != null && WarpManager.IsInWarp(newWaypoint)) {
+        if (newWaypoint != null && WarpManager.isInWarp(newWaypoint)) {
             newWaypoint = WarpManager.getRealSpacePos(newWaypoint);
         }
 

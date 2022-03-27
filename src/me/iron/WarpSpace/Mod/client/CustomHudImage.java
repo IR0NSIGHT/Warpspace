@@ -76,7 +76,7 @@ class CustomHudImage extends org.schema.schine.graphicsengine.forms.gui.GUIEleme
             //its all jank, gotta switch to vanilla GUI at some point.
             if (this.el.enumValue.equals(SpriteList.SPIRAL) || el.enumValue.equals(SpriteList.SPIRAL_BLOCKED)) {
                 float rotateAngle;
-                if (WarpManager.IsInWarp(GameClientState.instance.getPlayer().getCurrentSector())) {
+                if (WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector())) {
                     rotateAngle = -.5f;
                 } else {
                     rotateAngle = -.05f;

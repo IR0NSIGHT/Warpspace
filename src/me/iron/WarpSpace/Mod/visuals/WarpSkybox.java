@@ -12,7 +12,6 @@ import com.bulletphysics.linearmath.Transform;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.lwjgl.opengl.GL11;
-import org.schema.common.FastMath;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
 import org.schema.game.common.controller.SegmentController;
@@ -27,7 +26,6 @@ import org.schema.schine.graphicsengine.core.Timer;
 import org.schema.schine.graphicsengine.forms.Mesh;
 import org.schema.schine.graphicsengine.shader.Shader;
 import org.schema.schine.graphicsengine.shader.Shaderable;
-import org.schema.schine.network.server.ServerMessage;
 import org.schema.schine.resource.MeshLoader;
 
 import javax.imageio.ImageIO;
@@ -111,7 +109,7 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
         ManagedUsableSegmentController<?> vessel = null;
         if(GameClientState.instance != null) {
             vessel = currentlyOnBoardEntity();
-            warping = WarpManager.IsInWarp(getClientPlayerState().getCurrentSector());
+            warping = WarpManager.isInWarp(getClientPlayerState().getCurrentSector());
             float deltaD = 0f;
             if (vessel != null && warping && warpDepth < 1 && WarpManager.minimumSpeed < vessel.getSpeedCurrent()) {
                 deltaD = timer.getDelta() * 0.4f;

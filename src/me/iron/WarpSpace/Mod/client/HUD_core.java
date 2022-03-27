@@ -92,7 +92,7 @@ public class HUD_core {
                     HUDElementController.drawType(HUD_element.ElementType.BACKGROUND,1);
                     HUDElementController.drawElement(SpriteList.SPIRAL,true);
 
-                    boolean isInWarp = WarpManager.IsInWarp(player.getCurrentSector());
+                    boolean isInWarp = WarpManager.isInWarp(player.getCurrentSector());
                     if (isInWarp) {
                         HUDElementController.drawElement(SpriteList.PEARL,true);
                         HUDElementController.drawElement(SpriteList.ARROW_TO_RSP,true);
@@ -228,7 +228,7 @@ public class HUD_core {
         isWarpSectorBlocked = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.WARPSECTORBLOCKED) == 1);
 
         //todo build listener/event system
-        if (!dropOld && isDropping && WarpManager.IsInWarp(GameClientState.instance.getPlayer().getCurrentSector())
+        if (!dropOld && isDropping && WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector())
         && GameClientState.instance.getPlayer().getFirstControlledTransformableWOExc().getSpeedCurrent() <  WarpManager.minimumSpeed) { //now dropping
             WarpSounds.instance.queueSound(WarpSounds.Sound.dropping);
         }
@@ -259,7 +259,7 @@ public class HUD_core {
 
         if (GameClientState.instance == null)
             return;
-        if (GameClientState.instance.getPlayer().getCurrentSector().length()<5000 || WarpManager.IsInWarp(GameClientState.instance.getPlayer().getCurrentSector()))
+        if (GameClientState.instance.getPlayer().getCurrentSector().length()<5000 || WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector()))
             initRadarSectorGUI(); //TODO once derp fixed the damn buildsector overwriting warpspace.
     }
 
@@ -270,7 +270,7 @@ public class HUD_core {
         if (GameClientState.instance == null || GameClientState.instance.getPlayer() == null)
             return;
 
-        if (!WarpManager.IsInWarp(GameClientState.instance.getPlayer().getCurrentSector()))
+        if (!WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector()))
             return;
 
         HudIndicatorOverlay overlay = GameClientState.instance.getWorldDrawer().getGuiDrawer().getHud().getIndicator();
@@ -291,7 +291,7 @@ public class HUD_core {
             public String toString() {
                 try {
                     Vector3i sector = GameClientState.instance.getPlayer().getCurrentSector();
-                    boolean inWarp = WarpManager.IsInWarp(sector);
+                    boolean inWarp = WarpManager.isInWarp(sector);
 
                     //im funny
                     if (sector.equals(69,69,69))

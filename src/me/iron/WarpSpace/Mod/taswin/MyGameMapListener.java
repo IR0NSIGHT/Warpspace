@@ -91,7 +91,7 @@ public class MyGameMapListener implements GameMapDrawListener
 	@Override
 	public void galaxy_DrawSprites(GameMapDrawer drawer)
 	{
-		if (!WarpManager.IsInWarp(drawer.getPlayerSector())) return;
+		if (!WarpManager.isInWarp(drawer.getPlayerSector())) return;
 		
 		Vector3i realCoords = WarpManager.getRealSpacePos(drawer.getPlayerSector());
 		realCoords.scaleFloat(1 / 16f);
@@ -112,7 +112,7 @@ public class MyGameMapListener implements GameMapDrawListener
 	public void galaxy_DrawQuads(GameMapDrawer drawer)
 	{
 		Vector3i sector = drawer.getPlayerSector();
-		if (WarpManager.IsInWarp(sector))
+		if (WarpManager.isInWarp(sector))
 		{
 			float r = WarpManager.scale / 2f;
 			

@@ -38,11 +38,11 @@ public class WarpCheckLoop {
                 //check for every segmentcontroller:
                 Map<String, SegmentController> scList = GameServer.getServerState().getSegmentControllersByName();
                 for (SegmentController sc: scList.values()) {
-                    if (WarpManager.IsInWarp(sc) && !WarpEntityManager.isWarpEntity(sc)) {
+                    if (WarpManager.isInWarp(sc) && !WarpEntityManager.isWarpEntity(sc)) {
                         //is in warp and not registered
                         WarpEntityManager.DeclareWarpEntity(sc);
                     }
-                    if (!WarpManager.IsInWarp(sc) && WarpEntityManager.isWarpEntity(sc)) {
+                    if (!WarpManager.isInWarp(sc) && WarpEntityManager.isWarpEntity(sc)) {
                         //is not in warp but registered
                         WarpEntityManager.RemoveWarpEntity(sc);
                     }

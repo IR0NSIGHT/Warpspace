@@ -43,7 +43,7 @@ public class WarpThrusterListener implements ThrusterElementManagerListener {
     @Override
     public float getMaxSpeed(ThrusterElementManager thrusterElementManager, float v) {
         SegmentController sc = thrusterElementManager.getSegmentController();
-        if(WarpManager.IsInWarp(sc)){
+        if(WarpManager.isInWarp(sc)){
             if(sc instanceof ManagedUsableSegmentController<?>){
                 ManagedUsableSegmentController<?> musc = (ManagedUsableSegmentController<?>) sc;
 

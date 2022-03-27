@@ -6,7 +6,6 @@ import api.mod.StarLoader;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.game.client.data.GameClientState;
-import org.schema.schine.network.client.ClientController;
 
 /**
  * STARMADE MOD
@@ -22,7 +21,7 @@ public class BackgroundEventListener {
                 if (event.isServer()) {
                     return;
                 }
-                if (WarpManager.IsInWarp(GameClientState.instance.getPlayer().getCurrentSector())) {
+                if (WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector())) {
                     event.setColor1(1,0,1,1.5f);
                     event.setColor2(4,4,0,4);   //idk why but starmade allows for numbers >1 as color input. vanilla is usually <2 tho.
                 }

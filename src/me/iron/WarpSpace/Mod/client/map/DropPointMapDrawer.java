@@ -64,7 +64,7 @@ public class DropPointMapDrawer extends MapDrawer {
 
         clearMarkers();
 
-        if (WarpManager.IsInWarp(currentPos))
+        if (WarpManager.isInWarp(currentPos))
             return;
 
         Vector3i warpPos = WarpManager.getWarpSpacePos(currentPos);

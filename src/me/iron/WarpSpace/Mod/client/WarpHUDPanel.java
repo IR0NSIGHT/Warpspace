@@ -53,7 +53,7 @@ public class WarpHUDPanel { //TODO refactor messy class, make instatiable like C
                 if (i == 0 || !(oldPos.equals(getPlayerSector()))) {
                     oldPos = new Vector3i(getPlayerSector());
 
-                    if (WarpManager.IsInWarp(getPlayerSector())) {
+                    if (WarpManager.isInWarp(getPlayerSector())) {
                         newPos = WarpManager.getRealSpacePos(getPlayerSector());
                     } else {
                         newPos = WarpManager.getWarpSpacePos(getPlayerSector());

@@ -54,7 +54,7 @@ public class InterdictionHUDUpdateLoop {
                     //get relevant positions to check
                     Vector3i rspPos = null;
                     Vector3i warpPos = null;
-                    if (WarpManager.IsInWarp(sc)) {
+                    if (WarpManager.isInWarp(sc)) {
                         warpPos = sc.getSector(new Vector3i());
                         rspPos = WarpManager.getRealSpacePos(warpPos);
                     } else {

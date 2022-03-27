@@ -118,7 +118,7 @@ public class WarpSpaceMap
 				sectorPos.y = (event.getGalaxy().galaxyPos.y * Galaxy.size + event.getPosition().y - Galaxy.halfSize) * 16;
 				sectorPos.z = (event.getGalaxy().galaxyPos.z * Galaxy.size + event.getPosition().z - Galaxy.halfSize) * 16;
 				
-				if (WarpManager.IsInWarp(sectorPos))
+				if (WarpManager.isInWarp(sectorPos))
 				{
 					event.setStarWeight((byte) 0);
 				}
