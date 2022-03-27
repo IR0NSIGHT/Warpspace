@@ -72,15 +72,24 @@ public class DebugUI implements CommandInterface {
             StringBuilder b = new StringBuilder("All sectors with active beacons:");
             Collection<Vector3i> ss = WarpMain.instance.beaconManagerServer.getBeaconSectors();
             for (Vector3i s: ss) {
-                b.append("Sector ").append(s).append("[");
-                ArrayList<String> beacons = WarpMain.instance.beaconManagerServer.getBeacons(s);
+                b.append("Sector ").append(s).append("[\n");
+                Collection<String> beacons = WarpMain.instance.beaconManagerServer.getBeacons(s);
                 for (String UID: beacons) {
-                    b.append(UID).append(", ");
+
+                    b.append("---").append(WarpMain.instance.beaconManagerServer.getBeaconByUID(UID)).append(",\n");
                 }
                 b.append("]\n");
             }
             echo(b.toString(),playerState);
             return true;
+        }
+        if(strings[0].equalsIgnoreCase("beacon-clear")) {
+            WarpMain.instance.beaconManagerServer.clearBeacons();
+            echo("cleared beacons",playerState);
+            return true;
+        }
+        if (strings[0].equalsIgnoreCase("print-beacons")) {
+            echo(WarpMain.instance.beaconManagerServer.print(),playerState);
         }
         return false;
     }

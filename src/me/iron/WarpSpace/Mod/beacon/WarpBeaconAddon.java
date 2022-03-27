@@ -164,6 +164,7 @@ public class WarpBeaconAddon extends SimpleAddOn {
         DebugUI.echo("beacon toggle on entity"+ getSegmentController().getName()+ " was activated",null);
         if (isOnServer()) {
             //get/make beacon
+            beacon = WarpMain.instance.beaconManagerServer.getBeaconByUID(getSegmentController().getUniqueIdentifier());
             if (beacon == null) {
                 beacon = new BeaconObject(this.segmentController);
                 WarpMain.instance.beaconManagerServer.addBeacon(beacon);

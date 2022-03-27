@@ -123,11 +123,11 @@ public class BeaconObject implements Serializable {
             WarpBeaconAddon addon = WarpBeaconAddon.getAddon(msc);
             if (addon == null) //seems to sometimes just randomly be null?
                 return;
-            if (!addon.isActive() || !addon.isPlayerUsable()) {
-                //TODO playerusable for unmanned craft too?
-                setFlagForDelete();
-                DebugUI.echo("DELETE BEACON: ADDON INACTIVE/NOT PLAYERUSABLE",null);
-            }
+           //if (!addon.isActive() || !addon.isPlayerUsable()) {
+           //    //TODO playerusable for unmanned craft too?
+           //    setFlagForDelete();
+           //    DebugUI.echo("DELETE BEACON: ADDON INACTIVE/NOT PLAYERUSABLE",null);
+           //}
         }
 
     }

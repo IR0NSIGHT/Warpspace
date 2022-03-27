@@ -1,6 +1,5 @@
 package me.iron.WarpSpace.Mod.beacon;
 
-import api.DebugFile;
 import api.ModPlayground;
 import api.listener.Listener;
 import api.listener.events.entity.SegmentControllerFullyLoadedEvent;
@@ -16,7 +15,6 @@ import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
-import org.schema.game.mod.Mod;
 import org.schema.game.server.data.GameServerState;
 
 import java.util.*;
@@ -46,7 +44,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
         }
     }
 
-    transient private HashMap<Vector3i,ArrayList<String>> beacons_by_sector = new HashMap(){
+    transient private HashMap<Vector3i,LinkedList<String>> beaconUIDs_by_sector = new HashMap(){
         @Override
         public void clear() {
             super.clear();
@@ -57,14 +55,14 @@ public class BeaconManager extends SimpleSerializerWrapper {
             return super.remove(key);
         }
     };
-    transient private HashMap<String ,BeaconObject> beacons_by_UID = new HashMap<>();
+    transient private HashMap<String ,BeaconObject> beacon_by_UID = new HashMap<>();
     transient private Random random;
     public BeaconManager() {
 
     }
 
     public void activateAll() {
-        for (BeaconObject b: beacons_by_UID.values()) {
+        for (BeaconObject b: beacon_by_UID.values()) {
             SegmentController sc = GameServerState.instance.getSegmentControllersByName().get(b.getUID());
             if (sc == null)
                 continue;
@@ -89,7 +87,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
             StarLoader.registerListener(SegmentControllerFullyLoadedEvent.class, new Listener<SegmentControllerFullyLoadedEvent>() {
                 @Override
                 public void onEvent(SegmentControllerFullyLoadedEvent event) {
-                    BeaconObject b = beacons_by_UID.get(event.getController().getUniqueIdentifier());
+                    BeaconObject b = beacon_by_UID.get(event.getController().getUniqueIdentifier());
                     if (b == null)
                         return;
                     //FIXME infinite loop? b.activateAddon(event.getController());
@@ -115,8 +113,8 @@ public class BeaconManager extends SimpleSerializerWrapper {
     }
 
     public void clearBeacons() {
-        beacons_by_sector.clear();
-        beacons_by_UID.clear();
+        beaconUIDs_by_sector.clear();
+        beacon_by_UID.clear();
         synchAll();
     }
 
@@ -124,18 +122,19 @@ public class BeaconManager extends SimpleSerializerWrapper {
         if (GameServerState.instance == null)
             return;
 
-        ArrayList<BeaconObject> temp = new ArrayList<>(beacons_by_UID.values());
+        ArrayList<BeaconObject> temp = new ArrayList<>(beacon_by_UID.values());
         for (BeaconObject b : temp) {
             if (b == null)
                 continue;
             updateBeacon(b);
 
         }
+        synchAll();
     //    print();
     }
 
-    private BeaconObject getBeaconByUID(String UID) {
-        return beacons_by_UID.get(UID);
+    public BeaconObject getBeaconByUID(String UID) {
+        return beacon_by_UID.get(UID);
     }
 
     /**
@@ -144,11 +143,12 @@ public class BeaconManager extends SimpleSerializerWrapper {
      * @param dropPos
      */
     public BeaconObject modifyDroppoint(Vector3i warpPos, Vector3i dropPos) {
-        ArrayList<String> beacons = beacons_by_sector.get(warpPos);
+        LinkedList<String> beacons = beaconUIDs_by_sector.get(warpPos);
         if (beacons == null || beacons.size() == 0 || getBeaconByUID(beacons.get(0))==null)
             return null;
         BeaconObject pulling = getBeaconByUID(beacons.get(0));
-        dropPos.set(pulling.getPosition());
+        if (pulling.isActive())
+            dropPos.set(pulling.getPosition()); //FIXME handle inactive beacons proplery, this is a hotfix
         return pulling;
     }
 
@@ -159,7 +159,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
      */
     public void updateStrongest(Vector3i warpPos) {
         //sort the list of beacons by their strength.
-        ArrayList<String> list = beacons_by_sector.get(warpPos);
+        LinkedList<String> list = beaconUIDs_by_sector.get(warpPos);
         if (list == null)
             return;
         BeaconObject b;
@@ -175,7 +175,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
                 BeaconObject b1 = getBeaconByUID(o1);
                 BeaconObject b2 = getBeaconByUID(o2);
 
-                if (b1.getStrength()==b2.getStrength()) {
+                if (b1.getStrength()-(b1.isActive()?0:10)==b2.getStrength()-(b2.isActive()?0:10)) { //inactive = -10 strength penalty, -> order between inactive beacons not destroyed
                     random.setSeed(b1.getPosition().code());
                     return random.nextInt();
                 }
@@ -196,15 +196,15 @@ public class BeaconManager extends SimpleSerializerWrapper {
     public void addBeacon(BeaconObject beacon) {
         //FIXME decline
         Vector3i warpPos = WarpManager.getWarpSpacePos(beacon.getPosition());
-        ArrayList<String> list = beacons_by_sector.get(warpPos);
+        LinkedList<String> list = beaconUIDs_by_sector.get(warpPos);
         if (list == null) {
-            list = new ArrayList<>();
-            beacons_by_sector.put(warpPos,list);
+            list = new LinkedList<>();
+            beaconUIDs_by_sector.put(warpPos,list);
         }
         if (!list.contains(beacon.getUID())) {
             list.add(beacon.getUID());
         }
-        beacons_by_UID.put(beacon.getUID(),beacon);
+        beacon_by_UID.put(beacon.getUID(),beacon);
         if (isServer && GameServerState.instance != null) {
         //    ModPlayground.broadcastMessage("added beacon: " + beacon.getName());
             updateStrongest(warpPos);
@@ -215,12 +215,12 @@ public class BeaconManager extends SimpleSerializerWrapper {
     public void removeBeacon(BeaconObject beacon) {
 
         Vector3i warpPos = WarpManager.getWarpSpacePos(beacon.getPosition());
-        ArrayList<String> list = beacons_by_sector.get(warpPos);
+        Collection<String> list = beaconUIDs_by_sector.get(warpPos);
         if (list == null) {
             return;
         }
         list.remove(beacon.getUID());
-        beacons_by_UID.remove(beacon.getUID());
+        beacon_by_UID.remove(beacon.getUID());
         ModPlayground.broadcastMessage("REMOVING BEACON "+beacon.getUID());
         if (isServer) {
         //    ModPlayground.broadcastMessage("removed beacon: " + beacon.getName());
@@ -231,12 +231,12 @@ public class BeaconManager extends SimpleSerializerWrapper {
     }
 
     //TODO use linkedlist
-    public ArrayList<String> getBeacons(Vector3i warpPos) {
-        return beacons_by_sector.get(warpPos);
+    public Collection<String> getBeacons(Vector3i warpPos) {
+        return beaconUIDs_by_sector.get(warpPos);
     }
 
     public Collection<Vector3i> getBeaconSectors() {
-        return beacons_by_sector.keySet();
+        return beaconUIDs_by_sector.keySet();
     }
 
     public void synchAll() {
@@ -277,7 +277,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
 
         try {
             //collect ALL beacons in one big list
-            ArrayList<BeaconObject> all = new ArrayList<>(beacons_by_UID.values());
+            ArrayList<BeaconObject> all = new ArrayList<>(beacon_by_UID.values());
 
             packetWriteBuffer.writeInt(all.size());
 
@@ -293,15 +293,15 @@ public class BeaconManager extends SimpleSerializerWrapper {
     }
 
     //DEBUG STUFF
-    public void print() {
+    public String print() {
         StringBuilder b = new StringBuilder();
         b.append("BeaconManager:\n");
-        for (BeaconObject beacon: beacons_by_UID.values()) {
+        for (BeaconObject beacon: beacon_by_UID.values()) {
             b.append(beacon.getName()).append("[").append(beacon.getStrength()).append("] : ").append(beacon.getPosition().toStringPure());
             if (beacon.isGodMode())
                 b.append("  (god)");
             b.append("\n");
         }
-        ModPlayground.broadcastMessage(b.toString());
+        return  b.toString();
     }
 }
