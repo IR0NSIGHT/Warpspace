@@ -297,7 +297,8 @@ public class HUD_core {
                     if (sector.equals(69,69,69))
                         return "nice.";
                     Vector3i drop =  WarpJumpManager.getDropPoint(sector);
-                    return inWarp?"[WARP]\n"+drop.toStringPure():sector.toStringPure();
+                    boolean isBeacon = WarpJumpManager.isDroppointShifted(sector);
+                    return inWarp?"[WARP]\n"+(isBeacon?"B ":"")+drop.toStringPure():sector.toStringPure();
                 } catch (Exception e) {
                     return "error";
                 }

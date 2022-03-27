@@ -20,6 +20,8 @@ import org.schema.game.common.controller.elements.power.reactor.tree.ReactorElem
 import org.schema.game.common.data.element.ElementInformation;
 import org.schema.game.common.data.element.ElementKeyMap;
 import org.schema.game.server.data.GameServerState;
+import org.schema.schine.common.language.Lng;
+import org.schema.schine.network.server.ServerMessage;
 
 /**
  * STARMADE MOD
@@ -111,7 +113,7 @@ public class WarpBeaconAddon extends SimpleAddOn {
 
     @Override
     public boolean onExecuteServer() {
-        DebugUI.echo("BEACON ADDON EXECUTED ON SERVER",null);
+      //  DebugUI.echo("BEACON ADDON EXECUTED ON SERVER",null);
         if (!wasActive) {
             onActivation();
         }
@@ -121,9 +123,6 @@ public class WarpBeaconAddon extends SimpleAddOn {
 
     @Override
     public boolean onExecuteClient() {
-        if (getSegmentController().equals(GameClientState.instance.getPlayer().getFirstControlledTransformableWOExc())) {
-            WarpSounds.instance.queueSound(WarpSounds.Sound.beacon_activated);
-        }
         return true;
     }
 
@@ -147,21 +146,14 @@ public class WarpBeaconAddon extends SimpleAddOn {
      * called once when addon goes inactive.
      */
     private void onDeactivation() {
-        if (isOnServer()) { //serverside
-
-        }
-        else { //client side
-            // play sound
-            WarpSounds.instance.queueSound(WarpSounds.Sound.beacon_deactivated);
-        }
     }
 
     /**
      * called once when addon is activated
      */
     private void onActivation() {
-        ModPlayground.broadcastMessage("TOGGLE BEACON");
-        DebugUI.echo("beacon toggle on entity"+ getSegmentController().getName()+ " was activated",null);
+        //ModPlayground.broadcastMessage("TOGGLE BEACON");
+       // DebugUI.echo("beacon toggle on entity"+ getSegmentController().getName()+ " was activated",null);
         if (isOnServer()) {
             //get/make beacon
             beacon = WarpMain.instance.beaconManagerServer.getBeaconByUID(getSegmentController().getUniqueIdentifier());
@@ -172,12 +164,8 @@ public class WarpBeaconAddon extends SimpleAddOn {
 
             //toggle beacon
             boolean on = beacon.isActive();
-            if (on) {
-                ModPlayground.broadcastMessage("DE-ACTIVATE BEACON"+beacon.getName());
-            } else {
-                ModPlayground.broadcastMessage("ACTIVATE BEACON"+beacon.getName());
-            }
             beacon.setActive(!on);
+            getSegmentController().sendControllingPlayersServerMessage(Lng.astr("Beacon is now "+(beacon.isActive()?"active":"inactive")), ServerMessage.MESSAGE_TYPE_INFO);
         }
     }
 

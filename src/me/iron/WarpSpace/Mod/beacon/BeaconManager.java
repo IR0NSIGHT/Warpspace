@@ -13,6 +13,7 @@ import api.network.PacketWriteBuffer;
 import api.utils.StarRunnable;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
+import me.iron.WarpSpace.Mod.client.DebugUI;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.server.data.GameServerState;
@@ -58,7 +59,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
     transient private HashMap<String ,BeaconObject> beacon_by_UID = new HashMap<>();
     transient private Random random;
     public BeaconManager() {
-
+        //owo
     }
 
     public void activateAll() {
@@ -100,7 +101,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
                 @Override
                 public void run() {
                     if (next<System.currentTimeMillis()) {
-                        next = System.currentTimeMillis()+1000;
+                        next = System.currentTimeMillis()+5000;
                         try {
                             updateAllBeacons();
                         } catch (Exception e) {
@@ -126,8 +127,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
         for (BeaconObject b : temp) {
             if (b == null)
                 continue;
-            updateBeacon(b);
-
+            updateBeacon(b); //TODO collect beacons that need synch
         }
         synchAll();
     //    print();
@@ -135,6 +135,10 @@ public class BeaconManager extends SimpleSerializerWrapper {
 
     public BeaconObject getBeaconByUID(String UID) {
         return beacon_by_UID.get(UID);
+    }
+
+    public Collection<BeaconObject> getBeacons() {
+        return beacon_by_UID.values();
     }
 
     /**
@@ -239,6 +243,16 @@ public class BeaconManager extends SimpleSerializerWrapper {
         return beaconUIDs_by_sector.keySet();
     }
 
+    public boolean hasActiveBeacon(Vector3i warppos) {
+        if (!beaconUIDs_by_sector.containsKey(warppos))
+            return false;
+        Collection<String> uids = this.beaconUIDs_by_sector.get(warppos);
+        if (uids.size() == 0)
+            return false;
+        assert beacon_by_UID.containsKey(uids.iterator().next());
+        return beacon_by_UID.get(uids.iterator().next()).isActive();
+    }
+
     public void synchAll() {
         if (!WarpMain.instance.beaconManagerServer.equals(this))
             return;
@@ -254,16 +268,39 @@ public class BeaconManager extends SimpleSerializerWrapper {
     public void onDeserialize(PacketReadBuffer buffer) {
 
         try {
+            LinkedList<BeaconObject> beacons = new LinkedList<>();
             int totalSize = buffer.readInt();
             for (int i = 0; i < totalSize; i ++) {
                 BeaconObject beacon = buffer.readObject(BeaconObject.class);
                 if (beacon == null)
                     continue;
-                addBeacon(beacon);
+                beacons.add(beacon);
             }
-            if (!isServer) //clientside
-                WarpMain.instance.dropPointMapDrawer.flagForUpdate();
 
+            if (!isServer) {//clientside => received synch from server
+                for (BeaconObject b: beacons) {
+                    if (beacon_by_UID.containsKey(b.getUID())) {
+                        //beacon exists, update from dummy
+                        beacon_by_UID.get(b.getUID()).synchFromDummy(b);
+                    } else {
+                        //add new beacon if it doesnt exist yet
+                        addBeacon(b);
+                    }
+                    //delete flagged beacons
+                    if (b.isFlagForDelete()) {
+                        removeBeacon(b);
+                    }
+                }
+                WarpMain.instance.dropPointMapDrawer.flagForUpdate();
+            }
+            else {
+                //serverside => loading from persistence
+                beaconUIDs_by_sector.clear();
+                beacon_by_UID.clear();
+                for (BeaconObject b: beacons) {
+                    addBeacon(b);
+                }
+            }
         } catch (Exception e) {
             System.out.println("BEACONMANAGER BUFFER READ ERROR");
             e.printStackTrace();
@@ -274,7 +311,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
     public void onSerialize(PacketWriteBuffer packetWriteBuffer) {
         if (GameServerState.instance==null) //client doesnt need that.
             return;
-
+        //DebugUI.echo("serialize beacon mamanger",null);
         try {
             //collect ALL beacons in one big list
             ArrayList<BeaconObject> all = new ArrayList<>(beacon_by_UID.values());
@@ -297,10 +334,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
         StringBuilder b = new StringBuilder();
         b.append("BeaconManager:\n");
         for (BeaconObject beacon: beacon_by_UID.values()) {
-            b.append(beacon.getName()).append("[").append(beacon.getStrength()).append("] : ").append(beacon.getPosition().toStringPure());
-            if (beacon.isGodMode())
-                b.append("  (god)");
-            b.append("\n");
+            b.append(beacon).append("\n");
         }
         return  b.toString();
     }

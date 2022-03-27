@@ -1,12 +1,13 @@
 package me.iron.WarpSpace.Mod.beacon;
 
-import api.DebugFile;
-import api.ModPlayground;
 import api.utils.game.SegmentControllerUtils;
-import me.iron.WarpSpace.Mod.client.DebugUI;
+import me.iron.WarpSpace.Mod.WarpManager;
+import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
+import org.newdawn.slick.Game;
+import org.schema.common.util.linAlg.Vector;
 import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
-import org.schema.game.common.controller.PlayerUsableInterface;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.SpaceStation;
 import org.schema.game.common.controller.elements.power.reactor.tree.ReactorElement;
@@ -25,21 +26,36 @@ import java.io.Serializable;
  */
 public class BeaconObject implements Serializable {
     //important values
-    private Vector3i position = new Vector3i();
     private final String UID;
+    private SimpleTransformableSendableObject.EntityType entityType;
+
+    //runtime values (get updated from server to client)
+    private Vector3i position = new Vector3i();
     private int factionID;
     private int strength;
-    private SimpleTransformableSendableObject.EntityType entityType;
     private boolean godMode; //allows to skip all checks and remain as an active beacon.
     private boolean active; //state of beacon. toggled from outside
+    private boolean flagForDelete;
+    private boolean loaded;
 
     //display values
     private String name;
-    private String factionName;
 
-    //runtime values
-    transient private boolean flagForDelete;
-    transient private boolean loaded;
+    /** update with values from dummy object and fire any events connected to runtime values.
+     *
+     * @param dummy
+     */
+    public void synchFromDummy(BeaconObject dummy) {
+        this.setPosition(dummy.position);
+        this.setFactionID(dummy.factionID);
+        this.setStrength(dummy.strength);
+        this.setGodMode(dummy.godMode);
+        this.setActive(dummy.active);
+        if (dummy.isFlagForDelete())
+            setFlagForDelete();
+        this.setLoaded(dummy.loaded);
+        this.setName(dummy.name);
+    }
 
     public BeaconObject(SegmentController s) {
         this.position = s.getSector(position);
@@ -48,23 +64,9 @@ public class BeaconObject implements Serializable {
         this.name = s.getName();
 
         this.factionID = s.getFactionId();
-        if (factionID != 0)
-            this.factionName = s.getFaction().getName();
 
         this.strength = getBeaconStrength(s);
         this.entityType = s.getType();
-    }
-
-    public BeaconObject(Vector3i position, boolean loaded, String UID, int factionID, int strength, SimpleTransformableSendableObject.EntityType entityType, boolean godMode, String name, String factionName) {
-        this.position = position;
-        this.loaded = loaded;
-        this.UID = UID;
-        this.factionID = factionID;
-        this.strength = strength;
-        this.entityType = entityType;
-        this.godMode = godMode;
-        this.name = name;
-        this.factionName = factionName;
     }
 
     void update() {
@@ -76,7 +78,7 @@ public class BeaconObject implements Serializable {
 
         boolean existsDBorLoaded = EntityRequest.existsIdentifierWOExc(GameServerState.instance,UID);
         if (!existsDBorLoaded) {
-            DebugUI.echo("DELETE BEACON: UNLOADED+NOT EXIST IN DB",null);
+            //DebugUI.echo("DELETE BEACON: UNLOADED+NOT EXIST IN DB",null);
             setFlagForDelete();
             return;
         }
@@ -100,7 +102,7 @@ public class BeaconObject implements Serializable {
     private void updateLoaded(SegmentController sc) {
         if (!sc.getSector(new Vector3i()).equals(position)) {
             setFlagForDelete();
-            DebugUI.echo("DELETE BEACON: WRONG POSITION FOR BEACON",null);
+            //DebugUI.echo("DELETE BEACON: WRONG POSITION FOR BEACON",null);
             return;
         }
         boolean isHB = (sc instanceof SpaceStation && sc.isHomeBase());
@@ -110,13 +112,13 @@ public class BeaconObject implements Serializable {
             //beaconchamber is null after loading. -> is that an issue that gets solved by waiting for th chamber to be loaded in?
             if (beaconChamber == null) {
                 setFlagForDelete();
-                DebugUI.echo("DELETE BEACON: CHAMBER IS NULL",null);
+               // DebugUI.echo("DELETE BEACON: CHAMBER IS NULL",null);
 
                 //    ModPlayground.broadcastMessage("doesnt have chamber.");
                 return;
             }
             if (sc.isCoreOverheating() || isHB || beaconChamber.isDamagedRec()) {
-                DebugUI.echo("DELETE BEACON: HB/CORE-OVERHEAT/CHAMBER DAMAGED",null);
+              //  DebugUI.echo("DELETE BEACON: HB/CORE-OVERHEAT/CHAMBER DAMAGED",null);
                 setFlagForDelete();
                 return;
             }
@@ -161,12 +163,12 @@ public class BeaconObject implements Serializable {
         this.name = name;
     }
 
-    public String getFactionName() {
-        return factionName;
+    public boolean isLoaded() {
+        return loaded;
     }
 
-    public void setFactionName(String factionName) {
-        this.factionName = factionName;
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
     }
 
     public Vector3i getPosition() {
@@ -189,8 +191,26 @@ public class BeaconObject implements Serializable {
         return active;
     }
 
+    public void setFactionID(int id) {
+        this.factionID = id;
+    }
+
     public void setActive(boolean active) {
+        if (this.active != active) {
+            if (GameClientState.instance != null) {
+                Vector3i ownWarpPos = WarpManager.getWarpSpacePos(GameClientState.instance.getPlayer().getCurrentSector());
+                Vector3i beaconPos = WarpManager.getWarpSpacePos(getPosition());
+                if (ownWarpPos.equals(beaconPos))
+                    WarpSounds.instance.queueSound(
+                            (active? WarpSounds.Sound.beacon_activated:WarpSounds.Sound.beacon_deactivated)
+                    );
+            }
+        }
         this.active = active;
+    }
+
+    public void setPosition(Vector3i position) {
+        this.position = position;
     }
 
     @Override

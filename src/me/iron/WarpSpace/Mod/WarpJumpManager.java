@@ -25,7 +25,9 @@ import org.schema.schine.network.server.ServerMessage;
 import javax.vecmath.Vector3f;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * STARMADE MOD
@@ -261,6 +263,11 @@ public class WarpJumpManager {
             return false;
         }
         return true;
+    }
+
+    public static boolean isDroppointShifted(Vector3i warpSector) {
+        BeaconManager bm = (WarpMain.instance.beaconManagerServer!=null)?WarpMain.instance.beaconManagerServer:WarpMain.instance.beaconManagerClient;
+        return bm.hasActiveBeacon(warpSector);
     }
 
     /**
