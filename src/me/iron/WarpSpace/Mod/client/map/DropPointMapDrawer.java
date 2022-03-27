@@ -5,6 +5,7 @@ import api.mod.StarMod;
 import libpackage.drawer.MapDrawer;
 import libpackage.drawer.SpriteLoader;
 import libpackage.markers.SimpleMapMarker;
+import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import me.iron.WarpSpace.Mod.beacon.BeaconObject;
@@ -78,10 +79,10 @@ public class DropPointMapDrawer extends MapDrawer {
                     tempWarp.add(x,y,z);
                     tempDrop = WarpManager.getRealSpacePos(tempWarp);
                     BeaconObject beaconObject = null;
-                    if (WarpMain.instance.beaconManagerClient != null)
+                    if (WarpJumpManager.isDroppointShifted(tempWarp))
                        beaconObject = WarpMain.instance.beaconManagerClient.modifyDroppoint(tempWarp,tempDrop);
 
-                    int subsprite = (beaconObject == null)?0:1;
+                    int subsprite = (WarpJumpManager.isDroppointShifted(tempWarp))?1:0;
                     SimpleMapMarker drop = new SimpleMapMarker(mapSprite,subsprite,markerColor,posFromSector(tempDrop,true));
                     drop.setScale(0.2f);
                     addMarker(drop);
