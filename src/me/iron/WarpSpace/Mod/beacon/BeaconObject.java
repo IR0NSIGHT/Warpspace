@@ -31,6 +31,7 @@ public class BeaconObject implements Serializable {
     private int strength;
     private SimpleTransformableSendableObject.EntityType entityType;
     private boolean godMode; //allows to skip all checks and remain as an active beacon.
+    private boolean active; //state of beacon. toggled from outside
 
     //display values
     private String name;
@@ -84,8 +85,6 @@ public class BeaconObject implements Serializable {
         SegmentController beaconSC = GameServerState.instance.getSegmentControllersByName().get(UID);
         if (beaconSC != null && beaconSC.isFullyLoadedWithDock())
             updateLoaded(beaconSC);
-        //else
-        //    ModPlayground.broadcastMessage(getUID() + " is unloaded beacon.");
     }
 
     //will attempt to execute the beacon module of this segementcontroller. used when objects are loaded in.
@@ -140,7 +139,7 @@ public class BeaconObject implements Serializable {
     //getter and setter
     public void setFlagForDelete() {
         flagForDelete = true;
-    }
+    } //TODO only delete if beacon chamber is gone
 
     public boolean isFlagForDelete() {
         return flagForDelete;
@@ -184,5 +183,27 @@ public class BeaconObject implements Serializable {
 
     public String getUID() {
         return UID;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    @Override
+    public String toString() {
+        return "BeaconObject{" +
+                "position=" + position +
+                ", factionID=" + factionID +
+                ", strength=" + strength +
+                ", godMode=" + godMode +
+                ", active=" + active +
+                ", name='" + name + '\'' +
+                ", flagForDelete=" + flagForDelete +
+                ", loaded=" + loaded +
+                '}';
     }
 }
