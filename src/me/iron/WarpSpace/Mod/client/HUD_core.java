@@ -4,6 +4,7 @@ import api.listener.Listener;
 import api.listener.events.gui.HudCreateEvent;
 import api.mod.StarLoader;
 import me.iron.WarpSpace.Mod.TimedRunnable;
+import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import api.utils.StarRunnable;
@@ -295,7 +296,7 @@ public class HUD_core {
                     //im funny
                     if (sector.equals(69,69,69))
                         return "nice.";
-                    Vector3i drop =  WarpManager.getRealSpacePos(sector);
+                    Vector3i drop =  WarpJumpManager.getDropPoint(sector);
                     return inWarp?"[WARP]\n"+drop.toStringPure():sector.toStringPure();
                 } catch (Exception e) {
                     return "error";

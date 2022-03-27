@@ -141,24 +141,44 @@ public class WarpBeaconAddon extends SimpleAddOn {
 
     @Override
     public void onActive() {
-        if (GameServerState.instance != null && isActive() && (beacon == null || beacon.isFlagForDelete()))
-            deactivate();
-        notify = true;
+        if (!wasActive) {
+            onActivation();
+        }
+        wasActive = true;
     }
 
-    private boolean notify; //on deactivation
+    private boolean wasActive; //on deactivation
     @Override
     public void onInactive() { //called when?
-        if (GameClientState.instance!=null && notify && (getSegmentController().equals(GameClientState.instance.getPlayer().getFirstControlledTransformableWOExc()))) {
-            WarpSounds.instance.queueSound(WarpSounds.Sound.beacon_deactivated);
-            notify = false;
+        ModPlayground.broadcastMessage("ON INACTIVE BEACON");
+        if (wasActive) {
+            onDeactivation();
         }
-       if (GameServerState.instance != null && !isActive() && beacon != null) {
-           ModPlayground.broadcastMessage("ON INACTIVE BEACON");
-           beacon.setFlagForDelete();
-           WarpMain.instance.beaconManagerServer.updateBeacon(beacon);
-           beacon = null;
-       }
+        wasActive = false;
+    }
+
+    /**
+     * called once when addon goes inactive.
+     */
+    private void onDeactivation() {
+        ModPlayground.broadcastMessage("ON DE-ACTIVATE BEACON");
+        if (isOnServer()) { //serverside
+            if (beacon != null)
+                beacon.setFlagForDelete();
+            beacon = null;
+        }
+        else { //client side
+            // play sound
+            WarpSounds.instance.queueSound(WarpSounds.Sound.beacon_deactivated);
+        }
+    }
+
+    /**
+     * called once when addon is activated
+     */
+    private void onActivation() {
+        ModPlayground.broadcastMessage("ON ACTIVATE BEACON");
+
     }
 
     @Override

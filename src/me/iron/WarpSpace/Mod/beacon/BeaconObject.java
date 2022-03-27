@@ -1,7 +1,9 @@
 package me.iron.WarpSpace.Mod.beacon;
 
+import api.DebugFile;
 import api.ModPlayground;
 import api.utils.game.SegmentControllerUtils;
+import me.iron.WarpSpace.Mod.client.DebugUI;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
 import org.schema.game.common.controller.PlayerUsableInterface;
@@ -73,6 +75,7 @@ public class BeaconObject implements Serializable {
 
         boolean existsDBorLoaded = EntityRequest.existsIdentifierWOExc(GameServerState.instance,UID);
         if (!existsDBorLoaded) {
+            DebugUI.echo("DELETE BEACON: UNLOADED+NOT EXIST IN DB",null);
             setFlagForDelete();
             return;
         }
@@ -98,6 +101,7 @@ public class BeaconObject implements Serializable {
     private void updateLoaded(SegmentController sc) {
         if (!sc.getSector(new Vector3i()).equals(position)) {
             setFlagForDelete();
+            DebugUI.echo("DELETE BEACON: WRONG POSITION FOR BEACON",null);
             return;
         }
         boolean isHB = (sc instanceof SpaceStation && sc.isHomeBase());
@@ -107,20 +111,24 @@ public class BeaconObject implements Serializable {
             //beaconchamber is null after loading. -> is that an issue that gets solved by waiting for th chamber to be loaded in?
             if (beaconChamber == null) {
                 setFlagForDelete();
-            //    ModPlayground.broadcastMessage("doesnt have chamber.");
+                DebugUI.echo("DELETE BEACON: CHAMBER IS NULL",null);
+
+                //    ModPlayground.broadcastMessage("doesnt have chamber.");
                 return;
             }
             if (sc.isCoreOverheating() || isHB || beaconChamber.isDamagedRec()) {
+                DebugUI.echo("DELETE BEACON: HB/CORE-OVERHEAT/CHAMBER DAMAGED",null);
                 setFlagForDelete();
                 return;
             }
             WarpBeaconAddon addon = WarpBeaconAddon.getAddon(msc);
             if (addon == null) //seems to sometimes just randomly be null?
                 return;
-            if (!addon.isActive() || !addon.isPlayerUsable()) //TODO playerusable for unmanned craft too?
+            if (!addon.isActive() || !addon.isPlayerUsable()) {
+                //TODO playerusable for unmanned craft too?
                 setFlagForDelete();
-           // ModPlayground.broadcastMessage("addon for " + UID + " is active:" + addon.isActive());
-            //TODO flag for delete doesnt cause deletion?
+                DebugUI.echo("DELETE BEACON: ADDON INACTIVE/NOT PLAYERUSABLE",null);
+            }
         }
 
     }

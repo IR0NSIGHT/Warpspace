@@ -8,6 +8,7 @@ import api.utils.game.chat.CommandInterface;
 import me.iron.WarpSpace.Mod.WarpMain;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.player.PlayerState;
+import org.schema.game.server.data.GameServerState;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class DebugUI implements CommandInterface {
 
     @Override
     public String[] getAliases() {
-        return new String[]{"Warpspace","wsp"};
+        return new String[]{"Warpspace","wsp","ws"};
     }
 
     @Override
@@ -79,6 +80,7 @@ public class DebugUI implements CommandInterface {
                 b.append("]\n");
             }
             echo(b.toString(),playerState);
+            return true;
         }
         return false;
     }
@@ -93,8 +95,16 @@ public class DebugUI implements CommandInterface {
         return null;
     }
 
-    public static void echo(String mssg, PlayerState p) {
-        PlayerUtils.sendMessage(p,mssg);
+    public static void echo(String mssg, @Nullable PlayerState p) {
         DebugFile.log("[WARPSPACE-DEBUG] "+mssg);
+        if (p == null) {
+            if (GameServerState.instance!=null) {
+                for (PlayerState pl: GameServerState.instance.getPlayerStatesByName().values()) {
+                //    PlayerUtils.sendMessage(pl,mssg);
+                }
+            }
+        } else {
+            PlayerUtils.sendMessage(p,mssg);
+        }
     }
 }

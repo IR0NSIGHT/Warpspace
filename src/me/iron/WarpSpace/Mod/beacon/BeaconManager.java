@@ -221,7 +221,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
         }
         list.remove(beacon.getUID());
         beacons_by_UID.remove(beacon.getUID());
-
+        ModPlayground.broadcastMessage("REMOVING BEACON "+beacon.getUID());
         if (isServer) {
         //    ModPlayground.broadcastMessage("removed beacon: " + beacon.getName());
 

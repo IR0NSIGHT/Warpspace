@@ -1,5 +1,6 @@
 package me.iron.WarpSpace.Mod;
 
+import me.iron.WarpSpace.Mod.beacon.BeaconManager;
 import me.iron.WarpSpace.Mod.client.WarpProcessController;
 import api.common.GameServer;
 import api.mod.StarLoader;
@@ -389,8 +390,9 @@ public class WarpJumpManager {
     public static Vector3i getDropPoint(Vector3i warpSector) {
         //apply warp-beacon. inform player if beacon had effect.
         Vector3i drop = WarpManager.getRealSpacePos(warpSector);
-        WarpMain.instance.beaconManagerServer.updateStrongest(warpSector);
-        WarpMain.instance.beaconManagerServer.modifyDroppoint(warpSector, drop);
+        BeaconManager bm = (WarpMain.instance.beaconManagerServer!=null)?WarpMain.instance.beaconManagerServer:WarpMain.instance.beaconManagerClient;
+        bm.updateStrongest(warpSector);
+        bm.modifyDroppoint(warpSector, drop);
         return drop;
     }
 }
