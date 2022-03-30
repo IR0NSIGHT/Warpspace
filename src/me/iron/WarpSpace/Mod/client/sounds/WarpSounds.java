@@ -12,9 +12,14 @@ import org.schema.game.client.view.MainGameGraphics;
 import org.schema.schine.graphicsengine.core.Controller;
 import org.schema.schine.graphicsengine.util.WorldToScreenConverter;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.vecmath.Vector3f;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -35,9 +40,19 @@ public class WarpSounds {
 
           File f;
           for (int i = 0; i< Sound.values().length; i++) {
-              f = new File(path + Sound.values()[i].getSoundName()+".ogg");
+              f = new File(path + Sound.values()[i].getSoundName()+".wav");
               if (f.exists()) {
                   addSound(Sound.values()[i].getSoundName(), f);
+                  Sound sound = Sound.values()[i];
+                  try {
+                      AudioInputStream ais = AudioSystem.getAudioInputStream(f);
+                      AudioFormat format = ais.getFormat();
+                      long frames = ais.getFrameLength();
+                      double durationInSeconds = (frames+0.0)/format.getFrameRate();
+                      sound.setDuration(durationInSeconds);
+                  } catch (UnsupportedAudioFileException | IOException e) {
+                      e.printStackTrace();
+                  }
               } else {
                   new FileNotFoundException("warp sounds file " + Sound.values()[i].getSoundName()).printStackTrace();
               }
@@ -45,6 +60,8 @@ public class WarpSounds {
         initLoop();
 
     }
+
+
 
     /**
      *
@@ -112,9 +129,27 @@ public class WarpSounds {
             this.soundName = path;
         }
         private String soundName;
+        private double duration;
+
+        public double getDuration() {
+            return duration;
+        }
+
+        public void setDuration(double duration) {
+            this.duration = duration;
+        }
 
         public String getSoundName() {
             return soundName;
+        }
+
+        @Override
+        public String toString() {
+            return "Sound{" +
+                    "enum='"+this.name() + '\'' +
+                    ", soundName='" + soundName + '\'' +
+                    ", duration=" + duration +
+                    '}';
         }
     }
 }

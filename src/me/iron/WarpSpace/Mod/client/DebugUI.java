@@ -9,6 +9,7 @@ import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import me.iron.WarpSpace.Mod.beacon.BeaconObject;
+import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.server.data.GameServerState;
@@ -61,7 +62,12 @@ public class DebugUI implements CommandInterface {
 
     @Override
     public String getDescription() {
-        return "Debug command for warpspace";
+        return "Debug command for warpspace" +
+                "beacon pulls: print all pulling beacons\n" +
+                "beacon manager: print all beacon objects\n" +
+                "beacon clear: delete all beacon objects\n" +
+                "beacon toggle: invert state of all beacons\n" +
+                "sound print: print all sounds";
     }
 
     @Override
@@ -105,6 +111,16 @@ public class DebugUI implements CommandInterface {
                 return true;
             }
 
+        }
+        //sounds
+        if (strings[0].equalsIgnoreCase("sound")) {
+            if (strings[1].equalsIgnoreCase("print")) {
+                StringBuilder b = new StringBuilder("All warp-sounds:");
+                for (WarpSounds.Sound s: WarpSounds.Sound.values())
+                    b.append(s.toString()).append("\n");
+                echo(b.toString(),playerState);
+                return true;
+            }
         }
         return false;
     }
