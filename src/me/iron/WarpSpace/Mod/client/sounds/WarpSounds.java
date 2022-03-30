@@ -181,8 +181,9 @@ public class WarpSounds {
         beacon_detected("07-beacon_det"),
         beacon_activated("08-beacon_act"),
         beacon_deactivated("09-beacon_deac"),
-        jump_charge("10-warp_entry_effect");
-;
+        jump_charge("10-warp_entry_effect"),
+        warp_boom("11-warp_boom");
+
 
         Sound(String path) {
             this.soundName = path;

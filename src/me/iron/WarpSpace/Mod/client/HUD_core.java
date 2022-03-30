@@ -49,6 +49,7 @@ public class HUD_core {
     private static boolean isExit;
     private static boolean isRSPSectorBlocked;
     private static boolean isWarpSectorBlocked;
+    private static boolean inWarp;
     private static Vector3f noInhibition = new Vector3f((float)1622/1920,(float)928/1080,0.01f);
     private static Vector3f onInhibition = new Vector3f((float) 1460/1920,(float) 928/1080,0f);
 
@@ -209,11 +210,11 @@ public class HUD_core {
      */
     private static void UpdateSituation() {
         boolean dropOld = isDropping,
-        exitOld = isExit,
+        wasExitting = isExit,
         entryOld = isEntry,
         rspBlocked = isRSPSectorBlocked,
-        warpBlocked = isWarpSectorBlocked;
-
+        warpBlocked = isWarpSectorBlocked,
+        wasInWarp = inWarp;
         //DebugFile.log("updating warp situation from WarpProcessMap: ");
 
         //FIXME gives false positive on velocity close to 50: 65m/s -> fix for now: test clientside speed.
@@ -227,13 +228,19 @@ public class HUD_core {
 
         isWarpSectorBlocked = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.WARPSECTORBLOCKED) == 1);
 
+        inWarp = (GameClientState.instance.getPlayer()!=null && WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector()));
+
         //todo build listener/event system
-        if (!dropOld && isDropping && WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector())
+        if (!dropOld && isDropping && inWarp
         && GameClientState.instance.getPlayer().getFirstControlledTransformableWOExc().getSpeedCurrent() <  WarpManager.minimumSpeed) { //now dropping
             WarpSounds.instance.queueSound(WarpSounds.Sound.dropping);
         }
 
-        if (!exitOld && isExit) { //now exit
+        if (wasInWarp && !inWarp) {
+            WarpSounds.instance.playSound(WarpSounds.Sound.warp_boom);
+        }
+
+        if (!wasExitting && isExit) { //now exit
             WarpSounds.instance.queueSound(WarpSounds.Sound.warping);
         }
 
