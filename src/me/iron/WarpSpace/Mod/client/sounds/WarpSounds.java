@@ -7,19 +7,19 @@ import api.mod.StarLoader;
 import api.utils.StarRunnable;
 import api.utils.sound.AudioUtils;
 import me.iron.WarpSpace.Mod.WarpMain;
+import org.apache.commons.io.IOUtils;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.view.MainGameGraphics;
 import org.schema.schine.graphicsengine.core.Controller;
 import org.schema.schine.graphicsengine.util.WorldToScreenConverter;
+import org.schema.schine.sound.pcode.SoundManager;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.vecmath.Vector3f;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -36,6 +36,8 @@ public class WarpSounds {
     }
     public WarpSounds() {
         instance = this;
+        installSounds();
+
         String path = WarpMain.instance.getSkeleton().getResourcesFolder().getPath().replace("\\","/")+"/resources/sounds/"; //in moddata
 
           File f;
@@ -49,7 +51,7 @@ public class WarpSounds {
                       AudioFormat format = ais.getFormat();
                       long frames = ais.getFrameLength();
                       double durationInSeconds = (frames+0.0)/format.getFrameRate();
-                      sound.setDuration(durationInSeconds);
+                      sound.setDuration((long)(durationInSeconds*1000));
                   } catch (UnsupportedAudioFileException | IOException e) {
                       e.printStackTrace();
                   }
@@ -61,7 +63,56 @@ public class WarpSounds {
 
     }
 
+    /**
+     * will add sounds and install soundfiles to the client if they dont already exist.
+     */
+    private void installSounds() {
+        String folderPath = WarpMain.instance.getSkeleton().getResourcesFolder().getPath().replace("\\","/")+"/resources/sounds/"; //in moddata
+        File dir = new File(folderPath);
+        if (!dir.exists())
+            dir.mkdirs();
 
+        File file;
+        String name;
+        String path;
+        for (int i = 0; i< Sound.values().length; i++) {
+            name = Sound.values()[i].getSoundName();
+            path = folderPath + name +".wav";
+            System.out.println("trying to load sound '"+name+"' at :"+path);
+            file = new File(".",path);
+            if (!file.exists()) {
+                try {
+                    //install sound files to client
+                    String jarPath = "me/iron/WarpSpace/Mod/res/sounds/" +Sound.values()[i].getSoundName()+".wav";
+
+                    InputStream source = WarpMain.instance.getSkeleton().getClassLoader().getResourceAsStream(jarPath);
+
+                    File targetFile = new File(".",path);
+                    targetFile.createNewFile();
+
+
+                    FileOutputStream outStream = new FileOutputStream(targetFile);
+
+                    IOUtils.copy(source,outStream);
+
+                    source.close();
+                    outStream.close();
+
+                    file = new File(path);
+                    if (!file.exists()) {
+                        new FileNotFoundException().printStackTrace();
+                    } else {
+                        System.out.println("installed file at " + file.getCanonicalPath());
+                    }
+                } catch (IOException | NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+            assert file.exists():"installation of warpspace soundfiles failed";
+            addSound(name,file);
+
+        }
+    }
 
     /**
      *
@@ -99,22 +150,30 @@ public class WarpSounds {
         soundQueue.add(s);
     }
 
+    public void playSound(Sound s) {
+        String name = s.soundName;
+        AudioUtils.clientPlaySound(name,1,1);
+    }
+
     private void initLoop() {
         new StarRunnable(){
             long last;
+            long timeout;
             @Override
             public void run() {
-                if (last + 2000 < System.currentTimeMillis() && soundQueue.size() >0) {
-                    String name = soundQueue.remove(0).soundName;
+                if (last + Math.max(500,timeout) < System.currentTimeMillis() && soundQueue.size() >0) {
+                    Sound s = soundQueue.remove(0);
+                    playSound(s);
 
-                    AudioUtils.clientPlaySound(name,1,1);
-                //    ModPlayground.broadcastMessage("playing:"+name);
+                    timeout = s.getDuration();
                     last = System.currentTimeMillis();
                 }
             }
         }.runTimer(WarpMain.instance,10);
     }
     public enum Sound {
+        warping("01-warping"),
+        dropping("02-dropping"),
         warp_signature_detected("03-warp_sig_det"),
         inhibitor_detected("04-inh_det"),
         inhibitor_activated("05-inh_act"),
@@ -122,21 +181,25 @@ public class WarpSounds {
         beacon_detected("07-beacon_det"),
         beacon_activated("08-beacon_act"),
         beacon_deactivated("09-beacon_deac"),
-        warping("01-warping"),
-        dropping("02-dropping");
+        jump_charge("10-warp_entry_effect");
+;
 
         Sound(String path) {
             this.soundName = path;
         }
         private String soundName;
-        private double duration;
+        private long duration;
 
-        public double getDuration() {
+        /**
+         * in millis
+         * @return
+         */
+        public long getDuration() {
             return duration;
         }
 
-        public void setDuration(double duration) {
-            this.duration = duration;
+        public void setDuration(long millis) {
+            this.duration = millis;
         }
 
         public String getSoundName() {

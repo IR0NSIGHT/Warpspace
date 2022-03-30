@@ -239,6 +239,7 @@ public class HUD_core {
 
         if (!entryOld && isEntry) { //now warping
             WarpSounds.instance.queueSound(WarpSounds.Sound.warping);
+            WarpSounds.instance.playSound(WarpSounds.Sound.jump_charge);
         }
 
         if (!rspBlocked && isRSPSectorBlocked) { //now rps blocked

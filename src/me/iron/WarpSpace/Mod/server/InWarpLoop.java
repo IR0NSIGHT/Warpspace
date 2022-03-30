@@ -52,7 +52,7 @@ public class InWarpLoop {
                     }
                     if (countdown <= 0) {
                         //drop entity out of warp.
-                        WarpJumpManager.invokeDrop(1,ship,false, false);
+                        WarpJumpManager.invokeDrop(0,ship,false, false);
                         cancel();
                     }
                 } catch (Exception e) {

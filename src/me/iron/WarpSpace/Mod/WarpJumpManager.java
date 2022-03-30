@@ -7,6 +7,7 @@ import api.mod.StarLoader;
 import api.network.packets.PacketUtil;
 import api.utils.StarRunnable;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
+import org.lwjgl.Sys;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
@@ -53,7 +54,6 @@ public class WarpJumpManager {
      * @param force overwrite all checks, admin
      */
     public static void invokeDrop(long countdown, final SegmentController ship, final boolean isJump, boolean force) {
-        countdown *= 25; //turn seconds into ticks
         //check if already dropping
         if (!force && dropQueue.contains(ship)) { //ship already has a drop queued, and doesnt force another one.
         //    ship.sendControllingPlayersServerMessage(Lng.astr("Ship is already jumping"), ServerMessage.MESSAGE_TYPE_INFO);
@@ -77,13 +77,16 @@ public class WarpJumpManager {
             //SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,1);
         }
 
-
+        final  long dropTime = System.currentTimeMillis()+(countdown*1000);
         dropQueue.add(ship);
         new StarRunnable() {
             @Override
             public void run() {
                 if (GameServerState.isShutdown() || GameServerState.isFlagShutdown()) {
                     cancel();
+                }
+                if (System.currentTimeMillis()<dropTime) {
+                    return;
                 }
                 //remove from queue
                 dropQueue.remove(ship);
@@ -120,8 +123,9 @@ public class WarpJumpManager {
 
                 //queue sector switch
                 doSectorSwitch(ship, targetSector,true);
+                cancel();
             }
-        }.runLater(WarpMain.instance,countdown);
+        }.runTimer(WarpMain.instance,countdown);
     }
 
     /**
@@ -131,8 +135,6 @@ public class WarpJumpManager {
      * @param force true if ignore all checks and force jump anyways
      */
     public static void invokeEntry(long countdown, final SegmentController ship, boolean force) {
-        countdown *= 25; //turn seconds into ticks
-
         //check if already dropping
         if (!force && entryQueue.contains(ship)) { //ship already has a jump queued, and doesnt force another one.
             ship.sendControllingPlayersServerMessage(Lng.astr("Ship is already jumping!"), ServerMessage.MESSAGE_TYPE_INFO);
@@ -143,12 +145,15 @@ public class WarpJumpManager {
         //set entry process to true/happening
         SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,1, new ArrayList<String>());
         //ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
-
+        final long dropTime = System.currentTimeMillis() + countdown*1000; //10 seconds from now
         new StarRunnable() {
             @Override
             public void run() {
                 if (GameServerState.isShutdown() || GameServerState.isFlagShutdown()) {
                     cancel();
+                }
+                if (System.currentTimeMillis()<dropTime) {
+                    return;
                 }
                 if (entryQueue.contains(ship)) { //remove from queue
                     entryQueue.remove(ship);
@@ -176,8 +181,9 @@ public class WarpJumpManager {
                 doSectorSwitch(ship, sector,true);
                 ship.sendControllingPlayersServerMessage(Lng.astr("Entering warp"), ServerMessage.MESSAGE_TYPE_INFO);
                 //TODO add visual effects and navwaypoint change
+                cancel();
             }
-        }.runLater(WarpMain.instance,countdown);
+        }.runTimer(WarpMain.instance,1);
     }
 
     /**

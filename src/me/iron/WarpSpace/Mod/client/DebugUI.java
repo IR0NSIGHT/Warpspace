@@ -77,6 +77,7 @@ public class DebugUI implements CommandInterface {
 
     @Override
     public boolean onCommand(PlayerState playerState, String[] strings) {
+        int l = strings.length;
         if (strings.length==2 && strings[0].equalsIgnoreCase("beacon")) {
         //print active pullings
             if (strings[1].equalsIgnoreCase("pulls")) {
@@ -113,12 +114,31 @@ public class DebugUI implements CommandInterface {
 
         }
         //sounds
-        if (strings[0].equalsIgnoreCase("sound")) {
-            if (strings[1].equalsIgnoreCase("print")) {
+        if (l>0 && strings[0].equalsIgnoreCase("sound")) {
+            if (l>1 &&strings[1].equalsIgnoreCase("print")) {
                 StringBuilder b = new StringBuilder("All warp-sounds:");
+                int i = 0;
                 for (WarpSounds.Sound s: WarpSounds.Sound.values())
-                    b.append(s.toString()).append("\n");
+                    b.append(i++).append(s.toString()).append("\n");
                 echo(b.toString(),playerState);
+                return true;
+            }
+            if (l>1 && strings[1].equalsIgnoreCase("play")) {
+                int ordinal = -1;
+                if (l>2) {
+                    ordinal = Integer.parseInt(strings[2]);
+                }
+                if (ordinal == -1) {
+                    for (WarpSounds.Sound s: WarpSounds.Sound.values())
+                        WarpSounds.instance.queueSound(s);
+                    echo("Playing all sounds in a row",playerState);
+                } else {
+                    ordinal = ordinal%WarpSounds.Sound.values().length;
+                    WarpSounds.Sound s = WarpSounds.Sound.values()[ordinal];
+                    echo("playing sound with ordinal="+ordinal+" - "+s,playerState);
+                    WarpSounds.instance.queueSound(s);
+                }
+
                 return true;
             }
         }
