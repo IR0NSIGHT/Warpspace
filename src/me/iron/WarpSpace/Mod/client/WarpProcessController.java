@@ -1,7 +1,6 @@
 package me.iron.WarpSpace.Mod.client;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
 
 /**
  * STARMADE MOD
@@ -11,53 +10,64 @@ import java.util.Map;
  */
 public class WarpProcessController {
     /**
-     * map that contains all warp related processes of this player with their current state: 0 not happening, 1 happening.
-     * Example: warpEntry 1 -- currently charging drive trying to enter into warp.
-     */
-    public static HashMap<WarpProcess,Integer> WarpProcessMap = new HashMap<>();
-    public static void initMap() {
-        //TODO call init
-        for (WarpProcess s: WarpProcess.values()) {
-            WarpProcessMap.put(s,0);
-        }
-    }
-
-    /**
      * enum containing available processes that can happen to a player like jumping to warp
      */
     public enum WarpProcess {
-        WARPSECTORBLOCKED(0),
-        RSPSECTORBLOCKED(1),
-        JUMPDROP(2),
-        JUMPEXIT(3),
-        JUMPENTRY(4),
-        JUMPPULL(5),
-        TRAVEL(6),
+        WARPSECTORBLOCKED,
+        RSPSECTORBLOCKED,
+        JUMPDROP,
+        JUMPEXIT,
+        JUMPENTRY,
+        JUMPPULL,
+        TRAVEL,
 
-        SECTOR_NOEXIT(7),
-        SECTOR_NOENTRY(8),
-        PARTNER_NOEXIT(9),
-        PARTNER_NOENTRY(10);
+        SECTOR_NOEXIT,
+        SECTOR_NOENTRY,
+        PARTNER_NOEXIT,
+        PARTNER_NOENTRY,
+        IS_IN_WARP,
+        IS_INHIBITED,
+        WARP_STABILITY,
+        HAS_JUMPED;
+        private static LinkedList<WarpProcess> changedValues = new LinkedList<>();
 
-        private final int value;
-        private static Map map = new HashMap<>();
-        private WarpProcess(int value) {
-            this.value = value;
+        /**
+         * update the "map" with values from these arrays, will auto fire events AFTER ALL values were set.
+         */
+        public static void update(byte[] arr) {
+            assert arr.length == values().length;
+            for (int i = 0; i < arr.length; i++)
+                values()[i].setCurrentValue(arr[i]);
+
+            for (WarpProcess wp: changedValues)
+                for (WarpProcessListener l : wp.listeners)
+                    l.onValueChange(wp);
+        }
+        private byte currentValue = 0;
+        private byte previousValue = 0;
+        private LinkedList<WarpProcessListener> listeners = new LinkedList();
+        public byte getCurrentValue() {
+            return currentValue;
         }
 
-        static { //map enum value to int keys for reconstruction int -> enumvalue
-            for (WarpProcess s: WarpProcess.values()) {
-                map.put(s.getValue(),s);
+        public void setCurrentValue(byte currentValue) {
+            if (currentValue != this.currentValue) {
+                changedValues.add(this);
+                previousValue = this.currentValue;
+                this.currentValue = currentValue;
             }
         }
 
-        public static WarpProcess valueOf(int k) {
-            return (WarpProcess) map.get(k);
+        public byte getPreviousValue() {
+            return previousValue;
         }
 
-        public int getValue() {
-            return value;
+        public void addListener(WarpProcessListener listener) {
+            listeners.add(listener);
         }
 
+        public void removeListener(WarpProcessListener listener) {
+            listeners.remove(listener);
+        }
     }
 }

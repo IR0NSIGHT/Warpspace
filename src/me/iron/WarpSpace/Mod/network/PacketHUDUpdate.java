@@ -17,16 +17,11 @@ import java.util.List;
  * made by jake
  */
 public class PacketHUDUpdate extends Packet {
-    /**
-     * what process
-     */
-    private WarpProcessController.WarpProcess warpProcess;
 
     /**
      * value given process has: 1 happening, 0 not happening
      */
-    private Integer processValue;
-    private List<String> processArray; //for more detailed info to display (inhibitor name f.e.)
+    private byte[] arr;
 
     //TODO allow multiple HUD updates in one packet
     /**
@@ -35,19 +30,14 @@ public class PacketHUDUpdate extends Packet {
      * @param processValue what value process has (1: active, 0: inactive)
      * @param processArray String list that allows input of extra info to be displayed. currently not used.
      */
-    public PacketHUDUpdate(WarpProcessController.WarpProcess warpProcess, Integer processValue, List<String> processArray) {
-        this.warpProcess = warpProcess;
-        this.processValue = processValue;
-        this.processArray = processArray;
+    public PacketHUDUpdate(int owo) {
         //DebugFile.log("sending HUD package to client with " + this.toString());
     }
 
     @Override
     public String toString() {
         return "PacketHUDUpdate{" +
-                "warpProcess=" + warpProcess +
-                ", processValue=" + processValue +
-                ", processArray=" + processArray.toString() +
+                "arr=" + arr +
                 '}';
     }
 
@@ -60,24 +50,21 @@ public class PacketHUDUpdate extends Packet {
 
     @Override
     public void readPacketData(PacketReadBuffer buf) throws IOException {
-        warpProcess = WarpProcessController.WarpProcess.valueOf(buf.readInt());
-        processValue = buf.readInt();
-        processArray = buf.readStringList();
+        byte[] arr = buf.readByteArray();
+
         //DebugFile.log("packet reading" + this.toString());
     }
 
     @Override
     public void writePacketData(PacketWriteBuffer buf) throws IOException {
-        buf.writeInt(warpProcess.ordinal());
-        buf.writeInt(processValue);
-        buf.writeStringList(processArray);
+        buf.writeByteArray(arr);
         //DebugFile.log("packet writing" + this.toString());
     }
 
     @Override
     public void processPacketOnClient() {
         //DebugFile.log("packet class process packet on client " + this.toString());
-        HUD_core.HUD_processPacket(warpProcess,processValue, processArray);
+        HUD_core.HUD_processPacket(arr);
     }
 
     @Override

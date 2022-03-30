@@ -192,14 +192,11 @@ public class HUD_core {
     /**
      * is called by me.iron.WarpSpace.Mod.network.PacketHUDUpdate, used to transfer information from the server to the client about what a player is currently doing related to warp.
      * Sets the received info to WarpProcessController to the ProcessMap, allows additional info in processarray. dependent on what process is updated.
-     * @param value x
-     * @param process x
-     * @param processArray x
      */
-    public static void HUD_processPacket(WarpProcessController.WarpProcess process, Integer value, List<String> processArray) {
-        //TODO add method to get more precise data like time till warpdrop/jump etc.
-        playerWarpState = process;
-        WarpProcessController.WarpProcessMap.put(process, value);
+    public static void HUD_processPacket(byte[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            WarpProcessController.WarpProcess.values()[i].setCurrentValue(arr[i]);
+        }
         UpdateSituation();
     }
 
@@ -217,15 +214,15 @@ public class HUD_core {
         //DebugFile.log("updating warp situation from WarpProcessMap: ");
 
         //FIXME gives false positive on velocity close to 50: 65m/s -> fix for now: test clientside speed.
-        isDropping = ( WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPDROP) == 1);
+        isDropping = (WarpProcessController.WarpProcess.JUMPDROP.getCurrentValue() == 1);
 
-        isExit = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPEXIT) == 1);
+        isExit = (WarpProcessController.WarpProcess.JUMPEXIT.getCurrentValue() == 1);
 
-        isEntry = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.JUMPENTRY) == 1);
+        isEntry = (WarpProcessController.WarpProcess.JUMPENTRY.getCurrentValue() == 1);
 
-        isRSPSectorBlocked = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.RSPSECTORBLOCKED) == 1);
+        isRSPSectorBlocked = (WarpProcessController.WarpProcess.RSPSECTORBLOCKED.getCurrentValue() == 1);
 
-        isWarpSectorBlocked = (WarpProcessController.WarpProcessMap.get(WarpProcessController.WarpProcess.WARPSECTORBLOCKED) == 1);
+        isWarpSectorBlocked = (WarpProcessController.WarpProcess.WARPSECTORBLOCKED.getCurrentValue() == 1);
 
         //todo build listener/event system
         if (!dropOld && isDropping && WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector())

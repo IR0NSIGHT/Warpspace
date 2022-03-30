@@ -213,6 +213,7 @@ public class WarpJumpManager {
             ship.sendControllingPlayersServerMessage(Lng.astr("Jump failed, warpdrive needs to cooldown."), ServerMessage.MESSAGE_TYPE_INFO);
         }
     }
+
     /**
      * Check if a ship is allowed to enter the warp
      * @param ship segmentcontroller to check
@@ -257,6 +258,7 @@ public class WarpJumpManager {
         warpdrive.setCharge(0.0F);
         warpdrive.sendChargeUpdate();
     }
+
     public static boolean canExecuteWarpdrive(SegmentController ship) {
         //get jumpaddon
         JumpAddOn warpdrive;
