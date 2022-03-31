@@ -162,7 +162,7 @@ public class WarpSounds {
 
     public void playSound(Sound s) {
         String name = s.soundName;
-        AudioUtils.clientPlaySound(name,1,1);
+        AudioUtils.clientPlaySound(name, (float) Math.pow(10,s.standardVolume),1);
     }
 
     private void initLoop() {
@@ -182,23 +182,25 @@ public class WarpSounds {
         }.runTimer(WarpMain.instance,10);
     }
     public enum Sound {
-        warping("01-warpdrive_engange"),
-        dropping("02-dropping"),
-        warp_signature_detected("03-warp_sig_det"),
-        inhibitor_detected("04-inh_det"),
-        inhibitor_activated("05-inh_act"),
-        inhibitor_deactivated("06-inh_deact"),
-        beacon_detected("07-beacon_det"),
-        beacon_activated("08-beacon_act"),
-        beacon_deactivated("09-beacon_deac"),
-        jump_charge("10-warp_entry_effect"),
-        jump_zoom("11-warp_zoom");
+        warping("01-warpdrive_engange",2.5f),
+        dropping("02-dropping",1),
+        warp_signature_detected("03-warp_sig_det",1),
+        inhibitor_detected("04-inh_det",1),
+        inhibitor_activated("05-inh_act",1),
+        inhibitor_deactivated("06-inh_deact",1),
+        beacon_detected("07-beacon_det",1),
+        beacon_activated("08-beacon_act",1),
+        beacon_deactivated("09-beacon_deac",1),
+        jump_charge("10-warp_entry_effect",0.5f),
+        jump_zoom("11-warp_zoom",0.5f);
 ;
 
-        Sound(String path) {
+        Sound(String path, float standardVolume) {
             this.soundName = path;
+            this.standardVolume = standardVolume;
         }
         private String soundName;
+        private float standardVolume = 1;
         private long duration;
 
         /**
