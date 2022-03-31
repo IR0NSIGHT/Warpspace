@@ -73,7 +73,7 @@ public class WarpSounds {
         for (int i = 0; i< Sound.values().length; i++) {
             name = Sound.values()[i].getSoundName();
             path = folderPath + name +".wav";
-            System.out.println("trying to load sound '"+name+"' at :"+path);
+            //System.out.println("trying to load sound '"+name+"' at :"+path);
             file = new File(".",path);
             if (!file.exists()) {
                 try {
@@ -129,6 +129,8 @@ public class WarpSounds {
         EngineSounds es = new EngineSounds();
         WarpProcess.JUMPENTRY.addListener(es);
         WarpProcess.JUMPEXIT.addListener(es);
+        WarpProcess.HAS_JUMPED.addListener(es);
+        WarpProcess.JUMPDROP.addListener(es);
     }
 
     private void initDebug() {
@@ -189,7 +191,8 @@ public class WarpSounds {
         beacon_detected("07-beacon_det"),
         beacon_activated("08-beacon_act"),
         beacon_deactivated("09-beacon_deac"),
-        jump_charge("10-warp_entry_effect");
+        jump_charge("10-warp_entry_effect"),
+        jump_zoom("11-warp_zoom");
 ;
 
         Sound(String path) {

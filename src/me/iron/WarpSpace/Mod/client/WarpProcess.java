@@ -64,7 +64,7 @@ public enum WarpProcess {
                 //garbage collection
                 if (!this.equals(updater))
                     cancel();
-                System.out.println("Server-Client synch for WarpProcess");
+                //System.out.println("Server-Client synch for WarpProcess");
                 //is server(implicit)
                 for (PlayerState p: player_to_processArr.keySet())
                     if (GameServerState.instance.getPlayerStatesByName().containsKey(p.getName()))
@@ -108,7 +108,7 @@ public enum WarpProcess {
 
         //handle values that are always updated
         setProcess(p,IS_IN_WARP, WarpManager.isInWarp(p.getCurrentSector())?1:0);
-        System.out.println("synch client"+p.getName());
+        //System.out.println("synch client"+p.getName());
         if (GameClientState.instance != null && GameClientState.instance.getPlayer().equals(p)) {
             //local host -> client, skip network
             update(player_to_processArr.get(p));
@@ -130,13 +130,13 @@ public enum WarpProcess {
      * update the "map" with values from these arrays, will auto fire events AFTER ALL values were set.
      */
     public static void update(long[] arr) {
-        System.out.println("Update");
+        //System.out.println("Update");
         assert arr.length == values().length;
         for (int i = 0; i < arr.length; i++)
             values()[i].setCurrentValue(arr[i]); //auto adds process to changed values if value is different
 
         for (WarpProcess wp : changedValues) {
-            System.out.println("Value changed: "+wp);
+            //System.out.println("Value changed: "+wp);
             for (WarpProcessListener l : wp.listeners)
                 l.onValueChange(wp);
         changedValues.clear();

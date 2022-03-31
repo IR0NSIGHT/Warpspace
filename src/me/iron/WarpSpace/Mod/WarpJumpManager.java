@@ -61,6 +61,7 @@ public class WarpJumpManager {
         } else {
             //must be a speeddrop situation is already handeled by loop.
             WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,1);
+            countdown = 1000; //almost immediate drop
         }
 
         final  long dropTime = System.currentTimeMillis()+(countdown); //TODY synch time to drop with client

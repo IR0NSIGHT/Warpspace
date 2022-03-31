@@ -8,6 +8,11 @@ public class EngineSounds extends WarpProcessListener {
     public void onValueChange(WarpProcess c) {
         super.onValueChange(c);
         switch (c) {
+            case JUMPDROP:
+                if (!c.wasTrue() && c.isTrue()) {
+                    WarpSounds.instance.playSound(WarpSounds.Sound.jump_zoom);
+                }
+                break;
             case JUMPEXIT: //fallthrough
             case JUMPENTRY:
                 if (!c.wasTrue() && c.isTrue())
