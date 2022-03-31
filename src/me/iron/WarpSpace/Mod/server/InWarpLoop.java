@@ -23,7 +23,7 @@ public class InWarpLoop {
     public static void startLoop(final SegmentController ship) {
         new StarRunnable() {
             int countdown = 15;
-            int countdownMax = 15;
+            final int countdownMax = 30;
             @Override
             public void run() {
                 if (GameServerState.isFlagShutdown() || GameServerState.isShutdown() || ship == null || !ship.existsInState()) {
