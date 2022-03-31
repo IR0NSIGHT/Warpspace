@@ -1,13 +1,10 @@
 package me.iron.WarpSpace.Mod.server;
 
-import me.iron.WarpSpace.Mod.client.WarpProcessController;
 import me.iron.WarpSpace.Mod.WarpMain;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * not used. intended for allowing a mod config later on.
+ * //TODO use
  */
 public class ConfigManager {
     public static String configName = "WarpSpaceConfig.yml";
@@ -15,20 +12,11 @@ public class ConfigManager {
         warpdrop_warningsound_loudness("warpdrop_warningsound_loudness");
 
         private final String path;
-        private static Map map = new HashMap<>();
         private entries(String path) {
             this.path = path;
         }
 
-        static { //map enum value to int keys for reconstruction int -> enumvalue
-            for (WarpProcessController.WarpProcess s: WarpProcessController.WarpProcess.values()) {
-                map.put(s.getValue(),s);
-            }
-        }
 
-        public static WarpProcessController.WarpProcess valueOf(int k) {
-            return (WarpProcessController.WarpProcess) map.get(k);
-        }
 
         public String getPath() {
             return path;

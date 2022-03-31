@@ -1,7 +1,7 @@
 package me.iron.WarpSpace.Mod.Interdiction;
 
 import api.utils.StarRunnable;
-import me.iron.WarpSpace.Mod.client.WarpProcessController;
+import me.iron.WarpSpace.Mod.client.WarpProcess;
 import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
@@ -73,8 +73,8 @@ public class InterdictionHUDUpdateLoop {
                         warpinterdicted = 1;
                     }
                    // DebugFile.log("updating player on inhibition: " + player.getName() + warpPos.toString() + "warp " + warpinterdicted +rspPos.toString() + " rsp: " + rspinterdicted);
-                    WarpJumpManager.SendPlayerWarpSituation(player, WarpProcessController.WarpProcess.WARPSECTORBLOCKED,warpinterdicted, new ArrayList<String>());
-                    WarpJumpManager.SendPlayerWarpSituation(player, WarpProcessController.WarpProcess.RSPSECTORBLOCKED,rspinterdicted, new ArrayList<String>());
+                    WarpProcess.setProcess(player, WarpProcess.WARPSECTORBLOCKED,warpinterdicted);
+                    WarpProcess.setProcess(player, WarpProcess.RSPSECTORBLOCKED,rspinterdicted);
                 }
             }
         }.runTimer(WarpMain.instance,12);

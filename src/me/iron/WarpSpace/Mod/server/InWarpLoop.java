@@ -1,6 +1,6 @@
 package me.iron.WarpSpace.Mod.server;
 
-import me.iron.WarpSpace.Mod.client.WarpProcessController;
+import me.iron.WarpSpace.Mod.client.WarpProcess;
 import me.iron.WarpSpace.Mod.WarpEntityManager;
 import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
@@ -29,23 +29,28 @@ public class InWarpLoop {
                     cancel();
                 }
                 try {
+                    if (ship == null)
+                        return;
+
                     if (!WarpEntityManager.isWarpEntity(ship) || GameServerState.isShutdown()) {
                         //left warp
                     //    DebugFile.log("InWarpLoop was terminated bc server is shutdown or ship no longer in warp.");
                         cancel();
                     }
+                    WarpProcess.setProcess(ship,WarpProcess.WARP_STABILITY,countdown);
                     if (ship.getSpeedCurrent() < WarpManager.minimumSpeed) {
                         //ship is to slow, dropping out of warp!
-                        countdown --; //runs once a second
+                        countdown --; //runs once a second //TODO send warp stability
                     } else {
-                        WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,0, new ArrayList<String>());
+                        WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,0);
                         if (countdown < 12) {
                             countdown +=2;
                         }
                     }
+
+                    //is jump drop?
                     if (countdown < 10 && ship.getSpeedCurrent() < WarpManager.minimumSpeed) {
-                        WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,1, new ArrayList<String>());
-                    } else {
+                        WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,1);
                     }
                     if (countdown > 12) { //essentially caps the countdown to 10, while allowing a start buffer of extra seconds
                         countdown --;

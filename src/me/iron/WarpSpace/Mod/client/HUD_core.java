@@ -8,7 +8,6 @@ import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import api.utils.StarRunnable;
-import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.view.gui.shiphud.HudIndicatorOverlay;
@@ -42,7 +41,7 @@ public class HUD_core {
             SpriteList.PEARL,
             HUD_element.ElementType.BACKGROUND);
 
-    public static WarpProcessController.WarpProcess playerWarpState = WarpProcessController.WarpProcess.TRAVEL;
+    public static WarpProcess playerWarpState = WarpProcess.TRAVEL;
 
     private static boolean isDropping = false;
     private static boolean isEntry;
@@ -195,16 +194,15 @@ public class HUD_core {
      */
     public static void HUD_processPacket(byte[] arr) {
         for (int i = 0; i < arr.length; i++) {
-            WarpProcessController.WarpProcess.values()[i].setCurrentValue(arr[i]);
+            WarpProcess.values()[i].setCurrentValue(arr[i]);
         }
-        UpdateSituation();
     }
 
 
     /**
      * update player situation fields from WarpProcessMap
      */
-    private static void UpdateSituation() {
+    public static void UpdateHUD() {
         boolean dropOld = isDropping,
         exitOld = isExit,
         entryOld = isEntry,
@@ -214,51 +212,48 @@ public class HUD_core {
         //DebugFile.log("updating warp situation from WarpProcessMap: ");
 
         //FIXME gives false positive on velocity close to 50: 65m/s -> fix for now: test clientside speed.
-        isDropping = (WarpProcessController.WarpProcess.JUMPDROP.getCurrentValue() == 1);
+        isDropping = (WarpProcess.JUMPDROP.getCurrentValue() == 1);
 
-        isExit = (WarpProcessController.WarpProcess.JUMPEXIT.getCurrentValue() == 1);
+        isExit = (WarpProcess.JUMPEXIT.getCurrentValue() == 1);
 
-        isEntry = (WarpProcessController.WarpProcess.JUMPENTRY.getCurrentValue() == 1);
+        isEntry = (WarpProcess.JUMPENTRY.getCurrentValue() == 1);
 
-        isRSPSectorBlocked = (WarpProcessController.WarpProcess.RSPSECTORBLOCKED.getCurrentValue() == 1);
+        isRSPSectorBlocked = (WarpProcess.RSPSECTORBLOCKED.getCurrentValue() == 1);
 
-        isWarpSectorBlocked = (WarpProcessController.WarpProcess.WARPSECTORBLOCKED.getCurrentValue() == 1);
+        isWarpSectorBlocked = (WarpProcess.WARPSECTORBLOCKED.getCurrentValue() == 1);
 
         //todo build listener/event system
         if (!dropOld && isDropping && WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector())
         && GameClientState.instance.getPlayer().getFirstControlledTransformableWOExc().getSpeedCurrent() <  WarpManager.minimumSpeed) { //now dropping
-            WarpSounds.instance.queueSound(WarpSounds.Sound.dropping);
+        //    WarpSounds.instance.queueSound(WarpSounds.Sound.dropping);
         }
 
         if (!exitOld && isExit) { //now exit
-            WarpSounds.instance.queueSound(WarpSounds.Sound.warping);
+        //    WarpSounds.instance.queueSound(WarpSounds.Sound.warping);
         }
 
         if (!entryOld && isEntry) { //now warping
-            WarpSounds.instance.queueSound(WarpSounds.Sound.warping);
-            WarpSounds.instance.playSound(WarpSounds.Sound.jump_charge);
+        //    WarpSounds.instance.queueSound(WarpSounds.Sound.warping);
+        //    WarpSounds.instance.playSound(WarpSounds.Sound.jump_charge);
         }
 
         if (!rspBlocked && isRSPSectorBlocked) { //now rps blocked
-            WarpSounds.instance.queueSound(WarpSounds.Sound.inhibitor_detected);
+        //    WarpSounds.instance.queueSound(WarpSounds.Sound.inhibitor_detected);
 
         }
 
         if (!warpBlocked && isWarpSectorBlocked) { //now warp blocked
-            WarpSounds.instance.queueSound(WarpSounds.Sound.inhibitor_detected);
+        //    WarpSounds.instance.queueSound(WarpSounds.Sound.inhibitor_detected);
         }
 
         if ((warpBlocked && !isWarpSectorBlocked) || (rspBlocked && !isRSPSectorBlocked)) { //not inhibited anymore.
             //TODO "inhibitor gone/free to jump again" sound
         }
 
-
-
-
         if (GameClientState.instance == null)
             return;
         if (GameClientState.instance.getPlayer().getCurrentSector().length()<5000 || WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector()))
-            initRadarSectorGUI(); //TODO once derp fixed the damn buildsector overwriting warpspace.
+            initRadarSectorGUI();
     }
 
     /**

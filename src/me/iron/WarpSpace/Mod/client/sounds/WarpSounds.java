@@ -1,24 +1,19 @@
 package me.iron.WarpSpace.Mod.client.sounds;
 
-import api.ModPlayground;
 import api.listener.Listener;
 import api.listener.events.player.PlayerChatEvent;
 import api.mod.StarLoader;
 import api.utils.StarRunnable;
 import api.utils.sound.AudioUtils;
 import me.iron.WarpSpace.Mod.WarpMain;
+import me.iron.WarpSpace.Mod.client.WarpProcess;
 import org.apache.commons.io.IOUtils;
-import org.schema.game.client.data.GameClientState;
-import org.schema.game.client.view.MainGameGraphics;
 import org.schema.schine.graphicsengine.core.Controller;
-import org.schema.schine.graphicsengine.util.WorldToScreenConverter;
-import org.schema.schine.sound.pcode.SoundManager;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.vecmath.Vector3f;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -60,7 +55,7 @@ public class WarpSounds {
               }
           }
         initLoop();
-
+        initEventSounds();
     }
 
     /**
@@ -121,6 +116,14 @@ public class WarpSounds {
      */
     private void addSound(String name, File file) {
         Controller.getAudioManager().addSound(name,file);
+    }
+
+    public void initEventSounds() {
+        VoiceAnnouncer vc = new VoiceAnnouncer();
+        WarpProcess.JUMPDROP.addListener(vc);
+        WarpProcess.JUMPENTRY.addListener(vc);
+        WarpProcess.JUMPEXIT.addListener(vc);
+        WarpProcess.JUMPPULL.addListener(vc);
     }
 
     private void initDebug() {
