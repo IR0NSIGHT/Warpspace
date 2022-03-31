@@ -124,6 +124,11 @@ public class WarpSounds {
         WarpProcess.JUMPENTRY.addListener(vc);
         WarpProcess.JUMPEXIT.addListener(vc);
         WarpProcess.JUMPPULL.addListener(vc);
+        WarpProcess.WARP_STABILITY.addListener(vc);
+
+        EngineSounds es = new EngineSounds();
+        WarpProcess.JUMPENTRY.addListener(es);
+        WarpProcess.JUMPEXIT.addListener(es);
     }
 
     private void initDebug() {

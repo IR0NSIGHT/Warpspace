@@ -32,9 +32,9 @@ public class WarpJumpListener {
                         event.setCanceled(true); //stop jump
                         //check if ship is in warp or not, check if ship is allowed to perform the jump
                         if (WarpManager.isInWarp(event.getController()) && WarpJumpManager.isAllowedDropJump(event.getController())) { //is in warpspace, get realspace pos
-                            WarpJumpManager.invokeDrop(0,event.getController(),true, false);
+                            WarpJumpManager.invokeDrop(10000,event.getController(),true, false);
                         } else if (!WarpManager.isInWarp(event.getController())&& WarpJumpManager.isAllowedEntry(event.getController())) { //is in realspace, get warppos
-                            WarpJumpManager.invokeEntry(10,event.getController(),false); //TODO set sector on jump, not before
+                            WarpJumpManager.invokeEntry(10000,event.getController(),false); //TODO set sector on jump, not before
                         }
                     }
                 }, WarpMain.instance);

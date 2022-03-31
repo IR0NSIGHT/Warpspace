@@ -41,7 +41,7 @@ public class WarpJumpManager {
      * will drop the given ship out of warp after x seconds to specified sector.
      * will not check if ship is allowed to drop, only if it already has a drop queued.
      * Automatically handles effects etc.
-     * @param countdown do jump in x second
+     * @param countdown do jump in millis
      * @param ship ship to warp
      * @param isJump is a jump or an autodrop, will empty warpdrive if true
      * @param force overwrite all checks, admin
@@ -63,7 +63,7 @@ public class WarpJumpManager {
             WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,1);
         }
 
-        final  long dropTime = System.currentTimeMillis()+(countdown*1000); //TODY synch time to drop with client
+        final  long dropTime = System.currentTimeMillis()+(countdown); //TODY synch time to drop with client
         dropQueue.add(ship);
         //invoke sectorswitch
         new StarRunnable() {
@@ -112,12 +112,12 @@ public class WarpJumpManager {
                 doSectorSwitch(ship, targetSector,true);
                 cancel();
             }
-        }.runTimer(WarpMain.instance,countdown);
+        }.runTimer(WarpMain.instance,1);
     }
 
     /**
      * will make the given ship entry warp after x seconds to specified sector.
-     * @param countdown in seconds
+     * @param countdown in millis
      * @param ship segmentcontroller
      * @param force true if ignore all checks and force jump anyways
      */
@@ -132,7 +132,7 @@ public class WarpJumpManager {
         //set entry process to true/happening
         WarpProcess.setProcess(ship,WarpProcess.JUMPENTRY,1);
         //ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
-        final long dropTime = System.currentTimeMillis() + countdown*1000; //10 seconds from now
+        final long dropTime = System.currentTimeMillis() + countdown; //10 seconds from now
         new StarRunnable() {
             @Override
             public void run() {
