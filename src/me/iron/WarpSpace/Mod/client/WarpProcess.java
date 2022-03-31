@@ -52,7 +52,7 @@ public enum WarpProcess {
 
     public static void initUpdateLoop() {
         updater = new StarRunnable() {
-            final int wait = 5000; //millis
+            final int wait = 500; //millis
             long last = System.currentTimeMillis() + 10000;
             @Override
             public void run() {
