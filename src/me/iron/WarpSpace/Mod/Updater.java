@@ -2,6 +2,7 @@ package me.iron.WarpSpace.Mod;
 
 import api.mod.config.PersistentObjectUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -45,8 +46,24 @@ public class Updater {
     }
 
     private void executeUpdate() {
+        //wipe "resources" directory, will be recreated afterwards by other classes
+        String folderPath = WarpMain.instance.getSkeleton().getResourcesFolder().getPath().replace("\\","/")+"/resources/"; //in moddata
+        File resources = new File(folderPath);
+        if (!resources.exists())
+            return;
+
+        deleteDirectoryRecursive(resources);
     }
 
+    private boolean deleteDirectoryRecursive(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectoryRecursive(file);
+            }
+        }
+        return directoryToBeDeleted.delete();
+    }
 
     class VersionTag {
         private int[] version = new int[3];
