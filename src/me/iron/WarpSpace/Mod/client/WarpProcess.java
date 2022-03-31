@@ -1,9 +1,11 @@
 package me.iron.WarpSpace.Mod.client;
 
+import api.ModPlayground;
 import api.network.packets.PacketUtil;
 import api.utils.StarRunnable;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
+import org.lwjgl.Sys;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
@@ -44,23 +46,24 @@ public enum WarpProcess {
     public static void setProcess(SegmentController sc, WarpProcess wp, long value) {
         Collection<PlayerState> attached = ((PlayerControllable) sc).getAttachedPlayers();
         for (PlayerState p : attached)
-            setProcess(p, wp, value); //TODO switch to use long
+            setProcess(p, wp, value);
     }
 
     public static void initUpdateLoop() {
         updater = new StarRunnable() {
-            final int wait = 500; //millis
+            final int wait = 1000; //millis
             long last;
             @Override
             public void run() {
                 if (System.currentTimeMillis()<= last+wait) { //once every x millis
                     return;
                 }
+                last = System.currentTimeMillis();
 
                 //garbage collection
                 if (!this.equals(updater))
                     cancel();
-
+                System.out.println("Server-Client synch for WarpProcess");
                 //is server(implicit)
                 for (PlayerState p: player_to_processArr.keySet())
                     synchToClient(p);
@@ -78,26 +81,33 @@ public enum WarpProcess {
      */
     public static void setProcess(PlayerState p, WarpProcess wp, long value) {
         long[] arr;
-        if (player_to_processArr.containsKey(p)) {
+        if (!player_to_processArr.containsKey(p)) {
             arr = new long[values().length];
             player_to_processArr.put(p, arr);
         } else {
             arr = player_to_processArr.get(p);
         }
         arr[wp.ordinal()] = value;
+        ModPlayground.broadcastMessage("set process "+wp.name() + " to " + value + " for player "+ p.getName());
+
     }
 
     /**
-     * send update with all
-     *
+     * send update with all warpprocess values of this player to the players machine
+     * auto handles localhost updating the hostplayer
      * @param p playerstate player
      */
     public static void synchToClient(PlayerState p) {
-        //make packet with current warpprocess values of player, send it to players client
         if (!player_to_processArr.containsKey(p))
             return;
-        PacketHUDUpdate packet = new PacketHUDUpdate(player_to_processArr.get(p));
-        PacketUtil.sendPacket(p, packet);
+
+        if (GameClientState.instance != null && GameClientState.instance.getPlayer().equals(p)) {
+            //local host -> client, skip network
+            update(player_to_processArr.get(p));
+        } else { //server machine->network->client
+            PacketHUDUpdate packet = new PacketHUDUpdate(player_to_processArr.get(p));
+            PacketUtil.sendPacket(p, packet);
+        }
     }
 
     public static long[] toArray() {
@@ -116,9 +126,12 @@ public enum WarpProcess {
         for (int i = 0; i < arr.length; i++)
             values()[i].setCurrentValue(arr[i]);
 
-        for (WarpProcess wp : changedValues)
+        for (WarpProcess wp : changedValues) {
+            System.out.println("Value changed: "+wp);
             for (WarpProcessListener l : wp.listeners)
                 l.onValueChange(wp);
+        }
+
     }
 
     private long currentValue = 0; //TODO is byte sufficient, maybe use long instead?
@@ -147,5 +160,14 @@ public enum WarpProcess {
 
     public void removeListener(WarpProcessListener listener) {
         listeners.remove(listener);
+    }
+
+    @Override
+    public String toString() {
+        return "WarpProcess{" +
+                "name="+ this.name() +
+                ", currentValue=" + currentValue +
+                ", previousValue=" + previousValue +
+                '}';
     }
 }

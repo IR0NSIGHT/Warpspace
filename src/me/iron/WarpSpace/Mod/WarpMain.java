@@ -87,9 +87,10 @@ public class WarpMain extends StarMod {
         super.onServerCreated(event);
         config = getConfig("config");
 
-        WarpProcess.initUpdateLoop();
 
         WarpJumpListener.createListener();
+
+        WarpProcess.initUpdateLoop();
 
         WarpCheckLoop.loop(25);
         InterdictionHUDUpdateLoop.CreateServerLoop();

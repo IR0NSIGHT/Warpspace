@@ -30,7 +30,6 @@ public class WarpJumpListener {
                     @Override
                     public void onEvent(ShipJumpEngageEvent event) {
                         event.setCanceled(true); //stop jump
-                        Vector3i posNow = event.getOriginalSectorPos();
                         //check if ship is in warp or not, check if ship is allowed to perform the jump
                         if (WarpManager.isInWarp(event.getController()) && WarpJumpManager.isAllowedDropJump(event.getController())) { //is in warpspace, get realspace pos
                             WarpJumpManager.invokeDrop(0,event.getController(),true, false);
