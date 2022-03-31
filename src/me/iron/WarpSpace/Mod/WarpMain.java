@@ -48,9 +48,12 @@ public class WarpMain extends StarMod {
     @Override
     public void onEnable() {
         super.onEnable();
+        instance = this;
+
+        new Updater(getSkeleton().getModVersion()).runUpdate();
+
         StarLoader.registerCommand(new DebugUI());
 
-        instance = this;
 
         PacketUtil.registerPacket(PacketHUDUpdate.class);
         PacketUtil.registerPacket(BeaconUpdatePacket.class);
