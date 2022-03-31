@@ -45,6 +45,8 @@ public enum WarpProcess {
     private static HashMap<PlayerState, long[]> player_to_processArr = new HashMap<>();
     private static StarRunnable updater;
     public static void setProcess(SegmentController sc, WarpProcess wp, long value) {
+        if (!(sc instanceof  PlayerControllable))
+            return;
         Collection<PlayerState> attached = ((PlayerControllable) sc).getAttachedPlayers();
         for (PlayerState p : attached)
             setProcess(p, wp, value);
