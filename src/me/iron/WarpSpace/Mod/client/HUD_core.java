@@ -41,13 +41,7 @@ public class HUD_core {
             SpriteList.PEARL,
             HUD_element.ElementType.BACKGROUND);
 
-    public static WarpProcess playerWarpState = WarpProcess.TRAVEL;
-
-    private static boolean isDropping = false;
-    private static boolean isEntry;
-    private static boolean isExit;
-    private static boolean isRSPSectorBlocked;
-    private static boolean isWarpSectorBlocked;
+    //TODO extra info window
     private static Vector3f noInhibition = new Vector3f((float)1622/1920,(float)928/1080,0.01f);
     private static Vector3f onInhibition = new Vector3f((float) 1460/1920,(float) 928/1080,0f);
 
@@ -74,6 +68,8 @@ public class HUD_core {
                     if (GameServerState.isShutdown()) {
                         cancel();
                     }
+                    UpdateHUD();
+
                     SimpleTransformableSendableObject playerShip = player.getFirstControlledTransformableWOExc();
 
                     //turn of HUD if player is not controlling a ship
@@ -84,36 +80,31 @@ public class HUD_core {
                         return;
                     }
 
-
-                    //draw decision making method
-
                     //not server situation dependent, 100% passive
                     HUDElementController.drawType(HUD_element.ElementType.BACKGROUND,1);
                     HUDElementController.drawElement(SpriteList.SPIRAL,true);
 
-                    boolean isInWarp = WarpManager.isInWarp(player.getCurrentSector());
-                    if (isInWarp) {
+                    //situation dependend HUD, imperative
+                    if (WarpProcess.IS_IN_WARP.isTrue()) {
                         HUDElementController.drawElement(SpriteList.PEARL,true);
                         HUDElementController.drawElement(SpriteList.ARROW_TO_RSP,true);
 
                     } else {
-                        isDropping = false;
                         HUDElementController.drawElement(SpriteList.ARROW_TO_WARP,true);
                         HUDElementController.clearType(HUD_element.ElementType.PEARL);
                     }
 
-                    //TODO make prettier check for processes
-                    if ((isDropping || isExit) && ((tenthSeconds % 8) <= 4)) {
+                    if (WarpProcess.IS_IN_WARP.isTrue() && (WarpProcess.JUMPDROP.isTrue() || WarpProcess.JUMPEXIT.isTrue()) && ((tenthSeconds % 8) <= 4)) {
                         //do blinking drop icon
                         HUDElementController.drawElement(SpriteList.ARROW_TO_RSP_JUMP,true);
                     }
 
-                    if (isEntry && ((tenthSeconds % 8) <= 4)) {
+                    if (WarpProcess.JUMPENTRY.isTrue() && ((tenthSeconds % 8) <= 4)) {
                         HUDElementController.drawElement(SpriteList.ARROW_TO_WARP_JUMP,true);
                     }
 
-                    if (isWarpSectorBlocked) {
-                        if (isInWarp) { //sector locked down
+                    if (WarpProcess.WARPSECTORBLOCKED.isTrue()) {
+                        if (WarpProcess.IS_IN_WARP.isTrue()) { //sector locked down
                             HUDElementController.drawElement(SpriteList.PEARL_BLOCKED,true);
                             HUDElementController.drawElement(SpriteList.SPIRAL_BLOCKED,true);
 
@@ -122,8 +113,8 @@ public class HUD_core {
                         }
                     }
 
-                    if (isRSPSectorBlocked) {
-                        if (isInWarp) {
+                    if (WarpProcess.RSPSECTORBLOCKED.isTrue()) {
+                        if (WarpProcess.IS_IN_WARP.isTrue()) {
                             HUDElementController.drawElement(SpriteList.ARROW_TO_RSP_BLOCKED,true);
                         } else {
                             HUDElementController.drawElement(SpriteList.SPIRAL_BLOCKED,true);
@@ -189,67 +180,9 @@ public class HUD_core {
     }
 
     /**
-     * is called by me.iron.WarpSpace.Mod.network.PacketHUDUpdate, used to transfer information from the server to the client about what a player is currently doing related to warp.
-     * Sets the received info to WarpProcessController to the ProcessMap, allows additional info in processarray. dependent on what process is updated.
-     */
-    public static void HUD_processPacket(byte[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            WarpProcess.values()[i].setCurrentValue(arr[i]);
-        }
-    }
-
-
-    /**
-     * update player situation fields from WarpProcessMap
+     * overwrite custom radar if necessary //TODO handle properly instead of this leftover method
      */
     public static void UpdateHUD() {
-        boolean dropOld = isDropping,
-        exitOld = isExit,
-        entryOld = isEntry,
-        rspBlocked = isRSPSectorBlocked,
-        warpBlocked = isWarpSectorBlocked;
-
-        //DebugFile.log("updating warp situation from WarpProcessMap: ");
-
-        //FIXME gives false positive on velocity close to 50: 65m/s -> fix for now: test clientside speed.
-        isDropping = (WarpProcess.JUMPDROP.getCurrentValue() == 1);
-
-        isExit = (WarpProcess.JUMPEXIT.getCurrentValue() == 1);
-
-        isEntry = (WarpProcess.JUMPENTRY.getCurrentValue() == 1);
-
-        isRSPSectorBlocked = (WarpProcess.RSPSECTORBLOCKED.getCurrentValue() == 1);
-
-        isWarpSectorBlocked = (WarpProcess.WARPSECTORBLOCKED.getCurrentValue() == 1);
-
-        //todo build listener/event system
-        if (!dropOld && isDropping && WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector())
-        && GameClientState.instance.getPlayer().getFirstControlledTransformableWOExc().getSpeedCurrent() <  WarpManager.minimumSpeed) { //now dropping
-        //    WarpSounds.instance.queueSound(WarpSounds.Sound.dropping);
-        }
-
-        if (!exitOld && isExit) { //now exit
-        //    WarpSounds.instance.queueSound(WarpSounds.Sound.warping);
-        }
-
-        if (!entryOld && isEntry) { //now warping
-        //    WarpSounds.instance.queueSound(WarpSounds.Sound.warping);
-        //    WarpSounds.instance.playSound(WarpSounds.Sound.jump_charge);
-        }
-
-        if (!rspBlocked && isRSPSectorBlocked) { //now rps blocked
-        //    WarpSounds.instance.queueSound(WarpSounds.Sound.inhibitor_detected);
-
-        }
-
-        if (!warpBlocked && isWarpSectorBlocked) { //now warp blocked
-        //    WarpSounds.instance.queueSound(WarpSounds.Sound.inhibitor_detected);
-        }
-
-        if ((warpBlocked && !isWarpSectorBlocked) || (rspBlocked && !isRSPSectorBlocked)) { //not inhibited anymore.
-            //TODO "inhibitor gone/free to jump again" sound
-        }
-
         if (GameClientState.instance == null)
             return;
         if (GameClientState.instance.getPlayer().getCurrentSector().length()<5000 || WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector()))
@@ -278,24 +211,28 @@ public class HUD_core {
      * replaces the text of GUIText under radar so that "warp" is shown when in warp.
      */
     public static void initRadarSectorGUI() {
-        GUITextOverlay sectorPosGUI = GameClientState.instance.getWorldDrawer().getGuiDrawer().getHud().getRadar().getLocation();
-        sectorPosGUI.setTextSimple(new Object(){
-            @Override
-            public String toString() {
-                try {
-                    Vector3i sector = GameClientState.instance.getPlayer().getCurrentSector();
-                    boolean inWarp = WarpManager.isInWarp(sector);
+        try {
+            GUITextOverlay sectorPosGUI = GameClientState.instance.getWorldDrawer().getGuiDrawer().getHud().getRadar().getLocation();
+            sectorPosGUI.setTextSimple(new Object(){
+                @Override
+                public String toString() {
+                    try {
+                        Vector3i sector = GameClientState.instance.getPlayer().getCurrentSector();
+                        boolean inWarp = WarpManager.isInWarp(sector);
 
-                    //im funny
-                    if (sector.equals(69,69,69))
-                        return "nice.";
-                    Vector3i drop =  WarpJumpManager.getDropPoint(sector);
-                    boolean isBeacon = WarpJumpManager.isDroppointShifted(sector);
-                    return inWarp?"[WARP]\n"+(isBeacon?"B ":"")+drop.toStringPure():sector.toStringPure();
-                } catch (Exception e) {
-                    return "error";
+                        //im funny
+                        if (sector.equals(69,69,69))
+                            return "nice.";
+                        Vector3i drop =  WarpJumpManager.getDropPoint(sector);
+                        boolean isBeacon = WarpJumpManager.isDroppointShifted(sector);
+                        return inWarp?"[WARP]\n"+(isBeacon?"B ":"")+drop.toStringPure():sector.toStringPure();
+                    } catch (Exception e) {
+                        return "error";
+                    }
                 }
-            }
-        }); //.getText().clear();
+            });
+        }catch (NullPointerException ignored) {
+
+        };
     }
 }

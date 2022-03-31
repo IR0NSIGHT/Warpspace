@@ -4,6 +4,7 @@ import api.ModPlayground;
 import api.network.packets.PacketUtil;
 import api.utils.StarRunnable;
 import me.iron.WarpSpace.Mod.WarpMain;
+import me.iron.WarpSpace.Mod.WarpManager;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import org.lwjgl.Sys;
 import org.schema.game.client.data.GameClientState;
@@ -87,8 +88,10 @@ public enum WarpProcess {
         } else {
             arr = player_to_processArr.get(p);
         }
-        arr[wp.ordinal()] = value;
-        ModPlayground.broadcastMessage("set process "+wp.name() + " to " + value + " for player "+ p.getName());
+        if (arr[wp.ordinal()]!=value) {
+            arr[wp.ordinal()] = value;
+            ModPlayground.broadcastMessage("set process "+wp.name() + " to " + value + " for player "+ p.getName());
+        }
 
     }
 
@@ -100,6 +103,9 @@ public enum WarpProcess {
     public static void synchToClient(PlayerState p) {
         if (!player_to_processArr.containsKey(p))
             return;
+
+        //handle values that are always updated
+        setProcess(p,IS_IN_WARP, WarpManager.isInWarp(p.getCurrentSector())?1:0);
 
         if (GameClientState.instance != null && GameClientState.instance.getPlayer().equals(p)) {
             //local host -> client, skip network
@@ -124,14 +130,14 @@ public enum WarpProcess {
     public static void update(long[] arr) {
         assert arr.length == values().length;
         for (int i = 0; i < arr.length; i++)
-            values()[i].setCurrentValue(arr[i]);
+            values()[i].setCurrentValue(arr[i]); //auto adds process to changed values if value is different
 
         for (WarpProcess wp : changedValues) {
             System.out.println("Value changed: "+wp);
             for (WarpProcessListener l : wp.listeners)
                 l.onValueChange(wp);
+        changedValues.clear();
         }
-
     }
 
     private long currentValue = 0; //TODO is byte sufficient, maybe use long instead?
@@ -160,6 +166,22 @@ public enum WarpProcess {
 
     public void removeListener(WarpProcessListener listener) {
         listeners.remove(listener);
+    }
+
+    /**
+     * jank way to convert current value to bool
+     * @return
+     */
+    public boolean isTrue() {
+        return currentValue==1;
+    }
+
+    /**
+     * jank way to convert previous value to bool
+     * @return
+     */
+    public boolean wasTrue() {
+        return previousValue == 1;
     }
 
     @Override
