@@ -13,6 +13,8 @@ import java.io.File;
 import java.util.Iterator;
 import javax.sound.sampled.AudioFormat;
 import javax.vecmath.Vector3f;
+
+import org.schema.game.client.data.GameClientState;
 import org.schema.schine.graphicsengine.core.Controller;
 import org.schema.schine.graphicsengine.core.GLFrame;
 import org.schema.schine.graphicsengine.core.GlUtil;
@@ -37,7 +39,7 @@ public class SoundManager {
     private static final float DEFAULT_SOUND_RADIUS = 50.0F;
     public static float musicVolume;
     public static float soundVolume;
-    private static SoundSystem sndSystem;
+    public static SoundSystem sndSystem;
     private static boolean loaded;
     public static boolean errorGotten;
     private final ObjectArrayList<AudioEntity> currentEntities = new ObjectArrayList();
@@ -153,6 +155,21 @@ public class SoundManager {
         this.playSound(var1, var2, var3, var4, 50.0F);
     }
 
+    public void _loopSound(String sourceUID, String soundName, float volume, float pitch, float distortion) {
+        if (loaded && this.getSoundVolume() > 0.0F) {
+            SoundPoolEntry poolEntry = this.soundPoolSounds.get(soundName);
+            volume *= this.getSoundVolume();
+            if (poolEntry != null && volume > 0.0F) {
+                sndSystem.newSource(false, sourceUID, poolEntry.soundUrl, poolEntry.soundName, true, 0,0,0, 0, distortion);
+                sndSystem.setPitch(sourceUID, pitch);
+                sndSystem.setVolume(sourceUID, volume);
+                sndSystem.play(sourceUID);
+            } else {
+                System.err.println("[SOUND] WARNING: sound not found: " + sourceUID);
+            }
+        }
+    }
+
     public void playSound(AudioEntity var1, String var2, float var3, float var4, float var5) {
         if (loaded && this.getSoundVolume() != 0.0F) {
             SoundPoolEntry var6 = this.soundPoolSounds.get(var2);
@@ -173,46 +190,46 @@ public class SoundManager {
         this.playSound(var1, var2, var3, var4, var5, var6, 50.0F);
     }
 
-    public void playSound(String var1, float var2, float var3, float var4, float var5, float var6, float var7) {
+    public void playSound(String soundName, float var2, float var3, float var4, float volume, float var6, float var7) {
         if (loaded && this.getSoundVolume() != 0.0F) {
-            var5 *= this.getSoundVolume();
-            SoundManager.PlayedCheck var8;
-            if ((var8 = (SoundManager.PlayedCheck)this.playedMap.get(var1)) != null) {
-                if (var8.first < 0L) {
-                    var8.first = System.currentTimeMillis();
+            volume *= this.getSoundVolume();
+            SoundManager.PlayedCheck playedCheck;
+            if ((playedCheck = (SoundManager.PlayedCheck)this.playedMap.get(soundName)) != null) {
+                if (playedCheck.first < 0L) {
+                    playedCheck.first = System.currentTimeMillis();
                 }
 
-                if (System.currentTimeMillis() - var8.first > 100L) {
-                    var8.first = System.currentTimeMillis();
-                    var8.playedCount = 0;
+                if (System.currentTimeMillis() - playedCheck.first > 100L) {
+                    playedCheck.first = System.currentTimeMillis();
+                    playedCheck.playedCount = 0;
                 }
 
-                if (var8.playedCount > 4) {
+                if (playedCheck.playedCount > 4) {
                     return;
                 }
 
-                var8.playedCount++;
+                playedCheck.playedCount++;
             } else {
-                (var8 = new SoundManager.PlayedCheck()).first = System.currentTimeMillis();
-                var8.playedCount++;
-                this.playedMap.put(var1, var8);
+                (playedCheck = new SoundManager.PlayedCheck()).first = System.currentTimeMillis();
+                playedCheck.playedCount++;
+                this.playedMap.put(soundName, playedCheck);
             }
 
-            SoundPoolEntry var9;
-            if ((var9 = this.soundPoolSounds.get(var1)) != null && var5 > 0.0F) {
+            SoundPoolEntry soundPoolEntry;
+            if ((soundPoolEntry = this.soundPoolSounds.get(soundName)) != null && volume > 0.0F) {
                 this.latestSoundID = (this.latestSoundID + 1) % 256;
-                var1 = "sound_" + this.latestSoundID;
-                if (sndSystem.playing(var1)) {
-                    sndSystem.setLooping(var1, false);
+                soundName = "sound_" + this.latestSoundID;
+                if (sndSystem.playing(soundName)) {
+                    sndSystem.setLooping(soundName, false);
                 }
 
-                sndSystem.newSource(false, var1, var9.soundUrl, var9.soundName, false, var2, var3, var4, 2, var7);
-                sndSystem.setPitch(var1, var6);
-                sndSystem.setVolume(var1, Math.min(1.0F, var5));
-                sndSystem.setLooping(var1, false);
-                sndSystem.play(var1);
+                sndSystem.newSource(false, soundName, soundPoolEntry.soundUrl, soundPoolEntry.soundName, false, var2, var3, var4, 2, var7);
+                sndSystem.setPitch(soundName, var6);
+                sndSystem.setVolume(soundName, Math.min(1.0F, volume));
+                sndSystem.setLooping(soundName, false);
+                sndSystem.play(soundName);
             } else {
-                System.err.println("[SOUND] WARNING: sound not found: " + var1);
+                System.err.println("[SOUND] WARNING: sound not found: " + soundName);
             }
         }
     }

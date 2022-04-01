@@ -2,9 +2,8 @@ package me.iron.WarpSpace.Mod.beacon;
 
 import api.utils.game.SegmentControllerUtils;
 import me.iron.WarpSpace.Mod.WarpManager;
+import me.iron.WarpSpace.Mod.client.sounds.VoiceAnnouncer;
 import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
-import org.newdawn.slick.Game;
-import org.schema.common.util.linAlg.Vector;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
@@ -200,10 +199,12 @@ public class BeaconObject implements Serializable {
             if (GameClientState.instance != null) {
                 Vector3i ownWarpPos = WarpManager.getWarpSpacePos(GameClientState.instance.getPlayer().getCurrentSector());
                 Vector3i beaconPos = WarpManager.getWarpSpacePos(getPosition());
-                if (ownWarpPos.equals(beaconPos))
-                    WarpSounds.instance.queueSound(
-                            (active? WarpSounds.Sound.beacon_activated:WarpSounds.Sound.beacon_deactivated)
+                if (ownWarpPos.equals(beaconPos)) ;
+                    /*WarpSounds.instance.queueSound(
+                            (active? WarpSounds.SoundEntry.beacon_activated: WarpSounds.SoundEntry.beacon_deactivated), VoiceAnnouncer.queueID
                     );
+
+                     */
             }
         }
         this.active = active;

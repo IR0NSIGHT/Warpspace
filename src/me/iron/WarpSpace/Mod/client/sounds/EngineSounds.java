@@ -10,13 +10,13 @@ public class EngineSounds extends WarpProcessListener {
         switch (c) {
             case JUMPDROP:
                 if (!c.wasTrue() && c.isTrue()) {
-                    WarpSounds.instance.playSound(WarpSounds.Sound.jump_zoom);
+                //    WarpSounds.instance.playSound(WarpSounds.SoundEntry.jump_zoom);
                 }
                 break;
             case JUMPEXIT: //fallthrough
             case JUMPENTRY:
                 if (!c.wasTrue() && c.isTrue())
-                    WarpSounds.instance.playSound(WarpSounds.Sound.jump_charge);
+                //    WarpSounds.instance.playSound(WarpSounds.SoundEntry.jump_charge);
                 break;
         }
 

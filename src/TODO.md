@@ -4,4 +4,4 @@
 - mirror events onto client for sfx/vfx
   - drop timer/warp stability
 
-## sound file reinstallation
+## soundEntry file reinstallation
