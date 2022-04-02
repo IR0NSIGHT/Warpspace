@@ -20,12 +20,12 @@ public class VoiceAnnouncer extends WarpProcessListener {
                     break;
 
                 case WARP_STABILITY:
-                    if (WarpProcess.IS_IN_WARP.isTrue() && c.getPreviousValue()>=10&&c.getCurrentValue()<10) {
-                        announce(WarpSounds.SoundEntry.voice_disengage);
+                    if (WarpProcess.IS_IN_WARP.isTrue() && c.getPreviousValue()>=50&&c.getCurrentValue()<50) {
                         announce(WarpSounds.SoundEntry.voice_warp);
+                        announce(WarpSounds.SoundEntry.voice_stability);
+                        announce(WarpSounds.SoundEntry.voice_critical);
                     }
             }
-
     }
 
     private void announce(WarpSounds.SoundEntry e) {

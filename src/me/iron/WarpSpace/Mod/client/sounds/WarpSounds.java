@@ -216,8 +216,6 @@ public class WarpSounds {
         warp_boom("warp_boom",1f),
         warpambient("warpambient",1f);
 
-
-
         SoundEntry(String path, float standardVolume) {
             this.soundName = path;
             this.standardVolume = standardVolume;
