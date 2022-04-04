@@ -14,6 +14,10 @@ public class VoiceAnnouncer extends WarpProcessListener {
         //beacon stuff
         WarpProcess.DROPPOINTSHIFTED.addListener(this);
         WarpProcess.IS_IN_WARP.addListener(this);
+
+        //inhibition
+        WarpProcess.WARPSECTORBLOCKED.addListener(this);
+        WarpProcess.RSPSECTORBLOCKED.addListener(this);
     }
 
     public static String queueID = "VoiceAnnouncer";
@@ -42,7 +46,19 @@ public class VoiceAnnouncer extends WarpProcessListener {
                 case DROPPOINTSHIFTED:
                     beaconEvent(WarpProcess.IS_IN_WARP,WarpProcess.DROPPOINTSHIFTED);
                     break;
+                case RSPSECTORBLOCKED:
+                case WARPSECTORBLOCKED:
+                    inhibitionEvent(); break;
             }
+    }
+
+    private void inhibitionEvent() {
+        if ((!WarpProcess.WARPSECTORBLOCKED.wasTrue() && WarpProcess.WARPSECTORBLOCKED.isTrue()) ||
+            (!WarpProcess.RSPSECTORBLOCKED.wasTrue() && WarpProcess.RSPSECTORBLOCKED.isTrue())) {
+            //RSP or Warp inhibited.
+            announce(WarpSounds.SoundEntry.voice_inhibitor);
+            announce(WarpSounds.SoundEntry.voice_detected);
+        }
     }
 
     private void beaconEvent(WarpProcess inWarp, WarpProcess droppointShifted) {
