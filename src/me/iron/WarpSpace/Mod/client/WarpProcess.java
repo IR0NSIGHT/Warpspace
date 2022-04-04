@@ -8,6 +8,7 @@ import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
+import org.newdawn.slick.Game;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
@@ -24,6 +25,7 @@ import java.util.LinkedList;
  * on client, listeners can be added to each process, that will fire when the process' value was changed.
  */
 public enum WarpProcess {
+    DUMMMY, //doesnt do anything
     //TODO add flag of process: autoreset after send
     WARPSECTORBLOCKED,
     RSPSECTORBLOCKED,
@@ -81,13 +83,15 @@ public enum WarpProcess {
                 //System.out.println("Server-Client synch for WarpProcess");
                 //is server(implicit)
                 LinkedList<PlayerState> disconnected = new LinkedList<>();
-                for (PlayerState p: player_to_processArr.keySet())
+                for (PlayerState p: GameServerState.instance.getPlayerStatesByName().values()) {
+                    setProcess(p, DUMMMY, 0);
                     if (GameServerState.instance.getClients().containsKey(p.getClientId()) &&
-                     GameServerState.instance.getPlayerStatesByName().containsKey(p.getName()))
+                            GameServerState.instance.getPlayerStatesByName().containsKey(p.getName()))
                         synchToClient(p);
                     else {
-                        disconnected.add(p);
+                        disconnected.add(p);//todo build proper garbage collection
                     }
+                }
 
                 for (PlayerState p: disconnected) {
                     player_to_processArr.remove(p);
