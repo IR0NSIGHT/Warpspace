@@ -4,6 +4,18 @@ import me.iron.WarpSpace.Mod.client.WarpProcess;
 import me.iron.WarpSpace.Mod.client.WarpProcessListener;
 
 public class VoiceAnnouncer extends WarpProcessListener {
+    public VoiceAnnouncer() {
+        WarpProcess.JUMPDROP.addListener(this);
+        WarpProcess.JUMPENTRY.addListener(this);
+        WarpProcess.JUMPEXIT.addListener(this);
+        WarpProcess.JUMPPULL.addListener(this);
+        WarpProcess.WARP_STABILITY.addListener(this);
+
+        //beacon stuff
+        WarpProcess.DROPPOINTSHIFTED.addListener(this);
+        WarpProcess.IS_IN_WARP.addListener(this);
+    }
+
     public static String queueID = "VoiceAnnouncer";
     @Override
     public void onValueChange(WarpProcess c) {
@@ -20,12 +32,28 @@ public class VoiceAnnouncer extends WarpProcessListener {
                     break;
 
                 case WARP_STABILITY:
-                    if (WarpProcess.IS_IN_WARP.isTrue() && c.getPreviousValue()>=50&&c.getCurrentValue()<50) {
+                    if (!WarpProcess.JUMPEXIT.isTrue() && WarpProcess.IS_IN_WARP.isTrue() && c.getPreviousValue()>=50&&c.getCurrentValue()<50) {
                         announce(WarpSounds.SoundEntry.voice_warp);
                         announce(WarpSounds.SoundEntry.voice_stability);
                         announce(WarpSounds.SoundEntry.voice_critical);
                     }
+                    break;
+                case IS_IN_WARP: //fallthrough
+                case DROPPOINTSHIFTED:
+                    beaconEvent(WarpProcess.IS_IN_WARP,WarpProcess.DROPPOINTSHIFTED);
+                    break;
             }
+    }
+
+    private void beaconEvent(WarpProcess inWarp, WarpProcess droppointShifted) {
+        if ((inWarp.isTrue() && !inWarp.wasTrue() && droppointShifted.isTrue())||
+            (inWarp.isTrue() && !droppointShifted.wasTrue() && droppointShifted.isTrue())) {
+            //entered warp into shifted point OR beacon was activated in that system
+            //no shift -> shift
+            announce(WarpSounds.SoundEntry.voice_detected);
+            announce(WarpSounds.SoundEntry.voice_activated); //use "active" instead of "activated"
+            announce(WarpSounds.SoundEntry.voice_beacon);
+        }
     }
 
     private void announce(WarpSounds.SoundEntry e) {

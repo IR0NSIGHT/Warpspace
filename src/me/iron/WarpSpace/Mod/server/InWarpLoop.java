@@ -22,6 +22,8 @@ public class InWarpLoop {
     //TODO add a central method that handles an entity being put into warp so it can be called by event or cheeseloop
     public static void startLoop(final SegmentController ship) {
         new StarRunnable() {
+            long lastRun;
+            long timeOut = 200;
             int countdown = 15;
             final int countdownMax = 30;
             @Override
@@ -29,6 +31,12 @@ public class InWarpLoop {
                 if (GameServerState.isFlagShutdown() || GameServerState.isShutdown() || ship == null || !ship.existsInState()) {
                     cancel();
                 }
+
+                //precise timer
+                if (System.currentTimeMillis()<lastRun + timeOut)
+                    return;
+                lastRun = System.currentTimeMillis();
+
                 try {
                     if (ship == null)
                         return;
@@ -43,9 +51,9 @@ public class InWarpLoop {
 
                     if (ship.getSpeedCurrent() < WarpManager.minimumSpeed) {
                         //ship is to slow, dropping out of warp!
-                        countdown --; //runs once a second //TODO send warp stability
+                        countdown --; //runs once a second
                     } else {
-                        WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,0);
+                        //WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,0);
                         if (countdown < countdownMax) {
                             countdown +=2;
                         }
@@ -64,6 +72,6 @@ public class InWarpLoop {
                     DebugFile.log(e.toString());
                 }
             }
-        }.runTimer(WarpMain.instance, 10); //TODO precise timing
+        }.runTimer(WarpMain.instance, 1);
     }
 }

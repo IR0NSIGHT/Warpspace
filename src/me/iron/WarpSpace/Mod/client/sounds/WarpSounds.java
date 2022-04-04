@@ -120,11 +120,7 @@ public class WarpSounds {
 
     public void initEventSounds() {
         VoiceAnnouncer vc = new VoiceAnnouncer();
-        WarpProcess.JUMPDROP.addListener(vc);
-        WarpProcess.JUMPENTRY.addListener(vc);
-        WarpProcess.JUMPEXIT.addListener(vc);
-        WarpProcess.JUMPPULL.addListener(vc);
-        WarpProcess.WARP_STABILITY.addListener(vc);
+
 
         EngineSounds es = new EngineSounds();
         WarpProcess.JUMPENTRY.addListener(es);

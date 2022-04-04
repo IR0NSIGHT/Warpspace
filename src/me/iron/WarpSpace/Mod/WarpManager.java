@@ -91,14 +91,16 @@ public class WarpManager {
 
     /**
      * Calculate the realspace position from a warpspace position
-     * @param WarpSpacePos sector in warpspace
+     * @param warpSpacePos sector in warpspace
      * @return correlating sector in realspace
      */
-    public static Vector3i getRealSpacePos(Vector3i WarpSpacePos) {
+    public static Vector3i getRealSpacePos(Vector3i warpSpacePos) {
+        if (!isInWarp(warpSpacePos))
+            return warpSpacePos;
         Vector3i realPos;
-        Vector3f warpPosF = WarpSpacePos.toVector3f();
+        Vector3f warpPosF = warpSpacePos.toVector3f();
         warpPosF.y -= offset; //offset sectors to up (y axis)
-        random.setSeed(WarpSpacePos.code());
+        random.setSeed(warpSpacePos.code());
         warpPosF.x = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*2.25f)+warpPosF.x * scale);
         warpPosF.y = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*2.25f)+warpPosF.y * scale);
         warpPosF.z = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*2.25f)+warpPosF.z * scale);

@@ -3,10 +3,11 @@ package me.iron.WarpSpace.Mod.client;
 import api.ModPlayground;
 import api.network.packets.PacketUtil;
 import api.utils.StarRunnable;
+import me.iron.WarpSpace.Mod.Interdiction.ExtraEventLoop;
+import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
-import org.lwjgl.Sys;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
@@ -26,21 +27,32 @@ public enum WarpProcess {
     //TODO add flag of process: autoreset after send
     WARPSECTORBLOCKED,
     RSPSECTORBLOCKED,
-    JUMPDROP,
+    JUMPDROP(true,false), //will drop,
     JUMPEXIT,
     JUMPENTRY,
     JUMPPULL,
-    TRAVEL,
+    DROPPOINTSHIFTED(false,true),
 
+    TRAVEL,
     SECTOR_NOEXIT,
     SECTOR_NOENTRY,
     PARTNER_NOEXIT,
     PARTNER_NOENTRY,
-    IS_IN_WARP,
+    IS_IN_WARP(false,true),
     IS_INHIBITED,
     WARP_STABILITY,
-    HAS_JUMPED;
+    HAS_JUMPED(true,false);
+
+    protected boolean resetAfterUpdate; //reset to zero after updated.
+    protected boolean clientOnly; //ignore server input
+    WarpProcess() {}
+    WarpProcess(boolean resetAfterUpdate, boolean clientOnly) {
+        this.resetAfterUpdate = resetAfterUpdate;
+        this.clientOnly = clientOnly;
+    }
+
     private static LinkedList<WarpProcess> changedValues = new LinkedList<>();
+
     //holds wp values for each player
     private static HashMap<PlayerState, long[]> player_to_processArr = new HashMap<>();
     private static StarRunnable updater;
@@ -68,10 +80,18 @@ public enum WarpProcess {
                     cancel();
                 //System.out.println("Server-Client synch for WarpProcess");
                 //is server(implicit)
+                LinkedList<PlayerState> disconnected = new LinkedList<>();
                 for (PlayerState p: player_to_processArr.keySet())
-                    if (GameServerState.instance.getPlayerStatesByName().containsKey(p.getName()))
+                    if (GameServerState.instance.getClients().containsKey(p.getClientId()) &&
+                     GameServerState.instance.getPlayerStatesByName().containsKey(p.getName()))
                         synchToClient(p);
+                    else {
+                        disconnected.add(p);
+                    }
 
+                for (PlayerState p: disconnected) {
+                    player_to_processArr.remove(p);
+                }
             }
         };
         updater.runTimer(WarpMain.instance,1);
@@ -107,17 +127,23 @@ public enum WarpProcess {
     public static void synchToClient(PlayerState p) {
         if (!player_to_processArr.containsKey(p))
             return;
+        //FIXME PacketUtil.getServerProcessor throws nullpointer here sometimes
+        preSynchServer(p);
 
-        //handle values that are always updated
-        setProcess(p,IS_IN_WARP, WarpManager.isInWarp(p.getCurrentSector())?1:0);
         //System.out.println("synch client"+p.getName());
         if (GameClientState.instance != null && GameClientState.instance.getPlayer().equals(p)) {
             //local host -> client, skip network
             update(player_to_processArr.get(p));
+            postSynchServer(player_to_processArr.get(p));
         } else { //server machine->network->client
             PacketHUDUpdate packet = new PacketHUDUpdate(player_to_processArr.get(p));
             PacketUtil.sendPacket(p, packet);
         }
+    }
+
+    private static void preSynchServer(PlayerState p) {
+        //handle values that are always updated
+        ExtraEventLoop.updatePlayer(p);
     }
 
     public static long[] toArray() {
@@ -135,14 +161,34 @@ public enum WarpProcess {
         //System.out.println("Update");
         assert arr.length == values().length;
         for (int i = 0; i < arr.length; i++)
-            values()[i].setCurrentValue(arr[i]); //auto adds process to changed values if value is different
-
+            if (!values()[i].clientOnly) //ignore some stuff thats handled by the client
+                values()[i].setCurrentValue(arr[i]); //auto adds process to changed values if value is different
+        postSynchClient();
         for (WarpProcess wp : changedValues) {
             //System.out.println("Value changed: "+wp);
-            for (WarpProcessListener l : wp.listeners)
+            for (WarpProcessListener l : wp.listeners) {
                 l.onValueChange(wp);
-        changedValues.clear();
+            }
+
         }
+        changedValues.clear();
+
+    }
+
+    public static void postSynchServer(long[] arr) {
+        //rest values that have the "resetAfterUpdate" flag
+        for (WarpProcess wp: values())
+            if (wp.resetAfterUpdate && arr[wp.ordinal()] != 0)
+                arr[wp.ordinal()] = 0;
+    }
+
+    public static void postSynchClient() {
+        //test if beacon is affecting player position, beacon synch is handeled separately.
+        boolean droppointShifted = (WarpJumpManager.isDroppointShifted(WarpManager.getWarpSpacePos(GameClientState.instance.getPlayer().getCurrentSector())));
+        System.out.println("DROPPOINT IS SHIFTED: " + droppointShifted);
+        WarpProcess.DROPPOINTSHIFTED.setCurrentValue(droppointShifted?1:0);
+        WarpProcess.IS_IN_WARP.setCurrentValue(WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector())?1:0);
+
     }
 
     private long currentValue = 0; //TODO is byte sufficient, maybe use long instead?
@@ -154,9 +200,10 @@ public enum WarpProcess {
     }
 
     public void setCurrentValue(long currentValue) {
+        previousValue = this.currentValue;
         if (currentValue != this.currentValue) {
             changedValues.add(this);
-            previousValue = this.currentValue;
+            System.out.println("[CLIENT] set process "+this.name()+" from " + this.currentValue + " to " + currentValue);
             this.currentValue = currentValue;
         }
     }
@@ -164,6 +211,8 @@ public enum WarpProcess {
     public long getPreviousValue() {
         return previousValue;
     }
+
+    //TODO allow listener that reacts to ALL
 
     public void addListener(WarpProcessListener listener) {
         listeners.add(listener);
@@ -197,4 +246,21 @@ public enum WarpProcess {
                 ", previousValue=" + previousValue +
                 '}';
     }
+
+    /*
+    class PlayerProcessMap {
+        long[] process = new long[WarpProcess.values().length];
+        boolean[] changed = new boolean[WarpProcess.values().length];
+
+        private void setValue(WarpProcess wp, long value) {
+            process[wp.ordinal()] = value;
+            changed[wp.ordinal()] = true;
+        }
+
+        public void synchToClient() {
+
+            //after synch
+            changed = new boolean[WarpProcess.values().length];
+        }
+    } */
 }
