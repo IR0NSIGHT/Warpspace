@@ -61,7 +61,7 @@ public class WarpJumpManager {
         } else {
             //must be a speeddrop situation is already handeled by loop.
             WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,1);
-            countdown = 1000; //almost immediate drop
+            countdown = 100; //almost immediate drop
         }
 
         final  long dropTime = System.currentTimeMillis()+(countdown); //TODY synch time to drop with client
@@ -71,8 +71,8 @@ public class WarpJumpManager {
             @Override
             public void cancel() {
                 super.cancel();
-                WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,0);
-                WarpProcess.setProcess(ship,WarpProcess.JUMPEXIT,0);
+                //WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,0);
+                //WarpProcess.setProcess(ship,WarpProcess.JUMPEXIT,0);
             }
 
             @Override
@@ -168,7 +168,6 @@ public class WarpJumpManager {
                 //queue sector switch
                 doSectorSwitch(ship, sector,true);
                 ship.sendControllingPlayersServerMessage(Lng.astr("Entered warp"), ServerMessage.MESSAGE_TYPE_INFO);
-                //TODO add visual effects and navwaypoint change
                 cancel();
             }
         }.runTimer(WarpMain.instance,1);
@@ -262,7 +261,7 @@ public class WarpJumpManager {
      * @return true if interdicted
      */
     public static boolean isInterdicted(SegmentController ship, Vector3i position) {
-        //TODO add interdiction check for target sector
+        //TODO PR into starmade repo, fix there.
         JumpAddOn warpdrive;
         if(ship instanceof Ship) {
             warpdrive =((Ship)ship).getManagerContainer().getJumpAddOn();
@@ -306,7 +305,7 @@ public class WarpJumpManager {
         int inhibitorStrength = 0;
         int catchesLvl = 0;
         double inhRange = 0;
-        Vector3i currentSec = ship.getSector(new Vector3i()); //TODO refactor me and make me pretty
+        Vector3i currentSec = ship.getSector(new Vector3i());
         for (int x = -checkRange; x <= checkRange; ++x) {
             for (int y = -checkRange; y <= checkRange; ++y) {
                 for (int z = -checkRange; z <= checkRange; ++z) {

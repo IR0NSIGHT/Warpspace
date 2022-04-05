@@ -24,7 +24,6 @@ public class PacketHUDUpdate extends Packet {
      */
     private long[] arr;
 
-    //TODO allow multiple HUD updates in one packet
     /**
      * constructor
      * @param processArray String list that allows input of extra info to be displayed. currently not used.
@@ -66,7 +65,7 @@ public class PacketHUDUpdate extends Packet {
     public void processPacketOnClient() {
         //set players process "map" (enum)
         WarpProcess.update(arr);
-        HUD_core.UpdateHUD(); //TODO make listener on specific values or to all
+        HUD_core.UpdateHUD();
     }
 
     @Override

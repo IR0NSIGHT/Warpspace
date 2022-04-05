@@ -184,10 +184,10 @@ public class HUD_core {
      */
     public static void UpdateHUD() {
         if (GameClientState.instance == null)
-        if (GameClientState.instance == null)
             return;
         if (GameClientState.instance.getPlayer().getCurrentSector().length()<5000 || WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector()))
             initRadarSectorGUI();
+
     }
 
     /**

@@ -17,7 +17,7 @@ import glossar.GlossarInit;
 
 import me.iron.WarpSpace.Mod.client.*;
 import me.iron.WarpSpace.Mod.client.map.DropPointMapDrawer;
-import me.iron.WarpSpace.Mod.Interdiction.InterdictionHUDUpdateLoop;
+import me.iron.WarpSpace.Mod.Interdiction.ExtraEventLoop;
 import me.iron.WarpSpace.Mod.beacon.BeaconManager;
 import me.iron.WarpSpace.Mod.beacon.BeaconUpdatePacket;
 import me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon;
@@ -96,7 +96,7 @@ public class WarpMain extends StarMod {
         WarpProcess.initUpdateLoop();
 
         WarpCheckLoop.loop(25);
-        InterdictionHUDUpdateLoop.CreateServerLoop();
+        ExtraEventLoop.CreateServerLoop();
         beaconManagerServer = BeaconManager.getSavedOrNew(this.getSkeleton());
         beaconManagerServer.onInit();
     //    DebugChatEvent.addDebugChatListener();

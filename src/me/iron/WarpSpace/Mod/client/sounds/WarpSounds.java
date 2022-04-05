@@ -120,11 +120,7 @@ public class WarpSounds {
 
     public void initEventSounds() {
         VoiceAnnouncer vc = new VoiceAnnouncer();
-        WarpProcess.JUMPDROP.addListener(vc);
-        WarpProcess.JUMPENTRY.addListener(vc);
-        WarpProcess.JUMPEXIT.addListener(vc);
-        WarpProcess.JUMPPULL.addListener(vc);
-        WarpProcess.WARP_STABILITY.addListener(vc);
+
 
         EngineSounds es = new EngineSounds();
         WarpProcess.JUMPENTRY.addListener(es);
@@ -215,8 +211,6 @@ public class WarpSounds {
         warning_beep("warning_beep",1f),
         warp_boom("warp_boom",1f),
         warpambient("warpambient",1f);
-
-
 
         SoundEntry(String path, float standardVolume) {
             this.soundName = path;

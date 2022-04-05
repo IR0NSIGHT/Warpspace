@@ -4,6 +4,22 @@ import me.iron.WarpSpace.Mod.client.WarpProcess;
 import me.iron.WarpSpace.Mod.client.WarpProcessListener;
 
 public class VoiceAnnouncer extends WarpProcessListener {
+    public VoiceAnnouncer() {
+        WarpProcess.JUMPDROP.addListener(this);
+        WarpProcess.JUMPENTRY.addListener(this);
+        WarpProcess.JUMPEXIT.addListener(this);
+        WarpProcess.JUMPPULL.addListener(this);
+        WarpProcess.WARP_STABILITY.addListener(this);
+
+        //beacon stuff
+        WarpProcess.DROPPOINTSHIFTED.addListener(this);
+        WarpProcess.IS_IN_WARP.addListener(this);
+
+        //inhibition
+        WarpProcess.WARPSECTORBLOCKED.addListener(this);
+        WarpProcess.RSPSECTORBLOCKED.addListener(this);
+    }
+
     public static String queueID = "VoiceAnnouncer";
     @Override
     public void onValueChange(WarpProcess c) {
@@ -20,12 +36,40 @@ public class VoiceAnnouncer extends WarpProcessListener {
                     break;
 
                 case WARP_STABILITY:
-                    if (WarpProcess.IS_IN_WARP.isTrue() && c.getPreviousValue()>=10&&c.getCurrentValue()<10) {
-                        announce(WarpSounds.SoundEntry.voice_disengage);
+                    if (!WarpProcess.JUMPEXIT.isTrue() && WarpProcess.IS_IN_WARP.isTrue() && c.getPreviousValue()>=50&&c.getCurrentValue()<50) {
                         announce(WarpSounds.SoundEntry.voice_warp);
+                        announce(WarpSounds.SoundEntry.voice_stability);
+                        announce(WarpSounds.SoundEntry.voice_critical);
                     }
+                    break;
+                case IS_IN_WARP: //fallthrough
+                case DROPPOINTSHIFTED:
+                    beaconEvent(WarpProcess.IS_IN_WARP,WarpProcess.DROPPOINTSHIFTED);
+                    break;
+                case RSPSECTORBLOCKED:
+                case WARPSECTORBLOCKED:
+                    inhibitionEvent(); break;
             }
+    }
 
+    private void inhibitionEvent() {
+        if ((!WarpProcess.WARPSECTORBLOCKED.wasTrue() && WarpProcess.WARPSECTORBLOCKED.isTrue()) ||
+            (!WarpProcess.RSPSECTORBLOCKED.wasTrue() && WarpProcess.RSPSECTORBLOCKED.isTrue())) {
+            //RSP or Warp inhibited.
+            announce(WarpSounds.SoundEntry.voice_inhibitor);
+            announce(WarpSounds.SoundEntry.voice_detected);
+        }
+    }
+
+    private void beaconEvent(WarpProcess inWarp, WarpProcess droppointShifted) {
+        if ((inWarp.isTrue() && !inWarp.wasTrue() && droppointShifted.isTrue())||
+            (inWarp.isTrue() && !droppointShifted.wasTrue() && droppointShifted.isTrue())) {
+            //entered warp into shifted point OR beacon was activated in that system
+            //no shift -> shift
+            announce(WarpSounds.SoundEntry.voice_detected);
+            announce(WarpSounds.SoundEntry.voice_activated); //use "active" instead of "activated"
+            announce(WarpSounds.SoundEntry.voice_beacon);
+        }
     }
 
     private void announce(WarpSounds.SoundEntry e) {
