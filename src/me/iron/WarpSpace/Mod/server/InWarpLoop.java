@@ -24,7 +24,7 @@ public class InWarpLoop {
         new StarRunnable() {
             long lastRun;
             long timeOut = 200;
-            int countdown = 15;
+            int countdown = 30;
             final int countdownMax = 30;
             @Override
             public void run() {
