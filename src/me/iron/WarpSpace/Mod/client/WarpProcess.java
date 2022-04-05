@@ -118,7 +118,7 @@ public enum WarpProcess {
         }
         if (arr[wp.ordinal()]!=value) {
             arr[wp.ordinal()] = value;
-            ModPlayground.broadcastMessage("set process "+wp.name() + " to " + value + " for player "+ p.getName());
+            //ModPlayground.broadcastMessage("set process "+wp.name() + " to " + value + " for player "+ p.getName());
         }
 
     }
@@ -189,7 +189,6 @@ public enum WarpProcess {
     public static void postSynchClient() {
         //test if beacon is affecting player position, beacon synch is handeled separately.
         boolean droppointShifted = (WarpJumpManager.isDroppointShifted(WarpManager.getWarpSpacePos(GameClientState.instance.getPlayer().getCurrentSector())));
-        System.out.println("DROPPOINT IS SHIFTED: " + droppointShifted);
         WarpProcess.DROPPOINTSHIFTED.setCurrentValue(droppointShifted?1:0);
         WarpProcess.IS_IN_WARP.setCurrentValue(WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector())?1:0);
 
@@ -207,7 +206,7 @@ public enum WarpProcess {
         previousValue = this.currentValue;
         if (currentValue != this.currentValue) {
             changedValues.add(this);
-            System.out.println("[CLIENT] set process "+this.name()+" from " + this.currentValue + " to " + currentValue);
+            //System.out.println("[CLIENT] set process "+this.name()+" from " + this.currentValue + " to " + currentValue);
             this.currentValue = currentValue;
         }
     }

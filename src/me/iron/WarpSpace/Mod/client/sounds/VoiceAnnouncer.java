@@ -29,7 +29,7 @@ public class VoiceAnnouncer extends WarpProcessListener {
                 case JUMPEXIT: //fallthrough
                 case JUMPENTRY:
                     if (c.isTrue()) {
-                        System.out.println("player warp sound with process"+ c);
+                        //System.out.println("player warp sound with process"+ c);
                         announce(WarpSounds.SoundEntry.voice_engage);
                         announce(WarpSounds.SoundEntry.voice_warpdrive);
                         //announce(WarpSounds.SoundEntry.voice_engaged);
