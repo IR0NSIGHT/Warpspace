@@ -6,7 +6,6 @@ import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.client.WarpProcess;
 import org.apache.commons.io.IOUtils;
 import org.schema.schine.graphicsengine.core.Controller;
-import org.schema.schine.sound.pcode.SoundManager;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -14,7 +13,6 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.*;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -146,31 +144,26 @@ public class WarpSounds {
 
     public void playSound(SoundEntry s) {
         String name = s.soundName;
-        AudioUtils.clientPlaySound(name, (float) Math.pow(10,s.standardVolume),1);
+        AudioUtils.clientPlaySound(name, dbToVolume(s.standardVolume),1);
     }
 
     /**
      * @param s
-     * @param db Dezibel increase, use negative for decrease.
+     * @param volume Dezibel increase, use negative for decrease.
      * @param pitch pitch from 0 to 1
      */
-    public void playSound(SoundEntry s, float db, float pitch) {
-        float volume = dbToVolume(s.standardVolume+db);
+    public void playSound(SoundEntry s, float volume, float pitch) {
         AudioUtils.clientPlaySound(s.soundName, volume, pitch);
-        //SoundManager mng = Controller.getAudioManager();
-        //    SoundManager.sndSystem.setLooping("loopingSound01",false);
-    //    if (looping)
-    //        mng._loopSound("loopingSound01",s.getSoundName(), volume, pitch,10000);
-    //    else
-    //        mng.playSoundFX(s.getSoundName(), volume,  pitch);
     }
 
     public void playSound(SoundInstance sound) {
-        playSound(sound.soundEntry, sound.db, sound.pitch);
+        if (sound.getVolume() == 0)
+            return;
+        playSound(sound.soundEntry, sound.volume, sound.pitch);
     }
 
     public static float dbToVolume(float db) {
-        return (float)Math.pow(10,db);
+        return (float)Math.pow(10,db/10);
     }
 
     private void initLoop() {
@@ -259,22 +252,25 @@ public class WarpSounds {
     static class SoundInstance {
         SoundEntry soundEntry;
         float pitch;
-        private float db;
+        private float volume;
 
         public SoundInstance(SoundEntry e, float db, float pitch) {
             this.soundEntry = e;
-            this.db = db;
             this.pitch = pitch;
+            this.setVolume(dbToVolume(soundEntry.standardVolume+db));
         }
 
         public SoundInstance(SoundEntry soundEntry) {
             this.soundEntry = soundEntry;
             pitch = 1;
-            db = 0;
+            volume = dbToVolume(soundEntry.standardVolume);
         }
 
         public float getVolume() {
-            return dbToVolume(soundEntry.standardVolume+db);
+            return volume;
+        }
+        public void setVolume(float v) {
+            volume = v;
         }
     }
 

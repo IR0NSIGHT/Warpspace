@@ -7,8 +7,10 @@ import me.iron.WarpSpace.Mod.Interdiction.ExtraEventLoop;
 import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
+import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import org.newdawn.slick.Game;
+import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
@@ -18,6 +20,7 @@ import org.schema.game.server.data.GameServerState;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Vector;
 
 /**
  * enum containing available processes that can happen to a player like jumping to warp.
@@ -36,6 +39,7 @@ public enum WarpProcess {
     DROPPOINTSHIFTED(false,true),
 
     TRAVEL,
+    DISTANCE_TO_WP(false,true),
     SECTOR_NOEXIT,
     SECTOR_NOENTRY,
     PARTNER_NOEXIT,
@@ -186,13 +190,35 @@ public enum WarpProcess {
                 arr[wp.ordinal()] = 0;
     }
 
+    /**
+     * run after received value update from server, before events are fired. used to insert client-handled event value-updates
+     */
     public static void postSynchClient() {
+        if (GameClientState.instance == null || GameClientState.instance.getPlayer() == null)
+            return;
         //test if beacon is affecting player position, beacon synch is handeled separately.
         boolean droppointShifted = (WarpJumpManager.isDroppointShifted(WarpManager.getWarpSpacePos(GameClientState.instance.getPlayer().getCurrentSector())));
         WarpProcess.DROPPOINTSHIFTED.setCurrentValue(droppointShifted?1:0);
         WarpProcess.IS_IN_WARP.setCurrentValue(WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector())?1:0);
 
-    }
+        if (GameClientState.instance.getController().getClientGameData().getWaypoint() != null) {
+            Vector3i offSetWP;
+            if (WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector())) {
+                offSetWP = new Vector3i(GameClientState.instance.getController().getClientGameData().getWaypoint());
+                offSetWP = WarpJumpManager.getDropPoint(offSetWP);
+                Vector3i currentPos = WarpJumpManager.getDropPoint(GameClientState.instance.getPlayer().getCurrentSector());
+                offSetWP.sub(currentPos);
+            } else {
+                offSetWP = new Vector3i(GameClientState.instance.getController().getClientGameData().getWaypoint());
+                Vector3i currentPos = GameClientState.instance.getPlayer().getCurrentSector();
+                offSetWP.sub(currentPos);
+            }
+            WarpProcess.DISTANCE_TO_WP.setCurrentValue((long) (offSetWP.length()*GameClientState.instance.getSectorSize())); //distance to waypoint in meters
+            System.out.println(":"+ DISTANCE_TO_WP);
+        } else {
+            WarpProcess.DISTANCE_TO_WP.setCurrentValue(0); //distance to waypoint in meters
+        }
+   }
 
     private long currentValue = 0; //TODO is byte sufficient, maybe use long instead?
     private long previousValue = 0;

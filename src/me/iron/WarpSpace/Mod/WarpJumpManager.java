@@ -341,6 +341,7 @@ public class WarpJumpManager {
     }
 
     public static Vector3i getDropPoint(Vector3i warpSector) {
+        warpSector = new Vector3i(warpSector);
         //apply warp-beacon. inform player if beacon had effect.
         Vector3i drop = WarpManager.getRealSpacePos(warpSector);
         BeaconManager bm = (WarpMain.instance.beaconManagerServer!=null)?WarpMain.instance.beaconManagerServer:WarpMain.instance.beaconManagerClient;

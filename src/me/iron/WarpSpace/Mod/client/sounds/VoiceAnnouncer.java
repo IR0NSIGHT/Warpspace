@@ -2,6 +2,8 @@ package me.iron.WarpSpace.Mod.client.sounds;
 
 import me.iron.WarpSpace.Mod.client.WarpProcess;
 import me.iron.WarpSpace.Mod.client.WarpProcessListener;
+import me.iron.WarpSpace.Mod.server.ConfigManager;
+import org.schema.schine.sound.pcode.SoundManager;
 
 public class VoiceAnnouncer extends WarpProcessListener {
     public VoiceAnnouncer() {
@@ -18,6 +20,9 @@ public class VoiceAnnouncer extends WarpProcessListener {
         //inhibition
         WarpProcess.WARPSECTORBLOCKED.addListener(this);
         WarpProcess.RSPSECTORBLOCKED.addListener(this);
+
+        //waypoint
+        WarpProcess.DISTANCE_TO_WP.addListener(this);
     }
 
     public static String queueID = "VoiceAnnouncer";
@@ -50,7 +55,18 @@ public class VoiceAnnouncer extends WarpProcessListener {
                 case RSPSECTORBLOCKED:
                 case WARPSECTORBLOCKED:
                     inhibitionEvent(); break;
+                case DISTANCE_TO_WP:
+                    waypointEvent(c); break;
+
             }
+    }
+
+    private void waypointEvent(WarpProcess wp) {
+        if (WarpProcess.IS_IN_WARP.isTrue() && wp.getPreviousValue()>0 && wp.getCurrentValue()==0) {
+            //reached waypoint in warp
+            announce(WarpSounds.SoundEntry.voice_droppoint);
+            announce(WarpSounds.SoundEntry.voice_reached);
+        }
     }
 
     private void inhibitionEvent() {
@@ -74,7 +90,10 @@ public class VoiceAnnouncer extends WarpProcessListener {
     }
 
     private void announce(WarpSounds.SoundEntry e) {
-        WarpSounds.instance.queueSound(e ,VoiceAnnouncer.queueID);
+        if (!ConfigManager.ConfigEntry.sfx_voice_enable.isTrue())
+            return;
+
+        WarpSounds.instance.queueSound(new WarpSounds.SoundInstance(e, ConfigManager.ConfigEntry.sfx_voice_loudness.getValue(), 1),queueID);
 
     }
 }

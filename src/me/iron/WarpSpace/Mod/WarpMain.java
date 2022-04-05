@@ -23,6 +23,7 @@ import me.iron.WarpSpace.Mod.beacon.BeaconUpdatePacket;
 import me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon;
 import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
+import me.iron.WarpSpace.Mod.server.ConfigManager;
 import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
@@ -49,6 +50,8 @@ public class WarpMain extends StarMod {
     public void onEnable() {
         super.onEnable();
         instance = this;
+
+        new ConfigManager(this);
 
         new Updater(getSkeleton().getModVersion()).runUpdate();
 
@@ -88,8 +91,6 @@ public class WarpMain extends StarMod {
     @Override
     public void onServerCreated(ServerInitializeEvent event) {
         super.onServerCreated(event);
-        config = getConfig("config");
-
 
         WarpJumpListener.createListener();
 
