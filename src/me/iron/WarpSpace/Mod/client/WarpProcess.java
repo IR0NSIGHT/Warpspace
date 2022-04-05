@@ -214,7 +214,7 @@ public enum WarpProcess {
                 offSetWP.sub(currentPos);
             }
             WarpProcess.DISTANCE_TO_WP.setCurrentValue((long) (offSetWP.length()*GameClientState.instance.getSectorSize())); //distance to waypoint in meters
-            System.out.println(":"+ DISTANCE_TO_WP);
+            //System.out.println(":"+ DISTANCE_TO_WP);
         } else {
             WarpProcess.DISTANCE_TO_WP.setCurrentValue(0); //distance to waypoint in meters
         }
