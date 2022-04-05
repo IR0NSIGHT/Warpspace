@@ -15,7 +15,6 @@ import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.server.data.GameServerState;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collection;
 
 
@@ -118,7 +117,7 @@ public class DebugUI implements CommandInterface {
             if (l>1 &&strings[1].equalsIgnoreCase("print")) {
                 StringBuilder b = new StringBuilder("All warp-sounds:");
                 int i = 0;
-                for (WarpSounds.Sound s: WarpSounds.Sound.values())
+                for (WarpSounds.SoundEntry s: WarpSounds.SoundEntry.values())
                     b.append(i++).append(s.toString()).append("\n");
                 echo(b.toString(),playerState);
                 return true;
@@ -128,15 +127,19 @@ public class DebugUI implements CommandInterface {
                 if (l>2) {
                     ordinal = Integer.parseInt(strings[2]);
                 }
+                boolean loop = false;
+                if (l>3) {
+                    loop = Boolean.parseBoolean(strings[3]);
+                }
                 if (ordinal == -1) {
-                    for (WarpSounds.Sound s: WarpSounds.Sound.values())
-                        WarpSounds.instance.queueSound(s);
+                    for (WarpSounds.SoundEntry s: WarpSounds.SoundEntry.values())
+                        WarpSounds.instance.queueSound(s,"debug");
                     echo("Playing all sounds in a row",playerState);
                 } else {
-                    ordinal = ordinal%WarpSounds.Sound.values().length;
-                    WarpSounds.Sound s = WarpSounds.Sound.values()[ordinal];
-                    echo("playing sound with ordinal="+ordinal+" - "+s,playerState);
-                    WarpSounds.instance.queueSound(s);
+                    ordinal = ordinal% WarpSounds.SoundEntry.values().length;
+                    WarpSounds.SoundEntry s = WarpSounds.SoundEntry.values()[ordinal];
+                    echo("playing sound with ordinal="+ordinal+" - "+s + " looping: " + loop,playerState);
+                    WarpSounds.instance.playSound(s,1,1); //TODO allow pitch and volume control
                 }
 
                 return true;

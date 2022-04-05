@@ -1,21 +1,16 @@
 package me.iron.WarpSpace.Mod;
 
 import me.iron.WarpSpace.Mod.beacon.BeaconManager;
-import me.iron.WarpSpace.Mod.client.WarpProcessController;
+import me.iron.WarpSpace.Mod.client.WarpProcess;
 import api.common.GameServer;
 import api.mod.StarLoader;
-import api.network.packets.PacketUtil;
 import api.utils.StarRunnable;
-import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
-import org.lwjgl.Sys;
 import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.controller.elements.jumpdrive.JumpAddOn;
 import org.schema.game.common.data.ManagedSegmentController;
 import org.schema.game.common.data.blockeffects.config.StatusEffectType;
-import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.Sector;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.controller.SectorSwitch;
@@ -26,9 +21,7 @@ import org.schema.schine.network.server.ServerMessage;
 import javax.vecmath.Vector3f;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * STARMADE MOD
@@ -48,7 +41,7 @@ public class WarpJumpManager {
      * will drop the given ship out of warp after x seconds to specified sector.
      * will not check if ship is allowed to drop, only if it already has a drop queued.
      * Automatically handles effects etc.
-     * @param countdown do jump in x second
+     * @param countdown do jump in millis
      * @param ship ship to warp
      * @param isJump is a jump or an autodrop, will empty warpdrive if true
      * @param force overwrite all checks, admin
@@ -56,38 +49,41 @@ public class WarpJumpManager {
     public static void invokeDrop(long countdown, final SegmentController ship, final boolean isJump, boolean force) {
         //check if already dropping
         if (!force && dropQueue.contains(ship)) { //ship already has a drop queued, and doesnt force another one.
-        //    ship.sendControllingPlayersServerMessage(Lng.astr("Ship is already jumping"), ServerMessage.MESSAGE_TYPE_INFO);
-            //TODO abort already queued jump -> click to jump, click again to abort
             return;
         }
-        final boolean isRandom;
         if (ship.getType().equals(SimpleTransformableSendableObject.EntityType.SPACE_STATION) )
         {
-            //its a spacestation. drop to a random sector.
-            // reason: could drop second station into realspace sector by spawning in warp otherwise.
-            // also: could drop battlestation from warp into sector, maybe even homebase
-            isRandom = true;
+            //TODO handle space station in warp
         }
-        //--------------before action is taken
-        //--------------after action is taken
+        //set process values for attached players
         if (isJump) {
-            SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPEXIT, 1, new ArrayList<String>()); //set exiting process to true
+            WarpProcess.setProcess(ship, WarpProcess.JUMPEXIT, 1);
         } else {
             //must be a speeddrop situation is already handeled by loop.
-            //SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,1);
+            WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,1);
+            countdown = 1000; //almost immediate drop
         }
 
-        final  long dropTime = System.currentTimeMillis()+(countdown*1000);
+        final  long dropTime = System.currentTimeMillis()+(countdown); //TODY synch time to drop with client
         dropQueue.add(ship);
+        //invoke sectorswitch
         new StarRunnable() {
             @Override
+            public void cancel() {
+                super.cancel();
+                WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,0);
+                WarpProcess.setProcess(ship,WarpProcess.JUMPEXIT,0);
+            }
+
+            @Override
             public void run() {
-                if (GameServerState.isShutdown() || GameServerState.isFlagShutdown()) {
+                if (GameServerState.isShutdown() || GameServerState.isFlagShutdown()) { //obsolete?
                     cancel();
                 }
-                if (System.currentTimeMillis()<dropTime) {
+                if (System.currentTimeMillis()<dropTime) { //wait timer
                     return;
                 }
+
                 //remove from queue
                 dropQueue.remove(ship);
 
@@ -100,15 +96,11 @@ public class WarpJumpManager {
                 Vector3i targetSector = getDropPoint(warpPos);
 
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,warpPos,targetSector);
-                StarLoader.fireEvent(e, true);
+            //    StarLoader.fireEvent(e, true); //TODO hook for other mods, needs custom eventsystem in SL
 
                 if (isJump) {
-                    SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPEXIT, 0, new ArrayList<String>());
-                } else {
-                    //is a speeddrop (drop bc to slow)
-                    SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,0, new ArrayList<String>());
+                    emptyWarpdrive(ship);
                 }
-
 
                 if (e.isCanceled() || !isAllowedDropJump(ship)) {
                     cancel();
@@ -116,21 +108,17 @@ public class WarpJumpManager {
                 }
                 //-- event
 
-                if (isJump) {
-                    //empty warpdrive
-                    emptyWarpdrive(ship);
-                }
 
                 //queue sector switch
                 doSectorSwitch(ship, targetSector,true);
                 cancel();
             }
-        }.runTimer(WarpMain.instance,countdown);
+        }.runTimer(WarpMain.instance,1);
     }
 
     /**
      * will make the given ship entry warp after x seconds to specified sector.
-     * @param countdown in seconds
+     * @param countdown in millis
      * @param ship segmentcontroller
      * @param force true if ignore all checks and force jump anyways
      */
@@ -143,9 +131,9 @@ public class WarpJumpManager {
         entryQueue.add(ship);
 
         //set entry process to true/happening
-        SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,1, new ArrayList<String>());
+        WarpProcess.setProcess(ship,WarpProcess.JUMPENTRY,1);
         //ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
-        final long dropTime = System.currentTimeMillis() + countdown*1000; //10 seconds from now
+        final long dropTime = System.currentTimeMillis() + countdown; //10 seconds from now
         new StarRunnable() {
             @Override
             public void run() {
@@ -167,7 +155,7 @@ public class WarpJumpManager {
                 StarLoader.fireEvent(e, true);
 
                 //for all attached players send travel update, bc drop is over
-                SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPENTRY,0, new ArrayList<String>());
+                WarpProcess.setProcess(ship,WarpProcess.JUMPENTRY,0);
 
                 if (e.isCanceled() || !WarpJumpManager.isAllowedEntry(ship)) {
                     cancel();
@@ -179,28 +167,17 @@ public class WarpJumpManager {
                 emptyWarpdrive(ship);
                 //queue sector switch
                 doSectorSwitch(ship, sector,true);
-                ship.sendControllingPlayersServerMessage(Lng.astr("Entering warp"), ServerMessage.MESSAGE_TYPE_INFO);
+                ship.sendControllingPlayersServerMessage(Lng.astr("Entered warp"), ServerMessage.MESSAGE_TYPE_INFO);
                 //TODO add visual effects and navwaypoint change
                 cancel();
             }
         }.runTimer(WarpMain.instance,1);
     }
 
-    /**
-     * get a random sector in a 500 x 100 x 500 radius
-     * @return random pos Vector3i
-     */
-    private static Vector3i getRandomSector() {
-        Vector3i sector = new Vector3i();
-        sector.x = (int) Math.round(Math.random() * 1000 - 500);
-        sector.y = (int) Math.round(Math.random() * 200 - 100);
-        sector.z = (int) Math.round(Math.random() * 1000 - 500);
-        return sector;
-    }
-
     public static void doSectorSwitch(SegmentController ship, Vector3i newPos, boolean instant) {
         SectorSwitch sectorSwitch = GameServer.getServerState().getController().queueSectorSwitch(ship,newPos,SectorSwitch.TRANS_JUMP,false,true,true);
         if (sectorSwitch != null) {
+            WarpProcess.setProcess(ship,WarpProcess.HAS_JUMPED,1);
             sectorSwitch.delay = System.currentTimeMillis();
             if (!instant) {
                 sectorSwitch.delay += 4000;
@@ -213,6 +190,7 @@ public class WarpJumpManager {
             ship.sendControllingPlayersServerMessage(Lng.astr("Jump failed, warpdrive needs to cooldown."), ServerMessage.MESSAGE_TYPE_INFO);
         }
     }
+
     /**
      * Check if a ship is allowed to enter the warp
      * @param ship segmentcontroller to check
@@ -257,6 +235,7 @@ public class WarpJumpManager {
         warpdrive.setCharge(0.0F);
         warpdrive.sendChargeUpdate();
     }
+
     public static boolean canExecuteWarpdrive(SegmentController ship) {
         //get jumpaddon
         JumpAddOn warpdrive;
@@ -360,44 +339,6 @@ public class WarpJumpManager {
         }
 
         return retVal;
-    }
-
-    /**
-     * check if ship is interdicted at its current position
-     * @param ship ship to check for
-     * @return true if is interdicted
-     */
-    public static boolean isInterdicted(SegmentController ship) {
-        return isInterdicted(ship,ship.getSector(new Vector3i()));
-    }
-
-    /**
-     * send hud update to specific player client computer
-     * @param p playerstate player
-     * @param s process thats happening
-     * @param v value of process
-     * @param processArray extra info, not used atm
-     */
-    public static void SendPlayerWarpSituation(PlayerState p, WarpProcessController.WarpProcess s, Integer v, List<String> processArray) {
-        //make packet with new wp, send it to players client
-        PacketHUDUpdate packet = new PacketHUDUpdate(s, v, processArray);
-        PacketUtil.sendPacket(p, packet);
-    }
-
-    /**
-     * send HUD update to all clients of attached players of this segmentcontroller
-     * @param sc ship
-     * @param process warpprocess
-     * @param processValue value of warpprocess (0 = off, 1 = on)
-     * @param processArray extra info, not used atm
-     */
-    public static void SendPlayerWarpSituation(SegmentController sc, WarpProcessController.WarpProcess process, Integer processValue, List<String> processArray) {
-            if ((sc instanceof PlayerControllable && !((PlayerControllable)sc).getAttachedPlayers().isEmpty()))
-            {
-                for (PlayerState p: ((PlayerControllable)sc).getAttachedPlayers()) {
-                    SendPlayerWarpSituation(p,process,processValue, processArray);
-                }
-            }
     }
 
     public static Vector3i getDropPoint(Vector3i warpSector) {

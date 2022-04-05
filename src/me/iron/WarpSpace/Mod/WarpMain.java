@@ -26,7 +26,6 @@ import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
-import me.iron.WarpSpace.Mod.visuals.BackgroundEventListener;
 import me.iron.WarpSpace.Mod.visuals.WarpSkybox;
 import org.schema.schine.resource.ResourceLoader;
 
@@ -49,10 +48,12 @@ public class WarpMain extends StarMod {
     @Override
     public void onEnable() {
         super.onEnable();
+        instance = this;
+
+        new Updater(getSkeleton().getModVersion()).runUpdate();
+
         StarLoader.registerCommand(new DebugUI());
 
-        BackgroundEventListener.AddListener(); //add background color listener
-        instance = this;
 
         PacketUtil.registerPacket(PacketHUDUpdate.class);
         PacketUtil.registerPacket(BeaconUpdatePacket.class);
@@ -89,7 +90,10 @@ public class WarpMain extends StarMod {
         super.onServerCreated(event);
         config = getConfig("config");
 
+
         WarpJumpListener.createListener();
+
+        WarpProcess.initUpdateLoop();
 
         WarpCheckLoop.loop(25);
         InterdictionHUDUpdateLoop.CreateServerLoop();
@@ -101,7 +105,6 @@ public class WarpMain extends StarMod {
     @Override
     public void onClientCreated(ClientInitializeEvent event) {
         super.onClientCreated(event);
-        WarpProcessController.initMap(); //build situation map for warp processes
         SpriteList.init();
         HUD_core.initList();
         GUIeventhandler.addHUDDrawListener();

@@ -22,7 +22,7 @@ uniform float timeBasis;
 uniform float distortedTime;
 const float noiseScrollTimeCoeff = 0.05; //multiplier for distorted time
 
-uniform float warpDepth; //TODO
+uniform float warpDepth;
 uniform vec3 vesselOrigin; //in world pos of ship
 uniform vec3 flightVel;
 uniform float maxSpeed;

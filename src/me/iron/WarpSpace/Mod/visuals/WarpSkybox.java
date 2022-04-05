@@ -1,5 +1,6 @@
 package me.iron.WarpSpace.Mod.visuals;
 
+import api.ModPlayground;
 import api.listener.Listener;
 import api.listener.events.draw.RegisterWorldDrawersEvent;
 import api.utils.draw.ModWorldDrawer;
@@ -11,6 +12,7 @@ import com.bulletphysics.dynamics.character.KinematicCharacterController;
 import com.bulletphysics.linearmath.Transform;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
+import me.iron.WarpSpace.Mod.client.WarpProcess;
 import org.lwjgl.opengl.GL11;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
@@ -105,25 +107,21 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
 
     @Override
     public void update(Timer timer) {
-        boolean warping;
+        float maxChangePerFrame = 1/1000f; //x frames to go from 0 to 1
         ManagedUsableSegmentController<?> vessel = null;
+        active = WarpProcess.IS_IN_WARP.isTrue();
+        if (!active)
+            return;
         if(GameClientState.instance != null) {
             vessel = currentlyOnBoardEntity();
-            warping = WarpManager.isInWarp(getClientPlayerState().getCurrentSector());
-            float deltaD = 0f;
-            if (vessel != null && warping && warpDepth < 1 && WarpManager.minimumSpeed < vessel.getSpeedCurrent()) {
-                deltaD = timer.getDelta() * 0.4f;
+            //smoothly transition to desired warpdepth
+            float trueDepth = WarpProcess.WARP_STABILITY.getCurrentValue()/100f;
+            if (warpDepth < trueDepth) {
+                warpDepth = Math.min(trueDepth,warpDepth+maxChangePerFrame);
+            } else if (warpDepth > trueDepth) {
+                warpDepth = Math.max(trueDepth,warpDepth-maxChangePerFrame);
             }
-            if(warpDepth > 0 && (vessel != null && warping && WarpManager.minimumSpeed > vessel.getSpeedCurrent())){
-                deltaD = timer.getDelta() * -0.1f; //10s?
-            }
-            else if (warpDepth > 0 && (vessel == null || !warping || WarpManager.minimumSpeed > vessel.getSpeedCurrent())){
-                deltaD = (timer.getDelta()) * -0.6f;
-            }
-            warpDepth += deltaD;
         }
-        active = warpDepth > EPSILON;
-
         if(active){
             time += timer.getDelta() * 5.05F;
             if(vessel != null) distortedTime += timer.getDelta() * 5.05F * (vessel.getSpeedCurrent() / vessel.getMaxServerSpeed());
@@ -132,8 +130,6 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
             time = 0;
             distortedTime = 0;
         }
-
-        warpDepth = clamp(warpDepth,0,1); //defensive
     } //for shader
 
     @Override

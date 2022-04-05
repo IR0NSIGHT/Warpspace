@@ -1,26 +1,21 @@
 package me.iron.WarpSpace.Mod.client.sounds;
 
-import api.ModPlayground;
-import api.listener.Listener;
-import api.listener.events.player.PlayerChatEvent;
-import api.mod.StarLoader;
 import api.utils.StarRunnable;
 import api.utils.sound.AudioUtils;
 import me.iron.WarpSpace.Mod.WarpMain;
+import me.iron.WarpSpace.Mod.client.WarpProcess;
 import org.apache.commons.io.IOUtils;
-import org.schema.game.client.data.GameClientState;
-import org.schema.game.client.view.MainGameGraphics;
 import org.schema.schine.graphicsengine.core.Controller;
-import org.schema.schine.graphicsengine.util.WorldToScreenConverter;
 import org.schema.schine.sound.pcode.SoundManager;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.vecmath.Vector3f;
 import java.io.*;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * STARMADE MOD
@@ -30,7 +25,7 @@ import java.util.ArrayList;
  */
 public class WarpSounds {
     public static WarpSounds instance;
-    private ArrayList<Sound> soundQueue = new ArrayList<>(); //intended for voice sounds, times out for 2 seconds after playing each sound to not overlap.
+    private HashMap<String, SoundQueue> uid_to_queues = new HashMap<>();
     public static void main(String[] args) {
         new WarpSounds();
     }
@@ -41,26 +36,26 @@ public class WarpSounds {
         String path = WarpMain.instance.getSkeleton().getResourcesFolder().getPath().replace("\\","/")+"/resources/sounds/"; //in moddata
 
           File f;
-          for (int i = 0; i< Sound.values().length; i++) {
-              f = new File(path + Sound.values()[i].getSoundName()+".wav");
+          for (int i = 0; i< SoundEntry.values().length; i++) {
+              f = new File(path + SoundEntry.values()[i].getSoundName()+".wav");
               if (f.exists()) {
-                  addSound(Sound.values()[i].getSoundName(), f);
-                  Sound sound = Sound.values()[i];
+                  addSound(SoundEntry.values()[i].getSoundName(), f);
+                  SoundEntry soundEntry = SoundEntry.values()[i];
                   try {
                       AudioInputStream ais = AudioSystem.getAudioInputStream(f);
                       AudioFormat format = ais.getFormat();
                       long frames = ais.getFrameLength();
                       double durationInSeconds = (frames+0.0)/format.getFrameRate();
-                      sound.setDuration((long)(durationInSeconds*1000));
+                      soundEntry.setDuration((long)(durationInSeconds*1000));
                   } catch (UnsupportedAudioFileException | IOException e) {
                       e.printStackTrace();
                   }
               } else {
-                  new FileNotFoundException("warp sounds file " + Sound.values()[i].getSoundName()).printStackTrace();
+                  new FileNotFoundException("warp sounds file " + SoundEntry.values()[i].getSoundName()).printStackTrace();
               }
           }
         initLoop();
-
+        initEventSounds();
     }
 
     /**
@@ -75,15 +70,15 @@ public class WarpSounds {
         File file;
         String name;
         String path;
-        for (int i = 0; i< Sound.values().length; i++) {
-            name = Sound.values()[i].getSoundName();
+        for (int i = 0; i< SoundEntry.values().length; i++) {
+            name = SoundEntry.values()[i].getSoundName();
             path = folderPath + name +".wav";
-            System.out.println("trying to load sound '"+name+"' at :"+path);
+            //System.out.println("trying to load sound '"+name+"' at :"+path);
             file = new File(".",path);
             if (!file.exists()) {
                 try {
                     //install sound files to client
-                    String jarPath = "me/iron/WarpSpace/Mod/res/sounds/" +Sound.values()[i].getSoundName()+".wav";
+                    String jarPath = "me/iron/WarpSpace/Mod/res/sounds/" + SoundEntry.values()[i].getSoundName()+".wav";
 
                     InputStream source = WarpMain.instance.getSkeleton().getClassLoader().getResourceAsStream(jarPath);
 
@@ -123,72 +118,112 @@ public class WarpSounds {
         Controller.getAudioManager().addSound(name,file);
     }
 
-    private void initDebug() {
-        StarLoader.registerListener(PlayerChatEvent.class, new Listener<PlayerChatEvent>() {
-            @Override
-            public void onEvent(PlayerChatEvent event) {
-                if (event.isServer())
-                    return;
-                if (event.getText().contains("ping")) {
-                    for (int i = 0; i < Sound.values().length; i++) {
-                        final int ii = i;
-                        new StarRunnable(){
-                            @Override
-                            public void run() {
-                                queueSound(Sound.values()[ii]);
-                            }
-                        }.runLater(WarpMain.instance,i*10);
+    public void initEventSounds() {
+        VoiceAnnouncer vc = new VoiceAnnouncer();
+        WarpProcess.JUMPDROP.addListener(vc);
+        WarpProcess.JUMPENTRY.addListener(vc);
+        WarpProcess.JUMPEXIT.addListener(vc);
+        WarpProcess.JUMPPULL.addListener(vc);
+        WarpProcess.WARP_STABILITY.addListener(vc);
 
-                    }
-
-                }
-            }
-        },WarpMain.instance);
+        EngineSounds es = new EngineSounds();
+        WarpProcess.JUMPENTRY.addListener(es);
+        WarpProcess.JUMPEXIT.addListener(es);
+        WarpProcess.HAS_JUMPED.addListener(es);
+        WarpProcess.JUMPDROP.addListener(es);
     }
 
-    public void queueSound(Sound s) {
-        soundQueue.add(s);
+    public void queueSound(SoundEntry e, String queueID) {
+        queueSound(new SoundInstance(e),queueID);
     }
 
-    public void playSound(Sound s) {
+    public void queueSound(SoundInstance s, String queueID) {
+        SoundQueue queue;
+        if (!uid_to_queues.containsKey(queueID)) {
+            queue = new SoundQueue(queueID,false,true);
+            uid_to_queues.put(queueID,queue);
+        } else {
+            queue = uid_to_queues.get(queueID);
+        }
+        queue.add(s);
+    }
+
+    public void playSound(SoundEntry s) {
         String name = s.soundName;
-        AudioUtils.clientPlaySound(name,1,1);
+        AudioUtils.clientPlaySound(name, (float) Math.pow(10,s.standardVolume),1);
+    }
+
+    /**
+     * @param s
+     * @param db Dezibel increase, use negative for decrease.
+     * @param pitch pitch from 0 to 1
+     */
+    public void playSound(SoundEntry s, float db, float pitch) {
+        float volume = dbToVolume(s.standardVolume+db);
+        AudioUtils.clientPlaySound(s.soundName, volume, pitch);
+        //SoundManager mng = Controller.getAudioManager();
+        //    SoundManager.sndSystem.setLooping("loopingSound01",false);
+    //    if (looping)
+    //        mng._loopSound("loopingSound01",s.getSoundName(), volume, pitch,10000);
+    //    else
+    //        mng.playSoundFX(s.getSoundName(), volume,  pitch);
+    }
+
+    public void playSound(SoundInstance sound) {
+        playSound(sound.soundEntry, sound.db, sound.pitch);
+    }
+
+    public static float dbToVolume(float db) {
+        return (float)Math.pow(10,db);
     }
 
     private void initLoop() {
         new StarRunnable(){
-            long last;
-            long timeout;
             @Override
             public void run() {
-                if (last + Math.max(500,timeout) < System.currentTimeMillis() && soundQueue.size() >0) {
-                    Sound s = soundQueue.remove(0);
-                    playSound(s);
-
-                    timeout = s.getDuration();
-                    last = System.currentTimeMillis();
+                //update all soundqueues
+                if (!uid_to_queues.isEmpty()) {
+                    for (SoundQueue q: uid_to_queues.values()) {
+                        q.update(System.currentTimeMillis());
+                    }
                 }
             }
-        }.runTimer(WarpMain.instance,10);
+        }.runTimer(WarpMain.instance,1);
     }
-    public enum Sound {
-        warping("01-warping"),
-        dropping("02-dropping"),
-        warp_signature_detected("03-warp_sig_det"),
-        inhibitor_detected("04-inh_det"),
-        inhibitor_activated("05-inh_act"),
-        inhibitor_deactivated("06-inh_deact"),
-        beacon_detected("07-beacon_det"),
-        beacon_activated("08-beacon_act"),
-        beacon_deactivated("09-beacon_deac"),
-        jump_charge("10-warp_entry_effect"),
-        warp_boom("11-warp_boom");
+    public enum SoundEntry {
+        voice_activate("voice_activate",1f),
+        voice_activated("voice_activated",1f),
+        voice_beacon("voice_beacon",1f),
+        voice_deactivate("voice_deactivate",1f),
+        voice_deactivated("voice_deactivated",1f),
+        voice_detected("voice_detected",1f),
+        voice_disengage("voice_disengage",1f),
+        voice_disengaged("voice_disengaged",1f),
+        voice_drive("voice_drive",1f),
+        voice_engage("voice_engage",1f),
+        voice_engaged("voice_engaged",1f),
+        voice_inhibitor("voice_inhibitor",1f),
+        voice_interdictor("voice_interdictor",1f),
+        voice_signature("voice_signature",1f),
+        voice_warp("voice_warp",1f),
+        voice_warpdrive("voice_warpdrive",1f),
+        voice_critical("voice_critical",1f),
+        voice_high("voice_high",1f),
+        voice_low("voice_low",1f),
+        voice_stability("voice_stability",1f),
+        drive_charge_up("drive_charge_up",1f),
+        warning_beep("warning_beep",1f),
+        warp_boom("warp_boom",1f),
+        warpambient("warpambient",1f);
 
 
-        Sound(String path) {
+
+        SoundEntry(String path, float standardVolume) {
             this.soundName = path;
+            this.standardVolume = standardVolume;
         }
-        private String soundName;
+        private final String soundName;
+        private float standardVolume = 1;
         private long duration;
 
         /**
@@ -215,5 +250,106 @@ public class WarpSounds {
                     ", duration=" + duration +
                     '}';
         }
+    }
+
+    static class SoundInstance {
+        SoundEntry soundEntry;
+        float pitch;
+        private float db;
+
+        public SoundInstance(SoundEntry e, float db, float pitch) {
+            this.soundEntry = e;
+            this.db = db;
+            this.pitch = pitch;
+        }
+
+        public SoundInstance(SoundEntry soundEntry) {
+            this.soundEntry = soundEntry;
+            pitch = 1;
+            db = 0;
+        }
+
+        public float getVolume() {
+            return dbToVolume(soundEntry.standardVolume+db);
+        }
+    }
+
+    //queue that will play one sound after the other, starting when the sound has ended. allows control like pause, stop, clear, add
+    static class SoundQueue {
+        private String id;
+        private boolean loop;
+        private long soundStarted;
+        private boolean active;
+        private LinkedList<SoundInstance> queue = new LinkedList<>();
+        private SoundInstance currentlyPlaying;
+
+        public SoundQueue(String id, boolean loop, boolean active) {
+            this.id = id;
+            this.loop = loop;
+            this.active = active;
+        }
+
+        /**
+         * update soundqueue, will auto play next in line if previous was done, or nothing is currently played.
+         * @param timeMillis
+         * @return
+         */
+        public SoundInstance update(long timeMillis) {
+            boolean finishedCurrent = (currentlyPlaying == null || timeMillis>= soundStarted +currentlyPlaying.soundEntry.getDuration());
+            if (!finishedCurrent)
+                return currentlyPlaying;
+
+            //did current sound finished playing?
+            if (active && !queue.isEmpty()) {
+                assert currentlyPlaying == null || currentlyPlaying.equals(queue.getFirst());
+                if (loop)
+                    queue.add(queue.getFirst()); //is loop->add to end of queue after playing
+                if (currentlyPlaying != null)
+                    queue.removeFirst();                 //remove song that was finished
+
+                //are more sonds queued?
+                if (!queue.isEmpty()) {
+                    //play next sound
+                    currentlyPlaying = queue.getFirst();
+                    WarpSounds.instance.playSound(currentlyPlaying);
+                    soundStarted = timeMillis; //update time
+                } else {
+                    currentlyPlaying = null;
+                    soundStarted = -1;
+                    //TODO delete flag?
+                }
+            }
+            return currentlyPlaying;
+        }
+
+        /**
+         * set queue to active: will play new sounds after last one is done
+         */
+        public void setActive() {
+            this.active = true;
+        }
+
+        public void clear() {
+            queue.clear();
+        }
+
+        /**
+         * pause queue, will stop playing after current sound is done.
+         */
+        public void pause() {
+            active = false;
+        }
+
+        /**
+         * stop queue, will hard stop playing sound
+         */
+        public void stop() {
+            pause();
+            //TODO hard stop currentPlaying
+        }
+        public void add(SoundInstance s) {
+            queue.add(s);
+        }
+
     }
 }

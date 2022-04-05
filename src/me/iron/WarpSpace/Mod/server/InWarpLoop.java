@@ -1,6 +1,6 @@
 package me.iron.WarpSpace.Mod.server;
 
-import me.iron.WarpSpace.Mod.client.WarpProcessController;
+import me.iron.WarpSpace.Mod.client.WarpProcess;
 import me.iron.WarpSpace.Mod.WarpEntityManager;
 import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
@@ -23,31 +23,35 @@ public class InWarpLoop {
     public static void startLoop(final SegmentController ship) {
         new StarRunnable() {
             int countdown = 15;
+            final int countdownMax = 30;
             @Override
             public void run() {
                 if (GameServerState.isFlagShutdown() || GameServerState.isShutdown() || ship == null || !ship.existsInState()) {
                     cancel();
                 }
                 try {
+                    if (ship == null)
+                        return;
+
                     if (!WarpEntityManager.isWarpEntity(ship) || GameServerState.isShutdown()) {
                         //left warp
                     //    DebugFile.log("InWarpLoop was terminated bc server is shutdown or ship no longer in warp.");
                         cancel();
                     }
+                    //update value for synching
+                    WarpProcess.setProcess(ship,WarpProcess.WARP_STABILITY,(int)(100*((float)countdown/countdownMax)));
+
                     if (ship.getSpeedCurrent() < WarpManager.minimumSpeed) {
                         //ship is to slow, dropping out of warp!
-                        countdown --; //runs once a second
+                        countdown --; //runs once a second //TODO send warp stability
                     } else {
-                        WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,0, new ArrayList<String>());
-                        if (countdown < 12) {
+                        WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,0);
+                        if (countdown < countdownMax) {
                             countdown +=2;
                         }
                     }
-                    if (countdown < 10 && ship.getSpeedCurrent() < WarpManager.minimumSpeed) {
-                        WarpJumpManager.SendPlayerWarpSituation(ship, WarpProcessController.WarpProcess.JUMPDROP,1, new ArrayList<String>());
-                    } else {
-                    }
-                    if (countdown > 12) { //essentially caps the countdown to 10, while allowing a start buffer of extra seconds
+
+                    if (countdown > countdownMax) { //essentially caps the countdown to max_val, while allowing a start buffer of extra seconds
                         countdown --;
                     }
                     if (countdown <= 0) {
@@ -60,6 +64,6 @@ public class InWarpLoop {
                     DebugFile.log(e.toString());
                 }
             }
-        }.runTimer(WarpMain.instance, 25);
+        }.runTimer(WarpMain.instance, 10); //TODO precise timing
     }
 }
