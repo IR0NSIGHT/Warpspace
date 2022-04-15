@@ -1,6 +1,5 @@
 package me.iron.WarpSpace.Mod.visuals;
 
-import api.ModPlayground;
 import api.listener.Listener;
 import api.listener.events.draw.RegisterWorldDrawersEvent;
 import api.utils.draw.ModWorldDrawer;
@@ -11,7 +10,6 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.character.KinematicCharacterController;
 import com.bulletphysics.linearmath.Transform;
 import me.iron.WarpSpace.Mod.WarpMain;
-import me.iron.WarpSpace.Mod.WarpManager;
 import me.iron.WarpSpace.Mod.client.WarpProcess;
 import org.lwjgl.opengl.GL11;
 import org.schema.game.client.data.GameClientState;
@@ -48,7 +46,7 @@ import static org.schema.schine.graphicsengine.core.Controller.getCamera;
  * CREATOR: Ithirahad Ivrar'kiim
  * DATE: 21.10.2021
  * TIME: 10:15
- *
+ * <p>
  * Draws a large inside-out sphere with a special shader while in warpspace.
  */
 
@@ -56,10 +54,10 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
     public static Shader shader;
     private static Mesh mesh; //sphere mesh
     private static int bubblePlaceholderTexture;
-    private static final float EPSILON = 0.0000000000001f;
+    private static final float EPSILON = 0.0000000001f;
     private static final float SCALE_FACTOR = 0.35f; //scale factor of skybox sphere = this value x sector size, also used for shader coord compensation
     private static final Vector3f zeroVel = new Vector3f();
-    private static boolean active = false;
+    private static boolean skyboxIsActive = false;
     static float warpDepth = 0;
 
     /**
@@ -94,7 +92,7 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
             shader = Shader.newModShader(mod.getSkeleton(), "WarpShader",
                     mod.getJarResource("me/iron/WarpSpace/Mod/res/warp.vert"),
                     mod.getJarResource("me/iron/WarpSpace/Mod/res/warp.frag"));
-        } catch(Exception ex){
+        } catch (Exception ex) {
             System.err.println("[MOD][WarpSpace][ERROR] Failed to load skybox draw resources!");
             ex.printStackTrace();
         }
@@ -107,28 +105,33 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
 
     @Override
     public void update(Timer timer) {
-        float maxChangePerFrame = 1/1000f; //x frames to go from 0 to 1
+        skyboxIsActive = Math.abs(warpDepth) > EPSILON;
+
+        float maxChangePerFrame = 1/(timer.getFps()*2f); //x frames to go from 0 to 1
         ManagedUsableSegmentController<?> vessel = null;
-        active = WarpProcess.IS_IN_WARP.isTrue();
-        if (!active)
-            return;
-        if(GameClientState.instance != null) {
+        boolean inWarp = WarpProcess.IS_IN_WARP.isTrue();
+
+        if (!inWarp) {
+            warpDepth = Math.max(0, warpDepth - (maxChangePerFrame * 10)); //quick transition to zero warp depth visual before disabling entirely (fallback smoothing)
+        } else if (GameClientState.instance != null) {
             vessel = currentlyOnBoardEntity();
             //smoothly transition to desired warpdepth
-            float trueDepth = WarpProcess.WARP_STABILITY.getCurrentValue()/100f;
+            float trueDepth = WarpProcess.WARP_STABILITY.getCurrentValue() / 100f;
             if (warpDepth < trueDepth) {
-                warpDepth = Math.min(trueDepth,warpDepth+maxChangePerFrame);
+                warpDepth = Math.min(trueDepth, warpDepth + maxChangePerFrame);
             } else if (warpDepth > trueDepth) {
-                warpDepth = Math.max(trueDepth,warpDepth-maxChangePerFrame);
+                warpDepth = Math.max(trueDepth, warpDepth - maxChangePerFrame);
             }
         }
-        if(active){
-            time += timer.getDelta() * 5.05F;
-            if(vessel != null) distortedTime += timer.getDelta() * 5.05F * (vessel.getSpeedCurrent() / vessel.getMaxServerSpeed());
-            else distortedTime += timer.getDelta(); //very temporary case
-        } else {
+
+        if (!skyboxIsActive) {
             time = 0;
             distortedTime = 0;
+        } else {
+            time += timer.getDelta() * 5.05F;
+            if (vessel != null)
+                distortedTime += timer.getDelta() * 5.05F * (vessel.getSpeedCurrent() / vessel.getMaxServerSpeed());
+            else distortedTime += timer.getDelta(); //very temporary case
         }
     } //for shader
 
@@ -141,16 +144,16 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
     public void updateShaderParameters(Shader shader) {
         GlUtil.glBindTexture(GL11.GL_TEXTURE_2D, bubblePlaceholderTexture); //derpface; shouldn't matter though
         GlUtil.updateShaderFloat(shader, "timeBasis", time); //speed of effect 'animation'
-        if(GameClientState.instance != null){
+        if (GameClientState.instance != null) {
             ManagedUsableSegmentController<?> vessel = currentlyOnBoardEntity();
-            if(vessel != null && vessel.getPhysicsObject() != null) {
+            if (vessel != null && vessel.getPhysicsObject() != null) {
                 //synchronized (vessel) { //useless? produced nullpointer, guessed it might be non threadsafe cause
                 CollisionObject cob = vessel.getDockingController().getAbsoluteMother().getPhysicsDataContainer().getObject(); //I'll refrain from making any corny puns here
 
-                GlUtil.updateShaderVector3f(shader, "flightVel", cob != null? ((RigidBody)cob).getLinearVelocity(vel) : zeroVel);
+                GlUtil.updateShaderVector3f(shader, "flightVel", cob != null ? ((RigidBody) cob).getLinearVelocity(vel) : zeroVel);
                 GlUtil.updateShaderFloat(shader, "maxSpeed", vessel.getMaxServerSpeed());
-                GlUtil.updateShaderVector3f(shader,"vesselOrigin",vessel.getClientTransform().origin);
-                GlUtil.updateShaderFloat(shader,"distortedTime",distortedTime);
+                GlUtil.updateShaderVector3f(shader, "vesselOrigin", vessel.getClientTransform().origin);
+                GlUtil.updateShaderFloat(shader, "distortedTime", distortedTime);
                 GlUtil.updateShaderFloat(shader, "warpDepth", warpDepth);
                 //}
             }
@@ -160,7 +163,7 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
 
     @Override
     public void preCameraPrepare() { //Basically background draw; everything else except skybox draws on top of this stuff
-        if (!active) return;
+        if (!skyboxIsActive) return;
         float sectorSize = GameClientState.instance.getSectorSize();
         float scale = SCALE_FACTOR * sectorSize;
         scale *= -0.35f;
@@ -174,7 +177,7 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
         GlUtil.glEnable(GL_DEPTH_TEST); //??????????????????
         GlUtil.glDepthMask(true); //???????
 
-        Vector3f modelScale = new Vector3f(scale,scale,scale);
+        Vector3f modelScale = new Vector3f(scale, scale, scale);
 
         shader.setShaderInterface(this);
         shader.load();
@@ -214,19 +217,19 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
         if (units.isEmpty()) return null;
         else {
             ControllerStateUnit unit = units.iterator().next();
-            if(unit.playerControllable instanceof ManagedUsableSegmentController)
-            return (ManagedUsableSegmentController<?>) unit.playerControllable;
+            if (unit.playerControllable instanceof ManagedUsableSegmentController)
+                return (ManagedUsableSegmentController<?>) unit.playerControllable;
 
             else {
-                try{
+                try {
                     KinematicCharacterControllerExt characterController = GameClientState.instance.getPlayer().getAssingedPlayerCharacter().getCharacterController();
                     PairCachingGhostObject spook = (PairCachingGhostObject) readPrivateField(KinematicCharacterController.class, "ghostObject", characterController);
-                    if(spook instanceof PairCachingGhostObjectExt){ //covers null condition too
-                        SegmentController attached = (SegmentController)(readPrivateField(PairCachingGhostObjectExt.class,"attached", spook));
-                        if(attached != null) return (ManagedUsableSegmentController<?>) attached;
+                    if (spook instanceof PairCachingGhostObjectExt) { //covers null condition too
+                        SegmentController attached = (SegmentController) (readPrivateField(PairCachingGhostObjectExt.class, "attached", spook));
+                        if (attached != null) return (ManagedUsableSegmentController<?>) attached;
                     }
                 } //TODO: This is cursed. Is there really not any better way to get the segmentcontroller a player is attached to?
-                catch(Exception ex){
+                catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
