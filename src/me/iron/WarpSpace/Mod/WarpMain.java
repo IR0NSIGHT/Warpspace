@@ -72,6 +72,7 @@ public class WarpMain extends StarMod {
         final FileConfiguration universalConfig = getConfig("WarpSpace_Universal.yml"); //config needed on server & client
         //synch config to client
         WARP_CHAMBER_ADDITIVE_MULT = universalConfig.getConfigurableFloat("JUMP_DISTANCE_CHAMBER_ADDED_MULTIPLIER_PER_LEVEL", 2f/3f);
+        universalConfig.set("JUMP_DISTANCE_CHAMBER_ADDED_MULTIPLIER_PER_LEVEL",WARP_CHAMBER_ADDITIVE_MULT);
         StarLoader.registerListener(ClientLoginEvent.class, new Listener<ClientLoginEvent>() {
             @Override
             public void onEvent(ClientLoginEvent event) {
@@ -111,7 +112,6 @@ public class WarpMain extends StarMod {
         super.onServerCreated(event);
         clientConfig = getConfig("WarpSpace_Client.yml");
 
-
         WarpJumpListener.createListener();
 
         WarpProcess.initUpdateLoop();
@@ -126,6 +126,8 @@ public class WarpMain extends StarMod {
     @Override
     public void onClientCreated(ClientInitializeEvent event) {
         super.onClientCreated(event);
+        clientConfig = getConfig("WarpSpace_Client.yml");
+
         SpriteList.init();
         HUD_core.initList();
         GUIeventhandler.addHUDDrawListener();

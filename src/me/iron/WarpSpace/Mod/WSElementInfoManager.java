@@ -14,7 +14,7 @@ public class WSElementInfoManager {
         ElementInformation JUMP_DIST_2 = ElementKeyMap.getInfo(118);
         ElementInformation JUMP_DIST_3 = ElementKeyMap.getInfo(117);
         nameTranslations.remove(JUMP_BASE.id);
-        descriptionTranslations.remove(JUMP_BASE);
+        descriptionTranslations.remove(JUMP_BASE.id);
         JUMP_BASE.description = "If server settings require it, this chamber will enable the Warp Drive on your ship.\r\nOtherwise, it simply acts as a hub for Warp Drive upgrade chambers.";
         nameTranslations.remove(JUMP_DIST_1.id);
         nameTranslations.remove(JUMP_DIST_2.id);
