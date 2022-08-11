@@ -1,5 +1,5 @@
 # Warpspace
-# an alternative way to faster-than-light travel in starmade.
+# Starmade mod that completly overhauls fasttravel
 
 This mod explores the idea to have a space in which you travel to get from point a to point b, but faster than normal flight.
 The mod creates a warpspace, similar to the minecraft nether in concept. Every meter travelled in the warp translates into 10 meters travelled in realspace. 
