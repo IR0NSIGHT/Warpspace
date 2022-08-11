@@ -25,6 +25,7 @@ import me.iron.WarpSpace.Mod.beacon.BeaconUpdatePacket;
 import me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon;
 import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
+import me.iron.WarpSpace.Mod.server.ServerConfigValues;
 import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
@@ -32,6 +33,7 @@ import me.iron.WarpSpace.Mod.visuals.WarpSkybox;
 import org.schema.schine.resource.ResourceLoader;
 
 import static me.iron.WarpSpace.Mod.server.ServerConfigValues.WARP_CHAMBER_ADDITIVE_MULT;
+import static me.iron.WarpSpace.Mod.server.ServerConfigValues.WARP_SPEED_BASE_MULT;
 
 
 /**
@@ -71,7 +73,8 @@ public class WarpMain extends StarMod {
 
         final FileConfiguration universalConfig = getConfig("WarpSpace_Universal"); //config needed on server & client
         //synch config to client
-        WARP_CHAMBER_ADDITIVE_MULT = universalConfig.getConfigurableFloat("JUMP_DISTANCE_CHAMBER_ADDED_MULTIPLIER_PER_LEVEL", 2f/3f);
+        WARP_CHAMBER_ADDITIVE_MULT = universalConfig.getConfigurableFloat("JUMP_DISTANCE_CHAMBER_ADDED_MULTIPLIER_PER_LEVEL", 1f/3f);
+        WARP_SPEED_BASE_MULT = universalConfig.getConfigurableFloat("WARP_BASE_MAX_SPEED_BUFF",1.5f);
         StarLoader.registerListener(ClientLoginEvent.class, new Listener<ClientLoginEvent>() {
             @Override
             public void onEvent(ClientLoginEvent event) {
@@ -87,13 +90,14 @@ public class WarpMain extends StarMod {
                 FileConfiguration recievedConfig = event.getConfig();
                 ModSkeleton skelly = recievedConfig.getMod().getSkeleton();
 
-                if(skelly.getName().equals(this.getMod().getSkeleton().getName())) { //There's only one config for this mod at the moment anyway; everything else is persistentobject stuff.
+                if(skelly.getName().equals(this.getMod().getSkeleton().getName())) {
                     for (String key : event.getConfig().getKeys()) {
                         String val = event.getConfig().getString(key);
                         universalConfig.set(key, val);
                         System.err.println("[MOD][WarpSpace] Received config value for " + key + ": " + val);
                     }
-                    WARP_CHAMBER_ADDITIVE_MULT = recievedConfig.getConfigurableFloat("JUMP_DISTANCE_CHAMBER_ADDED_MULTIPLIER_PER_LEVEL", 2f/3f);
+                    WARP_CHAMBER_ADDITIVE_MULT = recievedConfig.getConfigurableFloat("JUMP_DISTANCE_CHAMBER_ADDED_MULTIPLIER_PER_LEVEL", 1f/3f);
+                    WARP_SPEED_BASE_MULT = recievedConfig.getConfigurableFloat("WARP_BASE_MAX_SPEED_BUFF",1.5f);
                 }
             }
         }, this);
