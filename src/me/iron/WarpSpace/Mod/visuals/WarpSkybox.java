@@ -174,8 +174,8 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
 
         Vector3f drawPosition = getCamera().getOffsetPos(new Vector3f()); //TODO: This should be the draw position
 
-        GlUtil.glEnable(GL_DEPTH_TEST); //??????????????????
-        GlUtil.glDepthMask(true); //???????
+        GlUtil.glEnable(GL_DEPTH_TEST);
+        GlUtil.glDepthMask(true);
 
         Vector3f modelScale = new Vector3f(scale, scale, scale);
 

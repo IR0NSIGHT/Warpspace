@@ -5,9 +5,11 @@ import api.listener.Listener;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
 import api.listener.events.network.ClientLoginEvent;
+import api.mod.ModSkeleton;
 import api.mod.StarLoader;
 import api.mod.StarMod;
 import api.mod.config.FileConfiguration;
+import api.mod.config.SyncedConfigReceiveEvent;
 import api.mod.config.SyncedConfigUtil;
 import api.network.packets.PacketUtil;
 import api.utils.registry.UniversalRegistry;
@@ -29,6 +31,8 @@ import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
 import me.iron.WarpSpace.Mod.visuals.WarpSkybox;
 import org.schema.schine.resource.ResourceLoader;
 
+import static me.iron.WarpSpace.Mod.server.ServerConfigValues.WARP_CHAMBER_ADDITIVE_MULT;
+
 
 /**
  * the me.iron.WarpSpace.Mod.testing.main class where the mod is run from by starloader.
@@ -43,7 +47,7 @@ public class WarpMain extends StarMod {
     public BeaconManager beaconManagerClient;
     public DropPointMapDrawer dropPointMapDrawer;
     public WarpThrusterListener warpThrusterListener;
-    private FileConfiguration config;
+    private FileConfiguration clientConfig;
 
     @Override
     public void onEnable() {
@@ -53,7 +57,6 @@ public class WarpMain extends StarMod {
         new Updater(getSkeleton().getModVersion()).runUpdate();
 
         StarLoader.registerCommand(new DebugUI());
-
 
         PacketUtil.registerPacket(PacketHUDUpdate.class);
         PacketUtil.registerPacket(BeaconUpdatePacket.class);
@@ -66,13 +69,31 @@ public class WarpMain extends StarMod {
         dropPointMapDrawer = new DropPointMapDrawer(this);
         warpThrusterListener = new WarpThrusterListener(this);
 
+        final FileConfiguration universalConfig = getConfig("WarpSpace_Universal.yml"); //config needed on server & client
         //synch config to client
-        final FileConfiguration config = getConfig("config");
-        config.set("important", "this is an important message");
+        WARP_CHAMBER_ADDITIVE_MULT = universalConfig.getConfigurableFloat("JUMP_DISTANCE_CHAMBER_ADDED_MULTIPLIER_PER_LEVEL", 2f/3f);
         StarLoader.registerListener(ClientLoginEvent.class, new Listener<ClientLoginEvent>() {
             @Override
             public void onEvent(ClientLoginEvent event) {
-                SyncedConfigUtil.sendConfigToClient(event.getServerProcessor(), config);
+                SyncedConfigUtil.sendConfigToClient(event.getServerProcessor(), universalConfig);
+            }
+        }, this);
+
+        //read synched config on client
+        StarLoader.registerListener(SyncedConfigReceiveEvent.class, new Listener<SyncedConfigReceiveEvent>() {
+            @Override
+            public void onEvent(SyncedConfigReceiveEvent event) {
+                FileConfiguration recievedConfig = event.getConfig();
+                ModSkeleton skelly = recievedConfig.getMod().getSkeleton();
+
+                if(skelly.getName().equals(this.getMod().getSkeleton().getName())) { //There's only one config for this mod at the moment anyway; everything else is persistentobject stuff.
+                    for (String key : event.getConfig().getKeys()) {
+                        String val = event.getConfig().getString(key);
+                        universalConfig.set(key, val);
+                        System.err.println("[MOD][WarpSpace] Received config value for " + key + ": " + val);
+                    }
+                    WARP_CHAMBER_ADDITIVE_MULT = recievedConfig.getConfigurableFloat("JUMP_DISTANCE_CHAMBER_ADDED_MULTIPLIER_PER_LEVEL", 2f/3f);
+                }
             }
         }, this);
 
@@ -88,7 +109,7 @@ public class WarpMain extends StarMod {
     @Override
     public void onServerCreated(ServerInitializeEvent event) {
         super.onServerCreated(event);
-        config = getConfig("config");
+        clientConfig = getConfig("WarpSpace_Client.yml");
 
 
         WarpJumpListener.createListener();
@@ -128,6 +149,7 @@ public class WarpMain extends StarMod {
     public void onBlockConfigLoad(BlockConfig blockConfig) {
         super.onBlockConfigLoad(blockConfig);
         WarpBeaconAddon.registerChamberBlock();
+        WSElementInfoManager.onBlockConfigLoad(instance,blockConfig);
     }
 
     @Override

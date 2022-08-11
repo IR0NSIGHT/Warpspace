@@ -7,7 +7,7 @@ import me.iron.WarpSpace.Mod.WarpMain;
  * //TODO use
  */
 public class ConfigManager {
-    public static String configName = "WarpSpaceConfig.yml";
+    public static String configName = "WarpSpace_Client.yml";
     public enum entries {
         warpdrop_warningsound_loudness("warpdrop_warningsound_loudness");
 

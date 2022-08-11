@@ -12,6 +12,8 @@ import org.schema.game.common.data.element.ElementKeyMap;
 
 import javax.vecmath.Vector3f;
 
+import static me.iron.WarpSpace.Mod.server.ServerConfigValues.WARP_CHAMBER_ADDITIVE_MULT;
+
 /**
  * Created by Jake on 12/7/2021.
  * <insert description here>
@@ -55,13 +57,13 @@ public class WarpThrusterListener implements ThrusterElementManagerListener {
                 ReactorElement jd2Chamber = SegmentControllerUtils.getChamberFromElement(musc, JUMP_DIST_2);
                 ReactorElement jd3Chamber = SegmentControllerUtils.getChamberFromElement(musc, JUMP_DIST_3);
                 if(jd3Chamber != null && jd3Chamber.isAllValid()){
-                    return v * 2;
+                    return v * (1+(WARP_CHAMBER_ADDITIVE_MULT *3)); //orig. *2f
                 }
                 if(jd2Chamber != null && jd2Chamber.isAllValid()){
-                    return v * 1.6F;
+                    return v * (1+(WARP_CHAMBER_ADDITIVE_MULT *2));
                 }
                 if(jd1Chamber != null && jd1Chamber.isAllValid()){
-                    return v * 1.3F;
+                    return v * (1+(WARP_CHAMBER_ADDITIVE_MULT *1));
                 }
             }
         }
