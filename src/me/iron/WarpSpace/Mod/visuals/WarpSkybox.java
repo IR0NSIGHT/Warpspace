@@ -107,7 +107,7 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
     public void update(Timer timer) {
         skyboxIsActive = Math.abs(warpDepth) > EPSILON;
 
-        float maxChangePerFrame = 1/(timer.getFps()*2f); //x frames to go from 0 to 1
+        float maxChangePerFrame = 1/(timer.getFps()*10f); //x frames to go from 0 to 1, in theory. apparently it's fuzzier than that though idk
         ManagedUsableSegmentController<?> vessel = null;
         boolean inWarp = WarpProcess.IS_IN_WARP.isTrue();
 
