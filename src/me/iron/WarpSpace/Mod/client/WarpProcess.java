@@ -118,7 +118,7 @@ public enum WarpProcess {
         }
         if (arr[wp.ordinal()]!=value) {
             arr[wp.ordinal()] = value;
-            ModPlayground.broadcastMessage("set process "+wp.name() + " to " + value + " for player "+ p.getName());
+            //ModPlayground.broadcastMessage("set process "+wp.name() + " to " + value + " for player "+ p.getName());
         }
 
     }
