@@ -45,6 +45,7 @@ public enum WarpProcess {
     WARP_STABILITY,
     HAS_JUMPED(true,false);
 
+    private static boolean debugPrevDropShifted = false;
     protected boolean resetAfterUpdate; //reset to zero after updated.
     protected boolean clientOnly; //ignore server input
     WarpProcess() {}
@@ -189,7 +190,10 @@ public enum WarpProcess {
     public static void postSynchClient() {
         //test if beacon is affecting player position, beacon synch is handeled separately.
         boolean droppointShifted = (WarpJumpManager.isDroppointShifted(WarpManager.getWarpSpacePos(GameClientState.instance.getPlayer().getCurrentSector())));
-        System.out.println("DROPPOINT IS SHIFTED: " + droppointShifted);
+        if(droppointShifted != debugPrevDropShifted){
+            System.out.println("DROPPOINT IS SHIFTED: " + droppointShifted);
+            debugPrevDropShifted = droppointShifted;
+        }
         WarpProcess.DROPPOINTSHIFTED.setCurrentValue(droppointShifted?1:0);
         WarpProcess.IS_IN_WARP.setCurrentValue(WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector())?1:0);
 
