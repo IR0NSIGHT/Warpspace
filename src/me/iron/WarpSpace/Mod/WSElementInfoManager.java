@@ -1,6 +1,8 @@
 package me.iron.WarpSpace.Mod;
 
 import api.config.BlockConfig;
+import it.unimi.dsi.fastutil.shorts.ShortList;
+import org.apache.poi.util.IntList;
 import org.schema.game.common.data.element.ElementInformation;
 import org.schema.game.common.data.element.ElementKeyMap;
 
@@ -23,5 +25,18 @@ public class WSElementInfoManager {
         JUMP_DIST_1.name = "Warp Flight Speed 1";
         JUMP_DIST_2.name = "Warp Flight Speed 2";
         JUMP_DIST_3.name = "Warp Flight Speed 3";
+        short[] chIDs = new short[]{ //other jump chamber IDs
+                1088,1089,1090, //power efficiency 1,2,3
+                1112, //multicharge
+                1117, //autocharge
+                127,126,12, //charge time 1,2,3
+                13,17,1112 //multicharge 1,2,3
+        };
+        ElementInformation block;
+        for(short id : chIDs){
+            block = ElementKeyMap.getInfo(id);
+            nameTranslations.remove(id);
+            block.name = block.name.replace("Jump","Warp Drive");
+        }
     }
 }
