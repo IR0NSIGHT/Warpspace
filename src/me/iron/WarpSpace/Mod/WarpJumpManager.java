@@ -96,7 +96,7 @@ public class WarpJumpManager {
                 Vector3i targetSector = getDropPoint(warpPos);
 
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,warpPos,targetSector);
-            //    StarLoader.fireEvent(e, true); //TODO hook for other mods, needs custom eventsystem in SL
+                StarLoader.fireEvent(e, true); //TODO: make sure this works
 
                 if (isJump) {
                     emptyWarpdrive(ship);
