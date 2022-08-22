@@ -46,7 +46,7 @@ import static org.schema.schine.graphicsengine.core.Controller.getCamera;
  * CREATOR: Ithirahad Ivrar'kiim
  * DATE: 21.10.2021
  * TIME: 10:15
- * <p>
+ * <br/><br/>
  * Draws a large inside-out sphere with a special shader while in warpspace.
  */
 
