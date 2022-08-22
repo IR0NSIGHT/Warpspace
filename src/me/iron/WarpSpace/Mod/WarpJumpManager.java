@@ -96,7 +96,7 @@ public class WarpJumpManager {
                 Vector3i targetSector = getDropPoint(warpPos);
 
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,warpPos,targetSector);
-                StarLoader.fireEvent(e, true); //TODO: make sure this works
+                StarLoader.fireEvent(e, true);
 
                 if (isJump) {
                     emptyWarpdrive(ship);
