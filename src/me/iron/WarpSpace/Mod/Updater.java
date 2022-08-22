@@ -6,9 +6,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * updater class. notices when version changed, can then rewrite the "resources" folder for warpspace (deleting the folders first)
+ * introduced to make life easier with soundfiles.
+ */
 public class Updater {
     private VersionTag jarVersion;
-    private boolean updateOnVersionChange = true;
+    private boolean updateOnVersionChange = true;   //change this flag according to version, if your update needs a rewrite
+
     public Updater(String version) {
         String[] vArr = version.split("\\.",4);
         jarVersion = new VersionTag(Integer.parseInt(vArr[0]),
