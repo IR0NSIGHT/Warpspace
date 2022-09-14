@@ -1,6 +1,5 @@
 package me.iron.WarpSpace.Mod.beacon;
 
-import api.ModPlayground;
 import api.network.Packet;
 import api.network.PacketReadBuffer;
 import api.network.PacketWriteBuffer;
@@ -18,23 +17,17 @@ import java.io.IOException;
  * TIME: 21:58
  */
 public class BeaconUpdatePacket extends Packet {
-   // public static void requestUpdateFromServer() {
-   //     BeaconUpdatePacket packet = new BeaconUpdatePacket();
-   //     PacketUtil.sendPacketToServer(packet);
-   // }
     @Override
     public void readPacketData(PacketReadBuffer packetReadBuffer) throws IOException {
         BeaconManager client = WarpMain.instance.beaconManagerClient;
         if (client == null)
             return;
         client.onDeserialize(packetReadBuffer);
-        //ModPlayground.broadcastMessage("READ BEACON DATA FROM SERVER");
     }
 
     @Override
     public void writePacketData(PacketWriteBuffer packetWriteBuffer) throws IOException {
         WarpMain.instance.beaconManagerServer.onSerialize(packetWriteBuffer);
-        //ModPlayground.broadcastMessage("WRITE BEACON DATA FOR CLIENT");
     }
 
     @Override

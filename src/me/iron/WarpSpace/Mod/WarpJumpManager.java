@@ -327,7 +327,6 @@ public class WarpJumpManager {
                     if (inhibitorStrength <= 1 || (distance > inhRange)) {
                         continue;
                     }
-                    //DebugFile.log("inhibitor has strength: " + inhibitorStrength + " catches rkt level: " + catchesLvl + " power cons: " + inhibitorStrength * 60000 + " range: " + inhRange + " vs: " + distance);
                     if (catchesLvl >= shipReactorLvl) {
                         warpdrive.getSegmentController().sendControllingPlayersServerMessage(new Object[]{" inhibitor detected in " + neighbourSectorPos.toString()}, 3);
                         retVal = true;

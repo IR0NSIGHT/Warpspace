@@ -48,11 +48,11 @@ public class WarpManager {
      */
     public static boolean isInWarp(SegmentController object) {
         if (object == null) {
-            DebugFile.log("isInWarp called with null object");
+            DebugFile.err("isInWarp called with null object");
             return false;
         }
         if (object.getSector(new Vector3i()) == null) {
-            DebugFile.log("isInWarp object has no sector:"+object.getName());
+            DebugFile.err("isInWarp object has no sector:"+object.getName());
             return false;
         }
         return isInWarp(object.getSector(new Vector3i()));

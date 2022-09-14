@@ -53,7 +53,6 @@ public class InWarpLoop {
                         //ship is to slow, dropping out of warp!
                         countdown --; //runs once a second
                     } else {
-                        //WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,0);
                         if (countdown < countdownMax) {
                             countdown +=2;
                         }
@@ -69,7 +68,7 @@ public class InWarpLoop {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    DebugFile.log(e.toString());
+                    DebugFile.err("Warpspace failed to run in-warp-loop on entity " + ship.getName() +" UID=" + ship.getUniqueIdentifier() + "err:" + e.toString());
                 }
             }
         }.runTimer(WarpMain.instance, 1);

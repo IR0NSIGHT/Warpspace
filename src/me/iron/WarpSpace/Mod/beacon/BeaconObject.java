@@ -77,7 +77,6 @@ public class BeaconObject implements Serializable {
 
         boolean existsDBorLoaded = EntityRequest.existsIdentifierWOExc(GameServerState.instance,UID);
         if (!existsDBorLoaded) {
-            //DebugUI.echo("DELETE BEACON: UNLOADED+NOT EXIST IN DB",null);
             setFlagForDelete();
             return;
         }
@@ -111,24 +110,17 @@ public class BeaconObject implements Serializable {
             //beaconchamber is null after loading. -> is that an issue that gets solved by waiting for th chamber to be loaded in?
             if (beaconChamber == null) {
                 setFlagForDelete();
-               // DebugUI.echo("DELETE BEACON: CHAMBER IS NULL",null);
-
-                //    ModPlayground.broadcastMessage("doesnt have chamber.");
                 return;
             }
             if (sc.isCoreOverheating() || isHB || beaconChamber.isDamagedRec()) {
-              //  DebugUI.echo("DELETE BEACON: HB/CORE-OVERHEAT/CHAMBER DAMAGED",null);
                 setFlagForDelete();
                 return;
             }
             WarpBeaconAddon addon = WarpBeaconAddon.getAddon(msc);
             if (addon == null) //seems to sometimes just randomly be null?
                 return;
-           //if (!addon.isActive() || !addon.isPlayerUsable()) {
            //    //TODO playerusable for unmanned craft too?
-           //    setFlagForDelete();
-           //    DebugUI.echo("DELETE BEACON: ADDON INACTIVE/NOT PLAYERUSABLE",null);
-           //}
+
         }
 
     }

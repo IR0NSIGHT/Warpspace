@@ -30,7 +30,6 @@ public class PacketHUDUpdate extends Packet {
      */
     public PacketHUDUpdate(long[] processArray) {
         arr = processArray;
-        DebugFile.log("sending HUD package to client: " + this);
     }
 
     /**
@@ -56,7 +55,6 @@ public class PacketHUDUpdate extends Packet {
         for (int i = 0; i < length; i++) {
             arr[i]=buf.readLong();
         }
-        DebugFile.log("packet reading" + this);
     }
 
 

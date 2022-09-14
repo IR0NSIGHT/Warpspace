@@ -27,8 +27,7 @@ public class ExtraEventLoop {
      * handles: interdiction, beacons
      * am aware that such stuff should be handeled on the client but am to lazy to change current event system thats focuessed on server -> client
      */
-    public static void CreateServerLoop() {
-        //DebugFile.log("starting loop that updates clients on interdiction",WarpMain.instance);
+    public static void CreateServerLoop() { //TODO fixme
         new StarRunnable() {
             @Override
             public void run() {

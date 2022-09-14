@@ -35,10 +35,6 @@ import org.schema.schine.resource.ResourceLoader;
  * the me.iron.WarpSpace.Mod.testing.main class where the mod is run from by starloader.
  */
 public class WarpMain extends StarMod {
-
-    public static void main(String[] args) {
-        System.out.println("hello space!");
-    }
     public static WarpMain instance;
     public BeaconManager beaconManagerServer;
     public BeaconManager beaconManagerClient;

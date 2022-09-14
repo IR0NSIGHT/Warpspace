@@ -1,6 +1,6 @@
 package me.iron.WarpSpace.Mod.beacon;
 
-import api.ModPlayground;
+import api.DebugFile;
 import api.listener.Listener;
 import api.listener.events.entity.SegmentControllerFullyLoadedEvent;
 import api.listener.events.player.PlayerSpawnEvent;
@@ -13,7 +13,6 @@ import api.network.PacketWriteBuffer;
 import api.utils.StarRunnable;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
-import me.iron.WarpSpace.Mod.client.DebugUI;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.server.data.GameServerState;
@@ -40,7 +39,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
             }
             return manager;
         } catch (Exception ex) {
-            System.out.println("BEACONMANAGER FAILED TO LOAD FOR WARPSPACE");
+            DebugFile.err("BEACONMANAGER FAILED TO LOAD FOR WARPSPACE");
             throw ex;
         }
     }
@@ -210,7 +209,6 @@ public class BeaconManager extends SimpleSerializerWrapper {
         }
         beacon_by_UID.put(beacon.getUID(),beacon);
         if (isServer && GameServerState.instance != null) {
-        //    ModPlayground.broadcastMessage("added beacon: " + beacon.getName());
             updateStrongest(warpPos);
             synchAll();
         }
@@ -301,7 +299,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
                 }
             }
         } catch (Exception e) {
-            System.out.println("BEACONMANAGER BUFFER READ ERROR");
+            DebugFile.err("BEACONMANAGER BUFFER READ ERROR");
             e.printStackTrace();
         }
     }
@@ -310,7 +308,6 @@ public class BeaconManager extends SimpleSerializerWrapper {
     public void onSerialize(PacketWriteBuffer packetWriteBuffer) {
         if (GameServerState.instance==null) //client doesnt need that.
             return;
-        //DebugUI.echo("serialize beacon mamanger",null);
         try {
             //collect ALL beacons in one big list
             ArrayList<BeaconObject> all = new ArrayList<>(beacon_by_UID.values());
@@ -322,7 +319,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
             }
 
         } catch (Exception e) {
-            System.out.println("BEACONMANAGER BUFFER WRITE ERROR");
+            DebugFile.err("BEACONMANAGER BUFFER WRITE ERROR");
             e.printStackTrace();
         }
 

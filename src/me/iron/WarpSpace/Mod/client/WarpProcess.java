@@ -1,15 +1,12 @@
 package me.iron.WarpSpace.Mod.client;
 
-import api.ModPlayground;
 import api.network.packets.PacketUtil;
 import api.utils.StarRunnable;
 import me.iron.WarpSpace.Mod.Interdiction.ExtraEventLoop;
 import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
-import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
-import org.newdawn.slick.Game;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.data.PlayerControllable;
@@ -20,7 +17,6 @@ import org.schema.game.server.data.GameServerState;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Vector;
 
 /**
  * enum containing available processes that can happen to a player like jumping to warp.
@@ -84,7 +80,6 @@ public enum WarpProcess {
                 //garbage collection
                 if (!this.equals(updater))
                     cancel();
-                //System.out.println("Server-Client synch for WarpProcess");
                 //is server(implicit)
                 LinkedList<PlayerState> disconnected = new LinkedList<>();
                 for (PlayerState p: GameServerState.instance.getPlayerStatesByName().values()) {
@@ -122,7 +117,6 @@ public enum WarpProcess {
         }
         if (arr[wp.ordinal()]!=value) {
             arr[wp.ordinal()] = value;
-            //ModPlayground.broadcastMessage("set process "+wp.name() + " to " + value + " for player "+ p.getName());
         }
 
     }
@@ -138,7 +132,6 @@ public enum WarpProcess {
         //FIXME PacketUtil.getServerProcessor throws nullpointer here sometimes
         preSynchServer(p);
 
-        //System.out.println("synch client"+p.getName());
         if (GameClientState.instance != null && GameClientState.instance.getPlayer().equals(p)) {
             //local host -> client, skip network
             update(player_to_processArr.get(p));
@@ -166,14 +159,12 @@ public enum WarpProcess {
      * update the "map" with values from these arrays, will auto fire events AFTER ALL values were set.
      */
     public static void update(long[] arr) {
-        //System.out.println("Update");
         assert arr.length == values().length;
         for (int i = 0; i < arr.length; i++)
             if (!values()[i].clientOnly) //ignore some stuff thats handled by the client
                 values()[i].setCurrentValue(arr[i]); //auto adds process to changed values if value is different
         postSynchClient();
         for (WarpProcess wp : changedValues) {
-            //System.out.println("Value changed: "+wp);
             for (WarpProcessListener l : wp.listeners) {
                 l.onValueChange(wp);
             }
@@ -232,7 +223,6 @@ public enum WarpProcess {
         previousValue = this.currentValue;
         if (currentValue != this.currentValue) {
             changedValues.add(this);
-            //System.out.println("[CLIENT] set process "+this.name()+" from " + this.currentValue + " to " + currentValue);
             this.currentValue = currentValue;
         }
     }
@@ -275,21 +265,4 @@ public enum WarpProcess {
                 ", previousValue=" + previousValue +
                 '}';
     }
-
-    /*
-    class PlayerProcessMap {
-        long[] process = new long[WarpProcess.values().length];
-        boolean[] changed = new boolean[WarpProcess.values().length];
-
-        private void setValue(WarpProcess wp, long value) {
-            process[wp.ordinal()] = value;
-            changed[wp.ordinal()] = true;
-        }
-
-        public void synchToClient() {
-
-            //after synch
-            changed = new boolean[WarpProcess.values().length];
-        }
-    } */
 }

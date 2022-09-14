@@ -1,6 +1,5 @@
 package me.iron.WarpSpace.Mod.beacon;
 
-import api.ModPlayground;
 import api.config.BlockConfig;
 import api.listener.Listener;
 import api.listener.events.register.RegisterAddonsEvent;
@@ -9,9 +8,6 @@ import api.mod.StarMod;
 import api.utils.addon.SimpleAddOn;
 import api.utils.game.SegmentControllerUtils;
 import me.iron.WarpSpace.Mod.WarpMain;
-import me.iron.WarpSpace.Mod.client.DebugUI;
-import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
-import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
 import org.schema.game.common.controller.PlayerUsableInterface;
 import org.schema.game.common.controller.SegmentController;
@@ -19,7 +15,6 @@ import org.schema.game.common.controller.elements.ManagerContainer;
 import org.schema.game.common.controller.elements.power.reactor.tree.ReactorElement;
 import org.schema.game.common.data.element.ElementInformation;
 import org.schema.game.common.data.element.ElementKeyMap;
-import org.schema.game.server.data.GameServerState;
 import org.schema.schine.common.language.Lng;
 import org.schema.schine.network.server.ServerMessage;
 
@@ -113,7 +108,6 @@ public class WarpBeaconAddon extends SimpleAddOn {
 
     @Override
     public boolean onExecuteServer() {
-      //  DebugUI.echo("BEACON ADDON EXECUTED ON SERVER",null);
         if (!wasActive) {
             onActivation();
         }
@@ -135,7 +129,6 @@ public class WarpBeaconAddon extends SimpleAddOn {
     private boolean wasActive; //on deactivation
     @Override
     public void onInactive() { //called when?
-        //ModPlayground.broadcastMessage("ON INACTIVE BEACON");
         if (wasActive) {
             onDeactivation();
         }
@@ -152,8 +145,6 @@ public class WarpBeaconAddon extends SimpleAddOn {
      * called once when addon is activated
      */
     private void onActivation() {
-        //ModPlayground.broadcastMessage("TOGGLE BEACON");
-       // DebugUI.echo("beacon toggle on entity"+ getSegmentController().getName()+ " was activated",null);
         if (isOnServer()) {
             //get/make beacon
             beacon = WarpMain.instance.beaconManagerServer.getBeaconByUID(getSegmentController().getUniqueIdentifier());

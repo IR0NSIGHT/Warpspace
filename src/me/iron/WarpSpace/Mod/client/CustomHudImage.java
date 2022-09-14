@@ -62,7 +62,6 @@ class CustomHudImage extends org.schema.schine.graphicsengine.forms.gui.GUIEleme
         }
 
         if (HUD_core.drawList.get(el.enumValue) == 1) { //draw
-            //DebugFile.log("positioning and scaling");
             sprite.setPositionCenter(true);
             if (el.playShutter) {
                 ShaderLibrary.scanlineShader.load();

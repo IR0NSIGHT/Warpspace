@@ -28,16 +28,13 @@ public class VoiceAnnouncer extends WarpProcessListener {
     public static String queueID = "VoiceAnnouncer";
     @Override
     public void onValueChange(WarpProcess c) {
-        //System.out.println("warp announcer="+c);
         super.onValueChange(c);
             switch (c) {
                 case JUMPEXIT: //fallthrough
                 case JUMPENTRY:
                     if (c.isTrue()) {
-                        //System.out.println("player warp sound with process"+ c);
                         announce(WarpSounds.SoundEntry.voice_engage);
                         announce(WarpSounds.SoundEntry.voice_warpdrive);
-                        //announce(WarpSounds.SoundEntry.voice_engaged);
                     }
                     break;
 

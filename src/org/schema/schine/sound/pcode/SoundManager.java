@@ -253,7 +253,6 @@ public class SoundManager {
                 sndSystem.setPitch(var4, pitch);
                 sndSystem.setVolume(var4, volume);
                 sndSystem.play(var4);
-                //System.out.println("playing sound "+var4 +" at volume "+  sndSystem.getVolume(var4) + " intended: " + volume );
             }
         }
     }

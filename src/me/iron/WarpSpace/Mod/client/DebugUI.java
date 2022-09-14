@@ -32,20 +32,19 @@ public class DebugUI implements CommandInterface {
 
     public static Integer[] parseText(String text, String keyword, String separator) {
         if (!text.contains(keyword)) {
-            DebugFile.log("text does not contain keyword.");
+            DebugFile.err("text does not contain keyword.");
             return null;
         }
 
         String s = text;
         s = s.replace(keyword,""); //remove keyword
         s = s.replace(" ",""); //remove space
-        DebugFile.log("pasreText: after removing keyword " + keyword + ", string is: " + s);
+        DebugFile.err("pasreText: after removing keyword " + keyword + ", string is: " + s);
         String[] parts = s.split(separator);
         Integer[] arr = new Integer[parts.length];
         for (int i = 0; i < arr.length; i++) {
             arr[i] = Integer.parseInt(parts[i]);
         }
-        DebugFile.log("integer[] is: " + arr.toString());
         return arr;
     }
 

@@ -67,7 +67,7 @@ public class ScreenHelper {
     public static Vector3f getCurrentScreenResolution() {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         if (gd == null) {
-            DebugFile.log("graphics device is null");
+            DebugFile.err("graphics device is null");
             return null;
         }
         Vector3f screenRes = new Vector3f(gd.getDisplayMode().getWidth(), gd.getDisplayMode().getHeight(),0); //resolution of current screen

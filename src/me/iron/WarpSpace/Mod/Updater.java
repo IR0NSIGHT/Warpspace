@@ -19,8 +19,6 @@ public class Updater {
         jarVersion = new VersionTag(Integer.parseInt(vArr[0]),
                 Integer.parseInt(vArr[1]),
                 Integer.parseInt(vArr[2]));
-        System.out.println("WarpSpace JAR has version:"+jarVersion);
-        System.out.println("WarpSpace installed has version:"+getSavedVersion());
     }
 
     public void runUpdate() {

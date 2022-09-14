@@ -71,7 +71,6 @@ public class WarpSounds {
         for (int i = 0; i< SoundEntry.values().length; i++) {
             name = SoundEntry.values()[i].getSoundName();
             path = folderPath + name +".wav";
-            //System.out.println("trying to load sound '"+name+"' at :"+path);
             file = new File(".",path);
             if (!file.exists()) {
                 try {
@@ -95,7 +94,7 @@ public class WarpSounds {
                     if (!file.exists()) {
                         new FileNotFoundException().printStackTrace();
                     } else {
-                        System.out.println("installed file at " + file.getCanonicalPath());
+                        ;
                     }
                 } catch (IOException | NullPointerException e) {
                     e.printStackTrace();
