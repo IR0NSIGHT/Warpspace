@@ -20,7 +20,7 @@ tasks.register("hello") {
     }
 
 }
-tasks.register("world") {
+tasks.register("hello-world") {
     dependsOn("hello")
     doLast {
         println(" world!")
