@@ -3,10 +3,11 @@ plugins {
 }
 
 java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(7))
 
-    }
+    sourceCompatibility = org.gradle.api.JavaVersion.VERSION_1_7
+    targetCompatibility = org.gradle.api.JavaVersion.VERSION_1_7
+    withJavadocJar()
+
 }
 
 tasks.register("hello") {
