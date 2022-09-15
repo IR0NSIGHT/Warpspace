@@ -12,9 +12,7 @@ jobs:
           distribution: 'adopt'
       - name: Build with Gradle
         run: ./gradlew build
-
-  owo:
-    runs-on: ubuntu-latest
-    steps:
       - name: do custom shit
         run: ./gradlew hello-world
+
+
