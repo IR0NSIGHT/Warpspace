@@ -2,7 +2,7 @@ package me.iron.WarpSpace.Mod.client.sounds;
 
 import me.iron.WarpSpace.Mod.client.WarpProcess;
 import me.iron.WarpSpace.Mod.client.WarpProcessListener;
-import me.iron.WarpSpace.Mod.server.ConfigManager;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 
 public class EngineSounds extends WarpProcessListener {
     public static String queueId = "Engine";

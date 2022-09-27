@@ -8,6 +8,7 @@ package me.iron.WarpSpace.Mod;
  */
 
 import api.DebugFile;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.server.data.Galaxy;
@@ -101,9 +102,9 @@ public class WarpManager {
         Vector3f warpPosF = warpSpacePos.toVector3f();
         warpPosF.y -= offset; //offset sectors to up (y axis)
         random.setSeed(warpSpacePos.code());
-        warpPosF.x = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*2.25f)+warpPosF.x * scale);
-        warpPosF.y = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*2.25f)+warpPosF.y * scale);
-        warpPosF.z = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*2.25f)+warpPosF.z * scale);
+        warpPosF.x = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()* ConfigManager.ConfigEntry.droppoint_random_offset.getValue())+warpPosF.x * scale);
+        warpPosF.y = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*ConfigManager.ConfigEntry.droppoint_random_offset.getValue())+warpPosF.y * scale);
+        warpPosF.z = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*ConfigManager.ConfigEntry.droppoint_random_offset.getValue())+warpPosF.z * scale);
         realPos = new Vector3i(warpPosF.x,warpPosF.y,warpPosF.z);
 
         return realPos;

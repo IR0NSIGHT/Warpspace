@@ -11,7 +11,7 @@ import com.bulletphysics.dynamics.character.KinematicCharacterController;
 import com.bulletphysics.linearmath.Transform;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.client.WarpProcess;
-import me.iron.WarpSpace.Mod.server.ConfigManager;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.lwjgl.opengl.GL11;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.controller.ManagedUsableSegmentController;

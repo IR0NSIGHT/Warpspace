@@ -23,7 +23,7 @@ import me.iron.WarpSpace.Mod.beacon.BeaconUpdatePacket;
 import me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon;
 import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
-import me.iron.WarpSpace.Mod.server.ConfigManager;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;

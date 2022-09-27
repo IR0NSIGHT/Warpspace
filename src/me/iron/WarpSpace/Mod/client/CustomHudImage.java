@@ -5,7 +5,6 @@ package me.iron.WarpSpace.Mod.client;
 
 import api.DebugFile;
 import me.iron.WarpSpace.Mod.WarpManager;
-import me.iron.WarpSpace.Mod.server.ConfigManager;
 import org.schema.game.client.data.GameClientState;
 import org.schema.schine.graphicsengine.forms.Sprite;
 import org.schema.schine.graphicsengine.shader.ShaderLibrary;
