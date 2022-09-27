@@ -11,6 +11,7 @@ import com.bulletphysics.dynamics.character.KinematicCharacterController;
 import com.bulletphysics.linearmath.Transform;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.client.WarpProcess;
+import me.iron.WarpSpace.Mod.server.ConfigManager;
 import org.lwjgl.opengl.GL11;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
@@ -178,21 +179,23 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
 
         Vector3f modelScale = new Vector3f(scale, scale, scale);
 
-        shader.setShaderInterface(this);
-        shader.load();
+        if (ConfigManager.ConfigEntry.vfx_use_warp_shader.isTrue()) {
+            shader.setShaderInterface(this);
+            shader.load();
 
-        tr.origin.set(drawPosition);
-        mesh.loadVBO(true);
+            tr.origin.set(drawPosition);
+            mesh.loadVBO(true);
 
-        GlUtil.glPushMatrix();
-        GlUtil.glMultMatrix(tr);
+            GlUtil.glPushMatrix();
+            GlUtil.glMultMatrix(tr);
 
-        GlUtil.scaleModelview(modelScale.x, modelScale.y, modelScale.z); //lol, why is there no scaleModelview(vector3f)
+            GlUtil.scaleModelview(modelScale.x, modelScale.y, modelScale.z); //lol, why is there no scaleModelview(vector3f)
 
-        mesh.renderVBO();
-        GlUtil.glPopMatrix();
-        mesh.unloadVBO(true);
-        shader.unload();
+            mesh.renderVBO();
+            GlUtil.glPopMatrix();
+            mesh.unloadVBO(true);
+            shader.unload();
+        }
     }
 
     @Override
