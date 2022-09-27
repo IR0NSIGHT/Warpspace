@@ -7,10 +7,10 @@ import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import api.DebugFile;
 import api.utils.StarRunnable;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.server.data.GameServerState;
 
-import java.util.ArrayList;
 
 /**
  * STARMADE MOD
@@ -23,9 +23,10 @@ public class InWarpLoop {
     public static void startLoop(final SegmentController ship) {
         new StarRunnable() {
             long lastRun;
-            long timeOut = 200;
-            int countdown = 30;
-            final int countdownMax = 30;
+            final long timeOut = 1000;
+            final int countdownMax = (int) ConfigManager.ConfigEntry.seconds_until_speeddrop.getValue();
+            int countdown = countdownMax; //initial start value
+
             @Override
             public void run() {
                 if (GameServerState.isFlagShutdown() || GameServerState.isShutdown() || ship == null || !ship.existsInState()) {

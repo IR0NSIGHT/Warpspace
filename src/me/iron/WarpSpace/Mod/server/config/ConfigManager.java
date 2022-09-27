@@ -54,7 +54,13 @@ public class ConfigManager {
         //map stuff
         map_draw_droppoints_range("map_draw_droppoints_range",1,0,10),
 
-        droppoint_random_offset("droppoint_random_offset_sectors",2.25f,0,Float.MAX_VALUE, false, true);
+        //######### serverside config
+
+        //sectors l/r u/d f/b random offset of droppoint (deterministic)
+        droppoint_random_offset("droppoint_random_offset_sectors",2.25f,0,Float.MAX_VALUE, false, true),
+
+        //second its takes for a slow ship to drop from warp
+        seconds_until_speeddrop("seconds_until_speeddrop",30,0,60000000, false, true);
 
         private final String path;
         private final float defaultValue;

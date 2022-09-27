@@ -37,8 +37,6 @@ public class ConfigSyncPaket extends Packet {
 
     @Override
     public void writePacketData(PacketWriteBuffer packetWriteBuffer) throws IOException {
-        DebugFile.err("#####################################################################" +
-                "######################################################## SENT CONFIG SYNC PACKET");
         for (ConfigManager.ConfigEntry e: ConfigManager.ConfigEntry.values()) {
                 packetWriteBuffer.writeString(e.getPath());
                 packetWriteBuffer.writeFloat(e.getValue());

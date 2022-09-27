@@ -64,15 +64,14 @@ public class WarpJumpManager {
             countdown = 100; //almost immediate drop
         }
 
-        final  long dropTime = System.currentTimeMillis()+(countdown); //TODY synch time to drop with client
+        final long dropTime = System.currentTimeMillis()+(countdown); //TODY synch time to drop with client
         dropQueue.add(ship);
+
         //invoke sectorswitch
         new StarRunnable() {
             @Override
             public void cancel() {
                 super.cancel();
-                //WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,0);
-                //WarpProcess.setProcess(ship,WarpProcess.JUMPEXIT,0);
             }
 
             @Override
@@ -80,6 +79,7 @@ public class WarpJumpManager {
                 if (GameServerState.isShutdown() || GameServerState.isFlagShutdown()) { //obsolete?
                     cancel();
                 }
+                //TODO adjust dropTime to always allow the drop-sound-effect to play completely.
                 if (System.currentTimeMillis()<dropTime) { //wait timer
                     return;
                 }
