@@ -94,7 +94,6 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
                     mod.getJarResource("me/iron/WarpSpace/Mod/res/warp.frag"));
         } catch (Exception ex) {
             System.err.println("[MOD][WarpSpace][ERROR] Failed to load skybox draw resources!");
-            ex.printStackTrace();
         }
     }
 
