@@ -158,7 +158,6 @@ public class DebugUI implements CommandInterface {
     }
 
     public static void echo(String mssg, @Nullable PlayerState p) {
-        DebugFile.log("[WARPSPACE-DEBUG] "+mssg);
         if (p == null) {
             if (GameServerState.instance!=null) {
                 for (PlayerState pl: GameServerState.instance.getPlayerStatesByName().values()) {

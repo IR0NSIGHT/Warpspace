@@ -43,7 +43,7 @@ public class InWarpLoop {
 
                     if (!WarpEntityManager.isWarpEntity(ship) || GameServerState.isShutdown()) {
                         //left warp
-                    //    DebugFile.log("InWarpLoop was terminated bc server is shutdown or ship no longer in warp.");
+                    ;
                         cancel();
                     }
                     //update value for synching

@@ -14,7 +14,6 @@ import api.utils.StarRunnable;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.common.controller.SegmentController;
 import org.schema.game.server.data.GameServerState;
 
 import java.util.*;
@@ -44,31 +43,23 @@ public class BeaconManager extends SimpleSerializerWrapper {
         }
     }
 
-    transient private HashMap<Vector3i,LinkedList<String>> beaconUIDs_by_sector = new HashMap(){
+    transient final private HashMap<Vector3i,LinkedList<String>> beaconUIDs_by_sector = new HashMap<Vector3i,LinkedList<String>>(){
         @Override
         public void clear() {
             super.clear();
         }
 
         @Override
-        public Object remove(Object key) {
+        public LinkedList<String> remove(Object key) {
             return super.remove(key);
         }
     };
-    transient private HashMap<String ,BeaconObject> beacon_by_UID = new HashMap<>();
+    transient final private HashMap<String ,BeaconObject> beacon_by_UID = new HashMap<>();
     transient private Random random;
     public BeaconManager() {
         //owo
     }
 
-    public void activateAll() {
-        for (BeaconObject b: beacon_by_UID.values()) {
-            SegmentController sc = GameServerState.instance.getSegmentControllersByName().get(b.getUID());
-            if (sc == null)
-                continue;
-            b.activateAddon(sc);
-        }
-    }
     public void onInit() {
         random = new Random(420);
         if (GameServerState.instance != null)
@@ -142,8 +133,8 @@ public class BeaconManager extends SimpleSerializerWrapper {
 
     /**
      * will modify the given droppoint with existing beacon positions.
-     * @param warpPos
-     * @param dropPos
+     * @param warpPos 3d warp position
+     * @param dropPos sector position in realspace
      */
     public BeaconObject modifyDroppoint(Vector3i warpPos, Vector3i dropPos) {
         LinkedList<String> beacons = beaconUIDs_by_sector.get(warpPos);
@@ -157,8 +148,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
 
     /**
      * will return the strongest beacon that affects this warppos. will update and validate beacons in the process.
-     * @param warpPos
-     * @return null if no beacon.
+     * @param warpPos position in warp
      */
     public void updateStrongest(Vector3i warpPos) {
         //sort the list of beacons by their strength.
@@ -259,7 +249,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
 
     /**
      * used for loading and reading server sent packets.
-     * @param buffer
+     * @param buffer packet read buffer
      */
     @Override
     public void onDeserialize(PacketReadBuffer buffer) {

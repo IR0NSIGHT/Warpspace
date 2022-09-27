@@ -64,7 +64,6 @@ class HUD_element {
         this.moveStep = moveStep;
         setScale(scale);
         setPos(pos);
-    //    DebugFile.log("created" + this.toString());
     }
 
     /**
@@ -82,7 +81,6 @@ class HUD_element {
         this.mother.addChild(this);
         setScale(scale);
         setPos(pos);
-    //    DebugFile.log("created " + this.toString());
     }
 
     @Override

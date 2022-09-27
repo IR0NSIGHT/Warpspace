@@ -199,7 +199,7 @@ public class WarpJumpManager {
         if (isInterdicted(ship,WarpManager.getWarpSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
             return false;
         }
-    //    DebugFile.log("isAllowedEntry is an empty check");
+    ;
         return true;
     }
 
@@ -214,7 +214,7 @@ public class WarpJumpManager {
         if (isInterdicted(ship,WarpManager.getRealSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
             return false;
         }
-    //    DebugFile.log("isAllowedDrop is an empty check");
+    ;
         return true;
     }
 

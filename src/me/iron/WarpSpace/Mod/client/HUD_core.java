@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class HUD_core {
 
-    public static List<HUD_element> elementList = new ArrayList(); //TODO get rid of compiler warning for raw usage
+    public static List<HUD_element> elementList = new ArrayList<>();
     public static HashMap<SpriteList, Integer> drawList = new HashMap<>();
     /**
      * some general HUD element placements to use a position references. any element built with these will move + scale with them
@@ -40,11 +40,6 @@ public class HUD_core {
             new Vector3f( 1,1,1),
             SpriteList.PEARL,
             HUD_element.ElementType.BACKGROUND);
-
-    //TODO extra info window
-    private static Vector3f noInhibition = new Vector3f((float)1622/1920,(float)928/1080,0.01f);
-    private static Vector3f onInhibition = new Vector3f((float) 1460/1920,(float) 928/1080,0f);
-
 
     /**
      * init method for HUD stuff.
@@ -57,12 +52,7 @@ public class HUD_core {
             long lastTime = System.currentTimeMillis();
             @Override
             public void run() {
-                /**
-                 * this method checks for static variables like "is in warp" and decides what elements to draw on the HUD and which to disable.
-                 */
-                //    UpdateSituation(); //TODO make 100% event based? -> new package from server triggers GUI update
                 if (player == null || player.getCurrentSector() == null) { //nullpointer check to avoid drawing before player spawns.
-                    // DebugFile.log("playerstate is null or playersector is null");
                     player = GameClientState.instance.getPlayer();
                 } else {
                     if (GameServerState.isShutdown()) {
@@ -150,9 +140,6 @@ public class HUD_core {
 
     }
 
-    //TODO maybe split up in placement + available sprites?
-    //TODO move to json
-    //TODO get rid of elementlist, directly put into drawlist.
     /**
      * initialize the list of hud elements, add all entries into the drawList.
      */
@@ -180,14 +167,13 @@ public class HUD_core {
     }
 
     /**
-     * overwrite custom radar if necessary //TODO handle properly instead of this leftover method
+     * overwrite custom radar if necessary
      */
     public static void UpdateHUD() {
         if (GameClientState.instance == null)
             return;
         if (GameClientState.instance.getPlayer().getCurrentSector().length()<5000 || WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector()))
             initRadarSectorGUI();
-
     }
 
     /**
@@ -205,7 +191,6 @@ public class HUD_core {
             overlay.neighborSectorsNames[i] = "[WARP]\n"+ WarpManager.getRealSpacePos(overlay.neighborSectorsPos[i]);
         }
 
-        //Radar.location ==> sector coord HUD under radar
     }
 
     /**
@@ -234,6 +219,6 @@ public class HUD_core {
             });
         }catch (NullPointerException ignored) {
 
-        };
+        }
     }
 }

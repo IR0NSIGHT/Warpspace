@@ -45,7 +45,6 @@ public class PacketHUDUpdate extends Packet {
         for (long l: arr) {
             buf.writeLong(l);
         }
-        DebugFile.log("packet writing" + this);
     }
 
     @Override
