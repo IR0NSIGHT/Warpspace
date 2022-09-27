@@ -3,7 +3,6 @@ package me.iron.WarpSpace.Mod.client.sounds;
 import me.iron.WarpSpace.Mod.client.WarpProcess;
 import me.iron.WarpSpace.Mod.client.WarpProcessListener;
 import me.iron.WarpSpace.Mod.server.ConfigManager;
-import org.apache.xmlbeans.impl.xb.xmlconfig.ConfigDocument;
 
 public class EngineSounds extends WarpProcessListener {
     public static String queueId = "Engine";
@@ -31,6 +30,6 @@ public class EngineSounds extends WarpProcessListener {
         if (!ConfigManager.ConfigEntry.sfx_effects_enable.isTrue())
             return;
 
-        WarpSounds.instance.queueSound(new WarpSounds.SoundInstance(e, ConfigManager.ConfigEntry.sfx_effects_loudness.getValue(), 1),queueId);
+        WarpSounds.instance.queueSound(new WarpSounds.SoundInstance(e, ConfigManager.ConfigEntry.sfx_effects_add_db.getValue(), 1),queueId);
     }
 }

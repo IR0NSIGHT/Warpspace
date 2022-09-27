@@ -3,7 +3,6 @@ package me.iron.WarpSpace.Mod.client.sounds;
 import me.iron.WarpSpace.Mod.client.WarpProcess;
 import me.iron.WarpSpace.Mod.client.WarpProcessListener;
 import me.iron.WarpSpace.Mod.server.ConfigManager;
-import org.schema.schine.sound.pcode.SoundManager;
 
 public class VoiceAnnouncer extends WarpProcessListener {
     public VoiceAnnouncer() {
@@ -90,7 +89,7 @@ public class VoiceAnnouncer extends WarpProcessListener {
         if (!ConfigManager.ConfigEntry.sfx_voice_enable.isTrue())
             return;
 
-        WarpSounds.instance.queueSound(new WarpSounds.SoundInstance(e, ConfigManager.ConfigEntry.sfx_voice_loudness.getValue(), 1),queueID);
+        WarpSounds.instance.queueSound(new WarpSounds.SoundInstance(e, ConfigManager.ConfigEntry.sfx_voice_add_db.getValue(), 1),queueID);
 
     }
 }
