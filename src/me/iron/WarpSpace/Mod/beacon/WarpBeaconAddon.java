@@ -8,6 +8,7 @@ import api.mod.StarMod;
 import api.utils.addon.SimpleAddOn;
 import api.utils.game.SegmentControllerUtils;
 import me.iron.WarpSpace.Mod.WarpMain;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
 import org.schema.game.common.controller.PlayerUsableInterface;
 import org.schema.game.common.controller.SegmentController;
@@ -33,7 +34,7 @@ public class WarpBeaconAddon extends SimpleAddOn {
          StarMod mod = WarpMain.instance;
          short rootID = ElementKeyMap.REACTOR_CHAMBER_JUMP;
         beaconChamber = BlockConfig.newChamber(mod, "Warp Beacon", rootID); //the chamber is the beacon, the addon is the toggle (button)
-        beaconChamber.chamberCapacity = 0.5f;
+        beaconChamber.chamberCapacity = ConfigManager.ConfigEntry.warp_beacon_chamber_percent.getValue();
         beaconChamber.setTextureId(ElementKeyMap.getInfo(rootID).getTextureIds());
         beaconChamber.setDescription("Shift the closest warp droppoint to this sector.");
         beaconChamber.chamberPermission = ElementInformation.CHAMBER_PERMISSION_STATION;

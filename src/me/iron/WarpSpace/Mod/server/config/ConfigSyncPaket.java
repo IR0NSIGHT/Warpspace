@@ -5,6 +5,7 @@ import api.network.Packet;
 import api.network.PacketReadBuffer;
 import api.network.PacketWriteBuffer;
 import api.network.packets.PacketUtil;
+import me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.server.data.GameServerState;
 
@@ -45,6 +46,7 @@ public class ConfigSyncPaket extends Packet {
 
     @Override
     public void processPacketOnClient() {
+        WarpBeaconAddon.beaconChamber.chamberCapacity = ConfigManager.ConfigEntry.warp_beacon_chamber_percent.getValue();
 
     }
 

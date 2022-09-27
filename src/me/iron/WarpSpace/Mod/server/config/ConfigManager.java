@@ -66,7 +66,10 @@ public class ConfigManager {
         warp_speed_no_chamber_multiplier("warp_speed_no_chamber_multiplier",1f,0,1000,false, true),
         warp_speed_chamber_lvl_1_multiplier("warp_speed_chamber_lvl_1_multiplier",1.3f,0,1000,false, true),
         warp_speed_chamber_lvl_2_multiplier("warp_speed_chamber_lvl_2_multiplier",1.6f,0,1000,false, true),
-        warp_speed_chamber_lvl_3_multiplier("warp_speed_chamber_lvl_3_multiplier",2,0,1000,false, true);
+        warp_speed_chamber_lvl_3_multiplier("warp_speed_chamber_lvl_3_multiplier",2,0,1000,false, true),
+
+        //beacon chamber
+        warp_beacon_chamber_percent("warp_beacon_chamber_percent",0.25f,0,1, false, true);
 
 
         private final String path;
