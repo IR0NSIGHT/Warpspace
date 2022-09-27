@@ -9,6 +9,7 @@ import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import me.iron.WarpSpace.Mod.beacon.BeaconObject;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.view.gamemap.GameMapDrawer;
 import org.schema.schine.graphicsengine.forms.Sprite;
@@ -71,16 +72,15 @@ public class DropPointMapDrawer extends MapDrawer {
         Vector3i warpPos = WarpManager.getWarpSpacePos(currentPos);
         Vector3i tempDrop;
         Vector3i tempWarp = new Vector3i();
-        int range = 1;
+        int range = (int)ConfigManager.ConfigEntry.map_draw_droppoints_range.getValue();
         for (int x =-range; x <= range; x++) {
             for (int y =-range; y <= range; y++){
                 for (int z = -range; z <= range; z++){
                     tempWarp.set(warpPos);
                     tempWarp.add(x,y,z);
                     tempDrop = WarpManager.getRealSpacePos(tempWarp);
-                    BeaconObject beaconObject = null;
                     if (WarpJumpManager.isDroppointShifted(tempWarp))
-                       beaconObject = WarpMain.instance.beaconManagerClient.modifyDroppoint(tempWarp,tempDrop);
+                       WarpMain.instance.beaconManagerClient.modifyDroppoint(tempWarp,tempDrop);
 
                     int subsprite = (WarpJumpManager.isDroppointShifted(tempWarp))?1:0;
                     SimpleMapMarker drop = new SimpleMapMarker(mapSprite,subsprite,markerColor,posFromSector(tempDrop,true));

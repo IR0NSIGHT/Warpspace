@@ -51,6 +51,9 @@ public class ConfigManager {
         //warp shader
         vfx_use_warp_shader("vfx_use_warp_shader",1,0,1, true, false),
 
+        //map stuff
+        map_draw_droppoints_range("map_draw_droppoints_range",1,0,10),
+
         droppoint_random_offset("droppoint_random_offset_sectors",2.25f,0,Float.MAX_VALUE, false, true);
 
         private final String path;
