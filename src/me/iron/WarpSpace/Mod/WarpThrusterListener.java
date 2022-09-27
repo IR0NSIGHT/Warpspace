@@ -3,6 +3,7 @@ package me.iron.WarpSpace.Mod;
 import api.listener.fastevents.FastListenerCommon;
 import api.listener.fastevents.ThrusterElementManagerListener;
 import api.utils.game.SegmentControllerUtils;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.elements.power.reactor.tree.ReactorElement;
@@ -55,14 +56,15 @@ public class WarpThrusterListener implements ThrusterElementManagerListener {
                 ReactorElement jd2Chamber = SegmentControllerUtils.getChamberFromElement(musc, JUMP_DIST_2);
                 ReactorElement jd3Chamber = SegmentControllerUtils.getChamberFromElement(musc, JUMP_DIST_3);
                 if(jd3Chamber != null && jd3Chamber.isAllValid()){
-                    return v * 2;
+                    return v * ConfigManager.ConfigEntry.warp_speed_chamber_lvl_3_multiplier.getValue();
                 }
                 if(jd2Chamber != null && jd2Chamber.isAllValid()){
-                    return v * 1.6F;
+                    return v * ConfigManager.ConfigEntry.warp_speed_chamber_lvl_2_multiplier.getValue();
                 }
                 if(jd1Chamber != null && jd1Chamber.isAllValid()){
-                    return v * 1.3F;
+                    return v * ConfigManager.ConfigEntry.warp_speed_chamber_lvl_1_multiplier.getValue();
                 }
+                return v * ConfigManager.ConfigEntry.warp_speed_no_chamber_multiplier.getValue();
             }
         }
         return v;
