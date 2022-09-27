@@ -24,11 +24,11 @@ public class ConfigManager {
     public enum ConfigEntry {
         //voice announcer
         sfx_voice_enable("sfx_voice_enable",1,0,20),
-        sfx_voice_loudness("sfx_voice_loudness_dezibel",10f,0,20),
+        sfx_voice_add_db("sfx_voice_loudness_add_dezibel",10f,0,20),
 
         //warp sound effects
         sfx_effects_enable("sfx_effects_enable",1,0,20),
-        sfx_effects_loudness("sfx_effects_loudness_dezibel",0f,0,20),
+        sfx_effects_add_db("sfx_effects_loudness_add_dezibel",0f,0,20),
 
         //warp shader
         vfx_use_warp_shader("vfx_use_warp_shader",1,0,1, true);
