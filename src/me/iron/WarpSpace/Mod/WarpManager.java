@@ -11,6 +11,7 @@ import api.DebugFile;
 import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
+import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.Galaxy;
 
 import javax.vecmath.Vector3f;
@@ -47,7 +48,7 @@ public class WarpManager {
      * @param object segmentcontroller to check
      * @return boolean, true if segmentcontrollers position is in warp
      */
-    public static boolean isInWarp(SegmentController object) {
+    public static boolean isInWarp(SimpleTransformableSendableObject object) {
         if (object == null) {
             DebugFile.err("isInWarp called with null object");
             return false;

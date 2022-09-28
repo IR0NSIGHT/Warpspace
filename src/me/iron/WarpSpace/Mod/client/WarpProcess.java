@@ -12,6 +12,7 @@ import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.data.PlayerControllable;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.data.player.PlayerState;
+import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
 
 import java.util.Collection;
@@ -58,7 +59,7 @@ public enum WarpProcess {
     //holds wp values for each player
     private static HashMap<PlayerState, long[]> player_to_processArr = new HashMap<>();
     private static StarRunnable updater;
-    public static void setProcess(SegmentController sc, WarpProcess wp, long value) {
+    public static void setProcess(SimpleTransformableSendableObject sc, WarpProcess wp, long value) {
         if (!(sc instanceof  PlayerControllable))
             return;
         Collection<PlayerState> attached = ((PlayerControllable) sc).getAttachedPlayers();

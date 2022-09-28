@@ -3,6 +3,7 @@ package me.iron.WarpSpace.Mod;
 import api.listener.events.Event;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
+import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.schine.common.language.Lng;
 import org.schema.schine.network.server.ServerMessage;
 
@@ -15,7 +16,7 @@ import org.schema.schine.network.server.ServerMessage;
  * fired whenever an entity enters or leaves warp
  */
 public class WarpJumpEvent extends Event {
-    private SegmentController ship;
+    private SimpleTransformableSendableObject ship;
 
     private WarpJumpType type;
 
@@ -39,7 +40,7 @@ public class WarpJumpEvent extends Event {
      * @param start start sector
      * @param end end sector
      */
-    public WarpJumpEvent(SegmentController ship, WarpJumpType type, Vector3i start, Vector3i end) {
+    public WarpJumpEvent(SimpleTransformableSendableObject ship, WarpJumpType type, Vector3i start, Vector3i end) {
         this.ship = ship;
         this.start = start;
         this.end = end;
@@ -50,7 +51,7 @@ public class WarpJumpEvent extends Event {
      * get segmentcontroller that is warping
      * @return ship
      */
-    public SegmentController getShip() {
+    public SimpleTransformableSendableObject getShip() {
         return ship;
     }
 

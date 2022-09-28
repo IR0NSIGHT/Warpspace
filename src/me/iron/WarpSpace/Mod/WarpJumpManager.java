@@ -35,8 +35,8 @@ import java.util.List;
  */
 public class WarpJumpManager {
 
-    public static List<SegmentController> dropQueue = new ArrayList<>();;
-    public static List<SegmentController> entryQueue = new ArrayList<>();;
+    public static List<SimpleTransformableSendableObject> dropQueue = new ArrayList<>();;
+    public static List<SimpleTransformableSendableObject> entryQueue = new ArrayList<>();;
     /**
      * will drop the given ship out of warp after x seconds to specified sector.
      * will not check if ship is allowed to drop, only if it already has a drop queued.
@@ -46,7 +46,7 @@ public class WarpJumpManager {
      * @param isJump is a jump or an autodrop, will empty warpdrive if true
      * @param force overwrite all checks, admin
      */
-    public static void invokeDrop(long countdown, final SegmentController ship, final boolean isJump, boolean force) {
+    public static void invokeDrop(long countdown, final SimpleTransformableSendableObject ship, final boolean isJump, boolean force) {
         //check if already dropping
         if (!force && dropQueue.contains(ship)) { //ship already has a drop queued, and doesnt force another one.
             return;
@@ -122,7 +122,7 @@ public class WarpJumpManager {
      * @param ship segmentcontroller
      * @param force true if ignore all checks and force jump anyways
      */
-    public static void invokeEntry(long countdown, final SegmentController ship, boolean force) {
+    public static void invokeEntry(long countdown, final SimpleTransformableSendableObject ship, boolean force) {
         //check if already dropping
         if (!force && entryQueue.contains(ship)) { //ship already has a jump queued, and doesnt force another one.
             ship.sendControllingPlayersServerMessage(Lng.astr("Ship is already jumping!"), ServerMessage.MESSAGE_TYPE_INFO);
@@ -143,9 +143,8 @@ public class WarpJumpManager {
                 if (System.currentTimeMillis()<dropTime) {
                     return;
                 }
-                if (entryQueue.contains(ship)) { //remove from queue
-                    entryQueue.remove(ship);
-                }
+                //remove from queue
+                entryQueue.remove(ship);
 
                 //create, fire event, get back params
                 WarpJumpEvent.WarpJumpType  type = WarpJumpEvent.WarpJumpType.ENTRY;
@@ -173,7 +172,7 @@ public class WarpJumpManager {
         }.runTimer(WarpMain.instance,1);
     }
 
-    public static void doSectorSwitch(SegmentController ship, Vector3i newPos, boolean instant) {
+    public static void doSectorSwitch(SimpleTransformableSendableObject ship, Vector3i newPos, boolean instant) {
         SectorSwitch sectorSwitch = GameServer.getServerState().getController().queueSectorSwitch(ship,newPos,SectorSwitch.TRANS_JUMP,false,true,true);
         if (sectorSwitch != null) {
             WarpProcess.setProcess(ship,WarpProcess.HAS_JUMPED,1);
@@ -195,7 +194,7 @@ public class WarpJumpManager {
      * @param ship segmentcontroller to check
      * @return boolean, true if allowed entry, false if interdicted or can fire warpdrive
      */
-    public static boolean isAllowedEntry(SegmentController ship) {
+    public static boolean isAllowedEntry(SimpleTransformableSendableObject ship) {
         if (isInterdicted(ship,WarpManager.getWarpSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
             return false;
         }
@@ -210,7 +209,7 @@ public class WarpJumpManager {
      * @param ship segmentcontroller ship
      * @return boolean, true if not interdicted and can fire warpdrive
      */
-    public static boolean isAllowedDropJump(SegmentController ship) {
+    public static boolean isAllowedDropJump(SimpleTransformableSendableObject ship) {
         if (isInterdicted(ship,WarpManager.getRealSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
             return false;
         }
@@ -222,20 +221,18 @@ public class WarpJumpManager {
      * will remove one jump charge from the FTL drive of the specified ship.
      * @param ship ship segmentcontroller
      */
-    public static void emptyWarpdrive(SegmentController ship) {
+    public static void emptyWarpdrive(SimpleTransformableSendableObject ship) {
         //get jumpaddon
         JumpAddOn warpdrive;
-        if(ship instanceof ManagedSegmentController<?>) {
-            warpdrive =((Ship)ship).getManagerContainer().getJumpAddOn();
-        } else {
+        if(!(ship instanceof ManagedSegmentController<?>))
             return;
-        }
+        warpdrive =((Ship)ship).getManagerContainer().getJumpAddOn();
         warpdrive.removeCharge();
         warpdrive.setCharge(0.0F);
         warpdrive.sendChargeUpdate();
     }
 
-    public static boolean canExecuteWarpdrive(SegmentController ship) {
+    public static boolean canExecuteWarpdrive(SimpleTransformableSendableObject ship) {
         //get jumpaddon
         JumpAddOn warpdrive;
         if(ship instanceof ManagedSegmentController<?>) {
@@ -260,7 +257,7 @@ public class WarpJumpManager {
      * @param position positon to check from
      * @return true if interdicted
      */
-    public static boolean isInterdicted(SegmentController ship, Vector3i position) {
+    public static boolean isInterdicted(SimpleTransformableSendableObject ship, Vector3i position) {
         //TODO PR into starmade repo, fix there.
         JumpAddOn warpdrive;
         if(ship instanceof Ship) {
@@ -271,13 +268,15 @@ public class WarpJumpManager {
 
         //use vanilla check method - check one sector in each direction for jumpaddons that interdict this one.
         assert warpdrive.isOnServer();
-        GameServerState gameServerState;
         Sector sector;
         boolean retVal = false;
         Vector3i neighbourSectorPos = new Vector3i();
 
+        if (!(ship instanceof SegmentController))
+            return false;
+
         //debug jumpdrive level
-        if(ship.hasActiveReactors()){
+        if(((SegmentController)ship).hasActiveReactors()){
         //    DebugFile.log ("warpdrive of "+ ship.getName() + " has level: " + ((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface().getActiveReactor().getLevel());
         }
 
