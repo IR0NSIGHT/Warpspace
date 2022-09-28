@@ -1,5 +1,6 @@
 package me.iron.WarpSpace.Mod.visuals;
 
+import api.ModPlayground;
 import api.listener.Listener;
 import api.listener.events.draw.RegisterWorldDrawersEvent;
 import api.utils.draw.ModWorldDrawer;
@@ -58,7 +59,7 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
     private static final float SCALE_FACTOR = 0.35f; //scale factor of skybox sphere = this value x sector size, also used for shader coord compensation
     private static final Vector3f zeroVel = new Vector3f();
     private static boolean skyboxIsActive = false;
-    static float warpDepth = 0;
+    static float smoothedWarpStability = 0;
 
     /**
      * Time elapsed in warp. Resets when not warping.
@@ -104,22 +105,23 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
 
     @Override
     public void update(Timer timer) {
-        skyboxIsActive = Math.abs(warpDepth) > EPSILON;
+        skyboxIsActive = Math.abs(smoothedWarpStability) > EPSILON;
 
-        float maxChangePerFrame = 1/(timer.getFps()*10f); //x frames to go from 0 to 1, in theory. apparently it's fuzzier than that though idk
+        float maxChangePerFrame = 1/(timer.getFps()*40f); //x frames to go from 0 to 1, in theory. apparently it's fuzzier than that though idk
         ManagedUsableSegmentController<?> vessel = null;
         boolean inWarp = WarpProcess.IS_IN_WARP.isTrue();
 
         if (!inWarp) {
-            warpDepth = Math.max(0, warpDepth - (maxChangePerFrame * 10)); //quick transition to zero warp depth visual before disabling entirely (fallback smoothing)
+            smoothedWarpStability = Math.max(0, smoothedWarpStability - (maxChangePerFrame * 10)); //quick transition to zero warp depth visual before disabling entirely (fallback smoothing)
         } else if (GameClientState.instance != null) {
             vessel = currentlyOnBoardEntity();
             //smoothly transition to desired warpdepth
             float trueDepth = WarpProcess.WARP_STABILITY.getCurrentValue() / 100f;
-            if (warpDepth < trueDepth) {
-                warpDepth = Math.min(trueDepth, warpDepth + maxChangePerFrame);
-            } else if (warpDepth > trueDepth) {
-                warpDepth = Math.max(trueDepth, warpDepth - maxChangePerFrame);
+
+            if (smoothedWarpStability < trueDepth) {
+                smoothedWarpStability = Math.min(trueDepth, smoothedWarpStability + maxChangePerFrame);
+            } else if (smoothedWarpStability > trueDepth) {
+                smoothedWarpStability = Math.max(trueDepth, smoothedWarpStability - maxChangePerFrame);
             }
         }
 
@@ -141,23 +143,21 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
 
     @Override
     public void updateShaderParameters(Shader shader) {
-        GlUtil.glBindTexture(GL11.GL_TEXTURE_2D, bubblePlaceholderTexture); //derpface; shouldn't matter though
+        GlUtil.glBindTexture(GL11.GL_TEXTURE_2D, bubblePlaceholderTexture);
         GlUtil.updateShaderFloat(shader, "timeBasis", time); //speed of effect 'animation'
         if (GameClientState.instance != null) {
             ManagedUsableSegmentController<?> vessel = currentlyOnBoardEntity();
             if (vessel != null && vessel.getPhysicsObject() != null) {
-                //synchronized (vessel) { //useless? produced nullpointer, guessed it might be non threadsafe cause
                 CollisionObject cob = vessel.getDockingController().getAbsoluteMother().getPhysicsDataContainer().getObject(); //I'll refrain from making any corny puns here
 
                 GlUtil.updateShaderVector3f(shader, "flightVel", cob != null ? ((RigidBody) cob).getLinearVelocity(vel) : zeroVel);
                 GlUtil.updateShaderFloat(shader, "maxSpeed", vessel.getMaxServerSpeed());
                 GlUtil.updateShaderVector3f(shader, "vesselOrigin", vessel.getClientTransform().origin);
                 GlUtil.updateShaderFloat(shader, "distortedTime", distortedTime);
-                GlUtil.updateShaderFloat(shader, "warpDepth", warpDepth);
+                GlUtil.updateShaderFloat(shader, "warpDepth", smoothedWarpStability);
                 //}
             }
         }
-        //TODO: Darken/lighten over time when entering/leaving
     }
 
     @Override
