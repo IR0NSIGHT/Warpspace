@@ -11,7 +11,9 @@ import me.iron.WarpSpace.Mod.WarpManager;
 import me.iron.WarpSpace.Mod.beacon.BeaconObject;
 import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
 import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.common.controller.ManagedUsableSegmentController;
 import org.schema.game.common.data.player.PlayerState;
+import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
 
 import javax.annotation.Nullable;
@@ -65,7 +67,8 @@ public class DebugUI implements CommandInterface {
                 "beacon manager: print all beacon objects\n" +
                 "beacon clear: delete all beacon objects\n" +
                 "beacon toggle: invert state of all beacons\n" +
-                "sound print: print all sounds";
+                "sound print: print all sounds\n" +
+                "warp: warp my vessel now";
     }
 
     @Override
@@ -143,6 +146,17 @@ public class DebugUI implements CommandInterface {
 
                 return true;
             }
+        }
+
+        if (l==1 && strings[0].equalsIgnoreCase("warp")) {
+            SimpleTransformableSendableObject obj = playerState.getFirstControlledTransformableWOExc();
+            if (WarpManager.isInWarp(obj)) { //is in warpspace, get realspace pos
+                WarpJumpManager.invokeDrop(0,obj,true, true);
+            } else if (!WarpManager.isInWarp(obj)) { //is in realspace, get warppos
+                WarpJumpManager.invokeEntry(0,obj,true);
+            }
+            echo("admin-warping "+ obj.getUniqueIdentifier(),playerState);
+            return true;
         }
         return false;
     }
