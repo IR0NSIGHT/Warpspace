@@ -1,6 +1,5 @@
 package me.iron.WarpSpace.Mod.visuals;
 
-import api.ModPlayground;
 import api.listener.Listener;
 import api.listener.events.draw.RegisterWorldDrawersEvent;
 import api.utils.draw.ModWorldDrawer;

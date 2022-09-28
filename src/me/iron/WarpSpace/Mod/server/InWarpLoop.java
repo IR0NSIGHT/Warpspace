@@ -23,9 +23,9 @@ public class InWarpLoop {
     public static void startLoop(final SegmentController ship) {
         new StarRunnable() {
             long lastRun;
-            final long timeOut = 1000;
+            final float timeOut = 0.1f;
             final int countdownMax = (int) ConfigManager.ConfigEntry.seconds_until_speeddrop.getValue();
-            int countdown = countdownMax; //initial start value
+            float countdown = countdownMax; //initial start value
 
             @Override
             public void run() {
@@ -34,10 +34,9 @@ public class InWarpLoop {
                 }
 
                 //precise timer
-                if (System.currentTimeMillis()<lastRun + timeOut)
+                if (System.currentTimeMillis()<lastRun + timeOut*1000)
                     return;
                 lastRun = System.currentTimeMillis();
-
                 try {
                     if (ship == null)
                         return;
@@ -48,19 +47,19 @@ public class InWarpLoop {
                         cancel();
                     }
                     //update value for synching
-                    WarpProcess.setProcess(ship,WarpProcess.WARP_STABILITY,(int)(100*((float)countdown/countdownMax)));
+                    WarpProcess.setProcess(ship,WarpProcess.WARP_STABILITY,(int)((100*countdown)/countdownMax));
 
                     if (ship.getSpeedCurrent() < WarpManager.minimumSpeed) {
                         //ship is to slow, dropping out of warp!
-                        countdown --; //runs once a second
+                        countdown -= timeOut; //runs once a second
                     } else {
                         if (countdown < countdownMax) {
-                            countdown +=2;
+                            countdown += 2*timeOut;
                         }
                     }
 
                     if (countdown > countdownMax) { //essentially caps the countdown to max_val, while allowing a start buffer of extra seconds
-                        countdown --;
+                        countdown -= timeOut;
                     }
                     if (countdown <= 0) {
                         //drop entity out of warp.

@@ -43,6 +43,9 @@ public enum WarpProcess {
     PARTNER_NOENTRY,
     IS_IN_WARP(false,true),
     IS_INHIBITED,
+    /**
+     * stability in percent, 0..100
+     */
     WARP_STABILITY,
     HAS_JUMPED(true,false);
 
