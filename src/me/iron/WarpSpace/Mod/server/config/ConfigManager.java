@@ -39,6 +39,7 @@ public class ConfigManager {
 
     private final FileConfiguration config;
     public static final String configName = "WarpSpaceConfig";
+    private static final float manySeconds = 60000000;
     public enum ConfigEntry {
         //voice announcer
         sfx_voice_enable("sfx_voice_enable",1,0,20),
@@ -60,7 +61,10 @@ public class ConfigManager {
         droppoint_random_offset("droppoint_random_offset_sectors",2.25f,0,Float.MAX_VALUE, false, true),
 
         //second its takes for a slow ship to drop from warp
-        seconds_until_speeddrop("seconds_until_speeddrop",30,0,60000000, false, true),
+        seconds_until_speeddrop("seconds_until_speeddrop",30,0,manySeconds, false, true),
+
+        //second between executing jumpdrive and jumping
+        seconds_warpjump_delay("seconds_warpjump_delay",9.5f,9.5f,manySeconds,false,true),
 
         //warp speed chamber values
         warp_speed_no_chamber_multiplier("warp_speed_no_chamber_multiplier",1f,0,1000,false, true),

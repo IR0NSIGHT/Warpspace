@@ -4,7 +4,6 @@ import me.iron.WarpSpace.Mod.beacon.BeaconManager;
 import me.iron.WarpSpace.Mod.client.WarpProcess;
 import api.common.GameServer;
 import api.mod.StarLoader;
-import api.utils.StarRunnable;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
@@ -64,26 +63,11 @@ public class WarpJumpManager {
             countdown = 100; //almost immediate drop
         }
 
-        final long dropTime = System.currentTimeMillis()+(countdown); //TODY synch time to drop with client
         dropQueue.add(ship);
-
         //invoke sectorswitch
-        new StarRunnable() {
+        new TimedRunnable((int) countdown, WarpMain.instance, 1) {
             @Override
-            public void cancel() {
-                super.cancel();
-            }
-
-            @Override
-            public void run() {
-                if (GameServerState.isShutdown() || GameServerState.isFlagShutdown()) { //obsolete?
-                    cancel();
-                }
-                //TODO adjust dropTime to always allow the drop-sound-effect to play completely.
-                if (System.currentTimeMillis()<dropTime) { //wait timer
-                    return;
-                }
-
+            public void onRun() {
                 //remove from queue
                 dropQueue.remove(ship);
 
@@ -102,8 +86,7 @@ public class WarpJumpManager {
                     emptyWarpdrive(ship);
                 }
 
-                if (e.isCanceled() || !isAllowedDropJump(ship)) {
-                    cancel();
+                if (!isAllowedDropJump(ship)) {
                     return;
                 }
                 //-- event
@@ -111,9 +94,8 @@ public class WarpJumpManager {
 
                 //queue sector switch
                 doSectorSwitch(ship, targetSector,true);
-                cancel();
             }
-        }.runTimer(WarpMain.instance,1);
+        };
     }
 
     /**
@@ -132,17 +114,9 @@ public class WarpJumpManager {
 
         //set entry process to true/happening
         WarpProcess.setProcess(ship,WarpProcess.JUMPENTRY,1);
-        //ship.sendControllingPlayersServerMessage(Lng.astr("Jumpdrive charging up"), ServerMessage.MESSAGE_TYPE_INFO);
-        final long dropTime = System.currentTimeMillis() + countdown; //10 seconds from now
-        new StarRunnable() {
+        new TimedRunnable((int) countdown, WarpMain.instance, 1) {
             @Override
-            public void run() {
-                if (GameServerState.isShutdown() || GameServerState.isFlagShutdown()) {
-                    cancel();
-                }
-                if (System.currentTimeMillis()<dropTime) {
-                    return;
-                }
+            public void onRun() {
                 //remove from queue
                 entryQueue.remove(ship);
 
@@ -156,8 +130,7 @@ public class WarpJumpManager {
                 //for all attached players send travel update, bc drop is over
                 WarpProcess.setProcess(ship,WarpProcess.JUMPENTRY,0);
 
-                if (e.isCanceled() || !WarpJumpManager.isAllowedEntry(ship)) {
-                    cancel();
+                if (!WarpJumpManager.isAllowedEntry(ship)) {
                     return;
                 }
                 //-- event
@@ -167,9 +140,8 @@ public class WarpJumpManager {
                 //queue sector switch
                 doSectorSwitch(ship, sector,true);
                 ship.sendControllingPlayersServerMessage(Lng.astr("Entered warp"), ServerMessage.MESSAGE_TYPE_INFO);
-                cancel();
             }
-        }.runTimer(WarpMain.instance,1);
+        };
     }
 
     public static void doSectorSwitch(SimpleTransformableSendableObject ship, Vector3i newPos, boolean instant) {

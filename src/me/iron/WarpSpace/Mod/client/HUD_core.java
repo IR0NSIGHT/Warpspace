@@ -127,7 +127,7 @@ public class HUD_core {
         StarLoader.registerListener(HudCreateEvent.class, new Listener<HudCreateEvent>() {
             @Override
             public void onEvent(HudCreateEvent hudCreateEvent) {
-                new TimedRunnable(500,WarpMain.instance){
+                new TimedRunnable(500,WarpMain.instance, -1){
                     @Override
                     public void onRun() {
                         updateVanillaHUD();

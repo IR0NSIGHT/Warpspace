@@ -1,5 +1,7 @@
 package me.iron.WarpSpace.Mod.client.sounds;
 
+import me.iron.WarpSpace.Mod.TimedRunnable;
+import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.client.WarpProcess;
 import me.iron.WarpSpace.Mod.client.WarpProcessListener;
 import me.iron.WarpSpace.Mod.server.config.ConfigManager;
@@ -10,17 +12,21 @@ public class JumpdriveSounds extends WarpProcessListener {
     public void onValueChange(WarpProcess c) {
         super.onValueChange(c);
         switch (c) {
-            case JUMPDROP: //immediate
-                if (!c.wasTrue() && c.isTrue()) { //TODO doenst always catch event
-                    queue(SoundQueueManager.SoundEntry.warp_boom); //assert immediate
-                }
+            case JUMPDROP:
+                if (!c.wasTrue() && c.isTrue())
+                    queue(SoundQueueManager.SoundEntry.warp_boom);
                 break;
             case JUMPEXIT: //fallthrough
             case JUMPENTRY:
                 if (!c.wasTrue() && c.isTrue()) {
-                    //TODO clear queue
-                    queue(SoundQueueManager.SoundEntry.drive_charge_up);
-                    queue(SoundQueueManager.SoundEntry.warp_boom);
+                    int delay = (int) (ConfigManager.ConfigEntry.seconds_warpjump_delay.getValue()*1000 - 9300);
+                    new TimedRunnable(delay, WarpMain.instance, 1){
+                        @Override
+                        public void onRun() {
+                            queue(SoundQueueManager.SoundEntry.drive_charge_up);
+                            queue(SoundQueueManager.SoundEntry.warp_boom);
+                        }
+                    };
                 }
                 break;
         }
