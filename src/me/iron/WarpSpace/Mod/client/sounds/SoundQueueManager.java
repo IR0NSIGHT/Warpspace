@@ -21,13 +21,13 @@ import java.util.LinkedList;
  * DATE: 18.12.2021
  * TIME: 19:28
  */
-public class WarpSounds {
-    public static WarpSounds instance;
+public class SoundQueueManager {
+    public static SoundQueueManager instance;
     private HashMap<String, SoundQueue> uid_to_queues = new HashMap<>();
     public static void main(String[] args) {
-        new WarpSounds();
+        new SoundQueueManager();
     }
-    public WarpSounds() {
+    public SoundQueueManager() {
         instance = this;
         installSounds();
 
@@ -119,7 +119,7 @@ public class WarpSounds {
         VoiceAnnouncer vc = new VoiceAnnouncer();
 
 
-        EngineSounds es = new EngineSounds();
+        JumpdriveSounds es = new JumpdriveSounds();
         WarpProcess.JUMPENTRY.addListener(es);
         WarpProcess.JUMPEXIT.addListener(es);
         WarpProcess.HAS_JUMPED.addListener(es);
@@ -310,7 +310,7 @@ public class WarpSounds {
                 if (!queue.isEmpty()) {
                     //play next sound
                     currentlyPlaying = queue.getFirst();
-                    WarpSounds.instance.playSound(currentlyPlaying);
+                    SoundQueueManager.instance.playSound(currentlyPlaying);
                     soundStarted = timeMillis; //update time
                 } else {
                     currentlyPlaying = null;

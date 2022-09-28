@@ -21,7 +21,7 @@ import me.iron.WarpSpace.Mod.Interdiction.ExtraEventLoop;
 import me.iron.WarpSpace.Mod.beacon.BeaconManager;
 import me.iron.WarpSpace.Mod.beacon.BeaconUpdatePacket;
 import me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon;
-import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
+import me.iron.WarpSpace.Mod.client.sounds.SoundQueueManager;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
@@ -111,7 +111,7 @@ public class WarpMain extends StarMod {
         dropPointMapDrawer.activate();
         GlossarInit.initGlossar(this);
         GlossarInit.addCategory(getWiki());
-        new WarpSounds();
+        new SoundQueueManager();
     }
 
     @Override

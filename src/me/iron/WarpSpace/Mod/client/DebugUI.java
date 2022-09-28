@@ -9,9 +9,8 @@ import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import me.iron.WarpSpace.Mod.beacon.BeaconObject;
-import me.iron.WarpSpace.Mod.client.sounds.WarpSounds;
+import me.iron.WarpSpace.Mod.client.sounds.SoundQueueManager;
 import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.common.controller.ManagedUsableSegmentController;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
@@ -119,7 +118,7 @@ public class DebugUI implements CommandInterface {
             if (l>1 &&strings[1].equalsIgnoreCase("print")) {
                 StringBuilder b = new StringBuilder("All warp-sounds:");
                 int i = 0;
-                for (WarpSounds.SoundEntry s: WarpSounds.SoundEntry.values())
+                for (SoundQueueManager.SoundEntry s: SoundQueueManager.SoundEntry.values())
                     b.append(i++).append(s.toString()).append("\n");
                 echo(b.toString(),playerState);
                 return true;
@@ -134,14 +133,14 @@ public class DebugUI implements CommandInterface {
                     loop = Boolean.parseBoolean(strings[3]);
                 }
                 if (ordinal == -1) {
-                    for (WarpSounds.SoundEntry s: WarpSounds.SoundEntry.values())
-                        WarpSounds.instance.queueSound(s,"debug");
+                    for (SoundQueueManager.SoundEntry s: SoundQueueManager.SoundEntry.values())
+                        SoundQueueManager.instance.queueSound(s,"debug");
                     echo("Playing all sounds in a row",playerState);
                 } else {
-                    ordinal = ordinal% WarpSounds.SoundEntry.values().length;
-                    WarpSounds.SoundEntry s = WarpSounds.SoundEntry.values()[ordinal];
+                    ordinal = ordinal% SoundQueueManager.SoundEntry.values().length;
+                    SoundQueueManager.SoundEntry s = SoundQueueManager.SoundEntry.values()[ordinal];
                     echo("playing sound with ordinal="+ordinal+" - "+s + " looping: " + loop,playerState);
-                    WarpSounds.instance.playSound(s,1,1); //TODO allow pitch and volume control
+                    SoundQueueManager.instance.playSound(s,1,1); //TODO allow pitch and volume control
                 }
 
                 return true;
