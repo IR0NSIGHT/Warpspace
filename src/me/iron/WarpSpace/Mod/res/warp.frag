@@ -167,10 +167,9 @@ void main()
     //how well the vert is aligned to flight dir. 0=right angle to flightdir, 1=aligned with flightdir
     float alignedToFlightDir = abs(dot(normalize(vertPos), flightDir));
 
+    float smoothAligned = min(1,mix(1,alignedToFlightDir*alignedToFlightDir,relativeSpeed*2)) ;   //the slower you go, the less factors goes towards 1
     //modifier for how hectic the noise fluctuation is supposed to be
-    float noiseChangeSpeed = mix(0.2,3,
-        min(1,mix(1,alignedToFlightDir*alignedToFlightDir,relativeSpeed*2))    //the slower you go, the less flight direction impacts color
-    );
+    float noiseChangeSpeed = mix(0.2,3, smoothAligned);
 
 
     //calculate the base color for background and noise
@@ -182,7 +181,7 @@ void main()
     vec3 noiseColor = baseColor * ithnoise(
         vertPos,
         relativeSpeed,  //how big the noiseclouds, higher value = bigger
-        time*noiseChangeSpeed); //how hectic, higher value = faster
+        sin(time*noiseChangeSpeed)); //how hectic, higher value = faster
 
     //noise in flightdir, baseColor to the sides, with a quadratic falloff from flightdir
     //noiseColor = mix(baseColor,noiseColor,alignedToFlightDir*alignedToFlightDir);
