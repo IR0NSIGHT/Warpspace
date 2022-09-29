@@ -1,5 +1,6 @@
 package me.iron.WarpSpace.Mod.visuals;
 
+import api.ModPlayground;
 import api.listener.Listener;
 import api.listener.events.draw.RegisterWorldDrawersEvent;
 import api.utils.draw.ModWorldDrawer;
@@ -16,10 +17,13 @@ import org.lwjgl.opengl.GL11;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
 import org.schema.game.common.controller.SegmentController;
+import org.schema.game.common.data.blockeffects.config.StatusEffectType;
 import org.schema.game.common.data.physics.KinematicCharacterControllerExt;
 import org.schema.game.common.data.physics.PairCachingGhostObjectExt;
 import org.schema.game.common.data.player.ControllerStateUnit;
 import org.schema.game.common.data.player.PlayerState;
+import org.schema.game.server.data.GameServerState;
+import org.schema.game.server.data.ServerConfig;
 import org.schema.schine.graphicsengine.core.Controller;
 import org.schema.schine.graphicsengine.core.DrawableScene;
 import org.schema.schine.graphicsengine.core.GlUtil;
@@ -56,7 +60,7 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
     private static int bubblePlaceholderTexture;
     private static final float EPSILON = 0.0000000001f;
     private static final float SCALE_FACTOR = 0.35f; //scale factor of skybox sphere = this value x sector size, also used for shader coord compensation
-    private static final Vector3f zeroVel = new Vector3f();
+    private static final Vector3f vectorForward = new Vector3f(1,0,0);
     private static boolean skyboxIsActive = false;
     static float smoothedWarpStability = 0;
 
@@ -114,7 +118,7 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
             smoothedWarpStability = Math.max(0, smoothedWarpStability - (maxChangePerFrame * 10)); //quick transition to zero warp depth visual before disabling entirely (fallback smoothing)
         } else if (GameClientState.instance != null) {
             vessel = currentlyOnBoardEntity();
-            //smoothly transition to desired warpdepth
+            //smoothly transition to desired warpdepth, range: 0..1
             float trueDepth = WarpProcess.WARP_STABILITY.getCurrentValue() / 100f;
 
             if (smoothedWarpStability < trueDepth) {
@@ -149,11 +153,19 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
             if (vessel != null && vessel.getPhysicsObject() != null) {
                 CollisionObject cob = vessel.getDockingController().getAbsoluteMother().getPhysicsDataContainer().getObject(); //I'll refrain from making any corny puns here
 
-                GlUtil.updateShaderVector3f(shader, "flightVel", cob != null ? ((RigidBody) cob).getLinearVelocity(vel) : zeroVel);
-                GlUtil.updateShaderFloat(shader, "maxSpeed", vessel.getMaxServerSpeed());
+                Vector3f velocity = cob != null ? ((RigidBody) cob).getLinearVelocity(vel) : vectorForward;
+                velocity = velocity.length()==0? vectorForward : new Vector3f(velocity);
+                float speed = velocity.length();
+                velocity.normalize();
+
+                GlUtil.updateShaderVector3f(shader, "flightDir", velocity);//
+
+                GlUtil.updateShaderFloat(shader, "maxSpeed", 510);
                 GlUtil.updateShaderVector3f(shader, "vesselOrigin", vessel.getClientTransform().origin);
                 GlUtil.updateShaderFloat(shader, "distortedTime", distortedTime);
-                GlUtil.updateShaderFloat(shader, "warpDepth", smoothedWarpStability);
+                GlUtil.updateShaderFloat(shader, "absoluteSpeed", speed);
+
+                GlUtil.updateShaderFloat(shader, "warpDepth", 0);// smoothedWarpStability);
                 //}
             }
         }
