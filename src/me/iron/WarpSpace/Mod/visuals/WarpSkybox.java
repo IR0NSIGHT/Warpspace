@@ -38,6 +38,7 @@ import javax.vecmath.Vector3f;
 
 import java.lang.reflect.Field;
 import java.util.Set;
+import java.util.Vector;
 
 import static api.common.GameClient.getClientPlayerState;
 import static api.mod.StarLoader.registerListener;
@@ -143,7 +144,7 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
     public void updateShader(DrawableScene drawableScene) {
         GlUtil.glBindTexture(GL11.GL_TEXTURE_2D, 0); //??? Shader does not use textures but maybe this is needed for some reason
     }
-
+    private static Vector3f lastValidVel = new Vector3f(1,0,0);
     @Override
     public void updateShaderParameters(Shader shader) {
         GlUtil.glBindTexture(GL11.GL_TEXTURE_2D, bubblePlaceholderTexture);
@@ -153,11 +154,11 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
             if (vessel != null && vessel.getPhysicsObject() != null) {
                 CollisionObject cob = vessel.getDockingController().getAbsoluteMother().getPhysicsDataContainer().getObject(); //I'll refrain from making any corny puns here
 
-                Vector3f velocity = cob != null ? ((RigidBody) cob).getLinearVelocity(vel) : vectorForward;
-                velocity = velocity.length()==0? vectorForward : new Vector3f(velocity);
+                Vector3f velocity = cob != null ? ((RigidBody) cob).getLinearVelocity(vel) : lastValidVel;
+                velocity = velocity.length()==0? new Vector3f(lastValidVel) : new Vector3f(velocity);
                 float speed = velocity.length();
+                lastValidVel.set(velocity);
                 velocity.normalize();
-
                 GlUtil.updateShaderVector3f(shader, "flightDir", velocity);//
 
                 GlUtil.updateShaderFloat(shader, "maxSpeed", 510);

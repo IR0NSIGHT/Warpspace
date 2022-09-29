@@ -156,112 +156,9 @@ float pnoiseq(float x, float y, float t) { //Unused alternate warp noise functio
 void main()
 {
     time = (timeBasis/80.);// * 1 + (someVeryLargeNumber * (1-warpDepth));//BEGIN OLD ITHI VARIABLES
-    float BLOOM_THRESHOLD = 0.75; //SM has weird pure white blooms when you try to approach full brightness too closely
-
     float relativeSpeed = max(5,absoluteSpeed)/maxSpeed; //between 0 and 1 based on max speed
    // relativeSpeed *= warpDepth; //auto-animate acceleration into/out of warp regardless of actual speed
 
-    float dotVel = dot(flightDir,normalize(vertPos));
-    float proxToWarpVector = 0.5 + (dotVel * 0.5);
-    float attFactor = smoothstep(0.,1.,min(relativeSpeed*10.,1.)); //quick ramp to full 1
-
-    float attProx = smoothstep(1.,proxToWarpVector,attFactor); //Attenuated flight orientation effect so that there won't be a sudden transition at 0 speed to some other state//float bgRingFunc = (0.95+0.05*attFactor) * sin(afreq*1.7452 * ((time * 0.5 * attFactor) + attProx));
-    float bgRingFunc = (0.5 * sin(afreq * (-proxToWarpVector + (time * -0.5 * attFactor)))) + 0.5;
-    bgRingFunc = pow(bgRingFunc,mix(40.,30.,relativeSpeed)); //thin rings
-    bgRingFunc = mix(0.,bgRingFunc,attFactor); //rings fade out at very low speed (range of one-eighth or less)
-    bgRingFunc = mix(bgRingFunc,0.,min(1.0,abs(dotVel)*mix(5.0,2.0,relativeSpeed))); //rings fade out ahead and behind//END OLD ITHI VARIABLES
-
-    float t = time * 7.0;
-    vec4 color = ambient;
-    vec3 loc = normalize(vertPos);
-
-    vec3 colorForward = vec3(0.96, 0.58, 0.02); //only relevant at intermediate speeds
-    vec3 colorAft = vec3(0.07,0.0,0.8); //only relevant at intermediate speeds
-    vec3 colorDark = vec3(0.0,0.001,0.01);
-    vec3 cyan = vec3(0.1,0.95,1.0);
-    vec3 yellow = vec3(1.0,0.9,0);
-    vec3 red = vec3(0.96,0.00,0.05);
-    vec3 lightcloud = vec3(1.0,0.925,0.811);
-    vec3 bluwhite = vec3(0.94,0.945,1.0);
-    vec3 redblack = vec3(0.08,0,0);
-
-    vec3 shiftColor = mix(colorForward,colorAft,proxToWarpVector);
-    vec3 refY = vec3(0,1,0); //reference UP vector
-    float theta = planeAngle(/*plane 1*/flightDir,refY,/*plane 2*/flightDir,vertPos); //TODO: This math in planeAngle is wrong. I end up getting coordinates that mirror... //TODO: I suspect I accidentally made a setup that doesn't respect angles above pi //theta *= 0.5;
-    theta -= 0.05; //may or may not remove a weird seam
-
-    float timeAdj = timeBasis * 0.31;
-    timeAdj += 1 - (0.1 * proxToWarpVector); //idk if this does anything //TODO: By this way comes floating-point imprecision, and in time, decay and ruin in the form of increasingly bad noise quality and banding. Not sure how to fix this.
-
-    float r = proxToWarpVector;
-    float maximumPower = mix(10.0,2.0,relativeSpeed);
-    r = pow(r,mix(maximumPower,1.0,pow(1.-r,relativeSpeed)));
-    r *= 5.5; //correct value to avoid 'squished' or 'stretched' noise
-
-    r+=(distortedTime * noiseScrollTimeCoeff); //somewhat better forward progression this way
-    float noise1 = perlinNoise(theta,r,69.420 + (timeAdj * 0.6)); //timeBasis * flight speed was nice at constant speeds, but made rapidly-shifting noise on accel to the point of being an accessibility concern
-    noise1 = (noise1/(2*PI)); //formerly 1.5 //todo: adjust awful maths //noise1 = sin(noise1); //generates sparse clouds
-    noise1 = pow(noise1,3.5);
-    noise1 *= BLOOM_THRESHOLD;
-
-    float noise2 = perlinNoise(theta,r,42.0 + timeAdj*0.25);
-    noise2 = abs(sin(noise2));
-    noise2 = pow(noise2,5.);
-    noise2 *= BLOOM_THRESHOLD;
-
-    float noise3 = perlinNoise(theta,r,timeAdj*0.35);
-    noise3 = abs(cos(noise3));
-    noise3 = pow(noise3,4.);
-    noise3 *= BLOOM_THRESHOLD;
-
-    float noise4 = perlinNoise(theta,r,timeAdj*0.5);
-    noise4 = abs(sin(noise4));
-    noise4 = pow(noise4,4.);
-    noise4 *= BLOOM_THRESHOLD;
-
-    vec3 finalColor = mix(colorDark,shiftColor,noise1);
-
-    vec3 color2 = mix(red,yellow,noise2);
-    color2 = mix(color2,lightcloud,pow(noise2,11.0));
-    color2 = mix(color2,cyan,pow(noise2,22.0));
-
-    finalColor = mix(finalColor,color2,noise2);
-    finalColor = mix(finalColor,cyan,noise3*0.7*pow(relativeSpeed,3.));
-
-    finalColor = mix(finalColor,lightcloud,noise4*0.6*relativeSpeed*relativeSpeed);
-
-    finalColor = mix(length(finalColor) * red,finalColor,pow(relativeSpeed,0.5));
-    finalColor.b = finalColor.b * relativeSpeed;
-    finalColor.r = finalColor.r * (1.0 - (0.1*relativeSpeed));
-
-    finalColor.r = mix(finalColor.r,0.24,relativeSpeed*bgRingFunc*0.2);
-    finalColor.b = mix(finalColor.b,1.0,relativeSpeed*bgRingFunc*0.2);
-    finalColor.g = mix(finalColor.g,0.6,relativeSpeed*bgRingFunc*0.2);
-
-    float tunnelEndsExp = mix(2100.0,1984.0,relativeSpeed*relativeSpeed);
-
-    bluwhite *= 0.9; //stupid bloom threshold forces me to reduce the intensity a bit or it just turns white //SM y u do dis
-    finalColor = mix(finalColor,finalColor*0.05,pow(proxToWarpVector,tunnelEndsExp));
-    finalColor = mix(finalColor,bluwhite,pow(proxToWarpVector,tunnelEndsExp)); //white part ahead of ship
-
-    vec3 stoppedInWarp = vec3(0.7,0,0);
-
-    //scaling coefficient varying with speeds and proximity to flight vector (if there is a flight vector at all)
-    //neat-looking and unifying transition out of stationary - coordinate system warps ahead and behind as speed increases
-    float staticVFX = min(1,max(0.0,1.0 - ithnoise(vertPos,relativeSpeed,time)));
-    vec3 staticColor = mix(
-        vec3(0.7,0.,0.),
-        mix(vec3(0.7,0.,0.),vec3(0.7,0.075,0.),relativeSpeed), //orangey peaks fade away as ships slip from warp
-        pow(3.0,staticVFX)
-    );
-
-    stoppedInWarp = mix(staticColor,vec3(0,0,0),staticVFX);
-
-    //TODO: Replace this with formalized octaves. At least eight of them.
-
-    finalColor = mix(stoppedInWarp,finalColor,attFactor);
-
-    finalColor = mix(finalColor,redblack,pow(1.0-proxToWarpVector,tunnelEndsExp*0.05)); //black part behind ship
     //constants
     vec3 redColor = vec3(1,0.,0.);
     vec3 magentaColor = vec3(1,0.,1);
@@ -271,12 +168,14 @@ void main()
     float alignedToFlightDir = abs(dot(normalize(vertPos), flightDir));
 
     //modifier for how hectic the noise fluctuation is supposed to be
-    float noiseChangeSpeed = mix(0.2,3,alignedToFlightDir*alignedToFlightDir);
+    float noiseChangeSpeed = mix(0.2,3,
+        min(1,mix(1,alignedToFlightDir*alignedToFlightDir,relativeSpeed*2))    //the slower you go, the less flight direction impacts color
+    );
 
 
     //calculate the base color for background and noise
-    float timedFluctuation = sin(time*noiseChangeSpeed);
-    vec3 baseColor = mix(redColor, magentaColor, relativeSpeed);
+    float timedFluctuation = sin(time*0.5)*0.1;
+    vec3 baseColor = mix(redColor, magentaColor, relativeSpeed+timedFluctuation);
 
 //add block tunnels at flight direction
     //more detailed noise for fastships, more hectic noise for verts aligned to flightdir with quadratic falloff
