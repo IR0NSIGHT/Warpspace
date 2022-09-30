@@ -4,6 +4,7 @@ import me.iron.WarpSpace.Mod.beacon.BeaconManager;
 import me.iron.WarpSpace.Mod.client.WarpProcess;
 import api.common.GameServer;
 import api.mod.StarLoader;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
@@ -34,8 +35,18 @@ import java.util.List;
  */
 public class WarpJumpManager {
 
-    public static List<SimpleTransformableSendableObject> dropQueue = new ArrayList<>();;
-    public static List<SimpleTransformableSendableObject> entryQueue = new ArrayList<>();;
+    public static List<SimpleTransformableSendableObject> dropQueue = new ArrayList<>();
+    public static List<SimpleTransformableSendableObject> entryQueue = new ArrayList<>();
+
+    public static void invokeJumpdriveUsed(SimpleTransformableSendableObject object, boolean forceJump) {
+        //check if ship is in warp or not, check if ship is allowed to perform the jump
+        if (WarpManager.isInWarp(object) && WarpJumpManager.isAllowedDropJump(object)) { //is in warpspace, get realspace pos
+            WarpJumpManager.invokeDrop((long) (1000* ConfigManager.ConfigEntry.seconds_warpjump_delay.getValue()),object,true, forceJump);
+        } else if (!WarpManager.isInWarp(object)&& WarpJumpManager.isAllowedEntry(object)) { //is in realspace, get warppos
+            WarpJumpManager.invokeEntry((long) (1000* ConfigManager.ConfigEntry.seconds_warpjump_delay.getValue()),object,forceJump);
+        }
+    }
+
     /**
      * will drop the given ship out of warp after x seconds to specified sector.
      * will not check if ship is allowed to drop, only if it already has a drop queued.
@@ -66,6 +77,11 @@ public class WarpJumpManager {
         dropQueue.add(ship);
         //invoke sectorswitch
         new TimedRunnable((int) countdown, WarpMain.instance, 1) {
+            private void afterRun() {
+                WarpProcess.setProcess(ship, WarpProcess.JUMPEXIT, 0);
+                WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,0);
+            }
+
             @Override
             public void onRun() {
                 //remove from queue
@@ -82,6 +98,8 @@ public class WarpJumpManager {
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,warpPos,targetSector);
                 StarLoader.fireEvent(e, true);
 
+                afterRun();
+
                 if (isJump) {
                     emptyWarpdrive(ship);
                 }
@@ -89,7 +107,7 @@ public class WarpJumpManager {
                 if (!isAllowedDropJump(ship)) {
                     return;
                 }
-                //-- event
+
 
 
                 //queue sector switch
@@ -115,6 +133,10 @@ public class WarpJumpManager {
         //set entry process to true/happening
         WarpProcess.setProcess(ship,WarpProcess.JUMPENTRY,1);
         new TimedRunnable((int) countdown, WarpMain.instance, 1) {
+            private void afterRun() {
+                WarpProcess.setProcess(ship, WarpProcess.JUMPENTRY, 0);
+            }
+
             @Override
             public void onRun() {
                 //remove from queue
@@ -127,9 +149,8 @@ public class WarpJumpManager {
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),sector);
                 StarLoader.fireEvent(e, true);
 
-                //for all attached players send travel update, bc drop is over
-                WarpProcess.setProcess(ship,WarpProcess.JUMPENTRY,0);
 
+                afterRun();
                 if (!WarpJumpManager.isAllowedEntry(ship)) {
                     return;
                 }

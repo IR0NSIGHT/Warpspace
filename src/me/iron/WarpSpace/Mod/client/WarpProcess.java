@@ -234,6 +234,18 @@ public enum WarpProcess {
         return previousValue;
     }
 
+    public boolean isDecreasing() {
+        return currentValue < previousValue;
+    }
+
+    public boolean isStable() {
+        return currentValue == previousValue;
+    }
+
+    public boolean isIncreasing() {
+        return currentValue > previousValue;
+    }
+
     //TODO allow listener that reacts to ALL
 
     public void addListener(WarpProcessListener listener) {

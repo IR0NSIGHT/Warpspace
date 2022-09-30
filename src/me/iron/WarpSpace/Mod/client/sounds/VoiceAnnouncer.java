@@ -58,7 +58,7 @@ public class VoiceAnnouncer extends WarpProcessListener {
     }
 
     private void waypointEvent(WarpProcess wp) {
-        if (WarpProcess.IS_IN_WARP.isTrue() && wp.getPreviousValue()>0 && wp.getCurrentValue()==0) {
+        if (WarpProcess.IS_IN_WARP.isTrue() && wp.isDecreasing() && wp.getCurrentValue()==0) {
             //reached waypoint in warp
             announce(SoundQueueManager.SoundEntry.voice_droppoint);
             announce(SoundQueueManager.SoundEntry.voice_reached);

@@ -83,10 +83,11 @@ public class HUD_core {
                         HUDElementController.clearType(HUD_element.ElementType.PEARL);
                     }
 
+                    boolean queuedForExitJump = WarpProcess.JUMPEXIT.isTrue();
+                    boolean isSpeedDropping = WarpProcess.WARP_STABILITY.getCurrentValue() < 95 && WarpProcess.WARP_STABILITY.isDecreasing();
                     if (
                             WarpProcess.IS_IN_WARP.isTrue() &&
-                            (WarpProcess.WARP_STABILITY.getCurrentValue() < 95) &&
-                            (WarpProcess.WARP_STABILITY.getPreviousValue()>WarpProcess.WARP_STABILITY.getCurrentValue()) &&
+                                    (queuedForExitJump || isSpeedDropping) &&
                             ((tenthSeconds % 8) <= 4)) {
                         //do blinking drop icon
                         HUDElementController.drawElement(SpriteList.ARROW_TO_RSP_JUMP,true);

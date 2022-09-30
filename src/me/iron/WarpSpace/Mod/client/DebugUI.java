@@ -147,13 +147,18 @@ public class DebugUI implements CommandInterface {
             }
         }
 
-        if (l==1 && strings[0].equalsIgnoreCase("warp")) {
+        if (l>=1 && strings[0].equalsIgnoreCase("warp")) {
             SimpleTransformableSendableObject obj = playerState.getFirstControlledTransformableWOExc();
-            if (WarpManager.isInWarp(obj)) { //is in warpspace, get realspace pos
-                WarpJumpManager.invokeDrop(0,obj,true, true);
-            } else if (!WarpManager.isInWarp(obj)) { //is in realspace, get warppos
-                WarpJumpManager.invokeEntry(0,obj,true);
+            if (l>=2 && strings[1].equalsIgnoreCase("-j"))  {
+                WarpJumpManager.invokeJumpdriveUsed(obj, true);
+            } else {
+                if (WarpManager.isInWarp(obj)) { //is in warpspace, get realspace pos
+                    WarpJumpManager.invokeDrop(0,obj,true, true);
+                } else if (!WarpManager.isInWarp(obj)) { //is in realspace, get warppos
+                    WarpJumpManager.invokeEntry(0,obj,true);
+                }
             }
+
             echo("admin-warping "+ obj.getUniqueIdentifier(),playerState);
             return true;
         }
