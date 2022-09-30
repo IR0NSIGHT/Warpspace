@@ -78,13 +78,16 @@ public class HUD_core {
                     if (WarpProcess.IS_IN_WARP.isTrue()) {
                         HUDElementController.drawElement(SpriteList.PEARL,true);
                         HUDElementController.drawElement(SpriteList.ARROW_TO_RSP,true);
-
                     } else {
                         HUDElementController.drawElement(SpriteList.ARROW_TO_WARP,true);
                         HUDElementController.clearType(HUD_element.ElementType.PEARL);
                     }
 
-                    if (WarpProcess.IS_IN_WARP.isTrue() && (WarpProcess.WARP_STABILITY.getCurrentValue() < 100) && (WarpProcess.WARP_STABILITY.getPreviousValue()>WarpProcess.WARP_STABILITY.getCurrentValue()) && ((tenthSeconds % 8) <= 4)) {
+                    if (
+                            WarpProcess.IS_IN_WARP.isTrue() &&
+                            (WarpProcess.WARP_STABILITY.getCurrentValue() < 95) &&
+                            (WarpProcess.WARP_STABILITY.getPreviousValue()>WarpProcess.WARP_STABILITY.getCurrentValue()) &&
+                            ((tenthSeconds % 8) <= 4)) {
                         //do blinking drop icon
                         HUDElementController.drawElement(SpriteList.ARROW_TO_RSP_JUMP,true);
                     }
