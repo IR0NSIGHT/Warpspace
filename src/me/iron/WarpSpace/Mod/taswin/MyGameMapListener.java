@@ -114,7 +114,7 @@ public class MyGameMapListener implements GameMapDrawListener
 		Vector3i sector = drawer.getPlayerSector();
 		if (WarpManager.isInWarp(sector))
 		{
-			float r = WarpManager.scale / 2f;
+			float r = WarpManager.getScale() / 2f;
 			
 			Vector3i realPos = WarpManager.getRealSpacePos(sector);
 			drawCube(new Vector3f(

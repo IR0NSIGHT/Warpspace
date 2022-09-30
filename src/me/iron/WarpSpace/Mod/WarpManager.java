@@ -10,7 +10,6 @@ package me.iron.WarpSpace.Mod;
 import api.DebugFile;
 import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.Galaxy;
 
@@ -22,10 +21,6 @@ import java.util.Random;
  */
 public class WarpManager {
     private static Random random = new Random();
-    /**
-     *  the scale of realspace to warpspace in sectors.
-     */
-    public static int scale = 10; //scale warpspace distance to realspace distance
 
     /**
      * Galaxy size * System size * 64 + Galaxy size * System size * 64 / scale + System size * 2
@@ -36,7 +31,7 @@ public class WarpManager {
     /**
      * the offset of warpspace to the realspace sector on the y axis. Use a number outside of the galaxy: empty space
      */
-    public static int offset = (int)(universeSize * (1 + 1f / scale)) + 16 * 2; //offset in sectors
+    public static int offset = (int)(universeSize * (1 + 1f / getScale())) + 16 * 2; //offset in sectors
 
     /**
      *  minimum speed required to stay in warp
@@ -66,7 +61,7 @@ public class WarpManager {
      * @return boolean, true if position is in warp
      */
     public static boolean isInWarp(Vector3i pos) {
-        if (pos != null && pos.y >= offset - (universeSize / scale) && pos.y <= offset + (universeSize / scale)) {
+        if (pos != null && pos.y >= offset - (universeSize / getScale()) && pos.y <= offset + (universeSize / getScale())) {
             return true;
         }
         return false;
@@ -82,9 +77,9 @@ public class WarpManager {
             return rspPos;
         Vector3i warpPos;
         Vector3f realPosF = rspPos.toVector3f();
-        realPosF.x = Math.round(realPosF.x / scale);
-        realPosF.y = Math.round(realPosF.y / scale);
-        realPosF.z = Math.round(realPosF.z / scale);
+        realPosF.x = Math.round(realPosF.x / getScale());
+        realPosF.y = Math.round(realPosF.y / getScale());
+        realPosF.z = Math.round(realPosF.z / getScale());
         realPosF.y += offset; //offset sectors to up (y axis)
         warpPos = new Vector3i(realPosF.x,realPosF.y,realPosF.z);
 
@@ -103,11 +98,19 @@ public class WarpManager {
         Vector3f warpPosF = warpSpacePos.toVector3f();
         warpPosF.y -= offset; //offset sectors to up (y axis)
         random.setSeed(warpSpacePos.code());
-        warpPosF.x = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()* ConfigManager.ConfigEntry.droppoint_random_offset.getValue())+warpPosF.x * scale);
-        warpPosF.y = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*ConfigManager.ConfigEntry.droppoint_random_offset.getValue())+warpPosF.y * scale);
-        warpPosF.z = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*ConfigManager.ConfigEntry.droppoint_random_offset.getValue())+warpPosF.z * scale);
+        warpPosF.x = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()* ConfigManager.ConfigEntry.droppoint_random_offset.getValue())+warpPosF.x * getScale());
+        warpPosF.y = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*ConfigManager.ConfigEntry.droppoint_random_offset.getValue())+warpPosF.y * getScale());
+        warpPosF.z = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*ConfigManager.ConfigEntry.droppoint_random_offset.getValue())+warpPosF.z * getScale());
         realPos = new Vector3i(warpPosF.x,warpPosF.y,warpPosF.z);
 
         return realPos;
+    }
+
+    /**
+     *  the scale of realspace to warpspace in sectors.
+     *  defined by config value warp_to_rsp_ratio
+     */
+    public static int getScale() {
+        return (int) ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue();
     }
 }

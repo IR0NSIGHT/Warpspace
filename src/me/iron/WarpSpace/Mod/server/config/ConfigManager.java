@@ -1,15 +1,12 @@
 package me.iron.WarpSpace.Mod.server.config;
 
-import api.DebugFile;
 import api.listener.Listener;
 import api.listener.events.network.ClientLoginEvent;
 import api.mod.StarLoader;
 import api.mod.config.FileConfiguration;
 import api.network.packets.PacketUtil;
 import me.iron.WarpSpace.Mod.WarpMain;
-import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.server.data.GameServerState;
-import org.schema.game.server.data.PlayerNotFountException;
 
 /**
  * config manager class. reads, writes, corrects, defaults config values.
@@ -20,8 +17,8 @@ public class ConfigManager {
         config = mod.getConfig(configName);
         for (ConfigEntry e: ConfigEntry.values()) {
             e.setValue(config.getConfigurableFloat(e.getPath(), e.defaultValue));
-            if (e.isBool)
-                e.value = e.value<0.5f?0:1;
+            if (e.isInt)
+                e.value = Math.round(e.value);
             config.set(e.getPath(),e.value);
         }
         config.set("help","deleted values will be set to their default value on next loading. values that go below/above limits will be capped to limit.");
@@ -60,6 +57,9 @@ public class ConfigManager {
         //sectors l/r u/d f/b random offset of droppoint (deterministic)
         droppoint_random_offset("droppoint_random_offset_sectors",2.25f,0,Float.MAX_VALUE, false, true),
 
+        //warp-to-rsp-ratio: how many sectors in rsp equals one sector in warp?
+        warp_to_rsp_ratio("warp_to_rsp_ratio",10,2,Float.MAX_VALUE),
+
         //second its takes for a slow ship to drop from warp
         seconds_until_speeddrop("seconds_until_speeddrop",30,0,manySeconds, false, true),
 
@@ -81,7 +81,7 @@ public class ConfigManager {
         private final float minValue;
         private final float maxValue;
         private float value;
-        private final boolean isBool;
+        private final boolean isInt;
         private final boolean overwriteClient;
 
         ConfigEntry(String path, float defaultValue, float min, float max) {
@@ -89,16 +89,16 @@ public class ConfigManager {
             this.defaultValue = defaultValue;
             this.minValue = min;
             this.maxValue = max;
-            this.isBool = false;
+            this.isInt = false;
             this.overwriteClient = false;
         }
 
-        ConfigEntry(String path, float defaultValue, float min, float max, boolean isBool, boolean overwriteClient) {
+        ConfigEntry(String path, float defaultValue, float min, float max, boolean isInt, boolean overwriteClient) {
             this.path = path;
             this.defaultValue = defaultValue;
             this.minValue = min;
             this.maxValue = max;
-            this.isBool = isBool;
+            this.isInt = isInt;
             this.overwriteClient = overwriteClient;
         }
 

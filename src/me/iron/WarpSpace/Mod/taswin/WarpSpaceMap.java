@@ -57,11 +57,11 @@ public class WarpSpaceMap
 					final Vector3f pos = WarpManager.getWarpSpacePos(sectorPos).toVector3f();
 					
 					Vector3f loaclOffset = galaxy.getSunPositionOffset(new Vector3i(systemPos), new Vector3i()).toVector3f();
-					loaclOffset.scale(1f / WarpManager.scale);
+					loaclOffset.scale(1f / WarpManager.getScale());
 					
-					pos.x = (pos.x + loaclOffset.x + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
-					pos.y = (pos.y + loaclOffset.y + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
-					pos.z = (pos.z + loaclOffset.z + (8f / WarpManager.scale) - 8 + 0.5f) * GameMapDrawer.sectorSize;
+					pos.x = (pos.x + loaclOffset.x + (8f / WarpManager.getScale()) - 8 + 0.5f) * GameMapDrawer.sectorSize;
+					pos.y = (pos.y + loaclOffset.y + (8f / WarpManager.getScale()) - 8 + 0.5f) * GameMapDrawer.sectorSize;
+					pos.z = (pos.z + loaclOffset.z + (8f / WarpManager.getScale()) - 8 + 0.5f) * GameMapDrawer.sectorSize;
 					
 					PositionableSubColorSprite[] s = new PositionableSubColorSprite[]
 						{
