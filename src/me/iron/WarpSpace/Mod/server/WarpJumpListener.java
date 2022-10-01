@@ -8,12 +8,10 @@ package me.iron.WarpSpace.Mod.server;
  */
 
 import me.iron.WarpSpace.Mod.WarpMain;
-import me.iron.WarpSpace.Mod.WarpManager;
 import me.iron.WarpSpace.Mod.WarpJumpManager;
 import api.listener.Listener;
 import api.listener.events.entity.ShipJumpEngageEvent;
 import api.mod.StarLoader;
-import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 
 /**
  * eventhandler class that will detect vanilla FTL jumps, abort them and instead issue a warp entry or warpdrop.

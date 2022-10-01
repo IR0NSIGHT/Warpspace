@@ -7,15 +7,13 @@ package me.iron.WarpSpace.Mod.server;
  * TIME: 15:17
  */
 
+import api.ModPlayground;
+import me.iron.WarpSpace.Mod.TimedRunnable;
 import me.iron.WarpSpace.Mod.WarpEntityManager;
 import me.iron.WarpSpace.Mod.WarpMain;
-import me.iron.WarpSpace.Mod.WarpManager;
-import api.common.GameServer;
-import api.utils.StarRunnable;
-import org.schema.game.common.controller.SegmentController;
+import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
-
-import java.util.Map;
+import org.schema.schine.network.objects.Sendable;
 
 /**
  * a loop that runs regularly and checks all loaded ships if they are in warp or not. passes the ships to the warpshipmanager
@@ -23,32 +21,27 @@ import java.util.Map;
 public class WarpCheckLoop {
     /**
      * loop that creates a starrunnable that checks the loaded segmentcontrollers every x seconds
-     * @param frequency amount of ticks between iterations. 25 ticks = 1 second
      */
-    public static void loop(long frequency) {
+    public static void loop() {
         //make a timed loop
-        new StarRunnable() {
+        new TimedRunnable(1000,WarpMain.instance, -1) {
             @Override
-            public void run() {
-                //kill loop if server is shut down.
-                if (GameServerState.isShutdown() || GameServerState.isFlagShutdown()) {
-                    cancel();
-                }
-
-                //check for every segmentcontroller:
-                Map<String, SegmentController> scList = GameServer.getServerState().getSegmentControllersByName();
-                for (SegmentController sc: scList.values()) {
-                    if (WarpManager.isInWarp(sc) && !WarpEntityManager.isWarpEntity(sc)) {
-                        //is in warp and not registered
-                        WarpEntityManager.DeclareWarpEntity(sc);
-                    }
-                    if (!WarpManager.isInWarp(sc) && WarpEntityManager.isWarpEntity(sc)) {
-                        //is not in warp but registered
-                        WarpEntityManager.RemoveWarpEntity(sc);
+            public void onRun() {
+                ModPlayground.broadcastMessage("run check loop"+Math.random());
+                //check for every updatable object (astronauts, hsips, asteroids etc
+                for (Sendable sc: GameServerState.instance.getLocalAndRemoteObjectContainer().getLocalUpdatableObjects().values()) {
+                    if (sc instanceof SimpleTransformableSendableObject) {
+                        SimpleTransformableSendableObject obj = (SimpleTransformableSendableObject)sc;
+                        if (!WarpEntityManager.isWarpEntity(obj)) {
+                            //if (obj instanceof ShopSpaceStation || obj instanceof AICharacter)
+                            //    continue;
+                            //is in warp and not registered
+                            WarpEntityManager.DeclareWarpEntity(obj);
+                        }
                     }
                 }
             }
-        }.runTimer(WarpMain.instance,frequency);
+        };
 
 
     }

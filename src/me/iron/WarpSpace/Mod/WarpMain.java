@@ -92,7 +92,7 @@ public class WarpMain extends StarMod {
 
         WarpProcess.initUpdateLoop();
 
-        WarpCheckLoop.loop(25);
+        WarpCheckLoop.loop();
         ExtraEventLoop.CreateServerLoop();
         beaconManagerServer = BeaconManager.getSavedOrNew(this.getSkeleton());
         beaconManagerServer.onInit();

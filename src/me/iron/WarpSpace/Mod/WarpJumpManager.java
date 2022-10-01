@@ -21,7 +21,9 @@ import org.schema.schine.network.server.ServerMessage;
 import javax.vecmath.Vector3f;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 /**
  * STARMADE MOD
@@ -35,10 +37,12 @@ import java.util.List;
  */
 public class WarpJumpManager {
 
-    public static List<SimpleTransformableSendableObject> dropQueue = new ArrayList<>();
-    public static List<SimpleTransformableSendableObject> entryQueue = new ArrayList<>();
+    public static HashSet<SimpleTransformableSendableObject> dropQueue = new HashSet<>();
+    public static HashSet<SimpleTransformableSendableObject> entryQueue = new HashSet<>();
 
     public static void invokeJumpdriveUsed(SimpleTransformableSendableObject object, boolean forceJump) {
+        if (!forceJump && (object instanceof Ship && !canExecuteWarpdrive((Ship)object)))
+            return;
         //check if ship is in warp or not, check if ship is allowed to perform the jump
         if (WarpManager.isInWarp(object) && WarpJumpManager.isAllowedDropJump(object)) { //is in warpspace, get realspace pos
             WarpJumpManager.invokeDrop((long) (1000* ConfigManager.ConfigEntry.seconds_warpjump_delay.getValue()),object,true, forceJump);
@@ -60,10 +64,6 @@ public class WarpJumpManager {
         //check if already dropping
         if (!force && dropQueue.contains(ship)) { //ship already has a drop queued, and doesnt force another one.
             return;
-        }
-        if (ship.getType().equals(SimpleTransformableSendableObject.EntityType.SPACE_STATION) )
-        {
-            //TODO handle space station in warp
         }
         //set process values for attached players
         if (isJump) {
@@ -93,8 +93,16 @@ public class WarpJumpManager {
                 type = isJump?WarpJumpEvent.WarpJumpType.EXIT:WarpJumpEvent.WarpJumpType.DROP;
 
                 Vector3i warpPos = ship.getSector(new Vector3i());
-                Vector3i targetSector = getDropPoint(warpPos);
 
+
+                Vector3i targetSector = getDropPoint(warpPos);
+                if (ship.getType().equals(SimpleTransformableSendableObject.EntityType.SPACE_STATION) )
+                {
+                    Random r = new Random();
+                    r.setSeed(targetSector.code());
+                    int range = 25;
+                    targetSector.add(r.nextInt(range),r.nextInt(range),r.nextInt(range));
+                }
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,warpPos,targetSector);
                 StarLoader.fireEvent(e, true);
 
@@ -184,30 +192,22 @@ public class WarpJumpManager {
 
     /**
      * Check if a ship is allowed to enter the warp
-     * @param ship segmentcontroller to check
-     * @return boolean, true if allowed entry, false if interdicted or can fire warpdrive
+     * @param ship SimpleTransformableSendableObject (Object) to check
+     * @return boolean, true if allowed entry, false if interdicted or can't fire warpdrive (only for ships)
      */
     public static boolean isAllowedEntry(SimpleTransformableSendableObject ship) {
-        if (isInterdicted(ship,WarpManager.getWarpSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
-            return false;
-        }
-    ;
-        return true;
+        return !isInterdicted(ship,WarpManager.getWarpSpacePos(ship.getSector(new Vector3i())));
     }
 
     /**
-     * Check if a ship is allowed to drop out of warp
+     * Check if a object is allowed to drop out of warp
      * checks interdiction
      * checks warpdrive.canExecute
-     * @param ship segmentcontroller ship
+     * @param object segmentcontroller object
      * @return boolean, true if not interdicted and can fire warpdrive
      */
-    public static boolean isAllowedDropJump(SimpleTransformableSendableObject ship) {
-        if (isInterdicted(ship,WarpManager.getRealSpacePos(ship.getSector(new Vector3i()))) || !canExecuteWarpdrive(ship)) {
-            return false;
-        }
-    ;
-        return true;
+    public static boolean isAllowedDropJump(SimpleTransformableSendableObject object) {
+        return !isInterdicted(object,WarpManager.getRealSpacePos(object.getSector(new Vector3i())));
     }
 
     /**
@@ -225,18 +225,11 @@ public class WarpJumpManager {
         warpdrive.sendChargeUpdate();
     }
 
-    public static boolean canExecuteWarpdrive(SimpleTransformableSendableObject ship) {
+    public static boolean canExecuteWarpdrive(Ship ship) {
         //get jumpaddon
         JumpAddOn warpdrive;
-        if(ship instanceof ManagedSegmentController<?>) {
-            warpdrive =((Ship)ship).getManagerContainer().getJumpAddOn();
-        } else {
-            return false;
-        }
-        if (!warpdrive.canExecute()) {
-            return false;
-        }
-        return true;
+        warpdrive =ship.getManagerContainer().getJumpAddOn();
+        return warpdrive.canExecute();
     }
 
     public static boolean isDroppointShifted(Vector3i warpSector) {

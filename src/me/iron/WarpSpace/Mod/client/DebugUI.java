@@ -5,6 +5,7 @@ import api.DebugFile;
 import api.mod.StarMod;
 import api.utils.game.PlayerUtils;
 import api.utils.game.chat.CommandInterface;
+import me.iron.WarpSpace.Mod.WarpEntityManager;
 import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
@@ -151,12 +152,18 @@ public class DebugUI implements CommandInterface {
             SimpleTransformableSendableObject obj = playerState.getFirstControlledTransformableWOExc();
             if (l>=2 && strings[1].equalsIgnoreCase("-j"))  {
                 WarpJumpManager.invokeJumpdriveUsed(obj, true);
+                echo("normal jump", playerState);
+            } else if (l >= 2 && strings[1].equalsIgnoreCase("-l")) {
+                echo("start loop", playerState);
+                WarpEntityManager.DeclareWarpEntity(obj);
             } else {
+                echo("immediate", playerState);
                 if (WarpManager.isInWarp(obj)) { //is in warpspace, get realspace pos
                     WarpJumpManager.invokeDrop(0,obj,true, true);
                 } else if (!WarpManager.isInWarp(obj)) { //is in realspace, get warppos
                     WarpJumpManager.invokeEntry(0,obj,true);
                 }
+
             }
 
             echo("admin-warping "+ obj.getUniqueIdentifier(),playerState);

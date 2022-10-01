@@ -18,6 +18,7 @@ import org.schema.schine.graphicsengine.core.Timer;
 public class TimedRunnable {
     private int timeout;
     private int runs;
+    StarRunnable runner;
     /**
      * will create a runnable that runs once every x millis.
      * @param timeout in millis
@@ -26,12 +27,14 @@ public class TimedRunnable {
     public TimedRunnable(final int timeout, StarMod mod, final int runAmount)  {
         this.timeout = timeout;
         this.runs = runAmount;
-        new StarRunnable(){
+        runner = new StarRunnable(){
             private long lastRun = System.currentTimeMillis();
+            private long nextRun = 0;
             @Override
             public void run() {
-                if (System.currentTimeMillis() > lastRun + timeout) {
+                if (System.currentTimeMillis() > nextRun) {
                     lastRun = System.currentTimeMillis();
+                    nextRun = lastRun + timeout;
                     onRun();
                     if (canStop()) {
                         runs--;
@@ -41,11 +44,16 @@ public class TimedRunnable {
 
                 }
             }
-        }.runTimer(mod,1);
+        };
+        runner.runTimer(mod,1);
     }
 
     private boolean canStop() {
         return (runs>=0);
+    }
+
+    public void doStop() {
+        runner.cancel();
     }
 
     /**
