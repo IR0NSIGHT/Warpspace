@@ -63,6 +63,9 @@ public class ConfigManager {
         //second its takes for a slow ship to drop from warp
         seconds_until_speeddrop("seconds_until_speeddrop",30,0,manySeconds, false, true),
 
+        //meters per second required to fly in warp to not drop out
+        minimum_warp_speed("minimum_warp_speed",50,0,Float.MAX_VALUE,false, true),
+
         //second between executing jumpdrive and jumping
         seconds_warpjump_delay("seconds_warpjump_delay",9.5f,9.5f,manySeconds,false,true),
 

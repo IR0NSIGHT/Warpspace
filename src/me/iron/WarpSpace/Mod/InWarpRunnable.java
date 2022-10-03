@@ -60,7 +60,7 @@ public class InWarpRunnable extends TimedRunnable{
         int stability = (int)((100* countdown_millis)/countdownMax);
         WarpProcess.setProcess(entity,WarpProcess.WARP_STABILITY,stability);
 
-        if (entity.getSpeedCurrent() < WarpManager.minimumSpeed) {
+        if (entity.getSpeedCurrent() < ConfigManager.ConfigEntry.minimum_warp_speed.getValue()) {
             //ship is to slow, dropping out of warp!
             countdown_millis -= getTimeout(); //runs once a second
         } else {
