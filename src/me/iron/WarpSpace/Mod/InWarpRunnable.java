@@ -3,12 +3,10 @@ package me.iron.WarpSpace.Mod;
 import api.ModPlayground;
 import me.iron.WarpSpace.Mod.client.WarpProcess;
 import me.iron.WarpSpace.Mod.server.config.ConfigManager;
-import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.data.player.AbstractCharacter;
+import org.schema.game.common.data.player.PlayerCharacter;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
-import org.schema.game.server.data.GameServerState;
-import org.schema.schine.network.objects.Sendable;
 
 /**
  * STARMADE MOD
@@ -20,8 +18,8 @@ public class InWarpRunnable extends TimedRunnable{
     private int entityId;
     private String entityName;
     private SimpleTransformableSendableObject entity;
-    final int countdownMax = (int) ConfigManager.ConfigEntry.seconds_until_speeddrop.getValue();
-    float countdown = countdownMax; //initial start value
+    static final int countdownMax = (int) ConfigManager.ConfigEntry.seconds_until_speeddrop.getValue()*1000;
+    private float countdown_millis = countdownMax; //initial start value
 
     public InWarpRunnable(SimpleTransformableSendableObject entity) {
         super(1000,WarpMain.instance, -1);
@@ -35,21 +33,14 @@ public class InWarpRunnable extends TimedRunnable{
         super.onRun();
         updateEntity();
         if (entity != null) {
-            if (entity instanceof SegmentController)
+            //skip attached players
+            if (entity instanceof AbstractCharacter && entity.getGravity().source != null) {
                 return;
-
-            if (entity instanceof AbstractCharacter) {
-/*                //its an AI dude or a player character
-                if (entity.getGravity() != null) {  //character is attached to something else
-                    ModPlayground.broadcastMessage(""+entity.getName() + " is attached to " + entity.getGravity().source.getName());
-                    return;
-                } else {
-                    ModPlayground.broadcastMessage("free astronaut " + entity);
-                }*/
             }
-            ModPlayground.broadcastMessage("Run " + entity.getName());
 
+            //skip docked ships
             if (entity instanceof Ship && !((Ship)entity).railController.isRoot()) {
+                ModPlayground.broadcastMessage("skip docked entity " + entity.getName());
                 return; //Object is docked to something else
             }
 
@@ -62,7 +53,6 @@ public class InWarpRunnable extends TimedRunnable{
         } else {
             WarpEntityManager.RemoveWarpEntity(entityId);
             ModPlayground.broadcastMessage("CANCEL " + entity.getName());
-
         }
     }
 
@@ -72,27 +62,27 @@ public class InWarpRunnable extends TimedRunnable{
     }
 
     private void updateWarp() {
-        ModPlayground.broadcastMessage(" stability: " + 100*(countdown/countdownMax));
-
         //update value for synching
-        WarpProcess.setProcess(entity,WarpProcess.WARP_STABILITY,(int)((100*countdown)/countdownMax));
+        int stability = (int)((100* countdown_millis)/countdownMax);
+        WarpProcess.setProcess(entity,WarpProcess.WARP_STABILITY,stability);
+        ModPlayground.broadcastMessage(" stability: " + stability+ " countdown: " + countdown_millis);
 
         if (entity.getSpeedCurrent() < WarpManager.minimumSpeed) {
             //ship is to slow, dropping out of warp!
-            countdown -= getTimeout(); //runs once a second
+            countdown_millis -= getTimeout(); //runs once a second
         } else {
-            if (countdown < countdownMax) {
-                countdown += 2*getTimeout();
+            if (countdown_millis < countdownMax) {
+                countdown_millis += 2*getTimeout();
             }
         }
 
-        if (countdown > countdownMax) { //essentially caps the countdown to max_val, while allowing a start buffer of extra seconds
-            countdown -= getTimeout();
+        if (countdown_millis > countdownMax) { //essentially caps the countdown to max_val, while allowing a start buffer of extra seconds
+            countdown_millis -= getTimeout();
         }
-        if (countdown <= 0) {
+        if (countdown_millis <= 0) {
             //drop entity out of warp.
+            ModPlayground.broadcastMessage("invoke speeddrop, countdown:" + countdown_millis);
             WarpJumpManager.invokeDrop(0,entity,false, false);
-
         }
 
     }
@@ -106,5 +96,6 @@ public class InWarpRunnable extends TimedRunnable{
     private void updateRSP() {
         //set to full, so that entering warp starts with f
         WarpProcess.setProcess(entity,WarpProcess.WARP_STABILITY,100);
+        countdown_millis = countdownMax;
     }
 }
