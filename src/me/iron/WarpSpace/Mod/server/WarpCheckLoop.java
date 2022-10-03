@@ -19,11 +19,11 @@ import org.schema.schine.network.objects.Sendable;
  */
 public class WarpCheckLoop {
     /**
-     * loop that creates a starrunnable that checks the loaded segmentcontrollers every x seconds
+     * creates a timed runnable that checks the loaded segmentcontrollers every x seconds
      */
     public static void loop() {
         //make a timed loop
-        new TimedRunnable(1000,WarpMain.instance, -1) {
+        new TimedRunnable(5000,WarpMain.instance, -1) {
             @Override
             public void onRun() {
                 //check for every updatable object (astronauts, hsips, asteroids etc
@@ -31,9 +31,6 @@ public class WarpCheckLoop {
                     if (sc instanceof SimpleTransformableSendableObject) {
                         SimpleTransformableSendableObject obj = (SimpleTransformableSendableObject)sc;
                         if (!WarpEntityManager.isWarpEntity(obj)) {
-                            //if (obj instanceof ShopSpaceStation || obj instanceof AICharacter)
-                            //    continue;
-                            //is in warp and not registered
                             WarpEntityManager.DeclareWarpEntity(obj);
                         }
                     }
