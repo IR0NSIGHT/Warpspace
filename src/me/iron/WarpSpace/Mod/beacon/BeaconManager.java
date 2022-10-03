@@ -10,7 +10,7 @@ import api.mod.config.PersistentObjectUtil;
 import api.mod.config.SimpleSerializerWrapper;
 import api.network.PacketReadBuffer;
 import api.network.PacketWriteBuffer;
-import api.utils.StarRunnable;
+import me.iron.WarpSpace.Mod.TimedRunnable;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
@@ -86,20 +86,16 @@ public class BeaconManager extends SimpleSerializerWrapper {
                 }
             }, WarpMain.instance);
 
-            new StarRunnable() {
-                long next = System.currentTimeMillis();
+            new TimedRunnable(5000, WarpMain.instance, -1) {
                 @Override
-                public void run() {
-                    if (next<System.currentTimeMillis()) {
-                        next = System.currentTimeMillis()+5000;
-                        try {
-                            updateAllBeacons();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                public void onRun() {
+                    try {
+                        updateAllBeacons();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
-            }.runTimer(WarpMain.instance,10);
+            };
         }
     }
 

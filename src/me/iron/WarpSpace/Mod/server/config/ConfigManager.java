@@ -76,8 +76,8 @@ public class ConfigManager {
         warp_speed_chamber_lvl_3_multiplier("warp_speed_chamber_lvl_3_multiplier",2,0,1000,false, true),
 
         //beacon chamber
-        warp_beacon_chamber_percent("warp_beacon_chamber_percent",0.25f,0,1, false, true);
-
+        warp_beacon_chamber_percent("warp_beacon_chamber_percent",0.25f,0,1, false, true),
+        warp_beacon_disable_on_homebase("warp_beacon_disable_on_homebase",1,0,1,true,true);
 
         private final String path;
         private final float defaultValue;

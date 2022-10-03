@@ -2,6 +2,7 @@ package me.iron.WarpSpace.Mod.beacon;
 
 import api.utils.game.SegmentControllerUtils;
 import me.iron.WarpSpace.Mod.WarpManager;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
@@ -101,7 +102,6 @@ public class BeaconObject implements Serializable {
             //DebugUI.echo("DELETE BEACON: WRONG POSITION FOR BEACON",null);
             return;
         }
-        boolean isHB = (sc instanceof SpaceStation && sc.isHomeBase());
         if (sc instanceof ManagedUsableSegmentController) {
             ManagedUsableSegmentController msc = (ManagedUsableSegmentController)sc;
             ReactorElement beaconChamber = SegmentControllerUtils.getChamberFromElement(msc,WarpBeaconAddon.beaconChamber);
@@ -110,7 +110,7 @@ public class BeaconObject implements Serializable {
                 setFlagForDelete();
                 return;
             }
-            if (sc.isCoreOverheating() || isHB || beaconChamber.isDamagedRec()) {
+            if (sc.isCoreOverheating() || (sc instanceof SpaceStation && sc.isHomeBase() && ConfigManager.ConfigEntry.warp_beacon_disable_on_homebase.isTrue()) || beaconChamber.isDamagedRec()) {
                 setFlagForDelete();
                 return;
             }
