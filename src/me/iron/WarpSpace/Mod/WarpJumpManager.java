@@ -96,13 +96,14 @@ public class WarpJumpManager {
 
 
                 Vector3i targetSector = getDropPoint(warpPos);
-                if (ship.getType().equals(SimpleTransformableSendableObject.EntityType.SPACE_STATION) )
-                {
+                if (ship.getType().equals(SimpleTransformableSendableObject.EntityType.SPACE_STATION) ) {
                     Random r = new Random();
                     r.setSeed(targetSector.code());
                     int range = 25;
                     targetSector.add(r.nextInt(range),r.nextInt(range),r.nextInt(range));
+                    ship.sendControllingPlayersServerMessage(Lng.astr("Unstable station drop, position shifted"),ServerMessage.MESSAGE_TYPE_WARNING);
                 }
+
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,warpPos,targetSector);
                 StarLoader.fireEvent(e, true);
 
@@ -215,10 +216,10 @@ public class WarpJumpManager {
      * @param ship ship segmentcontroller
      */
     public static void emptyWarpdrive(SimpleTransformableSendableObject ship) {
-        //get jumpaddon
-        JumpAddOn warpdrive;
-        if(!(ship instanceof ManagedSegmentController<?>))
+        if(!(ship instanceof Ship))
             return;
+
+        JumpAddOn warpdrive;
         warpdrive =((Ship)ship).getManagerContainer().getJumpAddOn();
         warpdrive.removeCharge();
         warpdrive.setCharge(0.0F);
@@ -260,11 +261,6 @@ public class WarpJumpManager {
 
         if (!(ship instanceof SegmentController))
             return false;
-
-        //debug jumpdrive level
-        if(((SegmentController)ship).hasActiveReactors()){
-        //    DebugFile.log ("warpdrive of "+ ship.getName() + " has level: " + ((ManagedSegmentController<?>)ship).getManagerContainer().getPowerInterface().getActiveReactor().getLevel());
-        }
 
         try {
             sector = GameServer.getUniverse().getSector(position);
@@ -324,6 +320,11 @@ public class WarpJumpManager {
         return retVal;
     }
 
+    /**
+     * returns drop point with applied beacon-shifting
+     * @param warpSector
+     * @return
+     */
     public static Vector3i getDropPoint(Vector3i warpSector) {
         warpSector = new Vector3i(warpSector);
         //apply warp-beacon. inform player if beacon had effect.
