@@ -1,5 +1,6 @@
 package me.iron.WarpSpace.Mod;
 
+import api.ModPlayground;
 import me.iron.WarpSpace.Mod.beacon.BeaconManager;
 import me.iron.WarpSpace.Mod.client.WarpProcess;
 import api.common.GameServer;
@@ -61,6 +62,7 @@ public class WarpJumpManager {
      * @param force overwrite all checks, admin
      */
     public static void invokeDrop(long countdown, final SimpleTransformableSendableObject ship, final boolean isJump, boolean force) {
+        ModPlayground.broadcastMessage("jump in " + countdown/1000 + " seconds");
         //check if already dropping
         if (!force && dropQueue.contains(ship)) { //ship already has a drop queued, and doesnt force another one.
             return;
@@ -69,6 +71,7 @@ public class WarpJumpManager {
         if (isJump) {
             WarpProcess.setProcess(ship, WarpProcess.JUMPEXIT, 1);
         } else {
+            ModPlayground.broadcastMessage("its a drop");
             //must be a speeddrop situation is already handeled by loop.
             WarpProcess.setProcess(ship,WarpProcess.JUMPDROP,1);
             countdown = 100; //almost immediate drop
@@ -132,6 +135,8 @@ public class WarpJumpManager {
      * @param force true if ignore all checks and force jump anyways
      */
     public static void invokeEntry(long countdown, final SimpleTransformableSendableObject ship, boolean force) {
+        ModPlayground.broadcastMessage("jump in " + countdown/1000 + " seconds");
+
         //check if already dropping
         if (!force && entryQueue.contains(ship)) { //ship already has a jump queued, and doesnt force another one.
             ship.sendControllingPlayersServerMessage(Lng.astr("Ship is already jumping!"), ServerMessage.MESSAGE_TYPE_INFO);

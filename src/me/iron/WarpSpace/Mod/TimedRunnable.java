@@ -1,11 +1,7 @@
 package me.iron.WarpSpace.Mod;
 
-import api.listener.fastevents.FastListenerCommon;
-import api.mod.StarLoader;
 import api.mod.StarMod;
 import api.utils.StarRunnable;
-import api.utils.draw.ModWorldDrawer;
-import org.schema.schine.graphicsengine.core.Timer;
 
 /**
  * STARMADE MOD
@@ -16,20 +12,21 @@ import org.schema.schine.graphicsengine.core.Timer;
  * overwrite onRun() for your custom methods to run timed.
  */
 public class TimedRunnable {
-    private int timeout;
+    private final int timeout;
     private int runs;
     StarRunnable runner;
     /**
      * will create a runnable that runs once every x millis.
      * @param timeout in millis
-     * @param
+     * @param mod the mod duh
+     * @param runAmount will run x times before autodestruct. -1 for forever
      */
     public TimedRunnable(final int timeout, StarMod mod, final int runAmount)  {
         this.timeout = timeout;
         this.runs = runAmount;
         runner = new StarRunnable(){
             private long lastRun = System.currentTimeMillis();
-            private long nextRun = 0;
+            private long nextRun = lastRun+timeout;
             @Override
             public void run() {
                 if (System.currentTimeMillis() > nextRun) {
