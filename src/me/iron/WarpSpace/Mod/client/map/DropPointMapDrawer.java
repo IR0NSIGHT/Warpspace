@@ -1,6 +1,5 @@
 package me.iron.WarpSpace.Mod.client.map;
 
-import api.ModPlayground;
 import api.listener.fastevents.FastListenerCommon;
 import api.mod.StarMod;
 import libpackage.drawer.MapDrawer;
@@ -23,9 +22,9 @@ import javax.vecmath.Vector4f;
  */
 public class DropPointMapDrawer extends MapDrawer {
     private Sprite mapSprite;
-    private Vector3i lastSector = new Vector3i();
+    private final Vector3i lastSector = new Vector3i();
     private long nextRefresh = 0;
-    private Vector4f markerColor = new Vector4f(0,1,1,0.8f);
+    private final Vector4f markerColor = new Vector4f(0,1,1,0.8f);
     private boolean updateFlag;
     public DropPointMapDrawer(StarMod mod) {
         super(mod);
