@@ -7,7 +7,6 @@ package me.iron.WarpSpace.Mod.server;
  * TIME: 15:17
  */
 
-import api.ModPlayground;
 import me.iron.WarpSpace.Mod.TimedRunnable;
 import me.iron.WarpSpace.Mod.WarpEntityManager;
 import me.iron.WarpSpace.Mod.WarpMain;
@@ -27,7 +26,6 @@ public class WarpCheckLoop {
         new TimedRunnable(1000,WarpMain.instance, -1) {
             @Override
             public void onRun() {
-                //ModPlayground.broadcastMessage("run check loop"+Math.random());
                 //check for every updatable object (astronauts, hsips, asteroids etc
                 for (Sendable sc: GameServerState.instance.getLocalAndRemoteObjectContainer().getLocalUpdatableObjects().values()) {
                     if (sc instanceof SimpleTransformableSendableObject) {

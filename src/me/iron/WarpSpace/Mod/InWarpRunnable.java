@@ -1,11 +1,9 @@
 package me.iron.WarpSpace.Mod;
 
-import api.ModPlayground;
 import me.iron.WarpSpace.Mod.client.WarpProcess;
 import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.data.player.AbstractCharacter;
-import org.schema.game.common.data.player.PlayerCharacter;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 
 /**
@@ -15,8 +13,7 @@ import org.schema.game.common.data.world.SimpleTransformableSendableObject;
  * TIME: 14:45
  */
 public class InWarpRunnable extends TimedRunnable{
-    private int entityId;
-    private String entityName;
+    private final int entityId;
     private SimpleTransformableSendableObject entity;
     static final int countdownMax = (int) ConfigManager.ConfigEntry.seconds_until_speeddrop.getValue()*1000;
     private float countdown_millis = countdownMax; //initial start value
@@ -25,7 +22,6 @@ public class InWarpRunnable extends TimedRunnable{
         super(1000,WarpMain.instance, -1);
         this.entityId = entity.getId();
         this.entity = entity;
-        this.entityName = entity.getName();
     }
 
     @Override
@@ -40,7 +36,6 @@ public class InWarpRunnable extends TimedRunnable{
 
             //skip docked ships
             if (entity instanceof Ship && !((Ship)entity).railController.isRoot()) {
-                ModPlayground.broadcastMessage("skip docked entity " + entity.getName());
                 return; //Object is docked to something else
             }
 
@@ -52,7 +47,6 @@ public class InWarpRunnable extends TimedRunnable{
             }
         } else {
             WarpEntityManager.RemoveWarpEntity(entityId);
-            ModPlayground.broadcastMessage("CANCEL " + entity.getName());
         }
     }
 
@@ -65,7 +59,6 @@ public class InWarpRunnable extends TimedRunnable{
         //update value for synching
         int stability = (int)((100* countdown_millis)/countdownMax);
         WarpProcess.setProcess(entity,WarpProcess.WARP_STABILITY,stability);
-        ModPlayground.broadcastMessage(" stability: " + stability+ " countdown: " + countdown_millis);
 
         if (entity.getSpeedCurrent() < WarpManager.minimumSpeed) {
             //ship is to slow, dropping out of warp!
@@ -81,7 +74,6 @@ public class InWarpRunnable extends TimedRunnable{
         }
         if (countdown_millis <= 0) {
             //drop entity out of warp.
-            ModPlayground.broadcastMessage("invoke speeddrop, countdown:" + countdown_millis);
             WarpJumpManager.invokeDrop(0,entity,false, false);
         }
 
@@ -90,7 +82,6 @@ public class InWarpRunnable extends TimedRunnable{
     @Override
     public void doStop() {
         super.doStop();
-        ModPlayground.broadcastMessage("HALT WARP LOOP " + entityName);
     }
 
     private void updateRSP() {
