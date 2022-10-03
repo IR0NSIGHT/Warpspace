@@ -15,6 +15,7 @@ import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
+import org.schema.schine.network.objects.Sendable;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -151,16 +152,21 @@ public class DebugUI implements CommandInterface {
         if (l>=1 && strings[0].equalsIgnoreCase("warp")) {
             SimpleTransformableSendableObject obj = playerState.getFirstControlledTransformableWOExc();
             if (l>=2 && strings[1].equalsIgnoreCase("-j"))  {
-                WarpJumpManager.invokeJumpdriveUsed(obj, true);
+                WarpJumpManager.invokeJumpdriveUsed(obj, false);
                 echo("normal jump", playerState);
-            } else if (l >= 2 && strings[1].equalsIgnoreCase("-l")) {
-                echo("start loop", playerState);
-                WarpEntityManager.DeclareWarpEntity(obj);
-            } else {
-                echo("immediate", playerState);
+            } else if (l>= 2 && strings[1].equalsIgnoreCase("-s")) {
+                Sendable selected = GameServerState.instance.getLocalAndRemoteObjectContainer().getLocalObjects().get(playerState.getSelectedEntityId());
+                if (selected instanceof SimpleTransformableSendableObject) {
+                    WarpJumpManager.invokeJumpdriveUsed((SimpleTransformableSendableObject) selected, true);
+                } else {
+                    echo("Nothing or wrong type of entity selected, can not warp entity.",playerState);
+                }
+            }
+            else {
+                echo("immediate forced warp", playerState);
                 if (WarpManager.isInWarp(obj)) { //is in warpspace, get realspace pos
                     WarpJumpManager.invokeDrop(0,obj,true, true);
-                } else if (!WarpManager.isInWarp(obj)) { //is in realspace, get warppos
+                } else { //is in realspace, get warppos
                     WarpJumpManager.invokeEntry(0,obj,true);
                 }
 
