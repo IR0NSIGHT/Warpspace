@@ -238,6 +238,11 @@ public class WarpJumpManager {
         return warpdrive.canExecute();
     }
 
+    /**
+     * test if this warpsector is influenced/shifted by an active beacon
+     * @param warpSector
+     * @return
+     */
     public static boolean isDroppointShifted(Vector3i warpSector) {
         BeaconManager bm = (WarpMain.instance.beaconManagerServer!=null)?WarpMain.instance.beaconManagerServer:WarpMain.instance.beaconManagerClient;
         return bm.hasActiveBeacon(warpSector);
