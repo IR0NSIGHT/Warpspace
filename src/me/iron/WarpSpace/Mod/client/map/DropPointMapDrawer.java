@@ -77,9 +77,11 @@ public class DropPointMapDrawer extends MapDrawer {
         for (int x =-range; x <= range; x++) {
             for (int y =-range; y <= range; y++){
                 for (int z = -range; z <= range; z++){
-                    tempWarp.set(warpPos);
-                    tempWarp.add(x,y,z);
-                    tempDrop = WarpJumpManager.getDropPoint(warpPos);
+                    tempWarp.set(x,y,z);
+                    if (tempWarp.length()>range)
+                        continue;
+                    tempWarp.add(warpPos);
+                    tempDrop = WarpJumpManager.getDropPoint(tempWarp);
                     boolean dropShift = (WarpJumpManager.isDroppointShifted(tempWarp));
                     SimpleMapMarker drop = new SimpleMapMarker(
                             mapSprite,

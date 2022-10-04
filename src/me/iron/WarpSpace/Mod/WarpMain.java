@@ -65,16 +65,6 @@ public class WarpMain extends StarMod {
         dropPointMapDrawer = new DropPointMapDrawer(this);
         warpThrusterListener = new WarpThrusterListener(this);
 
-        //synch config to client
-        final FileConfiguration config = getConfig("config");
-        config.set("important", "this is an important message");
-        StarLoader.registerListener(ClientLoginEvent.class, new Listener<ClientLoginEvent>() {
-            @Override
-            public void onEvent(ClientLoginEvent event) {
-                SyncedConfigUtil.sendConfigToClient(event.getServerProcessor(), config);
-            }
-        }, this);
-
     }
     
     @Override
