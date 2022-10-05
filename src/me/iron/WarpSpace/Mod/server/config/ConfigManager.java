@@ -21,7 +21,6 @@ public class ConfigManager {
                 e.value = Math.round(e.value);
             config.set(e.getPath(),e.value);
         }
-        config.set("help","deleted values will be set to their default value on next loading. values that go below/above limits will be capped to limit.");
         config.saveConfig();
 
         StarLoader.registerListener(ClientLoginEvent.class, new Listener<ClientLoginEvent>() {
@@ -32,6 +31,8 @@ public class ConfigManager {
                 }
             }
         }, mod);
+
+        new ConfigDocuManager(ConfigEntry.values(), configName);
     }
 
     private final FileConfiguration config;
@@ -80,9 +81,9 @@ public class ConfigManager {
         warp_beacon_disable_on_homebase("warp_beacon_disable_on_homebase",1,0,1,true,true);
 
         private final String path;
-        private final float defaultValue;
-        private final float minValue;
-        private final float maxValue;
+        public final float defaultValue;
+        public final float minValue;
+        public final float maxValue;
         private float value;
         private final boolean isInt;
         private final boolean overwriteClient;

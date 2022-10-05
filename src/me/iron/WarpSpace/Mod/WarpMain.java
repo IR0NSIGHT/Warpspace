@@ -127,8 +127,8 @@ public class WarpMain extends StarMod {
     private GlossarCategory getWiki() {
         GlossarCategory cat = new GlossarCategory("WarpSpace");
 
-        cat.addEntry(new GlossarEntry("Introduction","WarpSpace changes the jumping mechanic. Instead of being teleported to your waypoint or in the direction of the waypoint, instead you enter a parallel dimension that is a scaled down version of realspace: the Warp. Here you can travel using your ship's engines, just as in realspace, but distances are ten times shorter. \nThis means that you can follow others/be followed when you are travelling faster than light. The core feature is that fast-travel becomes predictable.\n This renders flash raid-attacks, which rely on jumping away to hide, useless and greatly improves the ability to defend your territory.\nSince the Warp is shared by everyone, its not unlikely to meet other players in it.\n\n\nContributors:\nIR0NSIGHT (author)\nJakeV (thrust in warp)\nTaswin (Map in Warp)\nMekTek (GUI)\nIthirahad (VFX & tweaks)"));
-        cat.addEntry(new GlossarEntry("Jumping","Set your desired destination as your navigation waypoint ('N'). Then activate your jumpdrive. After a couple seconds you will switch dimensions and enter the Warp. " +
+        cat.addEntry(new GlossarEntry("Introduction","WarpSpace changes the jumping mechanic. Instead of being teleported to your waypoint or in the direction of the waypoint, instead you enter a parallel dimension that is a scaled down version of realspace: the Warp. Here you can travel using your ship's engines, just as in realspace, but distances are ten times shorter. \nThis means that you can follow others/be followed when you are travelling faster than light. The core feature is that fast-travel becomes predictable.\n This renders flash raid-attacks, which rely on jumping away to hide, useless and greatly improves the ability to defend your territory.\nSince the Warp is shared by everyone, its not unlikely to meet other players in it.\n\n\nContributors:\nIR0NSIGHT (author)\nJakeV (warpthrust)\nTaswin (Map in Warp)\nMekTek (GUI)\nIthirahad (VFX & tweaks)\nDarkenWizMan (SFX)"));
+        cat.addEntry(new GlossarEntry("Jumping","Set your desired destination as your navigation waypoint ('N'). Activate your jumpdrive. After a couple seconds you will switch dimensions and enter the Warp. " +
                 "The Warp is a parallel dimension where distances are 10 times shorter. Follow your waypoint while you are in warp, until you reach it. You will see a notification 'droppoint' reached. Activate your jumpdrive again or slow down below 50 m/s for more than 10 seconds, to drop out of warp. You will re-enter realspace at the corresponding droppoint. This is your waypoint rounded to 10. After dropping, fly the remaining distance to your waypoint in realspace.\n" +
                 "If you want to go faster in Warp, try installing Warp Speed chambers (a replacement for vanilla Jump Distance) to increase your maximum flight speed within Warp Space."));
 
@@ -146,6 +146,8 @@ public class WarpMain extends StarMod {
                 "- If you are being inhibited:\n" +
                 "    - Red spiral: your sector is inhibited.\n" +
                 "    - Red arrows: the sector in the other dimension is inhibited."));
+
+        cat.addEntry(new GlossarEntry("Configuration","Warpspace is highly configurable. Check starmade-install-folder/moddata/warpspace for the warpspaceConfig file.\n Game mechanics, Sound effects, Visual effects and more can be configure there."));
         return cat;
     }
 }
