@@ -39,6 +39,7 @@ public class WarpJumpManager {
     public static HashSet<SimpleTransformableSendableObject> entryQueue = new HashSet<>();
 
     public static void invokeJumpdriveUsed(SimpleTransformableSendableObject object, boolean forceJump) {
+        System.out.println("entity used its jumpdrive: " + object.getUniqueIdentifier() + " type " + object.getClass().getName());
         if (!forceJump && (object instanceof Ship && !canExecuteWarpdrive((Ship)object)))
             return;
         //check if ship is in warp or not, check if ship is allowed to perform the jump

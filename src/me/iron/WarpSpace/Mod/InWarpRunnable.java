@@ -74,6 +74,7 @@ public class InWarpRunnable extends TimedRunnable{
         }
         if (countdown_millis <= 0) {
             //drop entity out of warp.
+            System.out.println("dropping entity" + entity.getUniqueIdentifier() + " type " + entity.getClass().getName() +" CAUSE: SPEEDDROP");
             WarpJumpManager.invokeDrop(0,entity,false, false);
         }
 
