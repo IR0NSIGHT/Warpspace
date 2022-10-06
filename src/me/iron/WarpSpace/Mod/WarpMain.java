@@ -1,14 +1,11 @@
 package me.iron.WarpSpace.Mod;
 
 import api.config.BlockConfig;
-import api.listener.Listener;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
-import api.listener.events.network.ClientLoginEvent;
 import api.mod.StarLoader;
 import api.mod.StarMod;
 import api.mod.config.FileConfiguration;
-import api.mod.config.SyncedConfigUtil;
 import api.network.packets.PacketUtil;
 import api.utils.registry.UniversalRegistry;
 import glossar.GlossarCategory;
