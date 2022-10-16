@@ -3,3 +3,6 @@
 /.idea/
 Warpspace.iml
 /.run/
+/.gradle/
+/build/
+/gradle/

@@ -1,0 +1,130 @@
+plugins {
+	id 'java'
+	id "com.diffplug.spotless" version "6.11.0"
+}
+
+group mod_org_id
+version mod_version
+
+// Still requires java 8 to build, because newer gradle versions require Java 8!
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	implementation.extendsFrom(jarLibs)
+}
+
+dependencies {
+	testImplementation 'junit:junit:4.13'
+	implementation files(starmade_root_client + 'StarMade.jar')
+	implementation fileTree(dir: starmade_root_client + 'lib', include: ["*.jar"])
+	jarLibs files("lib/MapDrawerUtils.jar")
+	jarLibs files("lib/ModGlossar.jar")
+}
+
+jar {
+	//noinspection GroovyAssignabilityCheck
+	duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+	manifest {
+		//noinspection GroovyAssignabilityCheck
+		attributes([
+				'Built-By': System.getProperty("user.name"),
+				'url': mod_url,
+				'Implementation-Title': mod_name,
+				'Implementation-Version': mod_version,
+				'Implementation-Vendor-Id': mod_org_id,
+				'Implementation-Vendor': mod_org
+		])
+	}
+
+	from {
+		configurations.jarLibs.collect {zipTree it }
+	}
+	doLast {
+		File jarFile = jar.archiveFile.get().asFile
+		copy {
+			from jarFile.getParent()
+			into starmade_root_client + "mods"
+
+			include jarFile.getName()
+		}
+
+		jarFile = jar.archiveFile.get().asFile
+		copy {
+			from jarFile.getParent()
+			into starmade_root_server + "mods"
+
+			include jarFile.getName()
+		}
+	}
+}
+
+spotless {
+	// optional: limit format enforcement to just the files changed by this feature branch
+	//ratchetFrom 'origin/master'
+
+	format 'misc', {
+		// define the files to apply `misc` to
+		target '*.gradle', '*.md', '.gitignore'
+
+		// define the steps to apply to those files
+		trimTrailingWhitespace()
+		indentWithTabs() // or spaces. Takes an integer argument if you don't like 4
+		endWithNewline()
+	}
+	java {
+		// Use the default importOrder configuration
+		println("use custom import order")
+		importOrder('java', 'javax', 'org', 'com', 'com.diffplug', '')   // A sequence of package names
+		println("remove unused imports")
+		removeUnusedImports() // removes any unused imports
+	}
+}
+
+tasks.jar.dependsOn(tasks.spotlessApply)
+
+task runGameClient(type: JavaExec) {
+	group = 'Game'
+	description = 'Run the game with the mod injected for debugging.'
+	classpath = sourceSets.main.compileClasspath
+	mainClass.set('me.jakev.starloader.LaunchClassLoader')
+	systemProperty('java.library.path', starmade_root_client + "native" + System.getProperty('path.separator') + starmade_root_client + "native/windows/x64" + System.getProperty('path.separator') + starmade_root_client + "native/solaris/x64")
+	//noinspection GroovyAssignabilityCheck
+	args = ["-client","-force","-uplink 127.0.0.1 4242 8166,-1"]
+	doFirst {
+		//noinspection GroovyAssignabilityCheck
+		workingDir = new File(starmade_root_client)
+	}
+}
+
+tasks.runGameClient.dependsOn(tasks.build)
+
+task runGameServer(type: JavaExec) {
+	group = 'Game'
+	description = 'Run the game with the mod injected for debugging.'
+	classpath = sourceSets.main.compileClasspath
+	mainClass.set('me.jakev.starloader.LaunchClassLoader')
+	systemProperty('java.library.path', starmade_root_server + "native" + System.getProperty('path.separator') + starmade_root_server + "native/windows/x64" + System.getProperty('path.separator') + starmade_root_server + "native/solaris/x64")
+	//noinspection GroovyAssignabilityCheck
+	args = ["-server"]
+	doFirst {
+		//noinspection GroovyAssignabilityCheck
+		workingDir = new File(starmade_root_server)
+	}
+}
+
+tasks.runGameServer.dependsOn(tasks.build)
+
+test {
+	useJUnit()
+
+	maxHeapSize = '2G'
+}
+
+tasks.check.dependsOn(tasks.spotlessApply)
+tasks.build.dependsOn(tasks.test)
