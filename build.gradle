@@ -101,7 +101,6 @@ task runGameClient(type: JavaExec) {
 		workingDir = new File(starmade_root_client)
 	}
 }
-
 tasks.runGameClient.dependsOn(tasks.build)
 
 task runGameServer(type: JavaExec) {
@@ -117,8 +116,22 @@ task runGameServer(type: JavaExec) {
 		workingDir = new File(starmade_root_server)
 	}
 }
-
 tasks.runGameServer.dependsOn(tasks.build)
+
+task runGameServerAsClient(type: JavaExec) {
+	group = 'Game'
+	description = 'Run the game with the mod injected for debugging.'
+	classpath = sourceSets.main.compileClasspath
+	mainClass.set('me.jakev.starloader.LaunchClassLoader')
+	systemProperty('java.library.path', starmade_root_server + "native" + System.getProperty('path.separator') + starmade_root_server + "native/windows/x64" + System.getProperty('path.separator') + starmade_root_server + "native/solaris/x64")
+	//noinspection GroovyAssignabilityCheck
+	args = ["-force"]
+	doFirst {
+		//noinspection GroovyAssignabilityCheck
+		workingDir = new File(starmade_root_server)
+	}
+}
+tasks.runGameServerAsClient.dependsOn(tasks.build)
 
 test {
 	useJUnit()

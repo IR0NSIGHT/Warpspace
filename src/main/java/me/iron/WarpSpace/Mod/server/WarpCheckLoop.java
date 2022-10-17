@@ -7,7 +7,6 @@ package me.iron.WarpSpace.Mod.server;
  * TIME: 15:17
  */
 
-import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
 import org.schema.schine.network.objects.Sendable;
@@ -30,7 +29,7 @@ public class WarpCheckLoop {
             public void onRun() {
                 //check for every updatable object (astronauts, hsips, asteroids etc
                 for (Sendable sc: GameServerState.instance.getLocalAndRemoteObjectContainer().getLocalUpdatableObjects().values()) {
-                    if (sc instanceof SegmentController) {  //TODO was specified to exclude AbstractCharacters, suspected to be related to nullpointers.
+                    if (sc instanceof SimpleTransformableSendableObject) {
                         SimpleTransformableSendableObject obj = (SimpleTransformableSendableObject)sc;
                         if (!WarpEntityManager.isWarpEntity(obj)) {
                             WarpEntityManager.DeclareWarpEntity(obj);
