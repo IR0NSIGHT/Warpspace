@@ -15,12 +15,12 @@ import org.schema.schine.network.objects.Sendable;
 import me.iron.WarpSpace.Mod.TimedRunnable;
 import me.iron.WarpSpace.Mod.WarpEntityManager;
 import me.iron.WarpSpace.Mod.WarpMain;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 
 /**
  * a loop that runs regularly and checks all loaded ships if they are in warp or not. passes the ships to the warpshipmanager
  */
 public class WarpCheckLoop {
-    public static boolean astronautAutodropKillSwitch = true;
     /**
      * creates a timed runnable that checks the loaded segmentcontrollers every x seconds
      */
@@ -35,7 +35,7 @@ public class WarpCheckLoop {
                         SimpleTransformableSendableObject obj = (SimpleTransformableSendableObject)sc;
 
                         //buggy feature with killswitch. disables astronauts autodropping
-                        if (astronautAutodropKillSwitch && sc instanceof AbstractCharacter)
+                        if (ConfigManager.ConfigEntry.killswitch_astronautDrop.isTrue() && sc instanceof AbstractCharacter)
                             continue;
 
                         if (!WarpEntityManager.isWarpEntity(obj)) {

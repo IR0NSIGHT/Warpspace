@@ -27,6 +27,8 @@ public class ConfigDocuManager {
         switch (entry) {
             case droppoint_random_offset:
                 return "natural droppoints are randomly shifted up to x sectors.";
+            case killswitch_astronautDrop:
+                return "killswitch to disable automated astronaut drop. disable the feature if people receive crashes + nullpointers when in warp.";
             case map_draw_droppoints_range:
                 return "draw the droppoints (blue spiral) of all warpsectors with distance < x on the map in realspace.";
             case minimum_warp_speed:

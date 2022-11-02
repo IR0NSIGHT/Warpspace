@@ -40,6 +40,10 @@ public class ConfigManager {
     public static final String configName = "WarpSpaceConfig";
     private static final float manySeconds = 60000000;
     public enum ConfigEntry {
+        //astronaut autodrop killswitch
+
+        killswitch_astronautDrop("killswitch_astronaut_drop",1,0,1, true, true),
+
         //voice announcer
         sfx_voice_enable("sfx_voice_enable",1,0,20),
         sfx_voice_add_db("sfx_voice_loudness_add_dezibel",10f,0,20),
