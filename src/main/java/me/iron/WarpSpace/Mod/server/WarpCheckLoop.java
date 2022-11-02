@@ -7,6 +7,7 @@ package me.iron.WarpSpace.Mod.server;
  * TIME: 15:17
  */
 
+import org.schema.game.common.data.player.AbstractCharacter;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
 import org.schema.schine.network.objects.Sendable;
@@ -19,6 +20,7 @@ import me.iron.WarpSpace.Mod.WarpMain;
  * a loop that runs regularly and checks all loaded ships if they are in warp or not. passes the ships to the warpshipmanager
  */
 public class WarpCheckLoop {
+    public static boolean astronautAutodropKillSwitch = true;
     /**
      * creates a timed runnable that checks the loaded segmentcontrollers every x seconds
      */
@@ -31,6 +33,11 @@ public class WarpCheckLoop {
                 for (Sendable sc: GameServerState.instance.getLocalAndRemoteObjectContainer().getLocalUpdatableObjects().values()) {
                     if (sc instanceof SimpleTransformableSendableObject) {
                         SimpleTransformableSendableObject obj = (SimpleTransformableSendableObject)sc;
+
+                        //buggy feature with killswitch. disables astronauts autodropping
+                        if (astronautAutodropKillSwitch && sc instanceof AbstractCharacter)
+                            continue;
+
                         if (!WarpEntityManager.isWarpEntity(obj)) {
                             WarpEntityManager.DeclareWarpEntity(obj);
                         }
