@@ -1,13 +1,12 @@
 package me.iron.WarpSpace.Mod.server.config;
 
-import org.schema.game.server.data.GameServerState;
-
 import api.listener.Listener;
 import api.listener.events.network.ClientLoginEvent;
 import api.mod.StarLoader;
 import api.mod.config.FileConfiguration;
 import api.network.packets.PacketUtil;
 import me.iron.WarpSpace.Mod.WarpMain;
+import org.schema.game.server.data.GameServerState;
 
 /**
  * config manager class. reads, writes, corrects, defaults config values.
@@ -39,21 +38,22 @@ public class ConfigManager {
     private final FileConfiguration config;
     public static final String configName = "WarpSpaceConfig";
     private static final float manySeconds = 60000000;
+
     public enum ConfigEntry {
         //astronaut autodrop killswitch
 
-        killswitch_astronautDrop("killswitch_astronaut_drop",1,0,1, true, true),
-
+        killswitch_astronautDrop("killswitch_astronaut_drop", 1, 0, 1, true, true),
+        killswitch_speedDrop("killswitch_speeddrop", 1, 0, 1, true, true),
         //voice announcer
-        sfx_voice_enable("sfx_voice_enable",1,0,20),
-        sfx_voice_add_db("sfx_voice_loudness_add_dezibel",10f,0,20),
+        sfx_voice_enable("sfx_voice_enable", 1, 0, 20),
+        sfx_voice_add_db("sfx_voice_loudness_add_dezibel", 10f, 0, 20),
 
         //warp sound effects
-        sfx_effects_enable("sfx_effects_enable",1,0,20),
-        sfx_effects_add_db("sfx_effects_loudness_add_dezibel",0f,0,20),
+        sfx_effects_enable("sfx_effects_enable", 1, 0, 20),
+        sfx_effects_add_db("sfx_effects_loudness_add_dezibel", 0f, 0, 20),
 
         //warp shader
-        vfx_use_warp_shader("vfx_use_warp_shader",1,0,1, true, false),
+        vfx_use_warp_shader("vfx_use_warp_shader", 1, 0, 1, true, false),
 
         //map stuff
         map_draw_droppoints_range("map_draw_droppoints_range",1,0,10),
