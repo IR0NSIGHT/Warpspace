@@ -17,11 +17,11 @@ import me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon;
  * DATE: 27.09.2022
  * TIME: 20:50
  */
-public class ConfigSyncPaket extends Packet {
+public class ConfigSyncPacket extends Packet {
     /**
      * default constructor required by starlaoder DO NOT DELETE!
      */
-    public ConfigSyncPaket() {
+    public ConfigSyncPacket() {
 
     }
 

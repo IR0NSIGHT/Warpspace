@@ -13,7 +13,7 @@ import org.schema.game.server.data.GameServerState;
  */
 public class ConfigManager {
     public ConfigManager(final WarpMain mod) {
-        PacketUtil.registerPacket(ConfigSyncPaket.class);
+        PacketUtil.registerPacket(ConfigSyncPacket.class);
         config = mod.getConfig(configName);
         for (ConfigEntry e: ConfigEntry.values()) {
             e.setValue(config.getConfigurableFloat(e.getPath(), e.defaultValue));
@@ -27,7 +27,7 @@ public class ConfigManager {
             @Override
             public void onEvent(ClientLoginEvent event) {
                 if(GameServerState.instance != null) {
-                    PacketUtil.sendPacket(event.getServerProcessor(), new ConfigSyncPaket());
+                    PacketUtil.sendPacket(event.getServerProcessor(), new ConfigSyncPacket());
                 }
             }
         }, mod);

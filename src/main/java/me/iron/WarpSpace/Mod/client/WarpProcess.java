@@ -192,13 +192,13 @@ public enum WarpProcess {
         if (GameClientState.instance == null || GameClientState.instance.getPlayer() == null)
             return;
         //test if beacon is affecting player position, beacon synch is handeled separately.
-        boolean droppointShifted = (WarpJumpManager.isDroppointShifted(WarpManager.getWarpSpacePos(GameClientState.instance.getPlayer().getCurrentSector())));
+        boolean droppointShifted = (WarpJumpManager.isDroppointShifted(WarpManager.getInstance().getWarpSpacePos(GameClientState.instance.getPlayer().getCurrentSector())));
         WarpProcess.DROPPOINTSHIFTED.setCurrentValue(droppointShifted?1:0);
-        WarpProcess.IS_IN_WARP.setCurrentValue(WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector())?1:0);
+        WarpProcess.IS_IN_WARP.setCurrentValue(WarpManager.getInstance().isInWarp(GameClientState.instance.getPlayer().getCurrentSector())?1:0);
 
         if (GameClientState.instance.getController().getClientGameData().getWaypoint() != null) {
             Vector3i offSetWP;
-            if (WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector())) {
+            if (WarpManager.getInstance().isInWarp(GameClientState.instance.getPlayer().getCurrentSector())) {
                 offSetWP = new Vector3i(GameClientState.instance.getController().getClientGameData().getWaypoint());
                 offSetWP = WarpJumpManager.getDropPoint(offSetWP);
                 Vector3i currentPos = WarpJumpManager.getDropPoint(GameClientState.instance.getPlayer().getCurrentSector());

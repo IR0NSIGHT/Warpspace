@@ -92,9 +92,9 @@ public class MyGameMapListener implements GameMapDrawListener
 	@Override
 	public void galaxy_DrawSprites(GameMapDrawer drawer)
 	{
-		if (!WarpManager.isInWarp(drawer.getPlayerSector())) return;
+		if (!WarpManager.getInstance().isInWarp(drawer.getPlayerSector())) return;
 		
-		Vector3i realCoords = WarpManager.getRealSpacePos(drawer.getPlayerSector());
+		Vector3i realCoords = WarpManager.getInstance().getRealSpacePos(drawer.getPlayerSector());
 		realCoords.scaleFloat(1 / 16f);
 		
 		Vector3i galaxyPos = new Vector3i(drawer.getState().getCurrentGalaxy().galaxyPos);
@@ -113,11 +113,11 @@ public class MyGameMapListener implements GameMapDrawListener
 	public void galaxy_DrawQuads(GameMapDrawer drawer)
 	{
 		Vector3i sector = drawer.getPlayerSector();
-		if (WarpManager.isInWarp(sector))
+		if (WarpManager.getInstance().isInWarp(sector))
 		{
-			float r = WarpManager.getScale() / 2f;
+			float r = WarpManager.getInstance().getScale() / 2f;
 			
-			Vector3i realPos = WarpManager.getRealSpacePos(sector);
+			Vector3i realPos = WarpManager.getInstance().getRealSpacePos(sector);
 			drawCube(new Vector3f(
 				(realPos.x - 8f) * GameMapDrawer.sectorSize,
 				(realPos.y - 8f) * GameMapDrawer.sectorSize,

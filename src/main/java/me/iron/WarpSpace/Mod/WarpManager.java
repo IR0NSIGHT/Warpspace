@@ -7,43 +7,54 @@ package me.iron.WarpSpace.Mod;
  * TIME: 15:29
  */
 
-import api.DebugFile;
-import me.iron.WarpSpace.Mod.server.config.ConfigManager;
-import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.common.data.world.SimpleTransformableSendableObject;
-import org.schema.game.server.data.Galaxy;
+import java.util.Random;
 
 import javax.vecmath.Vector3f;
-import java.util.Random;
+
+import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.common.data.world.SimpleTransformableSendableObject;
+
+import api.DebugFile;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 
 /**
  * defines mechanics in warp, hold settings of the warp like its position.
  */
 public class WarpManager {
-    private static Random random = new Random();
+    private static WarpManager instance;
 
-    /**
-     * Galaxy size * System size * 64 + Galaxy size * System size * 64 / scale + System size * 2
-     * 64 galaxies realspace + 64 galaxies warpspace + 2 systems buffer.
-     */
-    public static int universeSize = Galaxy.size * 16 * 8;
+    public static WarpManager getInstance() {
+        return instance;
+    }
+
+    public WarpManager(float sectorSize, int galaxySize, int scale) {
+        this.sectorSize = sectorSize;
+        //64 systems per galaxy, 16 sectors per system (hardcoded) //TODO assert these values are hardcoded
+        this.universeSize = galaxySize * 64 * 16;
+        this.scale = scale; //(int) ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue();
+        this.offset = (int)(universeSize * (1 + 1f / scale)) + 16 * 2; //offset in sectors
+        instance = this;
+    }
+
+    private Random random = new Random();
+
+    private int scale;
+
+    public float sectorSize;
+
+    public int universeSize;
 
     /**
      * the offset of warpspace to the realspace sector on the y axis. Use a number outside of the galaxy: empty space
      */
-    public static int offset = (int)(universeSize * (1 + 1f / getScale())) + 16 * 2; //offset in sectors
-
-    /**
-     *  minimum speed required to stay in warp
-     */
-    public static int minimumSpeed = 50;
+    public int offset;
 
     /**
      * check if an objects positon is in warpspace
      * @param object segmentcontroller to check
      * @return boolean, true if segmentcontrollers position is in warp
      */
-    public static boolean isInWarp(SimpleTransformableSendableObject object) {
+    public boolean isInWarp(SimpleTransformableSendableObject object) {
         if (object == null) {
             DebugFile.err("isInWarp called with null object");
             return false;
@@ -60,7 +71,7 @@ public class WarpManager {
      * @param pos  position to check
      * @return boolean, true if position is in warp
      */
-    public static boolean isInWarp(Vector3i pos) {
+    public boolean isInWarp(Vector3i pos) {
         if (pos != null && pos.y >= offset - (universeSize / getScale()) && pos.y <= offset + (universeSize / getScale())) {
             return true;
         }
@@ -72,7 +83,7 @@ public class WarpManager {
      * @param rspPos sector in realspace
      * @return correlating sector in warpspace
      */
-    public static Vector3i getWarpSpacePos(Vector3i rspPos) {
+    public Vector3i getWarpSpacePos(Vector3i rspPos) {
         if (isInWarp(rspPos))
             return rspPos;
         Vector3i warpPos;
@@ -86,12 +97,27 @@ public class WarpManager {
         return warpPos;
     }
 
+    public Vector3i getRealSpacePosPrecise(Vector3i warpSpacePos, Vector3f transformOrigin) {
+        //TBD
+    //    float sectorSize = (GameServerState.instance != null? GameServerState.instance.getSectorSize() : GameClientState.instance.getSectorSize());
+
+        transformOrigin = new Vector3f(transformOrigin);
+        Vector3i rspPos = getRealSpacePos(warpSpacePos);
+        //add inworld pos offset
+        //linear und stufenlos
+        //meters => % of a sector => % of one scale unit
+        transformOrigin.scale((float)getScale()/ sectorSize);
+
+        rspPos.add((int) transformOrigin.x, (int) transformOrigin.y, (int) transformOrigin.z);
+        return rspPos;
+    }
+
     /**
      * Calculate the realspace position from a warpspace position
      * @param warpSpacePos sector in warpspace
      * @return correlating sector in realspace
      */
-    public static Vector3i getRealSpacePos(Vector3i warpSpacePos) {
+    public Vector3i getRealSpacePos(Vector3i warpSpacePos) {
         if (!isInWarp(warpSpacePos))
             return warpSpacePos;
         Vector3i realPos;
@@ -110,7 +136,7 @@ public class WarpManager {
      *  the scale of realspace to warpspace in sectors.
      *  defined by config value warp_to_rsp_ratio
      */
-    public static int getScale() {
-        return (int) ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue();
+    public int getScale() {
+        return scale;
     }
 }

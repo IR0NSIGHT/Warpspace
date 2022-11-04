@@ -59,20 +59,20 @@ public class DropPointMapDrawer extends MapDrawer {
             return;
         synchronized (this) {
             //only update if the camera pos has changed.
-            Vector3i currentWarpPos = WarpManager.getWarpSpacePos(currentPos);
+            Vector3i currentWarpPos = WarpManager.getInstance().getWarpSpacePos(currentPos);
             if (lastSector.equals(currentWarpPos) && !updateFlag && System.currentTimeMillis()<nextRefresh)
                 return;
             nextRefresh = System.currentTimeMillis()+2000;
             updateFlag = false;
         }
-        lastSector.set(WarpManager.getWarpSpacePos(currentPos));
+        lastSector.set(WarpManager.getInstance().getWarpSpacePos(currentPos));
 
         clearMarkers();
 
-        if (WarpManager.isInWarp(currentPos))
+        if (WarpManager.getInstance().isInWarp(currentPos))
             return;
 
-        Vector3i warpPos = WarpManager.getWarpSpacePos(currentPos);
+        Vector3i warpPos = WarpManager.getInstance().getWarpSpacePos(currentPos);
         Vector3i tempDrop;
         Vector3i tempWarp = new Vector3i();
         int range = (int)ConfigManager.ConfigEntry.map_draw_droppoints_range.getValue();

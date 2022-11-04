@@ -188,8 +188,8 @@ public class BeaconObject implements Serializable {
     public void setActive(boolean active) {
         if (this.active != active) {
             if (GameClientState.instance != null) {
-                Vector3i ownWarpPos = WarpManager.getWarpSpacePos(GameClientState.instance.getPlayer().getCurrentSector());
-                Vector3i beaconPos = WarpManager.getWarpSpacePos(getPosition());
+                Vector3i ownWarpPos = WarpManager.getInstance().getWarpSpacePos(GameClientState.instance.getPlayer().getCurrentSector());
+                Vector3i beaconPos = WarpManager.getInstance().getWarpSpacePos(getPosition());
                 if (ownWarpPos.equals(beaconPos)) ;
                     /*WarpSounds.instance.queueSound(
                             (active? WarpSounds.SoundEntry.beacon_activated: WarpSounds.SoundEntry.beacon_deactivated), VoiceAnnouncer.queueID

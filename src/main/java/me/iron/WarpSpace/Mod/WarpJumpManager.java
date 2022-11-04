@@ -45,9 +45,9 @@ public class WarpJumpManager {
         if (!forceJump && (object instanceof Ship && !canExecuteWarpdrive((Ship)object)))
             return;
         //check if ship is in warp or not, check if ship is allowed to perform the jump
-        if (WarpManager.isInWarp(object) && WarpJumpManager.isAllowedDropJump(object)) { //is in warpspace, get realspace pos
+        if (WarpManager.getInstance().isInWarp(object) && WarpJumpManager.isAllowedDropJump(object)) { //is in warpspace, get realspace pos
             WarpJumpManager.invokeDrop((long) (1000* ConfigManager.ConfigEntry.seconds_warpjump_delay.getValue()),object,true, forceJump);
-        } else if (!WarpManager.isInWarp(object)&& WarpJumpManager.isAllowedEntry(object)) { //is in realspace, get warppos
+        } else if (!WarpManager.getInstance().isInWarp(object)&& WarpJumpManager.isAllowedEntry(object)) { //is in realspace, get warppos
             WarpJumpManager.invokeEntry((long) (1000* ConfigManager.ConfigEntry.seconds_warpjump_delay.getValue()),object,forceJump);
         }
     }
@@ -156,7 +156,7 @@ public class WarpJumpManager {
                 //create, fire event, get back params
                 WarpJumpEvent.WarpJumpType  type = WarpJumpEvent.WarpJumpType.ENTRY;
 
-                Vector3i sector = WarpManager.getWarpSpacePos(ship.getSector(new Vector3i()));
+                Vector3i sector = WarpManager.getInstance().getWarpSpacePos(ship.getSector(new Vector3i()));
                 WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),sector);
                 StarLoader.fireEvent(e, true);
 
@@ -199,7 +199,7 @@ public class WarpJumpManager {
      * @return boolean, true if allowed entry, false if interdicted or can't fire warpdrive (only for ships)
      */
     public static boolean isAllowedEntry(SimpleTransformableSendableObject ship) {
-        return !isInterdicted(ship,WarpManager.getWarpSpacePos(ship.getSector(new Vector3i())));
+        return !isInterdicted(ship,WarpManager.getInstance().getWarpSpacePos(ship.getSector(new Vector3i())));
     }
 
     /**
@@ -210,7 +210,7 @@ public class WarpJumpManager {
      * @return boolean, true if not interdicted and can fire warpdrive
      */
     public static boolean isAllowedDropJump(SimpleTransformableSendableObject object) {
-        return !isInterdicted(object,WarpManager.getRealSpacePos(object.getSector(new Vector3i())));
+        return !isInterdicted(object,WarpManager.getInstance().getRealSpacePos(object.getSector(new Vector3i())));
     }
 
     /**
@@ -335,7 +335,7 @@ public class WarpJumpManager {
     public static Vector3i getDropPoint(Vector3i warpSector) {
         warpSector = new Vector3i(warpSector);
         //apply warp-beacon. inform player if beacon had effect.
-        Vector3i drop = WarpManager.getRealSpacePos(warpSector);
+        Vector3i drop = WarpManager.getInstance().getRealSpacePos(warpSector);
         BeaconManager bm = (WarpMain.instance.beaconManagerServer!=null)?WarpMain.instance.beaconManagerServer:WarpMain.instance.beaconManagerClient;
         bm.updateStrongest(warpSector);
         bm.modifyDroppoint(warpSector, drop);

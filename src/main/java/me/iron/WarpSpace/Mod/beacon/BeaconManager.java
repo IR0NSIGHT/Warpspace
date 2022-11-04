@@ -185,7 +185,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
 
     public void addBeacon(BeaconObject beacon) {
         //FIXME decline
-        Vector3i warpPos = WarpManager.getWarpSpacePos(beacon.getPosition());
+        Vector3i warpPos = WarpManager.getInstance().getWarpSpacePos(beacon.getPosition());
         LinkedList<String> list = beaconUIDs_by_sector.get(warpPos);
         if (list == null) {
             list = new LinkedList<>();
@@ -202,7 +202,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
     }
 
     public void removeBeacon(BeaconObject beacon) {
-        Vector3i warpPos = WarpManager.getWarpSpacePos(beacon.getPosition());
+        Vector3i warpPos = WarpManager.getInstance().getWarpSpacePos(beacon.getPosition());
         Collection<String> list = beaconUIDs_by_sector.get(warpPos);
         if (list == null) {
             return;

@@ -40,7 +40,7 @@ public class InWarpRunnable extends TimedRunnable{
             }
 
             //update object
-            if (WarpManager.isInWarp(entity)) {
+            if (WarpManager.getInstance().isInWarp(entity)) {
                 updateWarp();
             } else {
                 updateRSP();

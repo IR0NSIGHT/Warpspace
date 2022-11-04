@@ -1,5 +1,7 @@
 package me.iron.WarpSpace.Mod;
 
+import org.schema.game.server.data.Galaxy;
+import org.schema.game.server.data.GameServerState;
 import org.schema.schine.resource.ResourceLoader;
 
 import api.config.BlockConfig;
@@ -46,6 +48,8 @@ public class WarpMain extends StarMod {
 
         new ConfigManager(this);
 
+
+
         new Updater(getSkeleton().getModVersion()).runUpdate();
 
         StarLoader.registerCommand(new DebugUI());
@@ -75,6 +79,12 @@ public class WarpMain extends StarMod {
     public void onServerCreated(ServerInitializeEvent event) {
         super.onServerCreated(event);
 
+        new WarpManager(
+                GameServerState.instance.getSectorSize(),
+                Galaxy.size,
+                (int) ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue()
+        );
+
         WarpJumpListener.createListener();
 
         WarpProcess.initUpdateLoop();
@@ -89,6 +99,13 @@ public class WarpMain extends StarMod {
     @Override
     public void onClientCreated(ClientInitializeEvent event) {
         super.onClientCreated(event);
+        event.getClientState()
+        new WarpManager(
+                event.getClientState().getSectorSize(),
+                Galaxy.size,
+                (int) ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue()
+        );
+
         SpriteList.init();
         HUD_core.initList();
         GUIeventhandler.addHUDDrawListener();

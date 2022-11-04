@@ -178,7 +178,7 @@ public class HUD_core {
     public static void UpdateHUD() {
         if (GameClientState.instance == null)
             return;
-        if (GameClientState.instance.getPlayer().getCurrentSector().length()<5000 || WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector()))
+        if (GameClientState.instance.getPlayer().getCurrentSector().length()<5000 || WarpManager.getInstance().isInWarp(GameClientState.instance.getPlayer().getCurrentSector()))
             initRadarSectorGUI();
     }
 
@@ -189,12 +189,12 @@ public class HUD_core {
         if (GameClientState.instance == null || GameClientState.instance.getPlayer() == null)
             return;
 
-        if (!WarpManager.isInWarp(GameClientState.instance.getPlayer().getCurrentSector()))
+        if (!WarpManager.getInstance().isInWarp(GameClientState.instance.getPlayer().getCurrentSector()))
             return;
 
         HudIndicatorOverlay overlay = GameClientState.instance.getWorldDrawer().getGuiDrawer().getHud().getIndicator();
         for (int i = 0; i < overlay.neighborSectorsNames.length; i++) {
-            overlay.neighborSectorsNames[i] = "[WARP]\n"+ WarpManager.getRealSpacePos(overlay.neighborSectorsPos[i]);
+            overlay.neighborSectorsNames[i] = "[WARP]\n"+ WarpManager.getInstance().getRealSpacePos(overlay.neighborSectorsPos[i]);
         }
 
     }
@@ -210,7 +210,7 @@ public class HUD_core {
                 public String toString() {
                     try {
                         Vector3i sector = GameClientState.instance.getPlayer().getCurrentSector();
-                        boolean inWarp = WarpManager.isInWarp(sector);
+                        boolean inWarp = WarpManager.getInstance().isInWarp(sector);
 
                         //im funny
                         if (sector.equals(69,69,69))

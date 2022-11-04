@@ -54,10 +54,10 @@ public class WarpHUDPanel { //TODO refactor messy class, make instatiable like C
                 if (i == 0 || !(oldPos.equals(getPlayerSector()))) {
                     oldPos = new Vector3i(getPlayerSector());
 
-                    if (WarpManager.isInWarp(getPlayerSector())) {
-                        newPos = WarpManager.getRealSpacePos(getPlayerSector());
+                    if (WarpManager.getInstance().isInWarp(getPlayerSector())) {
+                        newPos = WarpManager.getInstance().getRealSpacePos(getPlayerSector());
                     } else {
-                        newPos = WarpManager.getWarpSpacePos(getPlayerSector());
+                        newPos = WarpManager.getInstance().getWarpSpacePos(getPlayerSector());
                     }
                     Vector<Integer> vec = new Vector<Integer>();
                     vec.add(newPos.x);

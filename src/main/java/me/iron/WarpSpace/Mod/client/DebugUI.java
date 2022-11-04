@@ -87,7 +87,7 @@ public class DebugUI implements CommandInterface {
                 StringBuilder b = new StringBuilder("All sectors with active beacons:\n");
                 Collection<Vector3i> ss = WarpMain.instance.beaconManagerServer.getBeaconSectors();
                 for (Vector3i s: ss) {
-                    b.append("Sector ").append(WarpManager.getRealSpacePos(s)).append("-->").append(WarpJumpManager.getDropPoint(s));
+                    b.append("Sector ").append(WarpManager.getInstance().getRealSpacePos(s)).append("-->").append(WarpJumpManager.getDropPoint(s));
                     b.append("\n");
                 }
                 echo(b.toString(),playerState);
@@ -165,7 +165,7 @@ public class DebugUI implements CommandInterface {
             }
             else {
                 echo("immediate forced warp", playerState);
-                if (WarpManager.isInWarp(obj)) { //is in warpspace, get realspace pos
+                if (WarpManager.getInstance().isInWarp(obj)) { //is in warpspace, get realspace pos
                     WarpJumpManager.invokeDrop(0,obj,true, true);
                 } else { //is in realspace, get warppos
                     WarpJumpManager.invokeEntry(0,obj,true);

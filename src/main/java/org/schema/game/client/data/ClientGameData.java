@@ -42,7 +42,7 @@ public class ClientGameData {
         }
 
         //return warp pos if player is in warp
-        if (waypoint != null && WarpManager.isInWarp(playerPosTmp)) {
+        if (waypoint != null && WarpManager.getInstance().isInWarp(playerPosTmp)) {
             return warpWP;
         }
 
@@ -53,13 +53,13 @@ public class ClientGameData {
 
         //never allow setting direction in warp. always use RSP pos.
         //false
-        if (newWaypoint != null && WarpManager.isInWarp(newWaypoint)) {
-            newWaypoint = WarpManager.getRealSpacePos(newWaypoint);
+        if (newWaypoint != null && WarpManager.getInstance().isInWarp(newWaypoint)) {
+            newWaypoint = WarpManager.getInstance().getRealSpacePosPrecise(newWaypoint, GameClientState.instance.getPlayer().getFirstControlledTransformableWOExc().getWorldTransform().origin);
         }
 
         this.waypoint = newWaypoint;    //set to null
         if (waypoint != null) { //false
-            this.warpWP = WarpManager.getWarpSpacePos(waypoint);
+            this.warpWP = WarpManager.getInstance().getWarpSpacePos(waypoint);
         }
         this.nearestToWayPoint = null;
         this.updateNearest(this.state.getCurrentSectorId());

@@ -56,14 +56,14 @@ public class WarpSpaceMap
 					Vector3f systemPos = starPoses.get(finalI);
 					
 					Vector3i sectorPos = new Vector3i((systemPos.x - Galaxy.halfSize) * 16, (systemPos.y - Galaxy.halfSize) * 16, (systemPos.z - Galaxy.halfSize) * 16);
-					final Vector3f pos = WarpManager.getWarpSpacePos(sectorPos).toVector3f();
+					final Vector3f pos = WarpManager.getInstance().getWarpSpacePos(sectorPos).toVector3f();
 					
 					Vector3f loaclOffset = galaxy.getSunPositionOffset(new Vector3i(systemPos), new Vector3i()).toVector3f();
-					loaclOffset.scale(1f / WarpManager.getScale());
+					loaclOffset.scale(1f / WarpManager.getInstance().getScale());
 					
-					pos.x = (pos.x + loaclOffset.x + (8f / WarpManager.getScale()) - 8 + 0.5f) * GameMapDrawer.sectorSize;
-					pos.y = (pos.y + loaclOffset.y + (8f / WarpManager.getScale()) - 8 + 0.5f) * GameMapDrawer.sectorSize;
-					pos.z = (pos.z + loaclOffset.z + (8f / WarpManager.getScale()) - 8 + 0.5f) * GameMapDrawer.sectorSize;
+					pos.x = (pos.x + loaclOffset.x + (8f / WarpManager.getInstance().getScale()) - 8 + 0.5f) * GameMapDrawer.sectorSize;
+					pos.y = (pos.y + loaclOffset.y + (8f / WarpManager.getInstance().getScale()) - 8 + 0.5f) * GameMapDrawer.sectorSize;
+					pos.z = (pos.z + loaclOffset.z + (8f / WarpManager.getInstance().getScale()) - 8 + 0.5f) * GameMapDrawer.sectorSize;
 					
 					PositionableSubColorSprite[] s = new PositionableSubColorSprite[]
 						{
@@ -120,7 +120,7 @@ public class WarpSpaceMap
 				sectorPos.y = (event.getGalaxy().galaxyPos.y * Galaxy.size + event.getPosition().y - Galaxy.halfSize) * 16;
 				sectorPos.z = (event.getGalaxy().galaxyPos.z * Galaxy.size + event.getPosition().z - Galaxy.halfSize) * 16;
 				
-				if (WarpManager.isInWarp(sectorPos))
+				if (WarpManager.getInstance().isInWarp(sectorPos))
 				{
 					event.setStarWeight((byte) 0);
 				}
