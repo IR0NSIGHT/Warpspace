@@ -1,17 +1,17 @@
 package me.iron.WarpSpace.Mod.visuals;
 
-import static api.common.GameClient.getClientPlayerState;
-import static api.mod.StarLoader.registerListener;
-import static me.iron.WarpSpace.Mod.WarpMain.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.schema.schine.graphicsengine.core.Controller.getCamera;
-
-import java.lang.reflect.Field;
-import java.util.Set;
-
-import javax.imageio.ImageIO;
-import javax.vecmath.Vector3f;
-
+import api.listener.Listener;
+import api.listener.events.draw.RegisterWorldDrawersEvent;
+import api.utils.draw.ModWorldDrawer;
+import api.utils.textures.StarLoaderTexture;
+import com.bulletphysics.collision.dispatch.CollisionObject;
+import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
+import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.dynamics.character.KinematicCharacterController;
+import com.bulletphysics.linearmath.Transform;
+import me.iron.WarpSpace.Mod.WarpMain;
+import me.iron.WarpSpace.Mod.client.WarpProcess;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.lwjgl.opengl.GL11;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
@@ -29,19 +29,16 @@ import org.schema.schine.graphicsengine.shader.Shader;
 import org.schema.schine.graphicsengine.shader.Shaderable;
 import org.schema.schine.resource.MeshLoader;
 
-import com.bulletphysics.collision.dispatch.CollisionObject;
-import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
-import com.bulletphysics.dynamics.RigidBody;
-import com.bulletphysics.dynamics.character.KinematicCharacterController;
-import com.bulletphysics.linearmath.Transform;
+import javax.imageio.ImageIO;
+import javax.vecmath.Vector3f;
+import java.lang.reflect.Field;
+import java.util.Set;
 
-import api.listener.Listener;
-import api.listener.events.draw.RegisterWorldDrawersEvent;
-import api.utils.draw.ModWorldDrawer;
-import api.utils.textures.StarLoaderTexture;
-import me.iron.WarpSpace.Mod.WarpMain;
-import me.iron.WarpSpace.Mod.client.WarpProcess;
-import me.iron.WarpSpace.Mod.server.config.ConfigManager;
+import static api.common.GameClient.getClientPlayerState;
+import static api.mod.StarLoader.registerListener;
+import static me.iron.WarpSpace.Mod.WarpMain.instance;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.schema.schine.graphicsengine.core.Controller.getCamera;
 
 /**
  * STARMADE MOD
@@ -117,7 +114,9 @@ public class WarpSkybox extends ModWorldDrawer implements Shaderable {
         } else if (GameClientState.instance != null) {
             vessel = currentlyOnBoardEntity();
             //smoothly transition to desired warpdepth
-            float trueDepth = WarpProcess.WARP_STABILITY.getCurrentValue() / 100f;
+            float trueDepth = (ConfigManager.ConfigEntry.killswitch_speedDrop.isTrue() ?
+                    1 :
+                    WarpProcess.WARP_STABILITY.getCurrentValue() / 100f);
 
             if (smoothedWarpStability < trueDepth) {
                 smoothedWarpStability = Math.min(trueDepth, smoothedWarpStability + maxChangePerFrame);

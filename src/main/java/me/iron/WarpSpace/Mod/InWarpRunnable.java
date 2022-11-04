@@ -1,11 +1,10 @@
 package me.iron.WarpSpace.Mod;
 
+import me.iron.WarpSpace.Mod.client.WarpProcess;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.data.player.AbstractCharacter;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
-
-import me.iron.WarpSpace.Mod.client.WarpProcess;
-import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 
 /**
  * STARMADE MOD
@@ -78,7 +77,6 @@ public class InWarpRunnable extends TimedRunnable{
             System.out.println("dropping entity" + entity.getUniqueIdentifier() + " type " + entity.getClass().getName() +" CAUSE: SPEEDDROP");
             WarpJumpManager.invokeDrop(0,entity,false, false);
         }
-
     }
 
     @Override
