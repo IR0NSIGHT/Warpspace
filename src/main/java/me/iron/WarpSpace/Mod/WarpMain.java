@@ -82,7 +82,8 @@ public class WarpMain extends StarMod {
         new WarpManager(
                 GameServerState.instance.getSectorSize(),
                 Galaxy.size,
-                (int) ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue()
+                (int) ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue(),
+                (int) (0.5f *Galaxy.size * 16)
         );
 
         WarpJumpListener.createListener();
@@ -93,18 +94,17 @@ public class WarpMain extends StarMod {
         ExtraEventLoop.CreateServerLoop();
         beaconManagerServer = BeaconManager.getSavedOrNew(this.getSkeleton());
         beaconManagerServer.onInit();
-    //    DebugChatEvent.addDebugChatListener();
     }
 
     @Override
     public void onClientCreated(ClientInitializeEvent event) {
         super.onClientCreated(event);
-        event.getClientState()
-        new WarpManager(
+/*        new WarpManager(
                 event.getClientState().getSectorSize(),
                 Galaxy.size,
                 (int) ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue()
         );
+ */
 
         SpriteList.init();
         HUD_core.initList();

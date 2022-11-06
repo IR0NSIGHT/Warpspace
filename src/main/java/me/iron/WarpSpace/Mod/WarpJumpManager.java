@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Random;
 
+import javax.annotation.Nullable;
 import javax.vecmath.Vector3f;
 
 import org.schema.common.util.linAlg.Vector3i;
@@ -96,7 +97,7 @@ public class WarpJumpManager {
                 Vector3i warpPos = ship.getSector(new Vector3i());
 
 
-                Vector3i targetSector = getDropPoint(warpPos);
+                Vector3i targetSector = getDropPoint(warpPos, ship.getWorldTransform().origin);
                 if (ship.getType().equals(SimpleTransformableSendableObject.EntityType.SPACE_STATION) ) {
                     Random r = new Random();
                     r.setSeed(targetSector.code());
@@ -210,7 +211,7 @@ public class WarpJumpManager {
      * @return boolean, true if not interdicted and can fire warpdrive
      */
     public static boolean isAllowedDropJump(SimpleTransformableSendableObject object) {
-        return !isInterdicted(object,WarpManager.getInstance().getRealSpacePos(object.getSector(new Vector3i())));
+        return !isInterdicted(object,WarpManager.getInstance().getRealSpaceBySector(object.getSector(new Vector3i())));
     }
 
     /**
@@ -330,12 +331,15 @@ public class WarpJumpManager {
     /**
      * returns drop point with applied beacon-shifting
      * @param warpSector
+     * @param origin in-sector-position of transform. null: use sector center
      * @return
      */
-    public static Vector3i getDropPoint(Vector3i warpSector) {
+    public static Vector3i getDropPoint(Vector3i warpSector, @Nullable Vector3f origin) {
         warpSector = new Vector3i(warpSector);
-        //apply warp-beacon. inform player if beacon had effect.
-        Vector3i drop = WarpManager.getInstance().getRealSpacePos(warpSector);
+        if (origin == null)
+            origin = WarpManager.getInstance().getSectorCenter();
+
+        Vector3i drop = WarpManager.getInstance().getRealSpacePosPrecise(warpSector, origin);
         BeaconManager bm = (WarpMain.instance.beaconManagerServer!=null)?WarpMain.instance.beaconManagerServer:WarpMain.instance.beaconManagerClient;
         bm.updateStrongest(warpSector);
         bm.modifyDroppoint(warpSector, drop);

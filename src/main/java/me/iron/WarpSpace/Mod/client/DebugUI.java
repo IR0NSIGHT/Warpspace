@@ -87,7 +87,7 @@ public class DebugUI implements CommandInterface {
                 StringBuilder b = new StringBuilder("All sectors with active beacons:\n");
                 Collection<Vector3i> ss = WarpMain.instance.beaconManagerServer.getBeaconSectors();
                 for (Vector3i s: ss) {
-                    b.append("Sector ").append(WarpManager.getInstance().getRealSpacePos(s)).append("-->").append(WarpJumpManager.getDropPoint(s));
+                    b.append("Sector ").append(WarpManager.getInstance().getRealSpaceBySector(s)).append("-->").append(WarpJumpManager.getDropPoint(s, null));
                     b.append("\n");
                 }
                 echo(b.toString(),playerState);

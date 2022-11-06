@@ -94,7 +94,7 @@ public class MyGameMapListener implements GameMapDrawListener
 	{
 		if (!WarpManager.getInstance().isInWarp(drawer.getPlayerSector())) return;
 		
-		Vector3i realCoords = WarpManager.getInstance().getRealSpacePos(drawer.getPlayerSector());
+		Vector3i realCoords = WarpManager.getInstance().getRealSpaceBySector(drawer.getPlayerSector());
 		realCoords.scaleFloat(1 / 16f);
 		
 		Vector3i galaxyPos = new Vector3i(drawer.getState().getCurrentGalaxy().galaxyPos);
@@ -117,7 +117,7 @@ public class MyGameMapListener implements GameMapDrawListener
 		{
 			float r = WarpManager.getInstance().getScale() / 2f;
 			
-			Vector3i realPos = WarpManager.getInstance().getRealSpacePos(sector);
+			Vector3i realPos = WarpManager.getInstance().getRealSpaceBySector(sector);
 			drawCube(new Vector3f(
 				(realPos.x - 8f) * GameMapDrawer.sectorSize,
 				(realPos.y - 8f) * GameMapDrawer.sectorSize,

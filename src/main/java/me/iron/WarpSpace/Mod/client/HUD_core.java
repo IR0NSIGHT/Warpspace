@@ -18,7 +18,6 @@ import api.listener.Listener;
 import api.listener.events.gui.HudCreateEvent;
 import api.mod.StarLoader;
 import api.utils.StarRunnable;
-import me.iron.WarpSpace.Mod.TimedRunnable;
 import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
@@ -132,13 +131,12 @@ public class HUD_core {
 
         StarLoader.registerListener(HudCreateEvent.class, new Listener<HudCreateEvent>() {
             @Override
-            public void onEvent(HudCreateEvent hudCreateEvent) {
-                new TimedRunnable(500,WarpMain.instance, -1){
-                    @Override
-                    public void onRun() {
-                        updateVanillaHUD();
-                    }
-                };
+            public void onEvent(final HudCreateEvent hudCreateEvent) {
+                WarpHudIndicatorOverlay overlay = new WarpHudIndicatorOverlay(GameClientState.instance,
+                        hudCreateEvent.getHud().getIndicator());
+                overlay.onInit();
+
+                hudCreateEvent.getHud().setIndicator(overlay);
                 initRadarSectorGUI();
             }
         }, WarpMain.instance);
@@ -193,9 +191,14 @@ public class HUD_core {
             return;
 
         HudIndicatorOverlay overlay = GameClientState.instance.getWorldDrawer().getGuiDrawer().getHud().getIndicator();
-        for (int i = 0; i < overlay.neighborSectorsNames.length; i++) {
-            overlay.neighborSectorsNames[i] = "[WARP]\n"+ WarpManager.getInstance().getRealSpacePos(overlay.neighborSectorsPos[i]);
-        }
+
+      // for (int i = 0; i < overlay.neighborSectorsNames.length; i++) {
+      //     overlay.neighborSectorsNames[i] = "[WARP]\n"+ WarpManager.getInstance().getRealSpaceBySector(overlay.neighborSectorsPos[i]);
+      //     Transform transform = new Transform();
+      //     transform.setIdentity();
+      //     transform.origin.set(new Vector3f(i*50,i*50,i*50));
+      //     overlay.neighborSectors[i] = transform;
+      // }
 
     }
 
@@ -210,14 +213,23 @@ public class HUD_core {
                 public String toString() {
                     try {
                         Vector3i sector = GameClientState.instance.getPlayer().getCurrentSector();
+                        Vector3f origin = GameClientState.instance.getPlayer().getFirstControlledTransformable().getWorldTransform().origin;
                         boolean inWarp = WarpManager.getInstance().isInWarp(sector);
 
                         //im funny
                         if (sector.equals(69,69,69))
                             return "nice.";
-                        Vector3i drop =  WarpJumpManager.getDropPoint(sector);
+                        Vector3i drop =  WarpJumpManager.getDropPoint(sector, WarpManager.getInstance().getClientTransformOrigin());
                         boolean isBeacon = WarpJumpManager.isDroppointShifted(sector);
-                        return inWarp?"[WARP]\n"+(isBeacon?"B ":"")+drop.toStringPure():sector.toStringPure();
+                        Vector3f org = WarpManager.getInstance().getClientTransformOrigin();
+                        org.x = Math.round(org.x/100)/10f;
+                        org.y = Math.round(org.y/100)/10f;
+                        org.z = Math.round(org.z/100)/10f;
+
+                        return inWarp?
+                                "[WARP]\n"+(isBeacon?"B ":"")+drop.toStringPure()+"\n"+
+                                        WarpManager.getInstance().getRealSpacePosPrecise(sector, origin)+"\n"+ org
+                                :sector.toStringPure();
                     } catch (Exception e) {
                         return "error";
                     }

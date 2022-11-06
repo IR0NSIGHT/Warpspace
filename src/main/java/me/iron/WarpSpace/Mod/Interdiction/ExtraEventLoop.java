@@ -56,7 +56,7 @@ public class ExtraEventLoop {
 
         //get relevant positions to check
         Vector3i playerPos =  sc.getSector(new Vector3i()),
-                rspPos = WarpManager.getInstance().getRealSpacePos(playerPos),
+                rspPos = WarpManager.getInstance().getRealSpaceBySector(playerPos),
                 warpPos = WarpManager.getInstance().getWarpSpacePos(playerPos);
 
         //interdiction

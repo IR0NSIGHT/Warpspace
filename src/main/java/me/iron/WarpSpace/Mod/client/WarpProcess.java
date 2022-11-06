@@ -200,8 +200,9 @@ public enum WarpProcess {
             Vector3i offSetWP;
             if (WarpManager.getInstance().isInWarp(GameClientState.instance.getPlayer().getCurrentSector())) {
                 offSetWP = new Vector3i(GameClientState.instance.getController().getClientGameData().getWaypoint());
-                offSetWP = WarpJumpManager.getDropPoint(offSetWP);
-                Vector3i currentPos = WarpJumpManager.getDropPoint(GameClientState.instance.getPlayer().getCurrentSector());
+                offSetWP = WarpJumpManager.getDropPoint(offSetWP, null);
+                Vector3i currentPos = WarpJumpManager.getDropPoint(GameClientState.instance.getPlayer().getCurrentSector(),
+                        WarpManager.getInstance().getClientTransformOrigin());
                 offSetWP.sub(currentPos);
             } else {
                 offSetWP = new Vector3i(GameClientState.instance.getController().getClientGameData().getWaypoint());

@@ -12,10 +12,10 @@ import java.util.Random;
 import javax.vecmath.Vector3f;
 
 import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 
 import api.DebugFile;
-import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 
 /**
  * defines mechanics in warp, hold settings of the warp like its position.
@@ -27,19 +27,20 @@ public class WarpManager {
         return instance;
     }
 
-    public WarpManager(float sectorSize, int galaxySize, int scale) {
+    public WarpManager(float sectorSize, int galaxySize, int scale, int offset) {
         this.sectorSize = sectorSize;
         //64 systems per galaxy, 16 sectors per system (hardcoded) //TODO assert these values are hardcoded
         this.universeSize = galaxySize * 64 * 16;
         this.scale = scale; //(int) ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue();
-        this.offset = (int)(universeSize * (1 + 1f / scale)) + 16 * 2; //offset in sectors
+        halfScale = new Vector3i(0.5f*scale,0.5f*scale, 0.5f*scale);
+        this.offset = offset; //(int)(universeSize * (1 + 1f / scale)) + 16 * 2; //offset in sectors
         instance = this;
     }
 
     private Random random = new Random();
 
     private int scale;
-
+    private Vector3i halfScale = null;
     public float sectorSize;
 
     public int universeSize;
@@ -72,7 +73,7 @@ public class WarpManager {
      * @return boolean, true if position is in warp
      */
     public boolean isInWarp(Vector3i pos) {
-        if (pos != null && pos.y >= offset - (universeSize / getScale()) && pos.y <= offset + (universeSize / getScale())) {
+        if (pos != null && pos.y >= offset) {
             return true;
         }
         return false;
@@ -84,32 +85,64 @@ public class WarpManager {
      * @return correlating sector in warpspace
      */
     public Vector3i getWarpSpacePos(Vector3i rspPos) {
-        if (isInWarp(rspPos))
-            return rspPos;
-        Vector3i warpPos;
-        Vector3f realPosF = rspPos.toVector3f();
-        realPosF.x = Math.round(realPosF.x / getScale());
-        realPosF.y = Math.round(realPosF.y / getScale());
-        realPosF.z = Math.round(realPosF.z / getScale());
-        realPosF.y += offset; //offset sectors to up (y axis)
-        warpPos = new Vector3i(realPosF.x,realPosF.y,realPosF.z);
+        Vector3f origin = getWarpOrigin(rspPos);
+        metersToSector(origin);
 
-        return warpPos;
+        Vector3f warpPos = rspPos.toVector3f();
+        warpPos.scale(1f/getScale());
+
+        warpPos.sub(origin);
+        warpPos.y += offset;
+        return new Vector3i(
+                Math.round(warpPos.x),
+                Math.round(warpPos.y),
+                Math.round(warpPos.z)
+        );
+    }
+
+    /**
+     * calculate the warp-in-sector position relevant to this realspace sector
+     * @return origin in sector
+     */
+    public Vector3f getWarpOrigin(Vector3i rspPos) {
+        Vector3i mutate = new Vector3i(rspPos);
+
+        //round to -5 .. +4: 11 -> 10 + 1, 9 -> -1, 14 -> 10 + 4
+        mutate.add(halfScale);
+        mutate = new Vector3i(mod(mutate.x,getScale()), mod(mutate.y, getScale()), mod(mutate.z,getScale()));
+        mutate.sub(halfScale);
+        Vector3f warpOrigin = mutate.toVector3f();
+        sectorsToMeter(warpOrigin);
+        warpOrigin.scale(1f/getScale());
+        return warpOrigin;
+    }
+
+    public StellarPosition getWarpSpacePosPrecise(Vector3i realSpaceSector) {
+        Vector3f origin = getWarpOrigin(realSpaceSector);
+        Vector3f mutate = new Vector3f(origin);
+        metersToSector(mutate);
+
+        Vector3f warpPos = realSpaceSector.toVector3f();
+        warpPos.scale(1f/getScale());
+
+        warpPos.sub(mutate);
+        warpPos.y += offset;
+        Vector3i warpSector = new Vector3i(
+                Math.round(warpPos.x),
+                Math.round(warpPos.y),
+                Math.round(warpPos.z)
+        );
+        return new StellarPosition(warpSector, origin);
     }
 
     public Vector3i getRealSpacePosPrecise(Vector3i warpSpacePos, Vector3f transformOrigin) {
-        //TBD
-    //    float sectorSize = (GameServerState.instance != null? GameServerState.instance.getSectorSize() : GameClientState.instance.getSectorSize());
+        Vector3i rspSector = getRealSpaceBySector(warpSpacePos);
 
         transformOrigin = new Vector3f(transformOrigin);
-        Vector3i rspPos = getRealSpacePos(warpSpacePos);
-        //add inworld pos offset
-        //linear und stufenlos
-        //meters => % of a sector => % of one scale unit
-        transformOrigin.scale((float)getScale()/ sectorSize);
-
-        rspPos.add((int) transformOrigin.x, (int) transformOrigin.y, (int) transformOrigin.z);
-        return rspPos;
+        metersToSector(transformOrigin);
+        transformOrigin.scale(getScale());
+        rspSector.add((int)Math.round(transformOrigin.x), (int) Math.round(transformOrigin.y), (int) Math.round(transformOrigin.z));
+        return rspSector;
     }
 
     /**
@@ -117,19 +150,30 @@ public class WarpManager {
      * @param warpSpacePos sector in warpspace
      * @return correlating sector in realspace
      */
-    public Vector3i getRealSpacePos(Vector3i warpSpacePos) {
-        if (!isInWarp(warpSpacePos))
-            return warpSpacePos;
+    public Vector3i getRealSpaceBySector(Vector3i warpSpacePos) {
         Vector3i realPos;
         Vector3f warpPosF = warpSpacePos.toVector3f();
-        warpPosF.y -= offset; //offset sectors to up (y axis)
-        random.setSeed(warpSpacePos.code());
-        warpPosF.x = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()* ConfigManager.ConfigEntry.droppoint_random_offset.getValue())+warpPosF.x * getScale());
-        warpPosF.y = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*ConfigManager.ConfigEntry.droppoint_random_offset.getValue())+warpPosF.y * getScale());
-        warpPosF.z = Math.round(((random.nextBoolean()?(-1):1)* random.nextFloat()*ConfigManager.ConfigEntry.droppoint_random_offset.getValue())+warpPosF.z * getScale());
-        realPos = new Vector3i(warpPosF.x,warpPosF.y,warpPosF.z);
 
+        warpPosF.y = warpPosF.y - offset; //offset sectors to up (y axis)
+        warpPosF.x = Math.round(warpPosF.x * getScale());
+        warpPosF.y = Math.round(warpPosF.y * getScale());
+        warpPosF.z = Math.round(warpPosF.z * getScale());
+        realPos = new Vector3i(warpPosF.x,warpPosF.y,warpPosF.z);
         return realPos;
+    }
+
+    public void metersToSector(Vector3f origin) {
+        origin.scale(1/sectorSize);
+    }
+
+    public void sectorsToMeter(Vector3f origin) {
+        origin.scale(sectorSize);
+    }
+
+
+
+    private int mod(int a, int b) {
+        return (a % b + b) % b;
     }
 
     /**
@@ -138,5 +182,48 @@ public class WarpManager {
      */
     public int getScale() {
         return scale;
+    }
+
+    public Vector3f getSectorCenter() {
+        return new Vector3f(sectorSize*0.5f,sectorSize*0.5f,sectorSize*0.5f);
+    }
+
+    public Vector3f getClientTransformOrigin() {
+        try {
+            return new Vector3f(GameClientState.instance.getPlayer().getFirstControlledTransformableWOExc().getWorldTransform().origin);
+        } catch(NullPointerException ex) {
+            return new Vector3f();
+        }
+    }
+
+    public static class StellarPosition {
+        private Vector3i sector;
+        private Vector3f origin;
+
+        public StellarPosition(Vector3i sector, Vector3f origin) {
+            this.sector = sector;
+            this.origin = origin;
+        }
+
+        public Vector3f getPositionAdjustedFor(Vector3i sectorB) {
+            Vector3f sectorBf = sectorB.toVector3f();
+            Vector3f sectorAf = sector.toVector3f();
+
+            sectorAf.sub(sectorBf);
+            WarpManager.getInstance().sectorsToMeter(sectorAf);
+            sectorAf.add(origin);
+
+            return sectorAf;
+            //sectorB, 000 adjust for me => me, 111
+
+        }
+
+        public Vector3i getSector() {
+            return sector;
+        }
+
+        public Vector3f getOrigin() {
+            return origin;
+        }
     }
 }
