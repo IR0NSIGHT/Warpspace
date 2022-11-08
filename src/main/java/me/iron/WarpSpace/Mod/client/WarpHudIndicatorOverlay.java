@@ -70,19 +70,19 @@ public class WarpHudIndicatorOverlay extends HudIndicatorOverlay {
 
         drawNeighbourSectors(neighborSectors, neighborSectorsNames);
         drawWaypoint(
-                ((GameClientState) getState()).getController().getClientGameData().getWaypoint(),
+                ((GameClientState) getState()).getController().getClientGameData().getRspWaypoint(),
                 GameClientState.instance.getPlayer().getCurrentSector(),
                 WarpManager.getInstance().getClientTransformOrigin()
         );
     }
 
-    void drawWaypoint(Vector3i waypointWarpSector, Vector3i playerWarpSector, Vector3f playerWarpOrigin) {
-        if (waypointWarpSector != null & drawWaypoints) {
+    void drawWaypoint(Vector3i waypointRspSector, Vector3i playerWarpSector, Vector3f playerWarpOrigin) {
+        if (waypointRspSector != null & drawWaypoints) {
+            WarpManager.StellarPosition p = WarpManager.getInstance().getWarpSpacePosition(waypointRspSector);
             Vector4f tint = new Vector4f();
             tint.set(0.1f + selectColorValue, 0.8f + selectColorValue, 0.6f + selectColorValue, 0.4f + selectColorValue);
             Transform t = new Transform();
             t.setIdentity();
-            WarpManager.StellarPosition p = new WarpManager.StellarPosition(waypointWarpSector, new Vector3f(0, 0, 0));//WarpManager.getInstance().getWarpSpacePosition(wayPointRspSector);
             t.origin.set(p.getPositionAdjustedFor(playerWarpSector));
 
             Vector3f toWaypoint = p.getFromTo(playerWarpSector, playerWarpOrigin);
@@ -94,7 +94,7 @@ public class WarpHudIndicatorOverlay extends HudIndicatorOverlay {
             currentSpeedAligned = velocity.dot(toWaypoint);
             String text = Lng.str(
                     "Waypoint" +
-                            WarpManager.getInstance().getRealSpaceBySector(waypointWarpSector).toString() + "\ntime: " + (currentSpeedAligned > 0.1f ? formatETA((int) (metersToWp / currentSpeedAligned)) : -1)
+                            waypointRspSector.toString() + "\ntime: " + (currentSpeedAligned > 0.1f ? formatETA((int) (metersToWp / currentSpeedAligned)) : -1)
                     //v = s/t <=> t = s/v
             );
             drawFor(t, text, -300, true, true);

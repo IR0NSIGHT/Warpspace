@@ -44,7 +44,7 @@ public class ClientGameData {
         //if player is sitting in his waypoint, in warp -> dont return true wp -> dont delete waypoint.
         if (waypoint != null && playerPosTmp != null && playerPosTmp.equals(warpWP)) {
             GameClientState.instance.message(Lng.astr("dropout point reached."), 3);
-            return null;
+            return warpWP;
         }
 
         //return warp pos if player is in warp
@@ -69,6 +69,10 @@ public class ClientGameData {
         this.updateNearest(this.state.getCurrentSectorId());
     }
 
+    public Vector3i getRspWaypoint() {
+        return waypoint;
+    }
+
     public void updateNearest(int currentSectorID) {
         Vector3i wpOut = this.getWaypoint();
         if (wpOut  != null) {
@@ -84,7 +88,7 @@ public class ClientGameData {
             }
 
             //set waypoint to null bc player reached it
-            if (clientPos.equals(this.getWaypoint())) {
+            if (clientPos.equals(this.getWaypoint()) && !WarpManager.getInstance().isInWarp(clientPos)) {
                 this.setWaypoint((Vector3i)null);
                 return;
             }
