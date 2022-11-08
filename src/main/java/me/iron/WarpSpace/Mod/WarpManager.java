@@ -7,16 +7,14 @@ package me.iron.WarpSpace.Mod;
  * TIME: 15:29
  */
 
-import java.util.Random;
-
-import javax.vecmath.Vector3f;
-
+import api.DebugFile;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.Galaxy;
 
-import api.DebugFile;
-import me.iron.WarpSpace.Mod.server.config.ConfigManager;
+import javax.vecmath.Vector3f;
+import java.util.Random;
 
 /**
  * defines mechanics in warp, hold settings of the warp like its position.
@@ -28,7 +26,7 @@ public class WarpManager {
      * Galaxy size * System size * 64 + Galaxy size * System size * 64 / scale + System size * 2
      * 64 galaxies realspace + 64 galaxies warpspace + 2 systems buffer.
      */
-    public static int universeSize = Galaxy.size * 16 * 64;
+    public static int universeSize = Galaxy.size * 16 * 8;
 
     /**
      * the offset of warpspace to the realspace sector on the y axis. Use a number outside of the galaxy: empty space
