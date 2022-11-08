@@ -61,7 +61,7 @@ public class WarpMain extends StarMod {
 
         WarpSkybox.registerForRegistration();
 
-        dropPointMapDrawer = new DropPointMapDrawer(this);
+        //dropPointMapDrawer = new DropPointMapDrawer(this);
         warpThrusterListener = new WarpThrusterListener(this);
 
     }
@@ -109,7 +109,7 @@ public class WarpMain extends StarMod {
         HUD_core.HUDLoop();
         beaconManagerClient = new BeaconManager();
         beaconManagerClient.onInit();
-        dropPointMapDrawer.activate();
+        //dropPointMapDrawer.activate();
         GlossarInit.initGlossar(this);
         GlossarInit.addCategory(getWiki());
         new SoundQueueManager();
@@ -119,7 +119,7 @@ public class WarpMain extends StarMod {
     public void onResourceLoad(ResourceLoader loader) {
         super.onResourceLoad(loader);
         WarpSkybox.loadResources(loader.getMeshLoader(),this);
-        dropPointMapDrawer.loadSprite();
+        //dropPointMapDrawer.loadSprite();
     }
 
     @Override
