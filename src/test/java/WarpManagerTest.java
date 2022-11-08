@@ -1,27 +1,27 @@
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import javax.vecmath.Vector3f;
 
 import org.junit.Test;
 import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.server.data.Galaxy;
 
 import me.iron.WarpSpace.Mod.WarpManager;
+
 public class WarpManagerTest {
     @Test
     public void preciseDroppoint() {
         float sectorSize = 12000;
         WarpManager manager = new WarpManager(
                 sectorSize,
-                Galaxy.size,
                 10,
-                0
+                150,
+                1000
         );
         Vector3i trueRspSector = new Vector3i(13,25,-35);
         Vector3i roundedRspSector = new Vector3i(10,30,-30);
 
         Vector3i warpPos = manager.getWarpSpaceSector(trueRspSector);
-        assertEquals(new Vector3i(roundedRspSector),manager.getRealSpaceBySector(warpPos));
+        assertEquals(roundedRspSector,manager.getRealSpaceBySector(warpPos));
 
         assertEquals(
                 manager.getRealSpaceBySector(warpPos),
@@ -38,13 +38,15 @@ public class WarpManagerTest {
 
     @Test
     public void sectorCalculation() {
-        int offset = 2500;
+        int offset = 150;
+        int sectorSize = 10000;
         WarpManager manager = new WarpManager(
-                10000,
-                Galaxy.size,
+                sectorSize,
                 10,
-                offset
+                offset,
+                1000
         );
+
         Vector3i rspPos = new Vector3i(127,-128,129);
         Vector3f origin = WarpManager.getInstance().getWarpOrigin(rspPos);
         Vector3i warpPos = WarpManager.getInstance().getWarpSpaceSector(rspPos);
@@ -75,20 +77,21 @@ public class WarpManagerTest {
     }
 
     @Test
-    public void idkDude() {
-        int offset = 0;
+    public void warpSectorCalculation() {
+        int offset = 100;
+        int sectorSize = 1;
         WarpManager manager = new WarpManager(
-                1,
-                Galaxy.size,
+                sectorSize,
                 10,
-                offset
+                offset,
+                0
         );
         Vector3i rspPos = new Vector3i(-5, -14, -15);
         Vector3f origin = WarpManager.getInstance().getWarpOrigin(rspPos);
         Vector3i warpPos = WarpManager.getInstance().getWarpSpaceSector(rspPos);
 
         assertEquals(new Vector3f(-0.5f, -0.4f, -0.5f), origin);
-        assertEquals(new Vector3i(0, -1, -1), warpPos);
+        assertEquals(new Vector3i(0, -1+offset, -1), warpPos);
 
         rspPos.set(36, 1004, -4);
         System.out.println("warp " + WarpManager.getInstance().getWarpSpaceSector(rspPos));
@@ -106,8 +109,8 @@ public class WarpManagerTest {
         int sectorSize = 100;
         WarpManager manager = new WarpManager(
                 sectorSize,
-                Galaxy.size,
                 10,
+                1000,
                 offset
         );
 
@@ -151,8 +154,8 @@ public class WarpManagerTest {
         int offset = 0;
         WarpManager manager = new WarpManager(
                 100,
-                Galaxy.size,
                 10,
+                1000,
                 offset
         );
 
@@ -166,4 +169,65 @@ public class WarpManagerTest {
             System.out.println(p.getPositionAdjustedFor(warpSector));
         }
     }
+
+    @Test
+    public void isInWarpSpace() {
+        //test calculation if a sector is realspace
+        int dimension = 1000;
+        WarpManager manager = new WarpManager(
+                1234567,
+                10,
+                5000,
+                dimension
+        );
+
+        assertTrue(manager.isInRealSpace(new Vector3i(0,0,0)));
+        //positive edge
+        assertTrue(manager.isInRealSpace(new Vector3i(dimension, 0,0)));
+        assertTrue(manager.isInRealSpace(new Vector3i(0, dimension,0)));
+        assertTrue(manager.isInRealSpace(new Vector3i(0, 0,dimension)));
+        assertTrue(manager.isInRealSpace(new Vector3i(dimension,dimension,dimension)));
+
+        //negative edge
+        assertTrue(manager.isInRealSpace(new Vector3i(-dimension, 0,0)));
+        assertTrue(manager.isInRealSpace(new Vector3i(0, -dimension,0)));
+        assertTrue(manager.isInRealSpace(new Vector3i(0, 0,-dimension)));
+        assertTrue(manager.isInRealSpace(new Vector3i(-dimension,-dimension,-dimension)));
+
+        //outside of positive dimension
+        assertFalse(manager.isInRealSpace(new Vector3i(dimension+1, 0,0)));
+        assertFalse(manager.isInRealSpace(new Vector3i(0, dimension+1,0)));
+        assertFalse(manager.isInRealSpace(new Vector3i(0, 0,dimension+1)));
+
+        //outside of neg dimension
+        assertFalse(manager.isInRealSpace(new Vector3i(-dimension-1, 0,0)));
+        assertFalse(manager.isInRealSpace(new Vector3i(0, -dimension-1,0)));
+        assertFalse(manager.isInRealSpace(new Vector3i(0, 0,-dimension-1)));
+
+        //if in rsp => warppos in warp
+        assertTrue(manager.isInWarp(manager.getWarpSpaceSector(new Vector3i(0,0,0))));
+        assertTrue(manager.isInWarp(manager.getWarpSpaceSector(new Vector3i(dimension, dimension, dimension))));
+
+        //if not rsp => warppos is not warp
+        assertFalse(manager.isInWarp(manager.getWarpSpaceSector(new Vector3i(dimension+manager.getScale(), 0,0))));
+
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void rspAndWarpIntersect() {
+        WarpManager manager = new WarpManager(
+                1235,
+                1,
+                10,
+                100
+        );
+
+        manager = new WarpManager(
+                1235,
+                10,
+                10,
+                100
+        );
+    }
+
 }

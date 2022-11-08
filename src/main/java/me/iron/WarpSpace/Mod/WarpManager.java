@@ -15,7 +15,6 @@ import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 
-import api.DebugFile;
 
 /**
  * defines mechanics in warp, hold settings of the warp like its position.
@@ -27,13 +26,19 @@ public class WarpManager {
         return instance;
     }
 
-    public WarpManager(float sectorSize, int galaxySize, int scale, int offset) {
+    public WarpManager(float sectorSize, int scale, int offset, int warpDimensions) {
+        //make sure that warpable space and warpspace do not intersect
+        if (warpDimensions/scale>=offset)
+            throw new IllegalArgumentException("realspace and warpspace intersect");
+
         this.sectorSize = sectorSize;
         //64 systems per galaxy, 16 sectors per system (hardcoded) //TODO assert these values are hardcoded
-        this.universeSize = galaxySize * 64 * 16;
-        this.scale = scale; //(int) ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue();
+        this.scale = scale;
         halfScale = new Vector3i(0.5f*scale,0.5f*scale, 0.5f*scale);
-        this.offset = offset; //(int)(universeSize * (1 + 1f / scale)) + 16 * 2; //offset in sectors
+        this.offset = offset;
+
+        realspaceMin = new Vector3i(-warpDimensions, -warpDimensions, -warpDimensions);
+        realspaceMax = new Vector3i(warpDimensions, warpDimensions, warpDimensions);
         instance = this;
     }
 
@@ -43,29 +48,22 @@ public class WarpManager {
     private Vector3i halfScale = null;
     public float sectorSize;
 
-    public int universeSize;
-
     /**
      * the offset of warpspace to the realspace sector on the y axis. Use a number outside of the galaxy: empty space
      */
     public int offset;
 
+    private Vector3i realspaceMin;
+    private Vector3i realspaceMax;
     /**
      * check if an objects positon is in warpspace
      * @param object segmentcontroller to check
      * @return boolean, true if segmentcontrollers position is in warp
      */
     public boolean isInWarp(SimpleTransformableSendableObject object) {
-        if (object == null) {
-            DebugFile.err("isInWarp called with null object");
-            return false;
-        }
-        if (object.getSector(new Vector3i()) == null) {
-            DebugFile.err("isInWarp object has no sector:"+object.getName());
-            return false;
-        }
         return isInWarp(object.getSector(new Vector3i()));
     }
+
 
     /**
      * check if an objects positon is in warpspace
@@ -73,11 +71,13 @@ public class WarpManager {
      * @return boolean, true if position is in warp
      */
     public boolean isInWarp(Vector3i pos) {
-        if (pos != null && pos.y >= offset) {
-            return true;
-        }
-        return false;
+        return isInRealSpace(getRealSpaceBySector(pos));
     }
+
+    public boolean isInRealSpace(Vector3i sector) {
+        return sector.betweenIncl(realspaceMin, realspaceMax);
+    }
+
 
     /**
      * Calculate the Warpspace position from a realworld position, will round to closest point on scale: -5->0<-+4 at scale = 10
