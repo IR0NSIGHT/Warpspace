@@ -43,7 +43,7 @@ public class ClientGameData {
 
         //if player is sitting in his waypoint, in warp -> dont return true wp -> dont delete waypoint.
         if (waypoint != null && playerPosTmp != null && playerPosTmp.equals(warpWP)) {
-            GameClientState.instance.message(Lng.astr("dropout point reached."), 3);
+            GameClientState.instance.message(Lng.astr("dropout point close."), 3);
             return warpWP;
         }
 
