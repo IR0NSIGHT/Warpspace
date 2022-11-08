@@ -1,5 +1,10 @@
 package me.iron.WarpSpace.Mod.Interdiction;
 
+import api.utils.StarRunnable;
+import me.iron.WarpSpace.Mod.WarpJumpManager;
+import me.iron.WarpSpace.Mod.WarpMain;
+import me.iron.WarpSpace.Mod.WarpManager;
+import me.iron.WarpSpace.Mod.client.WarpProcess;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
@@ -8,12 +13,6 @@ import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
 import org.schema.game.server.data.PlayerNotFountException;
 import org.schema.schine.network.RegisteredClientOnServer;
-
-import api.utils.StarRunnable;
-import me.iron.WarpSpace.Mod.WarpJumpManager;
-import me.iron.WarpSpace.Mod.WarpMain;
-import me.iron.WarpSpace.Mod.WarpManager;
-import me.iron.WarpSpace.Mod.client.WarpProcess;
 
 /**
  * STARMADE MOD
@@ -57,7 +56,7 @@ public class ExtraEventLoop {
         //get relevant positions to check
         Vector3i playerPos =  sc.getSector(new Vector3i()),
                 rspPos = WarpManager.getInstance().getRealSpaceBySector(playerPos),
-                warpPos = WarpManager.getInstance().getWarpSpacePos(playerPos);
+                warpPos = WarpManager.getInstance().getWarpSpaceSector(playerPos);
 
         //interdiction
         updateInterdiction(warpPos,rspPos,player,sc);

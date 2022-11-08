@@ -1,12 +1,10 @@
 package me.iron.WarpSpace.Mod;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-import javax.vecmath.Vector3f;
-
+import api.common.GameServer;
+import api.mod.StarLoader;
+import me.iron.WarpSpace.Mod.beacon.BeaconManager;
+import me.iron.WarpSpace.Mod.client.WarpProcess;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
@@ -20,11 +18,11 @@ import org.schema.game.server.data.GameServerState;
 import org.schema.schine.common.language.Lng;
 import org.schema.schine.network.server.ServerMessage;
 
-import api.common.GameServer;
-import api.mod.StarLoader;
-import me.iron.WarpSpace.Mod.beacon.BeaconManager;
-import me.iron.WarpSpace.Mod.client.WarpProcess;
-import me.iron.WarpSpace.Mod.server.config.ConfigManager;
+import javax.annotation.Nullable;
+import javax.vecmath.Vector3f;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Random;
 
 /**
  * STARMADE MOD
@@ -155,10 +153,10 @@ public class WarpJumpManager {
                 entryQueue.remove(ship);
 
                 //create, fire event, get back params
-                WarpJumpEvent.WarpJumpType  type = WarpJumpEvent.WarpJumpType.ENTRY;
+                WarpJumpEvent.WarpJumpType type = WarpJumpEvent.WarpJumpType.ENTRY;
 
-                Vector3i sector = WarpManager.getInstance().getWarpSpacePos(ship.getSector(new Vector3i()));
-                WarpJumpEvent e = new WarpJumpEvent(ship,type,ship.getSector(new Vector3i()),sector);
+                Vector3i sector = WarpManager.getInstance().getWarpSpaceSector(ship.getSector(new Vector3i()));
+                WarpJumpEvent e = new WarpJumpEvent(ship, type, ship.getSector(new Vector3i()), sector);
                 StarLoader.fireEvent(e, true);
 
 
@@ -200,7 +198,7 @@ public class WarpJumpManager {
      * @return boolean, true if allowed entry, false if interdicted or can't fire warpdrive (only for ships)
      */
     public static boolean isAllowedEntry(SimpleTransformableSendableObject ship) {
-        return !isInterdicted(ship,WarpManager.getInstance().getWarpSpacePos(ship.getSector(new Vector3i())));
+        return !isInterdicted(ship, WarpManager.getInstance().getWarpSpaceSector(ship.getSector(new Vector3i())));
     }
 
     /**

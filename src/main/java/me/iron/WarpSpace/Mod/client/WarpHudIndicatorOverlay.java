@@ -1,7 +1,7 @@
 package me.iron.WarpSpace.Mod.client;
 
-import javax.vecmath.Vector3f;
-
+import com.bulletphysics.linearmath.Transform;
+import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.view.gui.shiphud.HudIndicatorOverlay;
@@ -12,9 +12,9 @@ import org.schema.schine.graphicsengine.core.settings.EngineSettings;
 import org.schema.schine.graphicsengine.core.settings.SectorIndicationMode;
 import org.schema.schine.input.InputState;
 
-import com.bulletphysics.linearmath.Transform;
-
-import me.iron.WarpSpace.Mod.WarpManager;
+import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
+import java.util.concurrent.TimeUnit;
 
 public class WarpHudIndicatorOverlay extends HudIndicatorOverlay {
     Vector3i[] neighborSectorsPos = new Vector3i[7];
@@ -60,8 +60,51 @@ public class WarpHudIndicatorOverlay extends HudIndicatorOverlay {
             calcNeighborSectors();
         }
         this.drawSectorIndicators = false;
+        this.drawWaypoints = false;
         super.draw();
         this.drawSectorIndicators = true;
+        this.drawWaypoints = true;
+
+        drawNeighbourSectors(neighborSectors, neighborSectorsNames);
+        drawWaypoint(
+                ((GameClientState) getState()).getController().getClientGameData().getWaypoint(),
+                GameClientState.instance.getPlayer().getCurrentSector(),
+                WarpManager.getInstance().getClientTransformOrigin()
+        );
+    }
+
+    void drawWaypoint(Vector3i waypointWarpSector, Vector3i playerWarpSector, Vector3f playerWarpOrigin) {
+        if (waypointWarpSector != null & drawWaypoints) {
+            Vector4f tint = new Vector4f();
+            tint.set(0.1f + selectColorValue, 0.8f + selectColorValue, 0.6f + selectColorValue, 0.4f + selectColorValue);
+            Transform t = new Transform();
+            t.setIdentity();
+            WarpManager.StellarPosition p = new WarpManager.StellarPosition(waypointWarpSector, new Vector3f(0, 0, 0));//WarpManager.getInstance().getWarpSpacePosition(wayPointRspSector);
+            t.origin.set(p.getPositionAdjustedFor(playerWarpSector));
+
+            Vector3f toWaypoint = p.getFromTo(playerWarpSector, playerWarpOrigin);
+            float metersToWp = toWaypoint.length();///WarpManager.getInstance().getScale();
+            float currentSpeedAligned;
+            Vector3f velocity = new Vector3f();
+            GameClientState.instance.getPlayer().getFirstControlledTransformableWOExc().getLinearVelocity(velocity);
+            toWaypoint.normalize();
+            currentSpeedAligned = velocity.dot(toWaypoint);
+            String text = Lng.str(
+                    "Waypoint" +
+                            WarpManager.getInstance().getRealSpaceBySector(waypointWarpSector).toString() + "\ntime: " + (currentSpeedAligned > 0.1f ? formatETA((int) (metersToWp / currentSpeedAligned)) : -1)
+                    //v = s/t <=> t = s/v
+            );
+            drawFor(t, text, -300, true, true);
+        }
+    }
+
+    String formatETA(int seconds) {
+        long minutes = TimeUnit.SECONDS.toMinutes(seconds);
+        seconds = seconds % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    void drawNeighbourSectors(Transform[] neighborSectors, String[] neighborSectorsNames) {
         PlayerState player = ((GameClientState) getState()).getPlayer();
         Transform neighborT = new Transform();
         neighborT.setIdentity();
@@ -87,17 +130,6 @@ public class WarpHudIndicatorOverlay extends HudIndicatorOverlay {
         calcNeighborSectors();
     }
 
-    private Vector3f getNeighbourDrawPosition(Vector3i rspSector, Vector3i ownSector) {
-        Vector3i warpSector = WarpManager.getInstance().getWarpSpacePos(rspSector);
-        Vector3i ownWarpSector = WarpManager.getInstance().getWarpSpacePos(ownSector);
-        warpSector.sub(ownWarpSector);
-        Vector3f diff = warpSector.toVector3f();
-        WarpManager.getInstance().sectorsToMeter(diff);
-        Vector3f origin = WarpManager.getInstance().getWarpOrigin(rspSector);
-        origin.add(diff);
-        return origin;
-    }
-
     private void calcNeighborSectors() {
         Vector3i playerWarpSector = GameClientState.instance.getPlayer().getCurrentSector();
         Vector3i neighbourWarpSector = new Vector3i(playerWarpSector);
@@ -115,19 +147,13 @@ public class WarpHudIndicatorOverlay extends HudIndicatorOverlay {
             neighbourRspSector.set(playerRspSector);
             neighbourRspSector.add(d);
 
-
-
-
             //create stellar position for cross sector drawing
-            WarpManager.StellarPosition warpPosition = WarpManager.getInstance().getWarpSpacePosPrecise(neighbourRspSector);
+            WarpManager.StellarPosition warpPosition = WarpManager.getInstance().getWarpSpacePosition(neighbourRspSector);
             Vector3f drawPosition = warpPosition.getPositionAdjustedFor(playerWarpSector);
 
             //set warp sector
             neighbourWarpSector.set(warpPosition.getSector());
 
-            //neighborSectorsPos[i].set(neighbourWarpSector); //What is this used for?
-
-            neighborSectorsPos[i].set(neighbourRspSector);
             try {
                 neighborSectorsNames[i] = Lng.str("Warp %s", neighbourRspSector.toString());
             } catch(Exception ignored) {

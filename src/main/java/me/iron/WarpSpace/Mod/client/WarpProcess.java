@@ -1,16 +1,5 @@
 package me.iron.WarpSpace.Mod.client;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-
-import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.client.data.GameClientState;
-import org.schema.game.client.data.PlayerControllable;
-import org.schema.game.common.data.player.PlayerState;
-import org.schema.game.common.data.world.SimpleTransformableSendableObject;
-import org.schema.game.server.data.GameServerState;
-
 import api.network.packets.PacketUtil;
 import api.utils.StarRunnable;
 import me.iron.WarpSpace.Mod.Interdiction.ExtraEventLoop;
@@ -18,6 +7,16 @@ import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
+import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.client.data.GameClientState;
+import org.schema.game.client.data.PlayerControllable;
+import org.schema.game.common.data.player.PlayerState;
+import org.schema.game.common.data.world.SimpleTransformableSendableObject;
+import org.schema.game.server.data.GameServerState;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * enum containing available processes that can happen to a player like jumping to warp.
@@ -192,7 +191,7 @@ public enum WarpProcess {
         if (GameClientState.instance == null || GameClientState.instance.getPlayer() == null)
             return;
         //test if beacon is affecting player position, beacon synch is handeled separately.
-        boolean droppointShifted = (WarpJumpManager.isDroppointShifted(WarpManager.getInstance().getWarpSpacePos(GameClientState.instance.getPlayer().getCurrentSector())));
+        boolean droppointShifted = (WarpJumpManager.isDroppointShifted(WarpManager.getInstance().getWarpSpaceSector(GameClientState.instance.getPlayer().getCurrentSector())));
         WarpProcess.DROPPOINTSHIFTED.setCurrentValue(droppointShifted?1:0);
         WarpProcess.IS_IN_WARP.setCurrentValue(WarpManager.getInstance().isInWarp(GameClientState.instance.getPlayer().getCurrentSector())?1:0);
 

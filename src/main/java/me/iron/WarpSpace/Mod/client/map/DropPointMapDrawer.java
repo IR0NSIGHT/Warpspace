@@ -1,11 +1,5 @@
 package me.iron.WarpSpace.Mod.client.map;
 
-import javax.vecmath.Vector4f;
-
-import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.client.view.gamemap.GameMapDrawer;
-import org.schema.schine.graphicsengine.forms.Sprite;
-
 import api.listener.fastevents.FastListenerCommon;
 import api.mod.StarMod;
 import libpackage.drawer.MapDrawer;
@@ -15,6 +9,11 @@ import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import me.iron.WarpSpace.Mod.server.config.ConfigManager;
+import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.client.view.gamemap.GameMapDrawer;
+import org.schema.schine.graphicsengine.forms.Sprite;
+
+import javax.vecmath.Vector4f;
 
 /**
  * STARMADE MOD
@@ -59,20 +58,20 @@ public class DropPointMapDrawer extends MapDrawer {
             return;
         synchronized (this) {
             //only update if the camera pos has changed.
-            Vector3i currentWarpPos = WarpManager.getInstance().getWarpSpacePos(currentPos);
+            Vector3i currentWarpPos = WarpManager.getInstance().getWarpSpaceSector(currentPos);
             if (lastSector.equals(currentWarpPos) && !updateFlag && System.currentTimeMillis()<nextRefresh)
                 return;
             nextRefresh = System.currentTimeMillis()+2000;
             updateFlag = false;
         }
-        lastSector.set(WarpManager.getInstance().getWarpSpacePos(currentPos));
+        lastSector.set(WarpManager.getInstance().getWarpSpaceSector(currentPos));
 
         clearMarkers();
 
         if (WarpManager.getInstance().isInWarp(currentPos))
             return;
 
-        Vector3i warpPos = WarpManager.getInstance().getWarpSpacePos(currentPos);
+        Vector3i warpPos = WarpManager.getInstance().getWarpSpaceSector(currentPos);
         Vector3i tempDrop;
         Vector3i tempWarp = new Vector3i();
         int range = (int)ConfigManager.ConfigEntry.map_draw_droppoints_range.getValue();

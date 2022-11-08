@@ -1,7 +1,8 @@
 package me.iron.WarpSpace.Mod.beacon;
 
-import java.io.Serializable;
-
+import api.utils.game.SegmentControllerUtils;
+import me.iron.WarpSpace.Mod.WarpManager;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
@@ -12,9 +13,7 @@ import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.EntityRequest;
 import org.schema.game.server.data.GameServerState;
 
-import api.utils.game.SegmentControllerUtils;
-import me.iron.WarpSpace.Mod.WarpManager;
-import me.iron.WarpSpace.Mod.server.config.ConfigManager;
+import java.io.Serializable;
 
 /**
  * STARMADE MOD
@@ -188,8 +187,8 @@ public class BeaconObject implements Serializable {
     public void setActive(boolean active) {
         if (this.active != active) {
             if (GameClientState.instance != null) {
-                Vector3i ownWarpPos = WarpManager.getInstance().getWarpSpacePos(GameClientState.instance.getPlayer().getCurrentSector());
-                Vector3i beaconPos = WarpManager.getInstance().getWarpSpacePos(getPosition());
+                Vector3i ownWarpPos = WarpManager.getInstance().getWarpSpaceSector(GameClientState.instance.getPlayer().getCurrentSector());
+                Vector3i beaconPos = WarpManager.getInstance().getWarpSpaceSector(getPosition());
                 if (ownWarpPos.equals(beaconPos)) ;
                     /*WarpSounds.instance.queueSound(
                             (active? WarpSounds.SoundEntry.beacon_activated: WarpSounds.SoundEntry.beacon_deactivated), VoiceAnnouncer.queueID

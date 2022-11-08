@@ -1,10 +1,5 @@
 package me.iron.WarpSpace.Mod.beacon;
 
-import java.util.*;
-
-import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.server.data.GameServerState;
-
 import api.DebugFile;
 import api.listener.Listener;
 import api.listener.events.entity.SegmentControllerFullyLoadedEvent;
@@ -18,6 +13,10 @@ import api.network.PacketWriteBuffer;
 import me.iron.WarpSpace.Mod.TimedRunnable;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
+import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.server.data.GameServerState;
+
+import java.util.*;
 
 /**
  * STARMADE MOD
@@ -185,7 +184,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
 
     public void addBeacon(BeaconObject beacon) {
         //FIXME decline
-        Vector3i warpPos = WarpManager.getInstance().getWarpSpacePos(beacon.getPosition());
+        Vector3i warpPos = WarpManager.getInstance().getWarpSpaceSector(beacon.getPosition());
         LinkedList<String> list = beaconUIDs_by_sector.get(warpPos);
         if (list == null) {
             list = new LinkedList<>();
@@ -202,7 +201,7 @@ public class BeaconManager extends SimpleSerializerWrapper {
     }
 
     public void removeBeacon(BeaconObject beacon) {
-        Vector3i warpPos = WarpManager.getInstance().getWarpSpacePos(beacon.getPosition());
+        Vector3i warpPos = WarpManager.getInstance().getWarpSpaceSector(beacon.getPosition());
         Collection<String> list = beaconUIDs_by_sector.get(warpPos);
         if (list == null) {
             return;

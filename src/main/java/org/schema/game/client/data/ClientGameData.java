@@ -5,12 +5,11 @@
 
 package org.schema.game.client.data;
 
+import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.element.Element;
 import org.schema.game.common.data.world.RemoteSector;
 import org.schema.schine.common.language.Lng;
-
-import me.iron.WarpSpace.Mod.WarpManager;
 
 /**
  * decompiled version edited by ironsight
@@ -32,12 +31,18 @@ public class ClientGameData {
         return this.nearestToWayPoint;
     }
 
+    /**
+     * returns waypoint of the player. if player is in rsp, the rsp-sector of the waypoint is returned.
+     * if player is in warp, the warpsector of the waypoint is returned.
+     *
+     * @return
+     */
     public Vector3i getWaypoint() {
         playerPosTmp = GameClientState.instance.getPlayer().getCurrentSector();
 
         //if player is sitting in his waypoint, in warp -> dont return true wp -> dont delete waypoint.
         if (waypoint != null && playerPosTmp != null && playerPosTmp.equals(warpWP)) {
-            GameClientState.instance.message(Lng.astr("dropout point reached."),3);
+            GameClientState.instance.message(Lng.astr("dropout point reached."), 3);
             return null;
         }
 
@@ -50,16 +55,14 @@ public class ClientGameData {
     }
 
     public void setWaypoint(Vector3i newWaypoint) {
-
         //never allow setting direction in warp. always use RSP pos.
-        //false
         if (newWaypoint != null && WarpManager.getInstance().isInWarp(newWaypoint)) {
             newWaypoint = WarpManager.getInstance().getRealSpacePosPrecise(newWaypoint, GameClientState.instance.getPlayer().getFirstControlledTransformableWOExc().getWorldTransform().origin);
         }
 
         this.waypoint = newWaypoint;    //set to null
         if (waypoint != null) { //false
-            this.warpWP = WarpManager.getInstance().getWarpSpacePos(waypoint);
+            this.warpWP = WarpManager.getInstance().getWarpSpaceSector(waypoint);
         }
         this.nearestToWayPoint = null;
         this.updateNearest(this.state.getCurrentSectorId());

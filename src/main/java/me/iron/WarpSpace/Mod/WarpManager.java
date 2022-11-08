@@ -7,15 +7,13 @@ package me.iron.WarpSpace.Mod;
  * TIME: 15:29
  */
 
-import java.util.Random;
-
-import javax.vecmath.Vector3f;
-
+import api.DebugFile;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 
-import api.DebugFile;
+import javax.vecmath.Vector3f;
+import java.util.Random;
 
 /**
  * defines mechanics in warp, hold settings of the warp like its position.
@@ -81,15 +79,16 @@ public class WarpManager {
 
     /**
      * Calculate the Warpspace position from a realworld position, will round to closest point on scale: -5->0<-+4 at scale = 10
+     *
      * @param rspPos sector in realspace
      * @return correlating sector in warpspace
      */
-    public Vector3i getWarpSpacePos(Vector3i rspPos) {
+    public Vector3i getWarpSpaceSector(Vector3i rspPos) {
         Vector3f origin = getWarpOrigin(rspPos);
         metersToSector(origin);
 
         Vector3f warpPos = rspPos.toVector3f();
-        warpPos.scale(1f/getScale());
+        warpPos.scale(1f / getScale());
 
         warpPos.sub(origin);
         warpPos.y += offset;
@@ -117,13 +116,13 @@ public class WarpManager {
         return warpOrigin;
     }
 
-    public StellarPosition getWarpSpacePosPrecise(Vector3i realSpaceSector) {
+    public StellarPosition getWarpSpacePosition(Vector3i realSpaceSector) {
         Vector3f origin = getWarpOrigin(realSpaceSector);
         Vector3f mutate = new Vector3f(origin);
         metersToSector(mutate);
 
         Vector3f warpPos = realSpaceSector.toVector3f();
-        warpPos.scale(1f/getScale());
+        warpPos.scale(1f / getScale());
 
         warpPos.sub(mutate);
         warpPos.y += offset;
@@ -218,12 +217,28 @@ public class WarpManager {
 
         }
 
+        public Vector3f getFromTo(Vector3i sector, Vector3f origin) {
+            Vector3i sectorOffset = new Vector3i(this.sector);
+            sectorOffset.sub(sector);
+            sectorOffset.scale((int) WarpManager.getInstance().sectorSize);
+
+            Vector3f originOffset = new Vector3f(this.origin);
+            originOffset.sub(origin);
+            originOffset.add(sectorOffset.toVector3f());
+            return originOffset;
+        }
+
         public Vector3i getSector() {
             return sector;
         }
 
         public Vector3f getOrigin() {
             return origin;
+        }
+
+        @Override
+        public String toString() {
+            return "sector: " + sector.toString() + " origin: " + origin.toString();
         }
     }
 }
