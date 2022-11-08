@@ -18,6 +18,7 @@ import api.listener.Listener;
 import api.listener.events.gui.HudCreateEvent;
 import api.mod.StarLoader;
 import api.utils.StarRunnable;
+import me.iron.WarpSpace.Mod.TimedRunnable;
 import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
@@ -132,16 +133,38 @@ public class HUD_core {
         StarLoader.registerListener(HudCreateEvent.class, new Listener<HudCreateEvent>() {
             @Override
             public void onEvent(final HudCreateEvent hudCreateEvent) {
-                WarpHudIndicatorOverlay overlay = new WarpHudIndicatorOverlay(GameClientState.instance,
-                        hudCreateEvent.getHud().getIndicator());
-                overlay.onInit();
-
-                hudCreateEvent.getHud().setIndicator(overlay);
                 initRadarSectorGUI();
             }
         }, WarpMain.instance);
 
 
+        new TimedRunnable(10,WarpMain.instance, -1) {
+            @Override
+            public void onRun() {
+                super.onRun();
+                try {
+                    Vector3i current = GameClientState.instance.getPlayer().getCurrentSector();
+                    HudIndicatorOverlay currentHUD = GameClientState.instance.getWorldDrawer().getGuiDrawer().getHud().getIndicator();
+                    if (WarpManager.getInstance().isInWarp(current) && !(currentHUD instanceof WarpHudIndicatorOverlay)) {
+                        // IS IN WARP
+                        HudIndicatorOverlay overlay = new WarpHudIndicatorOverlay(GameClientState.instance);
+                        overlay.onInit();
+                        GameClientState.instance.getWorldDrawer().getGuiDrawer().getHud().setIndicator(
+                                overlay
+                        );
+                    } else if (!WarpManager.getInstance().isInWarp(current) && currentHUD instanceof WarpHudIndicatorOverlay)  {
+                        HudIndicatorOverlay overlay = new HudIndicatorOverlay(GameClientState.instance);
+                        overlay.onInit();
+                        GameClientState.instance.getWorldDrawer().getGuiDrawer().getHud().setIndicator(
+                                overlay
+                        );
+                    }
+                } catch (NullPointerException ignored) {
+
+                }
+
+            }
+        };
     }
 
     /**
@@ -178,28 +201,6 @@ public class HUD_core {
             return;
         if (GameClientState.instance.getPlayer().getCurrentSector().length()<5000 || WarpManager.getInstance().isInWarp(GameClientState.instance.getPlayer().getCurrentSector()))
             initRadarSectorGUI();
-    }
-
-    /**
-     * update neighbour sector names.
-     */
-    private static void updateVanillaHUD() {
-        if (GameClientState.instance == null || GameClientState.instance.getPlayer() == null)
-            return;
-
-        if (!WarpManager.getInstance().isInWarp(GameClientState.instance.getPlayer().getCurrentSector()))
-            return;
-
-        HudIndicatorOverlay overlay = GameClientState.instance.getWorldDrawer().getGuiDrawer().getHud().getIndicator();
-
-      // for (int i = 0; i < overlay.neighborSectorsNames.length; i++) {
-      //     overlay.neighborSectorsNames[i] = "[WARP]\n"+ WarpManager.getInstance().getRealSpaceBySector(overlay.neighborSectorsPos[i]);
-      //     Transform transform = new Transform();
-      //     transform.setIdentity();
-      //     transform.origin.set(new Vector3f(i*50,i*50,i*50));
-      //     overlay.neighborSectors[i] = transform;
-      // }
-
     }
 
     /**

@@ -24,10 +24,8 @@ public class WarpHudIndicatorOverlay extends HudIndicatorOverlay {
     String[] neighborSectorsNames = new String[7];
     Transform[] neighborSectors = new Transform[7];
 
-    HudIndicatorOverlay original;
-    public WarpHudIndicatorOverlay(InputState inputState, HudIndicatorOverlay original) {
+    public WarpHudIndicatorOverlay(InputState inputState) {
         super(inputState);
-        this.original = original;
     }
 
     @Override
@@ -52,11 +50,6 @@ public class WarpHudIndicatorOverlay extends HudIndicatorOverlay {
 
     @Override
     public void draw() {
-        if (!inWarp) {
-            original.draw();
-            return;
-        }
-
         i++;
         if (i > 100) {
             i = 0;
@@ -129,7 +122,6 @@ public class WarpHudIndicatorOverlay extends HudIndicatorOverlay {
     public void onSectorChange() {
         super.onSectorChange();
         inWarp = WarpManager.getInstance().isInWarp(GameClientState.instance.getPlayer().getCurrentSector());
-        original.onSectorChange();
         calcNeighborSectors();
     }
 
