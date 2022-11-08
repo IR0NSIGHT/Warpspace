@@ -1,11 +1,11 @@
 package me.iron.WarpSpace.Mod;
 
+import api.DebugFile;
+import api.listener.events.Event;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.schine.common.language.Lng;
 import org.schema.schine.network.server.ServerMessage;
-
-import api.listener.events.Event;
 
 /**
  * STARMADE MOD
@@ -45,6 +45,7 @@ public class WarpJumpEvent extends Event {
         this.start = start;
         this.end = end;
         this.type = type;
+        DebugFile.log("warpspace performed jump for " + ship.getName() + " start: " + start + " end " + end + " of type " + type);
     }
 
     /**
