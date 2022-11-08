@@ -7,13 +7,15 @@ package me.iron.WarpSpace.Mod;
  * TIME: 15:29
  */
 
-import api.DebugFile;
+import java.util.Random;
+
+import javax.vecmath.Vector3f;
+
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 
-import javax.vecmath.Vector3f;
-import java.util.Random;
+import api.DebugFile;
 
 /**
  * defines mechanics in warp, hold settings of the warp like its position.

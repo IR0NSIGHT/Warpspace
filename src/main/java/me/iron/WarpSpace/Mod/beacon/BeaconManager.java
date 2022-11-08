@@ -1,5 +1,10 @@
 package me.iron.WarpSpace.Mod.beacon;
 
+import java.util.*;
+
+import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.server.data.GameServerState;
+
 import api.DebugFile;
 import api.listener.Listener;
 import api.listener.events.entity.SegmentControllerFullyLoadedEvent;
@@ -13,10 +18,6 @@ import api.network.PacketWriteBuffer;
 import me.iron.WarpSpace.Mod.TimedRunnable;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
-import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.server.data.GameServerState;
-
-import java.util.*;
 
 /**
  * STARMADE MOD

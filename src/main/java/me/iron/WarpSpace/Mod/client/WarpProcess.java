@@ -1,12 +1,9 @@
 package me.iron.WarpSpace.Mod.client;
 
-import api.network.packets.PacketUtil;
-import api.utils.StarRunnable;
-import me.iron.WarpSpace.Mod.Interdiction.ExtraEventLoop;
-import me.iron.WarpSpace.Mod.WarpJumpManager;
-import me.iron.WarpSpace.Mod.WarpMain;
-import me.iron.WarpSpace.Mod.WarpManager;
-import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.data.PlayerControllable;
@@ -14,9 +11,13 @@ import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
+import api.network.packets.PacketUtil;
+import api.utils.StarRunnable;
+import me.iron.WarpSpace.Mod.Interdiction.ExtraEventLoop;
+import me.iron.WarpSpace.Mod.WarpJumpManager;
+import me.iron.WarpSpace.Mod.WarpMain;
+import me.iron.WarpSpace.Mod.WarpManager;
+import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 
 /**
  * enum containing available processes that can happen to a player like jumping to warp.

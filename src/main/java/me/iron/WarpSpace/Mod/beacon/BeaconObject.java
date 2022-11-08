@@ -1,8 +1,7 @@
 package me.iron.WarpSpace.Mod.beacon;
 
-import api.utils.game.SegmentControllerUtils;
-import me.iron.WarpSpace.Mod.WarpManager;
-import me.iron.WarpSpace.Mod.server.config.ConfigManager;
+import java.io.Serializable;
+
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
@@ -13,7 +12,9 @@ import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.EntityRequest;
 import org.schema.game.server.data.GameServerState;
 
-import java.io.Serializable;
+import api.utils.game.SegmentControllerUtils;
+import me.iron.WarpSpace.Mod.WarpManager;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 
 /**
  * STARMADE MOD

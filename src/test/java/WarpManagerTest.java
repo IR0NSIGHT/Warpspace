@@ -1,11 +1,12 @@
-import me.iron.WarpSpace.Mod.WarpManager;
+import static org.junit.Assert.assertEquals;
+
+import javax.vecmath.Vector3f;
+
 import org.junit.Test;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.server.data.Galaxy;
 
-import javax.vecmath.Vector3f;
-
-import static org.junit.Assert.assertEquals;
+import me.iron.WarpSpace.Mod.WarpManager;
 public class WarpManagerTest {
     @Test
     public void preciseDroppoint() {

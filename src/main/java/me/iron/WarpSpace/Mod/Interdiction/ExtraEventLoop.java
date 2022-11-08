@@ -1,13 +1,14 @@
 package me.iron.WarpSpace.Mod.Interdiction;
 
-import me.iron.WarpSpace.Mod.WarpJumpManager;
-import me.iron.WarpSpace.Mod.WarpManager;
-import me.iron.WarpSpace.Mod.client.WarpProcess;
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
+
+import me.iron.WarpSpace.Mod.WarpJumpManager;
+import me.iron.WarpSpace.Mod.WarpManager;
+import me.iron.WarpSpace.Mod.client.WarpProcess;
 
 /**
  * STARMADE MOD

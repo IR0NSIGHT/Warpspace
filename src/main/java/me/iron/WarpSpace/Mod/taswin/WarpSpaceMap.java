@@ -1,5 +1,16 @@
 package me.iron.WarpSpace.Mod.taswin;
 
+import java.util.HashMap;
+
+import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
+
+import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.client.view.gamemap.GameMapDrawer;
+import org.schema.game.server.data.Galaxy;
+import org.schema.schine.graphicsengine.forms.PositionableSubColorSprite;
+import org.schema.schine.graphicsengine.forms.Sprite;
+
 import api.listener.Listener;
 import api.listener.events.world.GalaxyFinishedGeneratingEvent;
 import api.listener.events.world.StarCreationAttemptEvent;
@@ -9,15 +20,6 @@ import api.mod.StarMod;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import me.iron.WarpSpace.Mod.WarpManager;
-import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.client.view.gamemap.GameMapDrawer;
-import org.schema.game.server.data.Galaxy;
-import org.schema.schine.graphicsengine.forms.PositionableSubColorSprite;
-import org.schema.schine.graphicsengine.forms.Sprite;
-
-import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
-import java.util.HashMap;
 
 public class WarpSpaceMap
 {

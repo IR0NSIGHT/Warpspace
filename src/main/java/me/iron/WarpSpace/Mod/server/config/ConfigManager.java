@@ -1,12 +1,13 @@
 package me.iron.WarpSpace.Mod.server.config;
 
+import org.schema.game.server.data.GameServerState;
+
 import api.listener.Listener;
 import api.listener.events.network.ClientLoginEvent;
 import api.mod.StarLoader;
 import api.mod.config.FileConfiguration;
 import api.network.packets.PacketUtil;
 import me.iron.WarpSpace.Mod.WarpMain;
-import org.schema.game.server.data.GameServerState;
 
 /**
  * config manager class. reads, writes, corrects, defaults config values.

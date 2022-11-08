@@ -1,17 +1,17 @@
 package me.iron.WarpSpace.Mod.visuals;
 
-import api.listener.Listener;
-import api.listener.events.draw.RegisterWorldDrawersEvent;
-import api.utils.draw.ModWorldDrawer;
-import api.utils.textures.StarLoaderTexture;
-import com.bulletphysics.collision.dispatch.CollisionObject;
-import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
-import com.bulletphysics.dynamics.RigidBody;
-import com.bulletphysics.dynamics.character.KinematicCharacterController;
-import com.bulletphysics.linearmath.Transform;
-import me.iron.WarpSpace.Mod.WarpMain;
-import me.iron.WarpSpace.Mod.client.WarpProcess;
-import me.iron.WarpSpace.Mod.server.config.ConfigManager;
+import static api.common.GameClient.getClientPlayerState;
+import static api.mod.StarLoader.registerListener;
+import static me.iron.WarpSpace.Mod.WarpMain.instance;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.schema.schine.graphicsengine.core.Controller.getCamera;
+
+import java.lang.reflect.Field;
+import java.util.Set;
+
+import javax.imageio.ImageIO;
+import javax.vecmath.Vector3f;
+
 import org.lwjgl.opengl.GL11;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.common.controller.ManagedUsableSegmentController;
@@ -29,16 +29,19 @@ import org.schema.schine.graphicsengine.shader.Shader;
 import org.schema.schine.graphicsengine.shader.Shaderable;
 import org.schema.schine.resource.MeshLoader;
 
-import javax.imageio.ImageIO;
-import javax.vecmath.Vector3f;
-import java.lang.reflect.Field;
-import java.util.Set;
+import com.bulletphysics.collision.dispatch.CollisionObject;
+import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
+import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.dynamics.character.KinematicCharacterController;
+import com.bulletphysics.linearmath.Transform;
 
-import static api.common.GameClient.getClientPlayerState;
-import static api.mod.StarLoader.registerListener;
-import static me.iron.WarpSpace.Mod.WarpMain.instance;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
-import static org.schema.schine.graphicsengine.core.Controller.getCamera;
+import api.listener.Listener;
+import api.listener.events.draw.RegisterWorldDrawersEvent;
+import api.utils.draw.ModWorldDrawer;
+import api.utils.textures.StarLoaderTexture;
+import me.iron.WarpSpace.Mod.WarpMain;
+import me.iron.WarpSpace.Mod.client.WarpProcess;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 
 /**
  * STARMADE MOD

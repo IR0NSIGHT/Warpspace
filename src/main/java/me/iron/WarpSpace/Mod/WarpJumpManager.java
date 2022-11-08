@@ -1,10 +1,12 @@
 package me.iron.WarpSpace.Mod;
 
-import api.common.GameServer;
-import api.mod.StarLoader;
-import me.iron.WarpSpace.Mod.beacon.BeaconManager;
-import me.iron.WarpSpace.Mod.client.WarpProcess;
-import me.iron.WarpSpace.Mod.server.config.ConfigManager;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+import javax.vecmath.Vector3f;
+
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
@@ -18,11 +20,11 @@ import org.schema.game.server.data.GameServerState;
 import org.schema.schine.common.language.Lng;
 import org.schema.schine.network.server.ServerMessage;
 
-import javax.annotation.Nullable;
-import javax.vecmath.Vector3f;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Random;
+import api.common.GameServer;
+import api.mod.StarLoader;
+import me.iron.WarpSpace.Mod.beacon.BeaconManager;
+import me.iron.WarpSpace.Mod.client.WarpProcess;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 
 /**
  * STARMADE MOD

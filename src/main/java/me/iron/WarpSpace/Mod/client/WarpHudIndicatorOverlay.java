@@ -1,7 +1,10 @@
 package me.iron.WarpSpace.Mod.client;
 
-import com.bulletphysics.linearmath.Transform;
-import me.iron.WarpSpace.Mod.WarpManager;
+import java.util.concurrent.TimeUnit;
+
+import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
+
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
 import org.schema.game.client.view.gui.shiphud.HudIndicatorOverlay;
@@ -12,9 +15,9 @@ import org.schema.schine.graphicsengine.core.settings.EngineSettings;
 import org.schema.schine.graphicsengine.core.settings.SectorIndicationMode;
 import org.schema.schine.input.InputState;
 
-import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
-import java.util.concurrent.TimeUnit;
+import com.bulletphysics.linearmath.Transform;
+
+import me.iron.WarpSpace.Mod.WarpManager;
 
 public class WarpHudIndicatorOverlay extends HudIndicatorOverlay {
     Vector3i[] neighborSectorsPos = new Vector3i[7];

@@ -1,5 +1,11 @@
 package me.iron.WarpSpace.Mod.client.map;
 
+import javax.vecmath.Vector4f;
+
+import org.schema.common.util.linAlg.Vector3i;
+import org.schema.game.client.view.gamemap.GameMapDrawer;
+import org.schema.schine.graphicsengine.forms.Sprite;
+
 import api.listener.fastevents.FastListenerCommon;
 import api.mod.StarMod;
 import libpackage.drawer.MapDrawer;
@@ -9,11 +15,6 @@ import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import me.iron.WarpSpace.Mod.server.config.ConfigManager;
-import org.schema.common.util.linAlg.Vector3i;
-import org.schema.game.client.view.gamemap.GameMapDrawer;
-import org.schema.schine.graphicsengine.forms.Sprite;
-
-import javax.vecmath.Vector4f;
 
 /**
  * STARMADE MOD

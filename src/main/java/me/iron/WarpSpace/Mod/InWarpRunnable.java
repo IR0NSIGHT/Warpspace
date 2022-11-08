@@ -1,10 +1,11 @@
 package me.iron.WarpSpace.Mod;
 
-import me.iron.WarpSpace.Mod.client.WarpProcess;
-import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.data.player.AbstractCharacter;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
+
+import me.iron.WarpSpace.Mod.client.WarpProcess;
+import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 
 /**
  * STARMADE MOD

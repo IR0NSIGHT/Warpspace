@@ -1,5 +1,9 @@
 package me.iron.WarpSpace.Mod;
 
+import org.schema.game.server.data.Galaxy;
+import org.schema.game.server.data.GameServerState;
+import org.schema.schine.resource.ResourceLoader;
+
 import api.config.BlockConfig;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
@@ -23,9 +27,6 @@ import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
 import me.iron.WarpSpace.Mod.visuals.WarpSkybox;
-import org.schema.game.server.data.Galaxy;
-import org.schema.game.server.data.GameServerState;
-import org.schema.schine.resource.ResourceLoader;
 
 
 /**
@@ -81,7 +82,7 @@ public class WarpMain extends StarMod {
                 GameServerState.instance.getSectorSize(),
                 Galaxy.size,
                 (int) ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue(),
-                (int) (0.5f *Galaxy.size * 16)
+                (8 *Galaxy.size * 16)
         );
 
         WarpJumpListener.createListener();

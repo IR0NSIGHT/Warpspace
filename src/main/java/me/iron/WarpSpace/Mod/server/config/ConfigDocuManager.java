@@ -1,9 +1,9 @@
 package me.iron.WarpSpace.Mod.server.config;
 
+import java.util.LinkedList;
+
 import api.mod.config.FileConfiguration;
 import me.iron.WarpSpace.Mod.WarpMain;
-
-import java.util.LinkedList;
 
 /**
  * STARMADE MOD
