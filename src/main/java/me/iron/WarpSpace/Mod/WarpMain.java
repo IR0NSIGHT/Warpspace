@@ -80,9 +80,9 @@ public class WarpMain extends StarMod {
 
         new WarpManager(
                 GameServerState.instance.getSectorSize(),
-                Galaxy.size,
                 (int) ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue(),
-                (8 *Galaxy.size * 16)
+                (int)(8.5f *Galaxy.size * 16),
+                Galaxy.size * 16 * 3
         );
 
         WarpJumpListener.createListener();
