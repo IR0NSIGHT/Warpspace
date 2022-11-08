@@ -28,9 +28,11 @@ public class ExtraEventLoop {
         SegmentController sc = (SegmentController) ship;
 
         //get relevant positions to check
-        Vector3i playerPos =  sc.getSector(new Vector3i()),
-                rspPos = WarpManager.getInstance().getRealSpaceBySector(playerPos),
-                warpPos = WarpManager.getInstance().getWarpSpaceSector(playerPos);
+        Vector3i playerPos =  sc.getSector(new Vector3i());
+        if (playerPos == null)
+            return;
+        Vector3i rspPos = WarpManager.getInstance().getRealSpaceBySector(playerPos);
+        Vector3i warpPos = WarpManager.getInstance().getWarpSpaceSector(playerPos);
 
         //interdiction
         updateInterdiction(warpPos,rspPos,player,sc);
