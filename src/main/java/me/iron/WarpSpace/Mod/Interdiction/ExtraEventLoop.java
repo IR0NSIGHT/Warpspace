@@ -1,8 +1,6 @@
 package me.iron.WarpSpace.Mod.Interdiction;
 
-import api.utils.StarRunnable;
 import me.iron.WarpSpace.Mod.WarpJumpManager;
-import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
 import me.iron.WarpSpace.Mod.client.WarpProcess;
 import org.schema.common.util.linAlg.Vector3i;
@@ -10,9 +8,6 @@ import org.schema.game.common.controller.SegmentController;
 import org.schema.game.common.controller.Ship;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
-import org.schema.game.server.data.GameServerState;
-import org.schema.game.server.data.PlayerNotFountException;
-import org.schema.schine.network.RegisteredClientOnServer;
 
 /**
  * STARMADE MOD
@@ -21,29 +16,7 @@ import org.schema.schine.network.RegisteredClientOnServer;
  * TIME: 17:39
  */
 public class ExtraEventLoop {
-    /**
-     * loop that creates events by bruteforce checking.
-     * handles: interdiction, beacons
-     * am aware that such stuff should be handeled on the client but am to lazy to change current event system thats focuessed on server -> client
-     */
-    public static void CreateServerLoop() { //TODO fixme
-        new StarRunnable() {
-            @Override
-            public void run() {
-                //get all clients
-                for ( RegisteredClientOnServer client: GameServerState.instance.getClients().values() ) {
-                    PlayerState player;
-                    try {
-                        player = GameServerState.instance.getPlayerFromName(client.getPlayerName());
-                    } catch (PlayerNotFountException e) {
-                        continue;
-                    }
 
-
-                }
-            }
-        }.runTimer(WarpMain.instance,12);
-    }
 
     public static void updatePlayer(PlayerState player) {
         //player in ship? false for astronaut

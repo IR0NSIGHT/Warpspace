@@ -1,9 +1,5 @@
 package me.iron.WarpSpace.Mod;
 
-import org.schema.game.server.data.Galaxy;
-import org.schema.game.server.data.GameServerState;
-import org.schema.schine.resource.ResourceLoader;
-
 import api.config.BlockConfig;
 import api.listener.events.controller.ClientInitializeEvent;
 import api.listener.events.controller.ServerInitializeEvent;
@@ -15,7 +11,6 @@ import api.utils.registry.UniversalRegistry;
 import glossar.GlossarCategory;
 import glossar.GlossarEntry;
 import glossar.GlossarInit;
-import me.iron.WarpSpace.Mod.Interdiction.ExtraEventLoop;
 import me.iron.WarpSpace.Mod.beacon.BeaconManager;
 import me.iron.WarpSpace.Mod.beacon.BeaconUpdatePacket;
 import me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon;
@@ -28,6 +23,9 @@ import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
 import me.iron.WarpSpace.Mod.visuals.WarpSkybox;
+import org.schema.game.server.data.Galaxy;
+import org.schema.game.server.data.GameServerState;
+import org.schema.schine.resource.ResourceLoader;
 
 
 /**
@@ -91,7 +89,6 @@ public class WarpMain extends StarMod {
         WarpProcess.initUpdateLoop();
 
         WarpCheckLoop.loop();
-        ExtraEventLoop.CreateServerLoop();
         beaconManagerServer = BeaconManager.getSavedOrNew(this.getSkeleton());
         beaconManagerServer.onInit();
     }
