@@ -71,11 +71,12 @@ public class WarpManager {
      * @return boolean, true if position is in warp
      */
     public boolean isInWarp(Vector3i pos) {
-        return isInRealSpace(getRealSpaceBySector(pos));
+
+        return pos != null && isInRealSpace(getRealSpaceBySector(pos));
     }
 
     public boolean isInRealSpace(Vector3i sector) {
-        return sector.betweenIncl(realspaceMin, realspaceMax);
+        return sector != null && sector.betweenIncl(realspaceMin, realspaceMax);
     }
 
 
