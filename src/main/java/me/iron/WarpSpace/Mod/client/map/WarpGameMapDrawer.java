@@ -8,7 +8,6 @@ import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.VoidSystem;
 import org.schema.game.server.data.Galaxy;
 
-import api.DebugFile;
 import api.listener.events.world.GalaxyInstantiateEvent;
 import api.mod.StarLoader;
 import me.iron.WarpSpace.Mod.WarpManager;
@@ -17,13 +16,7 @@ public class WarpGameMapDrawer extends GameMapDrawer {
     public WarpGameMapDrawer(GameClientState gameClientState) {
         super(gameClientState);
     }
-
-    @Override
-    public void draw() {
-        DebugFile.log("player sector by map: "+getPlayerSector());
-        DebugFile.log("gamemap pos current system: " + getGameMapPosition().getCurrentSysPos());
-        super.draw();
-    }
+    private Galaxy lastGalaxy = null;
 
     @Override
     public Vector3i getPlayerSector() {
@@ -45,8 +38,16 @@ public class WarpGameMapDrawer extends GameMapDrawer {
                 WarpManager.getInstance().getClientTransformOrigin()
         );
 
-        Galaxy g = getCurrentGalaxy(sector, GameClientState.instance.getPlayer());
-        this.drawGalaxy(g);
+        PlayerState player = GameClientState.instance.getPlayer();
+        //get system and galaxy pos
+        Vector3i sysPos = VoidSystem.getContainingSystem(
+                (player.isInTutorial() || player.isInPersonalSector() || player.isInTestSector())
+                        ? new Vector3i(0, 0, 0) : sector, new Vector3i());
+        Vector3i galaxyPos = Galaxy.getContainingGalaxyFromSystemPos(sysPos, new Vector3i());
+
+        if (lastGalaxy == null || !galaxyPos.equals(lastGalaxy.galaxyPos))
+            lastGalaxy = getCurrentGalaxy(sector, GameClientState.instance.getPlayer());
+        this.drawGalaxy(lastGalaxy);
 
         Galaxy.USE_GALAXY = false;
         super.drawGalaxy();

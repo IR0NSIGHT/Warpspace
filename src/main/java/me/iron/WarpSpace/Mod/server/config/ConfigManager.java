@@ -14,7 +14,6 @@ import me.iron.WarpSpace.Mod.WarpMain;
  */
 public class ConfigManager {
     public ConfigManager(final WarpMain mod) {
-        PacketUtil.registerPacket(ConfigSyncPacket.class);
         config = mod.getConfig(configName);
         for (ConfigEntry e: ConfigEntry.values()) {
             e.setValue(config.getConfigurableFloat(e.getPath(), e.defaultValue));

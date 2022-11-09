@@ -17,7 +17,6 @@ import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
 import org.schema.schine.graphicsengine.forms.gui.GUITextOverlay;
 
-import api.DebugFile;
 import api.ModPlayground;
 import api.listener.Listener;
 import api.listener.events.gui.HudCreateEvent;
@@ -149,7 +148,6 @@ public class HUD_core {
             @Override
             public void onRun() {
                 super.onRun();
-                DebugFile.log("run loop for HUD replacement");
                 try {
                     Vector3i current = GameClientState.instance.getPlayer().getCurrentSector();
                     boolean isInWarp =  WarpManager.getInstance().isInWarp(current);
@@ -168,7 +166,6 @@ public class HUD_core {
     }
 
     private static void useCustomMapDrawer(boolean isInWarp, Vector3i currentSector, final WorldDrawer worldDrawer) {
-        DebugFile.log("run useCustomMapDrawer");
         final GameMapDrawer mapDrawer;
         if (isInWarp && !(worldDrawer.getGameMapDrawer() instanceof WarpGameMapDrawer)) {
             ModPlayground.broadcastMessage("use custom warp-mapdrawer");
@@ -187,7 +184,6 @@ public class HUD_core {
                 worldDrawer.setGameMapDrawer(mapDrawer);
                 Vector3i sector = mapDrawer.getPlayerSector();
                 mapDrawer.getGameMapPosition().set(sector.x, sector.y, sector.z, true);
-                ModPlayground.broadcastMessage("set mapdrawer on graphics thread");
             }
         });
 

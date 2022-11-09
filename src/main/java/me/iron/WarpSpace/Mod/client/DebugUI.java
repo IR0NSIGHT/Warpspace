@@ -1,11 +1,9 @@
 package me.iron.WarpSpace.Mod.client;
 
 
-import java.util.Collection;
 
 import javax.annotation.Nullable;
 
-import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
@@ -16,9 +14,7 @@ import api.mod.StarMod;
 import api.utils.game.PlayerUtils;
 import api.utils.game.chat.CommandInterface;
 import me.iron.WarpSpace.Mod.WarpJumpManager;
-import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
-import me.iron.WarpSpace.Mod.beacon.BeaconObject;
 import me.iron.WarpSpace.Mod.client.sounds.SoundQueueManager;
 
 
@@ -65,10 +61,6 @@ public class DebugUI implements CommandInterface {
     @Override
     public String getDescription() {
         return "Debug command for warpspace" +
-                "beacon pulls: print all pulling beacons\n" +
-                "beacon manager: print all beacon objects\n" +
-                "beacon clear: delete all beacon objects\n" +
-                "beacon toggle: invert state of all beacons\n" +
                 "sound print: print all sounds\n" +
                 "warp: warp my vessel now";
     }
@@ -81,41 +73,7 @@ public class DebugUI implements CommandInterface {
     @Override
     public boolean onCommand(PlayerState playerState, String[] strings) {
         int l = strings.length;
-        if (strings.length==2 && strings[0].equalsIgnoreCase("beacon")) {
-        //print active pullings
-            if (strings[1].equalsIgnoreCase("pulls")) {
-                StringBuilder b = new StringBuilder("All sectors with active beacons:\n");
-                Collection<Vector3i> ss = WarpMain.instance.beaconManagerServer.getBeaconSectors();
-                for (Vector3i s: ss) {
-                    b.append("Sector ").append(WarpManager.getInstance().getRealSpaceBySector(s)).append("-->").append(WarpJumpManager.getDropPoint(s, null));
-                    b.append("\n");
-                }
-                echo(b.toString(),playerState);
-                return true;
-            }
-        //print manager
-            if (strings[1].equalsIgnoreCase("manager")) {
-                echo(WarpMain.instance.beaconManagerServer.print(),playerState);
-                return true;
-            }
 
-        //clear all beacons.
-            if (strings[1].equalsIgnoreCase("clear")) {
-                WarpMain.instance.beaconManagerServer.clearBeacons();
-                echo("cleared beacons",playerState);
-                return true;
-            }
-
-        //invert state for all beacons
-            if (strings[1].equalsIgnoreCase("toggle")) {
-                for (BeaconObject b:WarpMain.instance.beaconManagerServer.getBeacons()) {
-                    b.setActive(!b.isActive());
-                }
-                echo("inverted all beacon states",playerState);
-                return true;
-            }
-
-        }
         //sounds
         if (l>0 && strings[0].equalsIgnoreCase("sound")) {
             if (l>1 &&strings[1].equalsIgnoreCase("print")) {

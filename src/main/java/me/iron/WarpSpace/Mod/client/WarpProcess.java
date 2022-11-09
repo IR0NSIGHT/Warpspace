@@ -192,7 +192,7 @@ public enum WarpProcess {
         if (GameClientState.instance == null || GameClientState.instance.getPlayer() == null)
             return;
         //test if beacon is affecting player position, beacon synch is handeled separately.
-        boolean droppointShifted = (WarpJumpManager.isDroppointShifted(WarpManager.getInstance().getWarpSpaceSector(GameClientState.instance.getPlayer().getCurrentSector())));
+        boolean droppointShifted = false; //(WarpJumpManager.isDroppointShifted(WarpManager.getInstance().getWarpSpaceSector(GameClientState.instance.getPlayer().getCurrentSector())));
         WarpProcess.DROPPOINTSHIFTED.setCurrentValue(droppointShifted?1:0);
         WarpProcess.IS_IN_WARP.setCurrentValue(WarpManager.getInstance().isInWarp(GameClientState.instance.getPlayer().getCurrentSector())?1:0);
 

@@ -2,6 +2,8 @@ package me.iron.WarpSpace.Mod.server.config;
 
 import java.io.IOException;
 
+import me.iron.WarpSpace.Mod.WarpMain;
+import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.server.data.GameServerState;
 
@@ -9,7 +11,6 @@ import api.network.Packet;
 import api.network.PacketReadBuffer;
 import api.network.PacketWriteBuffer;
 import api.network.packets.PacketUtil;
-import me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon;
 
 /**
  * STARMADE MOD
@@ -46,8 +47,7 @@ public class ConfigSyncPacket extends Packet {
 
     @Override
     public void processPacketOnClient() {
-        WarpBeaconAddon.beaconChamber.chamberCapacity = ConfigManager.ConfigEntry.warp_beacon_chamber_percent.getValue();
-
+        WarpManager.getInstance().setScale((int)ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue());
     }
 
     @Override

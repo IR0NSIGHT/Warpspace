@@ -1,5 +1,6 @@
 package me.iron.WarpSpace.Mod;
 
+import org.schema.game.client.data.GameClientState;
 import org.schema.game.server.data.Galaxy;
 import org.schema.game.server.data.GameServerState;
 import org.schema.schine.resource.ResourceLoader;
@@ -11,13 +12,9 @@ import api.mod.StarLoader;
 import api.mod.StarMod;
 import api.mod.config.FileConfiguration;
 import api.network.packets.PacketUtil;
-import api.utils.registry.UniversalRegistry;
 import glossar.GlossarCategory;
 import glossar.GlossarEntry;
 import glossar.GlossarInit;
-import me.iron.WarpSpace.Mod.beacon.BeaconManager;
-import me.iron.WarpSpace.Mod.beacon.BeaconUpdatePacket;
-import me.iron.WarpSpace.Mod.beacon.WarpBeaconAddon;
 import me.iron.WarpSpace.Mod.client.*;
 import me.iron.WarpSpace.Mod.client.map.DropPointMapDrawer;
 import me.iron.WarpSpace.Mod.client.sounds.SoundQueueManager;
@@ -25,6 +22,7 @@ import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.server.config.ConfigManager;
+import me.iron.WarpSpace.Mod.server.config.ConfigSyncPacket;
 import me.iron.WarpSpace.Mod.visuals.WarpSkybox;
 
 
@@ -33,8 +31,8 @@ import me.iron.WarpSpace.Mod.visuals.WarpSkybox;
  */
 public class WarpMain extends StarMod {
     public static WarpMain instance;
-    public BeaconManager beaconManagerServer;
-    public BeaconManager beaconManagerClient;
+   //public BeaconManager beaconManagerServer;
+   //public BeaconManager beaconManagerClient;
     public DropPointMapDrawer dropPointMapDrawer;
     public WarpThrusterListener warpThrusterListener;
     private FileConfiguration config;
@@ -44,20 +42,18 @@ public class WarpMain extends StarMod {
         super.onEnable();
         instance = this;
 
-        new ConfigManager(this);
-
-
 
         new Updater(getSkeleton().getModVersion()).runUpdate();
 
         StarLoader.registerCommand(new DebugUI());
 
-
         PacketUtil.registerPacket(PacketHUDUpdate.class);
-        PacketUtil.registerPacket(BeaconUpdatePacket.class);
+        PacketUtil.registerPacket(ConfigSyncPacket.class);
+
+        new ConfigManager(this);
 
         //WarpSpaceMap.enable(instance);
-        WarpBeaconAddon.registerAddonAddEventListener();
+        //WarpBeaconAddon.registerAddonAddEventListener();
 
         WarpSkybox.registerForRegistration();
 
@@ -89,26 +85,41 @@ public class WarpMain extends StarMod {
         WarpProcess.initUpdateLoop();
 
         WarpCheckLoop.loop();
-        beaconManagerServer = BeaconManager.getSavedOrNew(this.getSkeleton());
-        beaconManagerServer.onInit();
+        //beaconManagerServer = BeaconManager.getSavedOrNew(this.getSkeleton());
+        //beaconManagerServer.onInit();
     }
 
     @Override
     public void onClientCreated(ClientInitializeEvent event) {
         super.onClientCreated(event);
-/*        new WarpManager(
-                event.getClientState().getSectorSize(),
-                Galaxy.size,
-                (int) ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue()
+
+        new WarpManager(
+                0, //doesnt exist yet
+                (int) ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue(),
+                (int)(8.5f *Galaxy.size * 16),
+                Galaxy.size * 16 * 3
         );
- */
+
+        new TimedRunnable(50,WarpMain.instance, -1){
+            @Override
+            public void onRun() {
+                super.onRun();
+                if (GameClientState.instance.getGameState() != null) {
+                    WarpManager.getInstance().setSectorSize(
+                            GameClientState.instance.getSectorSize()
+                    );
+                    doStop();
+                }
+
+            }
+        };
 
         SpriteList.init();
         HUD_core.initList();
         GUIeventhandler.addHUDDrawListener();
         HUD_core.HUDLoop();
-        beaconManagerClient = new BeaconManager();
-        beaconManagerClient.onInit();
+        //beaconManagerClient = new BeaconManager();
+        //beaconManagerClient.onInit();
         //dropPointMapDrawer.activate();
         GlossarInit.initGlossar(this);
         GlossarInit.addCategory(getWiki());
@@ -125,14 +136,14 @@ public class WarpMain extends StarMod {
     @Override
     public void onBlockConfigLoad(BlockConfig blockConfig) {
         super.onBlockConfigLoad(blockConfig);
-        WarpBeaconAddon.registerChamberBlock();
+        //WarpBeaconAddon.registerChamberBlock();
         WSElementInfoManager.onBlockConfigLoad(instance,blockConfig);
     }
 
     @Override
     public void onUniversalRegistryLoad() {
         super.onUniversalRegistryLoad();
-        UniversalRegistry.registerURV(UniversalRegistry.RegistryType.PLAYER_USABLE_ID,this.getSkeleton(), WarpBeaconAddon.UIDName);
+        //UniversalRegistry.registerURV(UniversalRegistry.RegistryType.PLAYER_USABLE_ID,this.getSkeleton(), WarpBeaconAddon.UIDName);
     }
 
     private GlossarCategory getWiki() {
@@ -143,7 +154,7 @@ public class WarpMain extends StarMod {
                 "The Warp is a parallel dimension where distances are 10 times shorter. Follow your waypoint while you are in warp, until you reach it. You will see a notification 'droppoint' reached. Activate your jumpdrive again or slow down below 50 m/s for more than 10 seconds, to drop out of warp. You will re-enter realspace at the corresponding droppoint. This is your waypoint rounded to 10. After dropping, fly the remaining distance to your waypoint in realspace.\n" +
                 "If you want to go faster in Warp, try installing Warp Speed chambers (a replacement for vanilla Jump Distance) to increase your maximum flight speed within Warp Space."));
 
-        cat.addEntry(new GlossarEntry("Warp Beacon","The natural drop-points can be shifted to a more desirable position, by deploying a space station with a Beacon chamber. The chamber does not use energy, but costs 50% of the reactor's chamber capacity. Once the beacon addon is activated in the reactor menu, every ship will drop out at the stations sector, instead of the nearest natural drop point. The chamber stays active across loading/unloading the sector and server restarts.\n Beacons can only be deployed on non-homebase stations with undamaged chambers. It is recommended to reboot the station with 'y' before activating the chamber."));
+       // cat.addEntry(new GlossarEntry("Warp Beacon","The natural drop-points can be shifted to a more desirable position, by deploying a space station with a Beacon chamber. The chamber does not use energy, but costs 50% of the reactor's chamber capacity. Once the beacon addon is activated in the reactor menu, every ship will drop out at the stations sector, instead of the nearest natural drop point. The chamber stays active across loading/unloading the sector and server restarts.\n Beacons can only be deployed on non-homebase stations with undamaged chambers. It is recommended to reboot the station with 'y' before activating the chamber."));
 
         cat.addEntry(new GlossarEntry("Map","While in warp, a scaled down version of the universe is visible on the map. \nIn realspace, the droppoints are marked with small, blue spirals. Droppoints, that were shifted through the use of warpbeacons, are marked by the same symbol inside a box."));
 

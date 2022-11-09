@@ -22,7 +22,6 @@ import org.schema.schine.network.server.ServerMessage;
 
 import api.common.GameServer;
 import api.mod.StarLoader;
-import me.iron.WarpSpace.Mod.beacon.BeaconManager;
 import me.iron.WarpSpace.Mod.client.WarpProcess;
 import me.iron.WarpSpace.Mod.server.config.ConfigManager;
 
@@ -242,8 +241,8 @@ public class WarpJumpManager {
      * @return
      */
     public static boolean isDroppointShifted(Vector3i warpSector) {
-        BeaconManager bm = (WarpMain.instance.beaconManagerServer!=null)?WarpMain.instance.beaconManagerServer:WarpMain.instance.beaconManagerClient;
-        return bm.hasActiveBeacon(warpSector);
+       // BeaconManager bm = (WarpMain.instance.beaconManagerServer!=null)?WarpMain.instance.beaconManagerServer:WarpMain.instance.beaconManagerClient;
+        return false;//bm.hasActiveBeacon(warpSector);
     }
 
     /**
@@ -340,9 +339,9 @@ public class WarpJumpManager {
             origin = WarpManager.getInstance().getSectorCenter();
 
         Vector3i drop = WarpManager.getInstance().getRealSpacePosPrecise(warpSector, origin);
-        BeaconManager bm = (WarpMain.instance.beaconManagerServer!=null)?WarpMain.instance.beaconManagerServer:WarpMain.instance.beaconManagerClient;
-        bm.updateStrongest(warpSector);
-        bm.modifyDroppoint(warpSector, drop);
+        //BeaconManager bm = (WarpMain.instance.beaconManagerServer!=null)?WarpMain.instance.beaconManagerServer:WarpMain.instance.beaconManagerClient;
+        //bm.updateStrongest(warpSector);
+        //bm.modifyDroppoint(warpSector, drop);
         return drop;
     }
 }

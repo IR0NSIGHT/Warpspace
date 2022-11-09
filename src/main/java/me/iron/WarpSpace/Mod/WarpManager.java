@@ -33,13 +33,21 @@ public class WarpManager {
 
         this.sectorSize = sectorSize;
         //64 systems per galaxy, 16 sectors per system (hardcoded) //TODO assert these values are hardcoded
-        this.scale = scale;
-        halfScale = new Vector3i(0.5f*scale,0.5f*scale, 0.5f*scale);
+        setScale(scale);
         this.offset = offset;
 
         realspaceMin = new Vector3i(-warpDimensions, -warpDimensions, -warpDimensions);
         realspaceMax = new Vector3i(warpDimensions, warpDimensions, warpDimensions);
         instance = this;
+    }
+
+    public void setSectorSize(float sectorSize) {
+        this.sectorSize = sectorSize;
+    }
+
+    public void setScale(int scale) {
+        this.scale = scale;
+        halfScale = new Vector3i(0.5f*scale,0.5f*scale, 0.5f*scale);
     }
 
     private Random random = new Random();
@@ -61,6 +69,8 @@ public class WarpManager {
      * @return boolean, true if segmentcontrollers position is in warp
      */
     public boolean isInWarp(SimpleTransformableSendableObject object) {
+        if (object == null)
+            return false;
         return isInWarp(object.getSector(new Vector3i()));
     }
 

@@ -63,7 +63,7 @@ public class WarpHudIndicatorOverlay extends HudIndicatorOverlay {
 
         drawNeighbourSectors(neighborSectors, neighborSectorsNames);
         drawWaypoint(
-                ((GameClientState) getState()).getController().getClientGameData().getRspWaypoint(),
+                ((GameClientState) getState()).getController().getClientGameData().getWaypoint(),
                 GameClientState.instance.getPlayer().getCurrentSector(),
                 WarpManager.getInstance().getClientTransformOrigin()
         );
