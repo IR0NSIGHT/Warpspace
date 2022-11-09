@@ -98,6 +98,21 @@ public class DropPointMapDrawer extends MapDrawer {
     }
 
     @Override
+    public void galaxy_PreDraw(GameMapDrawer gameMapDrawer) {
+        //		this.gameMapPosition.set(state.getPlayer().getCurrentSector().x, state.getPlayer().getCurrentSector().y, state.getPlayer().getCurrentSector().z, true);
+//        if (WarpManager.getInstance().isInWarp(GameClientState.instance.getPlayer().getCurrentSector())) {
+//            Vector3i rspSector = WarpManager.getInstance().getRealSpacePosPrecise(
+//                    GameClientState.instance.getPlayer().getCurrentSector(),
+//                    WarpManager.getInstance().getClientTransformOrigin()
+//            );
+//            gameMapDrawer.getGameMapPosition().set(rspSector.x, rspSector.y, rspSector.z, true);
+//
+//            GameClientState.instance.getCurrentGalaxy()
+//        }
+        super.galaxy_PreDraw(gameMapDrawer);
+    }
+
+    @Override
     public void galaxy_DrawSprites(GameMapDrawer gameMapDrawer) {
         Vector3i currentCenteredSector = gameMapDrawer.getGameMapPosition().get(new Vector3i()); //should be current sector
         updateDropMarkers(currentCenteredSector);

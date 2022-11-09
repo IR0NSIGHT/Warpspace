@@ -25,7 +25,6 @@ import me.iron.WarpSpace.Mod.network.PacketHUDUpdate;
 import me.iron.WarpSpace.Mod.server.WarpCheckLoop;
 import me.iron.WarpSpace.Mod.server.WarpJumpListener;
 import me.iron.WarpSpace.Mod.server.config.ConfigManager;
-import me.iron.WarpSpace.Mod.taswin.WarpSpaceMap;
 import me.iron.WarpSpace.Mod.visuals.WarpSkybox;
 
 
@@ -57,7 +56,7 @@ public class WarpMain extends StarMod {
         PacketUtil.registerPacket(PacketHUDUpdate.class);
         PacketUtil.registerPacket(BeaconUpdatePacket.class);
 
-        WarpSpaceMap.enable(instance);
+        //WarpSpaceMap.enable(instance);
         WarpBeaconAddon.registerAddonAddEventListener();
 
         WarpSkybox.registerForRegistration();
@@ -69,7 +68,7 @@ public class WarpMain extends StarMod {
     
     @Override
     public void onDisable() {
-        WarpSpaceMap.disable();
+    //    WarpSpaceMap.disable();
     }
 
 

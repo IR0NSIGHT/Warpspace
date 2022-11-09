@@ -8,20 +8,27 @@ import javax.vecmath.Vector3f;
 
 import org.schema.common.util.linAlg.Vector3i;
 import org.schema.game.client.data.GameClientState;
+import org.schema.game.client.view.WorldDrawer;
+import org.schema.game.client.view.gamemap.GameMapDrawer;
 import org.schema.game.client.view.gui.shiphud.HudIndicatorOverlay;
+import org.schema.game.client.view.gui.shiphud.newhud.Hud;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.GameServerState;
 import org.schema.schine.graphicsengine.forms.gui.GUITextOverlay;
 
+import api.DebugFile;
+import api.ModPlayground;
 import api.listener.Listener;
 import api.listener.events.gui.HudCreateEvent;
 import api.mod.StarLoader;
 import api.utils.StarRunnable;
+import api.utils.textures.StarLoaderTexture;
 import me.iron.WarpSpace.Mod.TimedRunnable;
 import me.iron.WarpSpace.Mod.WarpJumpManager;
 import me.iron.WarpSpace.Mod.WarpMain;
 import me.iron.WarpSpace.Mod.WarpManager;
+import me.iron.WarpSpace.Mod.client.map.WarpGameMapDrawer;
 
 /**
  * STARMADE MOD
@@ -142,29 +149,66 @@ public class HUD_core {
             @Override
             public void onRun() {
                 super.onRun();
+                DebugFile.log("run loop for HUD replacement");
                 try {
                     Vector3i current = GameClientState.instance.getPlayer().getCurrentSector();
-                    HudIndicatorOverlay currentHUD = GameClientState.instance.getWorldDrawer().getGuiDrawer().getHud().getIndicator();
-                    if (WarpManager.getInstance().isInWarp(current) && !(currentHUD instanceof WarpHudIndicatorOverlay)) {
-                        // IS IN WARP
-                        HudIndicatorOverlay overlay = new WarpHudIndicatorOverlay(GameClientState.instance);
-                        overlay.onInit();
-                        GameClientState.instance.getWorldDrawer().getGuiDrawer().getHud().setIndicator(
-                                overlay
-                        );
-                    } else if (!WarpManager.getInstance().isInWarp(current) && currentHUD instanceof WarpHudIndicatorOverlay)  {
-                        HudIndicatorOverlay overlay = new HudIndicatorOverlay(GameClientState.instance);
-                        overlay.onInit();
-                        GameClientState.instance.getWorldDrawer().getGuiDrawer().getHud().setIndicator(
-                                overlay
-                        );
-                    }
+                    boolean isInWarp =  WarpManager.getInstance().isInWarp(current);
+                    useCustomHUD(
+                            isInWarp,
+                            current,
+                            GameClientState.instance.getWorldDrawer().getGuiDrawer().getHud());
+
+                    useCustomMapDrawer(isInWarp, current, GameClientState.instance.getWorldDrawer());
+
                 } catch (NullPointerException ignored) {
 
                 }
-
-            }
+  }
         };
+    }
+
+    private static void useCustomMapDrawer(boolean isInWarp, Vector3i currentSector, final WorldDrawer worldDrawer) {
+        DebugFile.log("run useCustomMapDrawer");
+        final GameMapDrawer mapDrawer;
+        if (isInWarp && !(worldDrawer.getGameMapDrawer() instanceof WarpGameMapDrawer)) {
+            ModPlayground.broadcastMessage("use custom warp-mapdrawer");
+            mapDrawer = new WarpGameMapDrawer(GameClientState.instance);
+        } else if (!isInWarp && (worldDrawer.getGameMapDrawer() instanceof WarpGameMapDrawer)) {
+            ModPlayground.broadcastMessage("use vanilla mapdrawer");
+            mapDrawer = new GameMapDrawer(GameClientState.instance);
+        } else {
+            return;
+        }
+
+        StarLoaderTexture.runOnGraphicsThread(new Runnable() {
+            @Override
+            public void run() {
+                mapDrawer.onInit();
+                worldDrawer.setGameMapDrawer(mapDrawer);
+                Vector3i sector = mapDrawer.getPlayerSector();
+                mapDrawer.getGameMapPosition().set(sector.x, sector.y, sector.z, true);
+                ModPlayground.broadcastMessage("set mapdrawer on graphics thread");
+            }
+        });
+
+    }
+
+    private static void useCustomHUD(boolean isInWarp, Vector3i currentSector, Hud hud) {
+        try {
+            HudIndicatorOverlay currentHUD = hud.getIndicator();
+            if (isInWarp && !(currentHUD instanceof WarpHudIndicatorOverlay)) {
+                // IS IN WARP
+                HudIndicatorOverlay overlay = new WarpHudIndicatorOverlay(GameClientState.instance);
+                overlay.onInit();
+                hud.setIndicator(overlay);
+            } else if (!isInWarp && currentHUD instanceof WarpHudIndicatorOverlay)  {
+                HudIndicatorOverlay overlay = new HudIndicatorOverlay(GameClientState.instance);
+                overlay.onInit();
+                hud.setIndicator(overlay);
+            }
+        } catch (NullPointerException ignored) {
+
+        }
     }
 
     /**
