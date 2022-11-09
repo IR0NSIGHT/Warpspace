@@ -2,8 +2,6 @@ package me.iron.WarpSpace.Mod.server.config;
 
 import java.io.IOException;
 
-import me.iron.WarpSpace.Mod.WarpMain;
-import me.iron.WarpSpace.Mod.WarpManager;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.server.data.GameServerState;
 
@@ -11,6 +9,7 @@ import api.network.Packet;
 import api.network.PacketReadBuffer;
 import api.network.PacketWriteBuffer;
 import api.network.packets.PacketUtil;
+import me.iron.WarpSpace.Mod.WarpManager;
 
 /**
  * STARMADE MOD
@@ -47,7 +46,8 @@ public class ConfigSyncPacket extends Packet {
 
     @Override
     public void processPacketOnClient() {
-        WarpManager.getInstance().setScale((int)ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue());
+        int value = (int)ConfigManager.ConfigEntry.warp_to_rsp_ratio.getValue();
+        WarpManager.getInstance().setScale(value);
     }
 
     @Override

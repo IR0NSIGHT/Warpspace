@@ -64,7 +64,7 @@ public class ConfigManager {
         droppoint_random_offset("droppoint_random_offset_sectors",2.25f,0,Float.MAX_VALUE, false, true),
 
         //warp-to-rsp-ratio: how many sectors in rsp equals one sector in warp?
-        warp_to_rsp_ratio("warp_to_rsp_ratio",10,2,Float.MAX_VALUE),
+        warp_to_rsp_ratio("warp_to_rsp_ratio",10,2,Float.MAX_VALUE, true, true),
 
         //second its takes for a slow ship to drop from warp
         seconds_until_speeddrop("seconds_until_speeddrop",30,0,manySeconds, false, true),
